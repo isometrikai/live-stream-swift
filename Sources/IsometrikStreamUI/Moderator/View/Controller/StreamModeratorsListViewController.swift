@@ -1,0 +1,238 @@
+//
+//  StreamModeratorsListViewController.swift
+//  PicoAdda
+//
+//  Created by Dheeraj Kumar Sharma on 14/02/23.
+//  Copyright © 2023 Rahul Sharma. All rights reserved.
+//
+
+import UIKit
+import MBProgressHUD
+import IsometrikStream
+
+protocol StreamModeratorsListActionDelegate {
+    func openListForSelectingModerators()
+}
+
+class StreamModeratorsListViewController: UIViewController {
+
+    // MARK: - PROPERTIES
+    var delegate: StreamModeratorsListActionDelegate?
+    var viewModel = ModeratorViewModel()
+    
+    let headerView: CustomHeaderView = {
+        let view = CustomHeaderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(DynamicUserInfoTableViewCell.self, forCellReuseIdentifier: "DynamicUserInfoTableViewCell")
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.refreshControl = refreshControl
+        return tableView
+    }()
+    
+    let defaultView: StreamDefaultEmptyView = {
+        let view = StreamDefaultEmptyView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        view.defaultImageView.image = Appearance.default.images.noViewers
+        view.defaultLabel.text = "No Moderators Found".localized
+        return view
+    }()
+    
+    let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.style = .medium
+        indicator.tintColor = .darkGray
+        return indicator
+    }()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action:
+                                    #selector(self.refreshAction),
+                                 for: UIControl.Event.valueChanged)
+        refreshControl.tintColor = .lightGray
+        return refreshControl
+    }()
+    
+    // MARK: - INITIALIZERS
+    
+    init(_isometrik: IsometrikSDK?, _streamInfo: ISMStream?) {
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel.isometrik = _isometrik
+        self.viewModel.streamInfo = _streamInfo
+        
+        // initializing configurations
+        let headerTitle = headerView.headerTitle
+        headerTitle.text = "Moderators".localized
+        headerTitle.font = Appearance.default.font.getFont(forTypo: .h3)
+        headerTitle.textAlignment = .left
+        
+        let trailingActionButton = self.headerView.trailingActionButton2
+        trailingActionButton.setTitle("+" + "Add".localized, for: .normal)
+        trailingActionButton.setTitleColor(.white, for: .normal)
+        trailingActionButton.isHidden = false
+        trailingActionButton.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        trailingActionButton.backgroundColor = .black
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    // MARK: - MAIN
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViews()
+        setupConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        viewModel.getModerators { [weak self] in
+            guard let self else { return }
+            MBProgressHUD.hide(for: self.view, animated: true)
+            self.tableView.reloadData()
+            
+            self.headerView.headerTitle.text = "Moderators".localized + " (\(self.viewModel.moderatorList.count))"
+        }
+    }
+    
+    // MARK: - FUNCTIONS
+    
+    func setupViews(){
+        view.backgroundColor = .white
+        view.addSubview(headerView)
+        view.addSubview(defaultView)
+        view.addSubview(tableView)
+        view.addSubview(activityIndicator)
+        
+        self.headerView.trailingActionButton2.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+    }
+    
+    func setupConstraints(){
+        NSLayoutConstraint.activate([
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 50),
+            
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            
+            defaultView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            defaultView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            defaultView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            defaultView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    // MARK: - ACTIONS
+    
+    @objc func refreshAction(){
+        self.viewModel.moderatorList.removeAll()
+        self.tableView.reloadData()
+        
+        self.viewModel.getModerators {
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    @objc func addButtonTapped(){
+        self.dismiss(animated: true)
+        delegate?.openListForSelectingModerators()
+    }
+
+}
+
+extension StreamModeratorsListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.moderatorList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DynamicUserInfoTableViewCell", for: indexPath) as! DynamicUserInfoTableViewCell
+        
+        let userData = viewModel.moderatorList[indexPath.row]
+        let currentUserId = viewModel.isometrik?.getUserSession().getUserId()
+        let currentUserType = viewModel.isometrik?.getUserSession().getUserType()
+        
+        cell.userData = userData
+        cell.backgroundColor = .clear
+        cell.selectionStyle = .none
+        cell.contentView.isUserInteractionEnabled = false
+        
+        if userData.userId == currentUserId {
+            cell.actionButton.isHidden = true
+        } else {
+            if currentUserType == .host {
+                cell.actionButton.isHidden = false
+            }
+        }
+        
+        // if current user is host show remove button
+        cell.actionButton.setTitle("Remove".localized, for: .normal)
+        cell.actionButtonWidth?.constant = 100
+        
+        cell.actionButton_callback = { [weak self] data in
+            
+            // remove this user as a moderator
+            self?.removeModerator(userData: data)
+            
+            // remove this user from the list and update
+            self?.viewModel.moderatorList.remove(at: indexPath.row)
+            self?.tableView.reloadData()
+            
+            self?.headerView.headerTitle.text = "Moderators".localized + " (\(self?.viewModel.moderatorList.count ?? 0))"
+            
+        }
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70
+    }
+    
+}
+
+
+extension StreamModeratorsListViewController {
+    
+    func removeModerator(userData: ISMStreamUser){
+        
+        guard let streamInfo = viewModel.streamInfo,
+              let isometrik = viewModel.isometrik else { return }
+        
+        let moderatorId = userData.userId ?? ""
+        let streamId = streamInfo.streamId ?? ""
+        let initiatorId = isometrik.getUserSession().getUserId()
+        
+        isometrik.getIsometrik().removeModerator(streamId: streamInfo.streamId ?? "", moderatorId: moderatorId, initiatorId: initiatorId) { moderator in
+            print(moderator)
+        } failure: { error in
+            print(error)
+        }
+        
+    }
+    
+}

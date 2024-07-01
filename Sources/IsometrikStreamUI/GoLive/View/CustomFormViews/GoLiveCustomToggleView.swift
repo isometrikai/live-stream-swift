@@ -1,0 +1,98 @@
+//
+//  GoLiveCustomToggleView.swift
+//  PicoAdda
+//
+//  Created by Dheeraj Kumar Sharma on 06/09/23.
+//  Copyright © 2023 Rahul Sharma. All rights reserved.
+//
+
+import UIKit
+
+class GoLiveCustomToggleView: UIView {
+
+    // MARK: - PROPERTIES
+    
+    var activeColor: UIColor? = .white
+    var isSelected: Bool? = false {
+        didSet {
+            guard let isSelected else { return }
+            
+            if isSelected {
+                if activeColor == .black {
+                    toggleImageView.image = Appearance.default.images.toggleOnDark
+                } else {
+                    toggleImageView.image = Appearance.default.images.toggleOn
+                }
+            } else {
+                if activeColor == .black {
+                    toggleImageView.image = Appearance.default.images.toggleOffDark
+                } else {
+                    toggleImageView.image = Appearance.default.images.toggleOff
+                }
+            }
+            
+            toggleTitleLabel.textColor = isSelected ? activeColor : .lightGray
+        }
+    }
+    
+    let toggleImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    let toggleTitleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Use Persistent RTMP Stream Key".localized
+        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.textColor = .white
+        return label
+    }()
+    
+    let actionButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    // MARK: - MAIN
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupViews()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - FUNCTIONS
+    
+    func setupViews(){
+        addSubview(toggleImageView)
+        addSubview(toggleTitleLabel)
+        addSubview(actionButton)
+    }
+    
+    func setupConstraints(){
+        NSLayoutConstraint.activate([
+            toggleImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            toggleImageView.widthAnchor.constraint(equalToConstant: 40),
+            toggleImageView.heightAnchor.constraint(equalToConstant: 40),
+            toggleImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            actionButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
+            actionButton.widthAnchor.constraint(equalToConstant: 40),
+            actionButton.heightAnchor.constraint(equalToConstant: 40),
+            actionButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            
+            toggleTitleLabel.leadingAnchor.constraint(equalTo: toggleImageView.trailingAnchor, constant: 10),
+            toggleTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            toggleTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+
+}
