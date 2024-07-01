@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StreamProfileView: UIView {
+class StreamProfileView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -49,23 +49,23 @@ class StreamProfileView: UIView {
         return stackView
     }()
     
-    let profileName: UILabel = {
+    lazy var profileName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.text = ""
         label.numberOfLines = 0
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
-    let userIdentifierLabel: UILabel = {
+    lazy var userIdentifierLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.text = ""
         label.numberOfLines = 0
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -75,11 +75,11 @@ class StreamProfileView: UIView {
         return button
     }()
     
-    let followButton: UIButton = {
+    lazy var followButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.follow.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = Appearance.default.colors.appRed
+        button.setImage(appearance.images.follow.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.imageView?.tintColor = appearance.colors.appRed
         return button
     }()
     
@@ -126,10 +126,10 @@ class StreamProfileView: UIView {
     }
     
     func setupConstraints(){
-        profileCard.pin(to: self)
-        profileDetailsButton.pin(to: profileCard)
-        defaultProfileView.pin(to: profileImageCardView)
-        profileImage.pin(to: profileImageCardView)
+        profileCard.ism_pin(to: self)
+        profileDetailsButton.ism_pin(to: profileCard)
+        defaultProfileView.ism_pin(to: profileImageCardView)
+        profileImage.ism_pin(to: profileImageCardView)
         NSLayoutConstraint.activate([
             profileImageCardView.widthAnchor.constraint(equalToConstant: 40),
             profileImageCardView.heightAnchor.constraint(equalToConstant: 40),

@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class RestreamChannelsViewController: UIViewController {
+class RestreamChannelsViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -24,18 +24,18 @@ class RestreamChannelsViewController: UIViewController {
     lazy var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.back.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.back.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .black
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return button
     }()
     
-    let headerTitle: UILabel = {
+    lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Restream Channels".localized
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     

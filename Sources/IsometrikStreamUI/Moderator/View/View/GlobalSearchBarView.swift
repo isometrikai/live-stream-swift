@@ -12,7 +12,7 @@ protocol GlobalSearchBarActionDelegate {
     func didSearchTextFieldDidChange(withText: String)
 }
 
-class GlobalSearchBarView: UIView {
+class GlobalSearchBarView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -26,10 +26,10 @@ class GlobalSearchBarView: UIView {
         return view
     }()
     
-    let searchIconImage: UIImageView = {
+    lazy var searchIconImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.search
+        imageView.image = appearance.images.search
         return imageView
     }()
     
@@ -43,11 +43,11 @@ class GlobalSearchBarView: UIView {
             string: "Search Users".localized,
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color:"#5E5E5E"),
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6)
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6)
             ]
         )
         
-        textField.font = Appearance.default.font.getFont(forTypo: .h6)
+        textField.font = appearance.font.getFont(forTypo: .h6)
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         return textField
     }()

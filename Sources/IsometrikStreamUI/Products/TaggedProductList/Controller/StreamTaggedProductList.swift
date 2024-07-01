@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class StreamTaggedProductList: UIViewController {
+class StreamTaggedProductList: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -30,7 +30,7 @@ class StreamTaggedProductList: UIViewController {
         view.headerTitle.textAlignment = .center
         
         view.trailingActionButton.isHidden = false
-        view.trailingActionButton.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.trailingActionButton.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         view.trailingActionButton.imageView?.tintColor = .black
         view.trailingActionButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return view

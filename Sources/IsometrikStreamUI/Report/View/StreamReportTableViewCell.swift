@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamReportTableViewCell: UITableViewCell {
+class StreamReportTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -20,11 +20,11 @@ class StreamReportTableViewCell: UITableViewCell {
         return view
     }()
     
-    let reasonLabel: UILabel = {
+    lazy var reasonLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
     

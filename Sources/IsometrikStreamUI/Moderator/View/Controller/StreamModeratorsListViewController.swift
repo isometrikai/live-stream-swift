@@ -14,7 +14,7 @@ protocol StreamModeratorsListActionDelegate {
     func openListForSelectingModerators()
 }
 
-class StreamModeratorsListViewController: UIViewController {
+class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     var delegate: StreamModeratorsListActionDelegate?
@@ -38,11 +38,11 @@ class StreamModeratorsListViewController: UIViewController {
         return tableView
     }()
     
-    let defaultView: StreamDefaultEmptyView = {
+    lazy var defaultView: StreamDefaultEmptyView = {
         let view = StreamDefaultEmptyView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
-        view.defaultImageView.image = Appearance.default.images.noViewers
+        view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Moderators Found".localized
         return view
     }()
@@ -74,14 +74,14 @@ class StreamModeratorsListViewController: UIViewController {
         // initializing configurations
         let headerTitle = headerView.headerTitle
         headerTitle.text = "Moderators".localized
-        headerTitle.font = Appearance.default.font.getFont(forTypo: .h3)
+        headerTitle.font = appearance.font.getFont(forTypo: .h3)
         headerTitle.textAlignment = .left
         
         let trailingActionButton = self.headerView.trailingActionButton2
         trailingActionButton.setTitle("+" + "Add".localized, for: .normal)
         trailingActionButton.setTitleColor(.white, for: .normal)
         trailingActionButton.isHidden = false
-        trailingActionButton.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        trailingActionButton.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         trailingActionButton.backgroundColor = .black
         
     }

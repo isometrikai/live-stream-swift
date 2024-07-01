@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FormTextView: UIView {
+class FormTextView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -29,28 +29,28 @@ class FormTextView: UIView {
         return view
     }()
     
-    let inputTextField: UITextField = {
+    lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.attributedPlaceholder = NSAttributedString(
             string: "Enter Something..",
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.lightGray.withAlphaComponent(0.7),
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8)!
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)
             ]
         )
         textField.tintColor = .white
-        textField.font = Appearance.default.font.getFont(forTypo: .h8)
+        textField.font = appearance.font.getFont(forTypo: .h8)
         textField.isHidden = true
         textField.textColor = .white
         return textField
     }()
     
-    let customTextLabel: UILabel = {
+    lazy var customTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Dummy form text label"
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = .lightGray.withAlphaComponent(0.7)
         return label
     }()
@@ -62,10 +62,10 @@ class FormTextView: UIView {
         return button
     }()
     
-    let copyButton: UIButton = {
+    lazy var copyButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.copyLink.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.copyLink.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         button.ismTapFeedBack()
         button.isHidden = true
@@ -96,8 +96,8 @@ class FormTextView: UIView {
     }
     
     func setupConstraints(){
-        outerView.pin(to: self)
-        tapActionButton.pin(to: self)
+        outerView.ism_pin(to: self)
+        tapActionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             customTextLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),

@@ -33,7 +33,7 @@ protocol StreamOptionActionDelegate {
     func didOptionsTapped(with option: StreamOption.RawValue)
 }
 
-class StreamOptionsView: UIView {
+class StreamOptionsView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -51,8 +51,8 @@ class StreamOptionsView: UIView {
     lazy var highlightView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundView.backgroundColor = Appearance.default.colors.appColor
-        view.optionImageView.image = Appearance.default.images.diamond.withRenderingMode(.alwaysTemplate)
+        view.backgroundView.backgroundColor = appearance.colors.appColor
+        view.optionImageView.image = appearance.images.diamond.withRenderingMode(.alwaysTemplate)
         view.optionImageView.tintColor = .black
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
@@ -64,7 +64,7 @@ class StreamOptionsView: UIView {
     lazy var shareView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.share1
+        view.optionImageView.image = appearance.images.share1
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.share.rawValue
@@ -75,7 +75,7 @@ class StreamOptionsView: UIView {
     lazy var bidderView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.tintColor = Appearance.default.colors.appColor
+        view.optionImageView.tintColor = appearance.colors.appColor
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.bidder.rawValue
@@ -86,7 +86,7 @@ class StreamOptionsView: UIView {
     lazy var storeView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.vendor.withRenderingMode(.alwaysTemplate)
+        view.optionImageView.image = appearance.images.vendor.withRenderingMode(.alwaysTemplate)
         view.optionImageView.tintColor = .white
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
@@ -98,7 +98,7 @@ class StreamOptionsView: UIView {
     lazy var flipCameraView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.flipCamera
+        view.optionImageView.image = appearance.images.flipCamera
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.camera.rawValue
@@ -109,7 +109,7 @@ class StreamOptionsView: UIView {
     lazy var microphoneView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.micUnmuted
+        view.optionImageView.image = appearance.images.micUnmuted
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.microphone.rawValue
@@ -120,7 +120,7 @@ class StreamOptionsView: UIView {
     lazy var lovedView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.reaction.withRenderingMode(.alwaysTemplate)
+        view.optionImageView.image = appearance.images.reaction.withRenderingMode(.alwaysTemplate)
         view.optionImageView.tintColor = .white
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
@@ -132,7 +132,7 @@ class StreamOptionsView: UIView {
     lazy var speakerView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.audioUnmuted
+        view.optionImageView.image = appearance.images.audioUnmuted
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.speaker.rawValue
@@ -143,7 +143,7 @@ class StreamOptionsView: UIView {
     lazy var moreView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.more1
+        view.optionImageView.image = appearance.images.more1
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.more.rawValue
@@ -154,7 +154,7 @@ class StreamOptionsView: UIView {
     lazy var walletView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.wallet
+        view.optionImageView.image = appearance.images.wallet
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.wallet.rawValue
@@ -165,7 +165,7 @@ class StreamOptionsView: UIView {
     lazy var analyticsView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.analytics
+        view.optionImageView.image = appearance.images.analytics
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.analytics.rawValue
@@ -176,7 +176,7 @@ class StreamOptionsView: UIView {
     lazy var settingsView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.more1
+        view.optionImageView.image = appearance.images.more1
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.settings.rawValue
@@ -187,7 +187,7 @@ class StreamOptionsView: UIView {
     lazy var requestView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.request
+        view.optionImageView.image = appearance.images.request
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.request.rawValue
@@ -198,7 +198,7 @@ class StreamOptionsView: UIView {
     lazy var requestListView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.requestList
+        view.optionImageView.image = appearance.images.requestList
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.requestList.rawValue
@@ -209,7 +209,7 @@ class StreamOptionsView: UIView {
     lazy var giftView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.gift
+        view.optionImageView.image = appearance.images.gift
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.gift.rawValue
@@ -220,7 +220,7 @@ class StreamOptionsView: UIView {
     lazy var pkInviteView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionButton.setBackgroundImage(Appearance.default.images.pkLogo, for: .normal)
+        view.optionButton.setBackgroundImage(appearance.images.pkLogo, for: .normal)
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.pkInvite.rawValue
@@ -231,11 +231,11 @@ class StreamOptionsView: UIView {
     lazy var stopPKBattleView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.stopPK
+        view.optionImageView.image = appearance.images.stopPK
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.stopPKBattle.rawValue
-        view.backgroundView.backgroundColor = Appearance.default.colors.appRed
+        view.backgroundView.backgroundColor = appearance.colors.appRed
         view.isHidden = true
         return view
     }()
@@ -243,11 +243,11 @@ class StreamOptionsView: UIView {
     lazy var endPKInviteView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = Appearance.default.images.endPK
+        view.optionImageView.image = appearance.images.endPK
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5
         view.optionButton.tag = StreamOption.endPKInvite.rawValue
-        view.backgroundView.backgroundColor = Appearance.default.colors.appRed
+        view.backgroundView.backgroundColor = appearance.colors.appRed
         view.isHidden = true
         return view
     }()
@@ -290,7 +290,7 @@ class StreamOptionsView: UIView {
     }
     
     func setupConstraints(){
-        optionStackView.pin(to: self)
+        optionStackView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             bidderView.widthAnchor.constraint(equalToConstant: 45),
             bidderView.heightAnchor.constraint(equalToConstant: 45),

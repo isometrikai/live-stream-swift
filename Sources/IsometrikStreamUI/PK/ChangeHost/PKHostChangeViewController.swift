@@ -8,18 +8,18 @@
 
 import UIKit
 
-class PKHostChangeViewController: UIViewController {
+class PKHostChangeViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
     var hostChange_Callback: (()->Void)?
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Are you sure that you want to change the host?"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         label.numberOfLines = 0
         return label
     }()
@@ -37,7 +37,7 @@ class PKHostChangeViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("No", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.lightGray, for: .normal)
         button.layer.cornerRadius = 25
         button.layer.borderWidth = 2
@@ -50,10 +50,10 @@ class PKHostChangeViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Yes", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.backgroundColor = appearance.colors.appColor
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(yesButtonTapped), for: .touchUpInside)
         return button
@@ -70,7 +70,7 @@ class PKHostChangeViewController: UIViewController {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = Appearance.default.colors.appDarkGray
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(titleLabel)
         view.addSubview(stackView)
         stackView.addArrangedSubview(noButton)

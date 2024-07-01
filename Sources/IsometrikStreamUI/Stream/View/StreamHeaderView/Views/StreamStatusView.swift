@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StreamStatusView: UIView {
+class StreamStatusView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -21,11 +21,11 @@ class StreamStatusView: UIView {
         return stackView
     }()
     
-    let liveButton: UIButton = {
+    lazy var liveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Live".localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h7)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .red
         button.layer.cornerRadius = 2
@@ -48,21 +48,21 @@ class StreamStatusView: UIView {
         return view
     }()
     
-    let memberIconImage: UIImageView = {
+    lazy var memberIconImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.user.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.user.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .white
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    let memberCountLabel: UILabel = {
+    lazy var memberCountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -94,11 +94,11 @@ class StreamStatusView: UIView {
         return imageView
     }()
     
-    let linkedProductCountLabel: UILabel = {
+    lazy var linkedProductCountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.text = ""
         label.textAlignment = .center
         return label
@@ -114,16 +114,16 @@ class StreamStatusView: UIView {
     
     // MARK: - Hourly ranking button
     
-    let hourlyRankingButton: UIButton = {
+    lazy var hourlyRankingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("  " + "Hourly Ranking".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appColor
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.backgroundColor = appearance.colors.appColor
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerCurve = .continuous
         button.setImage(UIImage(systemName: "flame")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = Appearance.default.colors.appColor
+        button.imageView?.tintColor = appearance.colors.appColor
         button.imageView?.contentMode = .scaleAspectFit
         button.imageEdgeInsets = UIEdgeInsets(top: 3, left: 3, bottom: 3, right: 3)
         button.layer.cornerRadius = 5
@@ -139,13 +139,13 @@ class StreamStatusView: UIView {
     
     // MARK: - Now featuring product Button
     
-    let nowFeaturingButton: UIButton = {
+    lazy var nowFeaturingButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Now Featuring", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appColor
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h7)
+        button.backgroundColor = appearance.colors.appColor
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 5
         button.isHidden = true
@@ -157,12 +157,12 @@ class StreamStatusView: UIView {
     
     // MARK: - Paid stream
     
-    let paidStreamButton: UIButton = {
+    lazy var paidStreamButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "profile_coin"), for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h7)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.ismTapFeedBack()
         return button
     }()
@@ -171,10 +171,10 @@ class StreamStatusView: UIView {
     
     // MARK: - Moderator
     
-    let moderatorButton: UIButton = {
+    lazy var moderatorButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.moderator.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.moderator.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         button.ismTapFeedBack()
         button.backgroundColor = .black.withAlphaComponent(0.4)
@@ -225,8 +225,8 @@ class StreamStatusView: UIView {
     }
     
     func setupConstraints(){
-        //memberCountButton.pin(to: memberCountView)
-        //linkedProductButton.pin(to: linkedProductsView)
+        //memberCountButton.ism_pin(to: memberCountView)
+        //linkedProductButton.ism_pin(to: linkedProductsView)
         
         NSLayoutConstraint.activate([
             

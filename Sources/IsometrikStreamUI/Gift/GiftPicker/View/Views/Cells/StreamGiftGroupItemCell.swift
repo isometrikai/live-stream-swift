@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamGiftGroupItemCell: UICollectionViewCell {
+class StreamGiftGroupItemCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -32,12 +32,12 @@ class StreamGiftGroupItemCell: UICollectionViewCell {
         return imageView
     }()
     
-    let groupItemTitle: UILabel = {
+    lazy var groupItemTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.text = "12 Coins"
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         return label
     }()
@@ -63,7 +63,7 @@ class StreamGiftGroupItemCell: UICollectionViewCell {
     }
     
     func setUpConstraints(){
-        cardView.pin(to: self)
+        cardView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             giftItemImage.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 10),
             giftItemImage.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RestreamOptionView: UIView {
+class RestreamOptionView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -19,19 +19,19 @@ class RestreamOptionView: UIView {
         return view
     }()
     
-    let restreamLabel: UILabel = {
+    lazy var restreamLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Restream".localized
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
     
-    let trailingImage: UIImageView = {
+    lazy var trailingImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.arrowRight.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.arrowRight.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .white
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -73,7 +73,7 @@ class RestreamOptionView: UIView {
     }
     
     func setupConstraints(){
-        actionButton.pin(to: self)
+        actionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             dividerOne.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             dividerOne.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),

@@ -8,24 +8,24 @@
 
 import UIKit
 
-class PKRefuseInvitationView: UIView {
+class PKRefuseInvitationView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Refuse all invitations".localized
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
     
-    let toggleSwitch: UISwitch = {
+    lazy var toggleSwitch: UISwitch = {
         let toggleView = UISwitch()
         toggleView.translatesAutoresizingMaskIntoConstraints = false
         toggleView.isOn = false
-        toggleView.onTintColor = Appearance.default.colors.appColor
+        toggleView.onTintColor = appearance.colors.appColor
         return toggleView
     }()
     

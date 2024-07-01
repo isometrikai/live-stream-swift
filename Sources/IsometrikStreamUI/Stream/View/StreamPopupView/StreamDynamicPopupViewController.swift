@@ -13,7 +13,7 @@ enum StreamDynamicPopupTap{
     case ok
 }
 
-class StreamDynamicPopupViewController: UIViewController {
+class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -37,22 +37,22 @@ class StreamDynamicPopupViewController: UIViewController {
         return view
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
     }()
     
-    let infoLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.colorWithHex(color: "#BCBCE5")
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -72,7 +72,7 @@ class StreamDynamicPopupViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         button.setTitle("Cancel".localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .lightGray.withAlphaComponent(0.5)
         button.layer.cornerRadius = 25
@@ -85,7 +85,7 @@ class StreamDynamicPopupViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action:
                             #selector(actionButtonTapped), for: .touchUpInside)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
         button.backgroundColor = .black
@@ -118,7 +118,7 @@ class StreamDynamicPopupViewController: UIViewController {
     }
     
     func setupConstraints(){
-        backCoverView.pin(to: view)
+        backCoverView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             cardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

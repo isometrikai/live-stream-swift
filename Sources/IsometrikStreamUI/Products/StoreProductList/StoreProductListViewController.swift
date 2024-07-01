@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class StoreProductListViewController: UIViewController {
+class StoreProductListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -41,7 +41,7 @@ class StoreProductListViewController: UIViewController {
         view.dividerView.isHidden = false
         
         view.leadingActionButton.isHidden = false
-        view.leadingActionButton.setImage(Appearance.default.images.back, for: .normal)
+        view.leadingActionButton.setImage(appearance.images.back, for: .normal)
         view.leadingActionButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         
         view.backgroundColor = .white

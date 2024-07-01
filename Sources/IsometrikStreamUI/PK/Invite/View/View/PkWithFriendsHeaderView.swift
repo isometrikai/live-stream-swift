@@ -8,23 +8,23 @@
 
 import UIKit
 
-class PkWithFriendsHeaderView: UIView {
+class PkWithFriendsHeaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "PK With Friends"
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         label.textColor = .white
         return label
     }()
     
-    let closeButton: UIButton = {
+    lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         return button
     }()

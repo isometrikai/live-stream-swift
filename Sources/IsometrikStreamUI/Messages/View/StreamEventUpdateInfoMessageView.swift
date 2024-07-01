@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamEventUpdateInfoMessageView: UIView {
+class StreamEventUpdateInfoMessageView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -45,20 +45,20 @@ class StreamEventUpdateInfoMessageView: UIView {
         return imageView
     }()
     
-    let userNameLabel: UILabel = {
+    lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h7)
+        label.font = appearance.font.getFont(forTypo: .h7)
         return label
     }()
     
-    let messageLabel: UILabel = {
+    lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
-        label.textColor = Appearance.default.colors.appColor
+        label.font = appearance.font.getFont(forTypo: .h6)
+        label.textColor = appearance.colors.appColor
         label.numberOfLines = 0
         return label
     }()
@@ -89,8 +89,8 @@ class StreamEventUpdateInfoMessageView: UIView {
     }
     
     func setupConstraints(){
-        userProfileImage.pin(to: profileCoverView)
-        userDefaultProfileImageView.pin(to: profileCoverView)
+        userProfileImage.ism_pin(to: profileCoverView)
+        userDefaultProfileImageView.ism_pin(to: profileCoverView)
         NSLayoutConstraint.activate([
             
             coverView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),

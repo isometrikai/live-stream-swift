@@ -12,11 +12,11 @@ import IsometrikStream
 
 extension StreamViewController: RtcWrapperProtocol {
     
-    func didUserJoinedAsCohost(withId Id: String) {}
+    public func didUserJoinedAsCohost(withId Id: String) {}
     
-    func didUserGoesOffline(user: ISMMember) {}
+    public func didUserGoesOffline(user: ISMMember) {}
     
-    func didUpdateVideoTrack(track: VideoTrack?, uid: UInt) {
+    public func didUpdateVideoTrack(track: VideoTrack?, uid: UInt) {
         
         guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
         DispatchQueue.main.async{
@@ -27,7 +27,7 @@ extension StreamViewController: RtcWrapperProtocol {
         
     }
     
-    func videoSessionsDidSet() {
+    public func videoSessionsDidSet() {
         
 //        guard let isometrik = viewModel.isometrik,
 //              let videoContainer = viewModel.videoContainer
@@ -39,7 +39,7 @@ extension StreamViewController: RtcWrapperProtocol {
         
     }
     
-    func updateVideoSessions() {
+    public func updateVideoSessions() {
         
         guard let isometrik = viewModel.isometrik
         else { return }
@@ -62,7 +62,7 @@ extension StreamViewController: RtcWrapperProtocol {
         
     }
     
-    func updateVideoSessionLayout(){
+    public func updateVideoSessionLayout(){
         
         // video views layout
         guard let isometrik = viewModel.isometrik,

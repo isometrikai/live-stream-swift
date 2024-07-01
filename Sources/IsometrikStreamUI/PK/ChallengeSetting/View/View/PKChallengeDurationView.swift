@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeDurationView: UIView {
+class PKChallengeDurationView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -18,12 +18,12 @@ class PKChallengeDurationView: UIView {
         }
     }
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Choose PK Challenge Duration"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     

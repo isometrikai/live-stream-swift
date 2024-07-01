@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamMessageTableViewCell: UITableViewCell {
+class StreamMessageTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -58,10 +58,10 @@ class StreamMessageTableViewCell: UITableViewCell {
     
     ///:
     
-    let messageLabel: UILabel = {
+    lazy var messageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .white
         label.numberOfLines = 0
         return label
@@ -73,11 +73,11 @@ class StreamMessageTableViewCell: UITableViewCell {
         return view
     }()
     
-    let deleteImage: UIImageView = {
+    lazy var deleteImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.removeCircle.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = Appearance.default.colors.appRed
+        imageView.image = appearance.images.removeCircle.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = appearance.colors.appRed
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -119,9 +119,9 @@ class StreamMessageTableViewCell: UITableViewCell {
     }
     
     func setupConstraints(){
-        userProfileImage.pin(to: profileCoverView)
-        userDefaultProfileImageView.pin(to: profileCoverView)
-        deleteButton.pin(to: deleteView)
+        userProfileImage.ism_pin(to: profileCoverView)
+        userDefaultProfileImageView.ism_pin(to: profileCoverView)
+        deleteButton.ism_pin(to: deleteView)
         
         NSLayoutConstraint.activate([
             backgroundMessageView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -229,7 +229,7 @@ class StreamMessageTableViewCell: UITableViewCell {
             attributedString: NSAttributedString(
                 string: AuthorName,
                 attributes: [
-                    NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7)! ,
+                    NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7)! ,
                     NSAttributedString.Key.foregroundColor: UIColor.white
                 ]
             )
@@ -239,7 +239,7 @@ class StreamMessageTableViewCell: UITableViewCell {
             NSAttributedString(
                 string: message,
                 attributes: [
-                    NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7)!,
+                    NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7)!,
                     NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.8)
                 ]
             )

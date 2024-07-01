@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import IsometrikStream
 
-enum StreamUserType {
+public enum StreamUserType {
     case viewer
     case member
     case host
@@ -32,7 +32,7 @@ enum PKStopAction: String {
 typealias streamResponse = ((String?) -> Void)
 typealias productResponse = ((Result<Any?, IsometrikError>) -> Void)
 
-class StreamViewModel: NSObject {
+final public class StreamViewModel: NSObject {
     
     var hours = 0
     var minutes = 0
@@ -57,10 +57,10 @@ class StreamViewModel: NSObject {
     
     var counter = 3
     
-    var isometrik: IsometrikSDK?
-    var streamsData: [ISMStream]?
+    public var isometrik: IsometrikSDK?
+    public var streamsData: [ISMStream]?
     var streamOptions: [StreamOption] = []
-    var streamUserType: StreamUserType = .viewer
+    public var streamUserType: StreamUserType = .viewer
     var streamMessageViewModel: StreamMessageViewModel?
     var streamProductViewModel: ProductViewModel?
 //    var profileViewModel = ProfileViewModel()
@@ -73,7 +73,7 @@ class StreamViewModel: NSObject {
     var videoPreviewPlayer: AVPlayer?
     
     var youAreLiveCallbackAfterCounter:(() -> Void)?
-    var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
+    public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
     var videoContainer: CustomVideoContainer?
     
     

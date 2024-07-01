@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class RestreamOptionTableViewCell: UITableViewCell {
+class RestreamOptionTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -26,10 +26,10 @@ class RestreamOptionTableViewCell: UITableViewCell {
         return view
     }()
 
-    let trailingImage: UIImageView = {
+    lazy var trailingImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = Appearance.default.images.arrowRight.withRenderingMode(.alwaysTemplate)
+        image.image = appearance.images.arrowRight.withRenderingMode(.alwaysTemplate)
         image.tintColor = .black.withAlphaComponent(0.3)
         return image
     }()
@@ -55,7 +55,7 @@ class RestreamOptionTableViewCell: UITableViewCell {
     }
     
     func setupConstraints(){
-        optionHeader.pin(to: self)
+        optionHeader.ism_pin(to: self)
         NSLayoutConstraint.activate([
             trailingImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             trailingImage.centerYAnchor.constraint(equalTo: centerYAnchor),

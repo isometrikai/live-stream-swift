@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamAnalyticsController: UIViewController {
+class StreamAnalyticsController: UIViewController, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -55,18 +55,18 @@ class StreamAnalyticsController: UIViewController {
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = .black
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return button
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Live".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         label.textColor = .black
         label.textAlignment = .center
         return label
@@ -90,38 +90,38 @@ class StreamAnalyticsController: UIViewController {
         return stackView
     }()
     
-    let totalHearts: AnalyticsInfoView = {
+    lazy var totalHearts: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.reaction.withRenderingMode(.alwaysTemplate)
+        view.featureImage.image = appearance.images.reaction.withRenderingMode(.alwaysTemplate)
         view.featureImage.tintColor = .black
         view.featureLabel.text = "Reactions"
         view.valueLabel.text = "--"
         return view
     }()
     
-    let totalOrders: AnalyticsInfoView = {
+    lazy var totalOrders: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.vendor
+        view.featureImage.image = appearance.images.vendor
         view.featureLabel.text = "Orders".localized
         view.valueLabel.text = "--"
         return view
     }()
     
-    let totalViewers: AnalyticsInfoView = {
+    lazy var totalViewers: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.viewerStat
+        view.featureImage.image = appearance.images.viewerStat
         view.featureLabel.text = "Viewers".localized
         view.valueLabel.text = "--"
         return view
     }()
     
-    let totalFollowers: AnalyticsInfoView = {
+    lazy var totalFollowers: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.followersStat
+        view.featureImage.image = appearance.images.followersStat
         view.featureLabel.text = "Followers".localized
         view.valueLabel.text = "--"
         view.isHidden = true
@@ -137,28 +137,28 @@ class StreamAnalyticsController: UIViewController {
         return stackView
     }()
     
-    let sellingQuantity: AnalyticsInfoView = {
+    lazy var sellingQuantity: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.sellingQtyStat
+        view.featureImage.image = appearance.images.sellingQtyStat
         view.featureLabel.text = "Selling Quantity".localized
         view.valueLabel.text = "--"
         return view
     }()
     
-    let earning: AnalyticsInfoView = {
+    lazy var earning: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.earningStat
+        view.featureImage.image = appearance.images.earningStat
         view.featureLabel.text = "Sales Value".localized
         view.valueLabel.text = "--"
         return view
     }()
     
-    let duration: AnalyticsInfoView = {
+    lazy var duration: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = Appearance.default.images.durationStat
+        view.featureImage.image = appearance.images.durationStat
         view.featureLabel.text = "Duration".localized
         view.valueLabel.text = "--:--"
         return view
@@ -190,7 +190,7 @@ class StreamAnalyticsController: UIViewController {
         button.backgroundColor = .black
         button.setTitle("Done".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
@@ -237,8 +237,8 @@ class StreamAnalyticsController: UIViewController {
     }
     
     func setupConstraints(){
-        logoImage.pin(to: logoCoverView)
-        defaultImageView.pin(to: logoCoverView)
+        logoImage.ism_pin(to: logoCoverView)
+        defaultImageView.ism_pin(to: logoCoverView)
         NSLayoutConstraint.activate([
             logoCoverView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoCoverView.widthAnchor.constraint(equalToConstant: 100),
@@ -305,7 +305,7 @@ class StreamAnalyticsController: UIViewController {
         
         let initialText = "\(firstName.prefix(1))\(lastName.prefix(1))"
         defaultImageView.initialsText.text = initialText
-        defaultImageView.initialsText.font = Appearance.default.font.getFont(forTypo: .h3)
+        defaultImageView.initialsText.font = appearance.font.getFont(forTypo: .h3)
         
         // get stream Analytics
         //Helper.showPI()
@@ -361,7 +361,7 @@ extension StreamAnalyticsController: StreamAnalyticViewersActionDelegate {
     
 }
 
-class AnalyticsInfoView: UIView {
+class AnalyticsInfoView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -372,22 +372,22 @@ class AnalyticsInfoView: UIView {
         return image
     }()
     
-    let featureLabel: UILabel = {
+    lazy var featureLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "feature label"
         label.textColor = UIColor.colorWithHex(color: "#9797BE")
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textAlignment = .center
         return label
     }()
     
-    let valueLabel: UILabel = {
+    lazy var valueLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "123 min"
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         label.textAlignment = .center
         return label
     }()
@@ -424,7 +424,7 @@ class AnalyticsInfoView: UIView {
     }
     
     func setupConstraints(){
-        stackView.pin(to: self)
+        stackView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             featureImage.widthAnchor.constraint(equalToConstant: 25),
             featureImage.heightAnchor.constraint(equalToConstant: 25)

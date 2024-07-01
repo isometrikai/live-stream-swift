@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomCropViewController: UIViewController, UIScrollViewDelegate {
+class CustomCropViewController: UIViewController, UIScrollViewDelegate, AppearanceProvider {
     
     var croppedImage: ((UIImage?) -> Void)?
     var aspectW: CGFloat!
@@ -36,7 +36,7 @@ class CustomCropViewController: UIViewController, UIScrollViewDelegate {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("cancel".localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .lightGray
         button.layer.borderColor = UIColor.white.cgColor
@@ -51,7 +51,7 @@ class CustomCropViewController: UIViewController, UIScrollViewDelegate {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("choose", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 25

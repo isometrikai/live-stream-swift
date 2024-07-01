@@ -8,22 +8,22 @@
 
 import UIKit
 
-class StreamGiftContentHeaderView: UIView {
+class StreamGiftContentHeaderView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let closeButton: UIButton = {
+    lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         return button
     }()
     
-    let coinImage: UIImageView = {
+    lazy var coinImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.coin
+        imageView.image = appearance.images.coin
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -37,32 +37,32 @@ class StreamGiftContentHeaderView: UIView {
         return stackView
     }()
     
-    let coinAmount: UILabel = {
+    lazy var coinAmount: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0 Coins"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     
-    let balanceLabel: UILabel = {
+    lazy var balanceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Your balance"
         label.textColor = .lightGray.withAlphaComponent(0.7)
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
-    let getMoreButton: UIButton = {
+    lazy var getMoreButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Get more", for: .normal)
-        button.setTitleColor(Appearance.default.colors.appSecondary, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
+        button.backgroundColor = appearance.colors.appColor
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 17.5
         return button
     }()

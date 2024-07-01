@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamUserProfileOptionTableViewCell: UITableViewCell {
+class StreamUserProfileOptionTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -24,10 +24,10 @@ class StreamUserProfileOptionTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    let optionLabel: UILabel = {
+    lazy var optionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textColor = .black
         return label
     }()

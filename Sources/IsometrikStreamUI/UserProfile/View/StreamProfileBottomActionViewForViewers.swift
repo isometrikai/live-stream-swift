@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamProfileBottomActionViewForViewers: UIView {
+class StreamProfileBottomActionViewForViewers: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -21,11 +21,11 @@ class StreamProfileBottomActionViewForViewers: UIView {
         return stackView
     }()
     
-    let followAndLeaveButton: UIButton = {
+    lazy var followAndLeaveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.backgroundColor = .black
         button.setTitle("Follow & Leave", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -36,16 +36,16 @@ class StreamProfileBottomActionViewForViewers: UIView {
         return button
     }()
     
-    let leaveButton: UIButton = {
+    lazy var leaveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
+        button.backgroundColor = appearance.colors.appColor
         button.layer.borderColor = UIColor.colorWithHex(color: "BCBCE5").cgColor
         button.layer.borderWidth = 1
         button.setTitle("Leave", for: .normal)
-        button.setTitleColor(Appearance.default.colors.appSecondary, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()

@@ -72,7 +72,7 @@ class StreamGiftContentGroupHeaderView: UIView {
     }
     
     func setUpConstraints(){
-        collectionView.pin(to: self)
+        collectionView.ism_pin(to: self)
         
         NSLayoutConstraint.activate([
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),

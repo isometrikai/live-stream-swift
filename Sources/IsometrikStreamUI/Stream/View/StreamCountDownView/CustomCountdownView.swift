@@ -44,7 +44,7 @@ class CustomCountdownView: UIView {
     }
     
     func setupConstraints(){
-        numberLabel.pin(to: self)
+        numberLabel.ism_pin(to: self)
     }
     
     func startTimer(){

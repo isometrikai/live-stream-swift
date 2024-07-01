@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveProfileView: UIView {
+class GoLiveProfileView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -27,21 +27,21 @@ class GoLiveProfileView: UIView {
         return view
     }()
     
-    let placeHolderImageView: UIImageView = {
+    lazy var placeHolderImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.add.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.add.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .white
         return imageView
     }()
     
-    let placeHolderTitle: UILabel = {
+    lazy var placeHolderTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "+" + " " + "Add Cover".localized
         label.textColor = .white
         label.textAlignment = .center
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -63,7 +63,7 @@ class GoLiveProfileView: UIView {
     lazy var clearImageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close, for: .normal)
+        button.setImage(appearance.images.close, for: .normal)
         button.backgroundColor = .white
         button.layer.cornerRadius = 10
         button.ismTapFeedBack()
@@ -93,7 +93,7 @@ class GoLiveProfileView: UIView {
         textView.textColor = .lightGray
         textView.backgroundColor = .clear
         textView.tintColor = .white
-        textView.font = Appearance.default.font.getFont(forTypo: .h8)
+        textView.font = appearance.font.getFont(forTypo: .h8)
         return textView
     }()
     
@@ -128,8 +128,8 @@ class GoLiveProfileView: UIView {
     }
     
     func setUpConstraints(){
-        profileActionButton.pin(to: profileCoverView)
-        profileCoverImageView.pin(to: profileCoverView)
+        profileActionButton.ism_pin(to: profileCoverView)
+        profileCoverImageView.ism_pin(to: profileCoverView)
         NSLayoutConstraint.activate([
             
             profileCoverView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),

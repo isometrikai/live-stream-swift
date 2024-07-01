@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class ProductDetailsViewController: UIViewController, UITextFieldDelegate {
+class ProductDetailsViewController: UIViewController, UITextFieldDelegate, AppearanceProvider {
 
     // MARK: - PROPERTIES
     var addButtonBottomConstraint: NSLayoutConstraint?
@@ -45,7 +45,7 @@ class ProductDetailsViewController: UIViewController, UITextFieldDelegate {
         view.headerTitle.textAlignment = .left
         
         view.trailingActionButton.isHidden = false
-        view.trailingActionButton.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.trailingActionButton.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         view.trailingActionButton.imageView?.tintColor = .black
         view.trailingActionButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         
@@ -60,7 +60,7 @@ class ProductDetailsViewController: UIViewController, UITextFieldDelegate {
         view.formTitleLabel.textColor = .black
         
         view.formTextView.copyButton.isHidden = false
-        view.formTextView.copyButton.setImage(Appearance.default.images.percentage.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.formTextView.copyButton.setImage(appearance.images.percentage.withRenderingMode(.alwaysTemplate), for: .normal)
         view.formTextView.copyButton.imageView?.tintColor = .black.withAlphaComponent(0.8)
         
         view.formTextView.customTextLabel.isHidden = true
@@ -71,14 +71,14 @@ class ProductDetailsViewController: UIViewController, UITextFieldDelegate {
             string: "Enter Discount Percentage".localized,
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.lightGray.withAlphaComponent(0.7),
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6)!
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6)!
             ]
         )
         view.formTextView.inputTextField.tintColor = .black
         view.formTextView.inputTextField.textColor = .black
         view.formTextView.inputTextField.delegate = self
         view.formTextView.inputTextField.keyboardType = .decimalPad
-        view.formTextView.inputTextField.font = Appearance.default.font.getFont(forTypo: .h6)
+        view.formTextView.inputTextField.font = appearance.font.getFont(forTypo: .h6)
         
         return view
     }()

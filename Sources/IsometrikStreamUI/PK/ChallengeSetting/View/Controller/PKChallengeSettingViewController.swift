@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeSettingViewController: UIViewController {
+class PKChallengeSettingViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -30,9 +30,9 @@ class PKChallengeSettingViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Confirm & Start", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
-        button.setTitleColor(Appearance.default.colors.appSecondary, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
+        button.backgroundColor = appearance.colors.appColor
         button.layer.cornerRadius = 27.5
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(startChallengeButtonTapped), for: .touchUpInside)
@@ -60,7 +60,7 @@ class PKChallengeSettingViewController: UIViewController {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = Appearance.default.colors.appDarkGray
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(challengeDurationView)
         view.addSubview(startChallengeButton)

@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-extension CustomVideoContainer {
+extension CustomVideoContainer: AppearanceProvider {
     
     func refreshLayout(streamInfo: ISMStream?){
         //reorderSessions()
@@ -155,7 +155,7 @@ extension CustomVideoContainer {
             // for draw condition
             congratsBanner.isHidden = false
             congratsBanner.titleLabel.text = "It's a Draw!".ism_localized
-            congratsBanner.backgroundColor = Appearance.default.colors.appDeepBlue
+            congratsBanner.backgroundColor = appearance.colors.appDeepBlue
             
             // show draw status image
             pkOverlayView.drawStatusImage.isHidden = false
@@ -186,7 +186,7 @@ extension CustomVideoContainer {
         
         group.notify(queue: .main) {
             congratsBanner.isHidden = false
-            congratsBanner.backgroundColor = Appearance.default.colors.appPink
+            congratsBanner.backgroundColor = self.appearance.colors.appPink
             congratsBanner.titleLabel.text = "Congratulation to " + "@\(userData?.userName ?? "")"
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {

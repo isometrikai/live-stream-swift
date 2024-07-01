@@ -26,7 +26,7 @@ enum GoLiveStreamType: Int {
 
 typealias response = ((Bool) -> Void)
 
-class GoLiveViewModel {
+final public class GoLiveViewModel {
     
     // For edit stream
     var streamData: ISMStream?
@@ -78,7 +78,7 @@ class GoLiveViewModel {
     var allProducts: [StreamProductModel] = []
     var update_callback: ((_ streamId: String)->())?
     
-    init(isometrik: IsometrikSDK) {
+    public init(isometrik: IsometrikSDK) {
         self.isometrik = isometrik
         self.productViewModel = ProductViewModel(isometrik: isometrik)
     }

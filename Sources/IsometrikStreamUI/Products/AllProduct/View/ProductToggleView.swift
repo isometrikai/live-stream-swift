@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProductToggleView: UIView {
+class ProductToggleView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -21,21 +21,21 @@ class ProductToggleView: UIView {
         return stackView
     }()
     
-    let myStoreButton: UIButton = {
+    lazy var myStoreButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("My Store".localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h7)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.layer.borderColor = UIColor.colorWithHex(color: "#BCBCE5").cgColor
         button.layer.cornerRadius = 22.5
         return button
     }()
     
-    let otherStoreButton: UIButton = {
+    lazy var otherStoreButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Other Stores".localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h7)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.layer.borderColor = UIColor.colorWithHex(color: "#BCBCE5").cgColor
         button.layer.cornerRadius = 22.5
         return button
@@ -92,9 +92,9 @@ class ProductToggleView: UIView {
             otherStoreButton.layer.borderWidth = 1
             otherStoreButton.backgroundColor = .clear
             
-            myStoreButton.setTitleColor(Appearance.default.colors.appSecondary, for: .normal)
+            myStoreButton.setTitleColor(appearance.colors.appSecondary, for: .normal)
             myStoreButton.layer.borderWidth = 0
-            myStoreButton.backgroundColor = Appearance.default.colors.appColor
+            myStoreButton.backgroundColor = appearance.colors.appColor
             
             break
         case .otherStore:
@@ -103,9 +103,9 @@ class ProductToggleView: UIView {
             myStoreButton.layer.borderWidth = 1
             myStoreButton.backgroundColor = .clear
             
-            otherStoreButton.setTitleColor(Appearance.default.colors.appSecondary, for: .normal)
+            otherStoreButton.setTitleColor(appearance.colors.appSecondary, for: .normal)
             otherStoreButton.layer.borderWidth = 0
-            otherStoreButton.backgroundColor = Appearance.default.colors.appColor
+            otherStoreButton.backgroundColor = appearance.colors.appColor
             
             break
         }

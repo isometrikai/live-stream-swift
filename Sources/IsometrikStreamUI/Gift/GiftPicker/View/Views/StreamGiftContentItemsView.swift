@@ -14,7 +14,7 @@ protocol StreamGiftItemActionProtocol {
     func didGiftItemSelected(giftData: ISMStreamGiftModel)
 }
 
-class StreamGiftContentItemsView: UIView {
+class StreamGiftContentItemsView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -47,12 +47,12 @@ class StreamGiftContentItemsView: UIView {
         return collectionView
     }()
     
-    let defaultLabel: UILabel = {
+    lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "No Gifts Found"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         label.isHidden = true
         return label
@@ -78,7 +78,7 @@ class StreamGiftContentItemsView: UIView {
     }
     
     func setUpConstraints(){
-        collectionView.pin(to: self)
+        collectionView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             defaultLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             defaultLabel.centerYAnchor.constraint(equalTo: centerYAnchor)

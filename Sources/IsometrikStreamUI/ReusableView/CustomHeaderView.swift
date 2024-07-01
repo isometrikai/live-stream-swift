@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomHeaderView: UIView {
+class CustomHeaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -147,12 +147,12 @@ class CustomHeaderView: UIView {
     func attributedHeaderTitle(title: String, subtitle: String) -> NSAttributedString {
         
         let attributedString = NSMutableAttributedString(attributedString: NSAttributedString(string: "\(title)\n", attributes: [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8)!,
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)!,
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]))
         
         attributedString.append(NSAttributedString(string: "\(subtitle)", attributes: [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h3)!,
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h3)!,
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]))
         

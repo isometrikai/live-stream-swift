@@ -8,22 +8,22 @@
 
 import UIKit
 
-class CustomRadioOptionView: UIView {
+class CustomRadioOptionView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let radioImage: UIImageView = {
+    lazy var radioImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.radioUnSelected
+        imageView.image = appearance.images.radioUnSelected
         return imageView
     }()
     
-    let optionLabel: UILabel = {
+    lazy var optionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     
@@ -54,7 +54,7 @@ class CustomRadioOptionView: UIView {
     }
     
     func setUpConstraints(){
-        actionButton.pin(to: self)
+        actionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             radioImage.leadingAnchor.constraint(equalTo: leadingAnchor),
             radioImage.widthAnchor.constraint(equalToConstant: 24),

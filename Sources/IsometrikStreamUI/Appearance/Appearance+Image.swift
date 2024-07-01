@@ -10,7 +10,7 @@ import UIKit
 public struct ISM_Image {
     
     private static func loadImageSafely(with imageName: String) -> UIImage {
-        if let image = UIImage(named: imageName) {
+        if let image = UIImage(named: imageName, in: .isometrikStreamBundle) {
             return image
         } else {
             print(

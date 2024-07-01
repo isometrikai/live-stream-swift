@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomVideoSessionProfileView: UIView {
+class CustomVideoSessionProfileView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
 
@@ -55,10 +55,10 @@ class CustomVideoSessionProfileView: UIView {
         return view
     }()
     
-    let usernameLabel: UILabel = {
+    lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 1
         label.textColor = .white
         label.textAlignment = .center
@@ -98,9 +98,9 @@ class CustomVideoSessionProfileView: UIView {
     }
     
     func setupConstraints(){
-        blurrView.pin(to: self)
-        profileView.pin(to: self)
-        backgroundImage.pin(to: self)
+        blurrView.ism_pin(to: self)
+        profileView.ism_pin(to: self)
+        backgroundImage.ism_pin(to: self)
         NSLayoutConstraint.activate([
             profilePicture.widthAnchor.constraint(equalToConstant: 50),
             profilePicture.heightAnchor.constraint(equalToConstant: 50),
@@ -127,7 +127,7 @@ class CustomVideoSessionProfileView: UIView {
 }
 
 
-class BlurrHolderView: UIView {
+class BlurrHolderView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -137,11 +137,11 @@ class BlurrHolderView: UIView {
         return view
     }()
     
-    let blurrViewLabel: UILabel = {
+    lazy var blurrViewLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font =  Appearance.default.font.getFont(forTypo: .h4)
+        label.font =  appearance.font.getFont(forTypo: .h4)
         return label
     }()
     
@@ -168,7 +168,7 @@ class BlurrHolderView: UIView {
     }
     
     func setupConstraints(){
-        blurrView.pin(to: self)
+        blurrView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             blurrViewLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             blurrViewLabel.centerYAnchor.constraint(equalTo: centerYAnchor)

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamDeleteMessageTableViewCell: UITableViewCell {
+class StreamDeleteMessageTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -19,27 +19,27 @@ class StreamDeleteMessageTableViewCell: UITableViewCell {
         }
     }
     
-    let defaultImage: UIImageView = {
+    lazy var defaultImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.cornerRadius = 15
-        image.image = Appearance.default.images.removeCircle
+        image.image = appearance.images.removeCircle
         return image
     }()
     
-    let backCardView: UIView = {
+    lazy var backCardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appRed.withAlphaComponent(0.3)
+        view.backgroundColor = appearance.colors.appRed.withAlphaComponent(0.3)
         view.layer.cornerRadius = 20
         return view
     }()
     
-    let infoLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white.withAlphaComponent(0.8)
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()

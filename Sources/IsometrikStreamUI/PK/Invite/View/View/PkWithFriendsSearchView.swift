@@ -8,25 +8,25 @@
 
 import UIKit
 
-class PkWithFriendsSearchView: UIView {
+class PkWithFriendsSearchView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let searchBarView: UIView = {
+    lazy var searchBarView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.1)
-        view.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.4).cgColor
+        view.backgroundColor = appearance.colors.appLightGray.withAlphaComponent(0.1)
+        view.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.4).cgColor
         view.layer.borderWidth = 1
         view.layer.cornerRadius = 5
         return view
     }()
     
-    let searchTextField: UITextField = {
+    lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Search"
-        textField.font = Appearance.default.font.getFont(forTypo: .h5)
+        textField.font = appearance.font.getFont(forTypo: .h5)
         textField.textColor = .white
         textField.tintColor = .white
         

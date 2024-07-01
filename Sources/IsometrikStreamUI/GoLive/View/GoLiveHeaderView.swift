@@ -20,7 +20,7 @@ protocol GoLiveHeaderActionDelegate {
     func didClearImageButtonTapped()
 }
 
-class GoLiveHeaderView: UIView {
+class GoLiveHeaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -34,21 +34,21 @@ class GoLiveHeaderView: UIView {
         return view
     }()
     
-    let headerTitle: UILabel = {
+    lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Go Live".localized
         label.textColor = .white
         label.textAlignment = .center
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         return label
     }()
     
-    let warningButtonView: UIButton = {
+    lazy var warningButtonView: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Broadcasters under 18 are not permitted".localized + ".", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 17.5
         button.backgroundColor = UIColor.ism_hexStringToUIColor(hex: "#FF5858")
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -59,7 +59,7 @@ class GoLiveHeaderView: UIView {
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
@@ -87,7 +87,7 @@ class GoLiveHeaderView: UIView {
         button.layer.borderWidth = 1.5
         button.layer.borderColor = UIColor.white.cgColor
         button.backgroundColor = .white.withAlphaComponent(0.3)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.tag = 1
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 5
@@ -103,7 +103,7 @@ class GoLiveHeaderView: UIView {
         button.layer.borderWidth = 1.5
         button.layer.borderColor = UIColor.white.cgColor
         button.backgroundColor = .white.withAlphaComponent(0.3)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.tag = 2
         button.layer.masksToBounds = false
         button.layer.cornerRadius = 5
@@ -129,21 +129,21 @@ class GoLiveHeaderView: UIView {
         return view
     }()
     
-    let placeHolderImageView: UIImageView = {
+    lazy var placeHolderImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.add.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.add.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .white
         return imageView
     }()
     
-    let placeHolderTitle: UILabel = {
+    lazy var placeHolderTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "+" + " " + "Add Cover".localized
         label.textColor = .white
         label.textAlignment = .center
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -165,7 +165,7 @@ class GoLiveHeaderView: UIView {
     lazy var clearImageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close, for: .normal)
+        button.setImage(appearance.images.close, for: .normal)
         button.backgroundColor = .white
         button.layer.cornerRadius = 10
         button.ismTapFeedBack()
@@ -196,7 +196,7 @@ class GoLiveHeaderView: UIView {
         textView.textColor = .lightGray
         textView.backgroundColor = .clear
         textView.tintColor = .white
-        textView.font = Appearance.default.font.getFont(forTypo: .h8)
+        textView.font = appearance.font.getFont(forTypo: .h8)
         return textView
     }()
     
@@ -240,8 +240,8 @@ class GoLiveHeaderView: UIView {
     
     func setupConstraints(){
         
-        profileCoverImageView.pin(to: profileCoverView)
-        profileActionButton.pin(to: profileCoverView)
+        profileCoverImageView.ism_pin(to: profileCoverView)
+        profileActionButton.ism_pin(to: profileCoverView)
         
         NSLayoutConstraint.activate([
             
@@ -303,13 +303,13 @@ class GoLiveHeaderView: UIView {
     
     func animatePaidStreamsButton(isPremium: Bool) {
         if isPremium {
-            premiumButton.backgroundColor = Appearance.default.colors.appColor
+            premiumButton.backgroundColor = appearance.colors.appColor
             premiumButton.layer.borderWidth = 0
             
             freeButton.backgroundColor = .white.withAlphaComponent(0.3)
             freeButton.layer.borderWidth = 1.5
         } else {
-            freeButton.backgroundColor = Appearance.default.colors.appColor
+            freeButton.backgroundColor = appearance.colors.appColor
             freeButton.layer.borderWidth = 0
             
             premiumButton.backgroundColor = .white.withAlphaComponent(0.3)

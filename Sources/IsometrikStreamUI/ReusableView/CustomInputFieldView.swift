@@ -13,7 +13,7 @@ enum InputFieldType {
     case dropdown
 }
 
-class CustomInputFieldView: UIView {
+class CustomInputFieldView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -23,11 +23,11 @@ class CustomInputFieldView: UIView {
         }
     }
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "titleField".localized + "*"
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = .lightGray
         return label
     }()
@@ -42,28 +42,28 @@ class CustomInputFieldView: UIView {
         return view
     }()
     
-    let inputTextField: UITextField = {
+    lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.attributedPlaceholder = NSAttributedString(
             string: "Placeholder".localized,
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.ism_hexStringToUIColor(hex: "BBC6D2"),
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h4)!
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h4)!
             ]
         )
         textField.textColor = .white
         textField.text = ""
-        textField.font = Appearance.default.font.getFont(forTypo: .h4)
+        textField.font = appearance.font.getFont(forTypo: .h4)
         return textField
     }()
     
-    let inputTextLabel: UILabel = {
+    lazy var inputTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Selected Item".localized
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.isHidden = true
         return label
     }()
@@ -75,11 +75,11 @@ class CustomInputFieldView: UIView {
         return imageView
     }()
     
-    let trailingText: UILabel = {
+    lazy var trailingText: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "USD".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textColor = UIColor.white
         label.isHidden = true
         return label

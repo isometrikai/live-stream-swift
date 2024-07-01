@@ -8,15 +8,15 @@
 
 import UIKit
 
-class FormSimpleTextView: UIView {
+class FormSimpleTextView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let formLabel: UILabel = {
+    lazy var formLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray.withAlphaComponent(0.7)
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()
@@ -47,7 +47,7 @@ class FormSimpleTextView: UIView {
     }
     
     func setupConstraints(){
-        actionButton.pin(to: self)
+        actionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             formLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             formLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),

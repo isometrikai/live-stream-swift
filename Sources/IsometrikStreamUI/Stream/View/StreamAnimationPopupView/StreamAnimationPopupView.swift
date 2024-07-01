@@ -12,7 +12,7 @@ import AVFoundation
 import Kingfisher
 import IsometrikStream
 
-class StreamAnimationPopupView: UIView {
+class StreamAnimationPopupView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -38,13 +38,13 @@ class StreamAnimationPopupView: UIView {
         return view
     }()
     
-    let infoLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     
@@ -121,7 +121,7 @@ class StreamAnimationPopupView: UIView {
         }
         
         let initialText = "\(senderName.prefix(2))"
-        defaultProfile.initialsText.font = Appearance.default.font.getFont(forTypo: .h6)
+        defaultProfile.initialsText.font = appearance.font.getFont(forTypo: .h6)
         defaultProfile.initialsText.text = "\(initialText)".uppercased()
         
         infoLabel.text = "\(textMessage)"

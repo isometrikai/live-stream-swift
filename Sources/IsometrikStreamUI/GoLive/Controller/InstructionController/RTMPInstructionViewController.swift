@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTMPInstructionViewController: UIViewController {
+class RTMPInstructionViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -25,21 +25,21 @@ class RTMPInstructionViewController: UIViewController {
         return view
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Instructions".localized
         label.textColor = .white
         label.textAlignment = .center
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     
-    let descriptionLabel: UILabel = {
+    lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "You can go live again by disable the PERSISTENT RTMP Stream Key, and then go live and after this you need to stop the stream and then again start a new stream , and this time around you need to ENABLE the option for PERSISTENT RTMP URL , this will then generate a new persistent STREAM KEY that you can use on your streaming device".localized + "."
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()
@@ -65,7 +65,7 @@ class RTMPInstructionViewController: UIViewController {
     }
     
     func setupConstraints(){
-        titleLabel.pin(to: headerView)
+        titleLabel.ism_pin(to: headerView)
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

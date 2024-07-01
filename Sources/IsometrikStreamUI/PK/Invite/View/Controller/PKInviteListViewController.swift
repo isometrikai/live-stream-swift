@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKInviteListViewController: UIViewController {
+class PKInviteListViewController: UIViewController, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -77,7 +77,7 @@ class PKInviteListViewController: UIViewController {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = Appearance.default.colors.appDarkGray
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(searchView)
         view.addSubview(userTableView)

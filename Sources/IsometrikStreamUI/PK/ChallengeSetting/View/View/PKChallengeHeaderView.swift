@@ -8,25 +8,25 @@
 
 import UIKit
 
-class PKChallengeHeaderView: UIView {
+class PKChallengeHeaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "PK Challenge Settings"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Configure your PK challenge by modifying the settings below"
-        label.textColor = Appearance.default.colors.appLightGray
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.textColor = appearance.colors.appLightGray
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()

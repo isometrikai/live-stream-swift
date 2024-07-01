@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 import Toast
 
-class StreamReportViewController: UIViewController {
+class StreamReportViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -20,7 +20,7 @@ class StreamReportViewController: UIViewController {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerTitle.text = "Report".localized
-        view.headerTitle.font = Appearance.default.font.getFont(forTypo: .h3)
+        view.headerTitle.font = appearance.font.getFont(forTypo: .h3)
         view.headerTitle.textAlignment = .center
         view.dividerView.isHidden = false
         return view

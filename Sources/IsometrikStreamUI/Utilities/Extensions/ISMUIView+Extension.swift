@@ -16,7 +16,7 @@ extension UIView {
         }
     }
     
-    func pin(to superView: UIView){
+    public func ism_pin(to superView: UIView){
         translatesAutoresizingMaskIntoConstraints = false
         topAnchor.constraint(equalTo: superView.topAnchor).isActive = true
         leadingAnchor.constraint(equalTo: superView.leadingAnchor).isActive = true

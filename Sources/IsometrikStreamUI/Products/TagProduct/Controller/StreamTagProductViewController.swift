@@ -9,7 +9,7 @@
 import UIKit
 import MBProgressHUD
 
-class StreamTagProductViewController: UIViewController {
+class StreamTagProductViewController: UIViewController, AppearanceProvider {
     
     // MARK: - PROPERTIES
     var bottomConstraint: NSLayoutConstraint?
@@ -20,19 +20,19 @@ class StreamTagProductViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.headerTitle.text = "Tag Products".localized
-        view.headerTitle.font = Appearance.default.font.getFont(forTypo: .h3)
+        view.headerTitle.font = appearance.font.getFont(forTypo: .h3)
         view.headerTitle.textColor = .black
         view.headerTitle.textAlignment = .center
         
         view.leadingActionButton.isHidden = false
-        view.leadingActionButton.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.leadingActionButton.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         view.leadingActionButton.imageView?.tintColor = .black
         view.leadingActionButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         
         view.trailingActionButton2.isHidden = false
         view.trailingActionButton2.setTitle("+" + "Add".localized, for: .normal)
-        view.trailingActionButton2.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
-        view.trailingActionButton2.setTitleColor(Appearance.default.colors.appSecondary, for: .normal)
+        view.trailingActionButton2.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
+        view.trailingActionButton2.setTitleColor(appearance.colors.appSecondary, for: .normal)
         view.trailingActionButton2.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         return view

@@ -13,7 +13,7 @@ protocol StreamAnalyticViewersActionDelegate {
     func didTapFollowButtonTapped(index: Int)
 }
 
-class ViewerContainer: UIView {
+class ViewerContainer: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -36,11 +36,11 @@ class ViewerContainer: UIView {
         
     }
     
-    let headerTitle: UILabel = {
+    lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Viewers".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     
@@ -57,10 +57,10 @@ class ViewerContainer: UIView {
         return tableView
     }()
     
-    let defaultView: StreamDefaultEmptyView = {
+    lazy var defaultView: StreamDefaultEmptyView = {
         let view = StreamDefaultEmptyView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.defaultImageView.image = Appearance.default.images.noViewers
+        view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Viewers Found".localized
         return view
     }()
@@ -86,7 +86,7 @@ class ViewerContainer: UIView {
     }
     
     func setupConstraints(){
-        defaultView.pin(to: self)
+        defaultView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             headerTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             headerTitle.topAnchor.constraint(equalTo: topAnchor, constant: 20),

@@ -54,7 +54,7 @@ import UIKit
 //    }
 //    
 //    func setupConstraints(){
-//        settingsOptionTableView.pin(to: view)
+//        settingsOptionTableView.ism_pin(to: view)
 //    }
 
 //}

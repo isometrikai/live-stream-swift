@@ -28,7 +28,7 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
         return view
     }()
     
-    let userDefaultProfile: CustomDefaultProfileView = {
+    lazy var userDefaultProfile: CustomDefaultProfileView = {
         let imageView = CustomDefaultProfileView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
@@ -36,7 +36,7 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
         imageView.layer.borderWidth = 0.7
         imageView.layer.cornerRadius = 15
         imageView.contentMode = .scaleAspectFill
-        imageView.initialsText.font = Appearance.default.font.getFont(forTypo: .h8)
+        imageView.initialsText.font = appearance.font.getFont(forTypo: .h8)
         return imageView
     }()
     
@@ -59,11 +59,11 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
         return stackView
     }()
     
-    let userNameLabel: UILabel = {
+    lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -76,20 +76,20 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
         return stackView
     }()
     
-    let coinImage: UIImageView = {
+    lazy var coinImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.gift
+        imageView.image = appearance.images.gift
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    let coinLabel: UILabel = {
+    lazy var coinLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -108,7 +108,7 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
         setupContraints()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-            self.cardGradientView.ism_setGradient(withColors: [Appearance.default.colors.appColor.cgColor, Appearance.default.colors.appColor.withAlphaComponent(0.5).cgColor, UIColor.white.withAlphaComponent(0).cgColor], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 0))
+            self.cardGradientView.ism_setGradient(withColors: [self.appearance.colors.appColor.cgColor, self.appearance.colors.appColor.withAlphaComponent(0.5).cgColor, UIColor.white.withAlphaComponent(0).cgColor], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 0))
             self.cardView.layer.cornerRadius = self.cardView.frame.height / 2
         })
     }
@@ -140,7 +140,7 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
     }
     
     func setupContraints(){
-        cardGradientView.pin(to: cardView)
+        cardGradientView.ism_pin(to: cardView)
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(equalTo: leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: trailingAnchor),

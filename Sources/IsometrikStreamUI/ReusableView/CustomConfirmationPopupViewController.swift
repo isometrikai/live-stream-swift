@@ -9,7 +9,7 @@
 import UIKit
 import Lottie
 
-class CustomConfirmationPopupViewController: UIViewController {
+class CustomConfirmationPopupViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -21,13 +21,13 @@ class CustomConfirmationPopupViewController: UIViewController {
         return view
     }()
     
-    let infoLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .black
         label.textAlignment = .center
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     

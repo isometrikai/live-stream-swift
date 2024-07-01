@@ -7,14 +7,14 @@
 
 import UIKit
 
-class CustomBattleProfileView: UIView {
+class CustomBattleProfileView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let coverImageView: UIImageView = {
+    lazy var coverImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.battleHostBackground
+        imageView.image = appearance.images.battleHostBackground
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.alpha = 0
@@ -67,9 +67,9 @@ class CustomBattleProfileView: UIView {
     }
     
     func setupConstraints(){
-        coverImageView.pin(to: self)
-        defaultProfilePicture.pin(to: profileView)
-        userProfilePicture.pin(to: profileView)
+        coverImageView.ism_pin(to: self)
+        defaultProfilePicture.ism_pin(to: profileView)
+        userProfilePicture.ism_pin(to: profileView)
         NSLayoutConstraint.activate([
             profileView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -60),
             profileView.centerXAnchor.constraint(equalTo: centerXAnchor),

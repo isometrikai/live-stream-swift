@@ -9,7 +9,7 @@
 import UIKit
 import Lottie
 
-class ProductDefaultPlaceholderView: UIView {
+class ProductDefaultPlaceholderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -19,11 +19,11 @@ class ProductDefaultPlaceholderView: UIView {
         return view
     }()
     
-    let defaultLabel: UILabel = {
+    lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "There are no products available to tag"
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textColor = .black
         label.textAlignment = .center
         return label

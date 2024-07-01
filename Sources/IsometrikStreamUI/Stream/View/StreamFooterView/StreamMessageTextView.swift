@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamMessageTextView: UIView {
+class StreamMessageTextView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -23,7 +23,7 @@ class StreamMessageTextView: UIView {
     lazy var emojiButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.emoji.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.emoji.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         button.backgroundColor = UIColor.colorWithHex(color: "#676767")
         button.layer.cornerRadius = 17.5
@@ -32,26 +32,26 @@ class StreamMessageTextView: UIView {
         return button
     }()
     
-    let messageTextField: UITextField = {
+    lazy var messageTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textColor = .white
         textField.tintColor = .white
-        textField.font = Appearance.default.font.getFont(forTypo: .h6)
+        textField.font = appearance.font.getFont(forTypo: .h6)
         textField.attributedPlaceholder = NSAttributedString(
             string: "Say Something".localized + "..",
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.white,
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6)!
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6)!
             ]
         )
         return textField
     }()
     
-    let sendButton: UIButton = {
+    lazy var sendButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.send, for: .normal)
+        button.setImage(appearance.images.send, for: .normal)
         button.ismTapFeedBack()
         return button
     }()
@@ -78,7 +78,7 @@ class StreamMessageTextView: UIView {
     }
     
     func setupConstraints(){
-        coverView.pin(to: self)
+        coverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             emojiButton.leadingAnchor.constraint(equalTo: coverView.leadingAnchor, constant: 7.5),
             emojiButton.widthAnchor.constraint(equalToConstant: 35),

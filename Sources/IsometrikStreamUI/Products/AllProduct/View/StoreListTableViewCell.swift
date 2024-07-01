@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StoreListTableViewCell: UITableViewCell {
+class StoreListTableViewCell: UITableViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -39,26 +39,26 @@ class StoreListTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    let storeNameLabel: UILabel = {
+    lazy var storeNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
     
-    let userNameLabel: UILabel = {
+    lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = UIColor.colorWithHex(color: "#9797BE")
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
-    let trailingArrowImage: UIImageView = {
+    lazy var trailingArrowImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.arrowRight.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.arrowRight.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = UIColor.colorWithHex(color: "#BCBCE5")
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true

@@ -55,7 +55,7 @@ class CustomImageLabelView: UIView {
     }
     
     func setupConstraints(){
-        actionButton.pin(to: self)
+        actionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             cardImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             cardImageView.centerYAnchor.constraint(equalTo: centerYAnchor),

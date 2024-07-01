@@ -19,7 +19,7 @@ enum ActionType {
     case kickout
 }
 
-class StreamViewerTableViewCell: UITableViewCell {
+class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -57,30 +57,30 @@ class StreamViewerTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "user@isometrik.io \nToday 12:34 AM"
         label.textColor = .lightGray
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()
     
-    let joiningLabel: UILabel = {
+    lazy var joiningLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()
@@ -89,7 +89,7 @@ class StreamViewerTableViewCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Kickout".ism_localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 15

@@ -50,7 +50,7 @@ public struct ISM_Font {
         self.customFont = customFont
     }
     
-    func getFont(forTypo: ISM_FontTypography) -> UIFont? {
+    public func getFont(forTypo: ISM_FontTypography) -> UIFont? {
         return forTypo.uiFont
     }
     
@@ -80,11 +80,24 @@ public enum ISM_FontTypography {
        }
     }
 
-    private func scaled(font: UIFont?, textStyle: UIFont.TextStyle) -> UIFont? {
-        if let font {
-            return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: font)
-        } else {
-            return font
+    private func scaled(font: UIFont?, textStyle: UIFont.TextStyle) -> UIFont {
+        
+        let defaultFont = UIFont.systemFont(ofSize: defaultFontSize())
+        let fontToUse = font ?? defaultFont
+        return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToUse)
+        
+    }
+    
+    private func defaultFontSize() -> CGFloat {
+        switch self {
+        case .h1: return 40
+        case .h2: return 24
+        case .h3: return 20
+        case .h4: return 16
+        case .h5: return 14
+        case .h6: return 14
+        case .h7: return 12
+        case .h8: return 12
         }
     }
     

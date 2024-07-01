@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamEndView: UIView {
+class StreamEndView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -19,24 +19,24 @@ class StreamEndView: UIView {
         return view
     }()
     
-    let streamEndMessageLabel: UILabel = {
+    lazy var streamEndMessageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
     }()
     
-    let continueButton: UIButton = {
+    lazy var continueButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Continue".localized, for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.backgroundColor = appearance.colors.appColor
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()
         return button
@@ -64,7 +64,7 @@ class StreamEndView: UIView {
     }
     
     func setupConstraints(){
-        backCoverView.pin(to: self)
+        backCoverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             streamEndMessageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             streamEndMessageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),

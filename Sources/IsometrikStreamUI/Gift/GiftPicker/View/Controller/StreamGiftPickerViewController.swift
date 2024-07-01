@@ -91,7 +91,7 @@ class StreamGiftPickerViewController: UIViewController {
     }
     
     func setUpConstraints(){
-        coverView.pin(to: view)
+        coverView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

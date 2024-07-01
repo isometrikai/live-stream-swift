@@ -13,26 +13,26 @@ protocol GoLiveFooterActionDelegate {
     func didGoLiveStreamTypeActionTapped(with actionType: GoLiveStreamType)
 }
 
-class NewGoLiveFooterView: UIView {
+class NewGoLiveFooterView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
     var delegate: GoLiveFooterActionDelegate?
     var goLiveButtonBottomConstraint: NSLayoutConstraint?
     
-    let warningCoverView: UIView = {
+    lazy var warningCoverView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appRed
+        view.backgroundColor = appearance.colors.appRed
         view.layer.cornerRadius = 22
         return view
     }()
     
-    let warningButtonView: UIButton = {
+    lazy var warningButtonView: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Broadcasters under 18 are not permitted".localized + ".", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         return button
     }()
     
@@ -42,7 +42,7 @@ class NewGoLiveFooterView: UIView {
         button.backgroundColor = UIColor.ism_hexStringToUIColor(hex: "#242424")
         button.setTitle("Go Live".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.addTarget(self, action: #selector(goliveButtonTapped), for: .touchUpInside)
         button.layer.cornerRadius = 25
         button.layer.borderWidth = 1
@@ -124,7 +124,7 @@ class NewGoLiveFooterView: UIView {
     }
     
     func setupConstraints(){
-        bottomActionStack.pin(to: bottomActionView)
+        bottomActionStack.ism_pin(to: bottomActionView)
         NSLayoutConstraint.activate([
             
             bottomActionView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -164,10 +164,10 @@ class NewGoLiveFooterView: UIView {
         case .guestLive:
             
             guestLiveButton.buttonTitle.textColor = .white
-            guestLiveButton.buttonTitle.font = Appearance.default.font.getFont(forTypo: .h8)
+            guestLiveButton.buttonTitle.font = appearance.font.getFont(forTypo: .h8)
             guestLiveButton.dashIndicatorView.isHidden = false
             
-            liveFromDeviceButton.buttonTitle.font = Appearance.default.font.getFont(forTypo: .h8)
+            liveFromDeviceButton.buttonTitle.font = appearance.font.getFont(forTypo: .h8)
             liveFromDeviceButton.buttonTitle.textColor = .lightGray
             liveFromDeviceButton.dashIndicatorView.isHidden = true
             
@@ -176,9 +176,9 @@ class NewGoLiveFooterView: UIView {
             
             guestLiveButton.buttonTitle.textColor = .lightGray
             guestLiveButton.dashIndicatorView.isHidden = true
-            guestLiveButton.buttonTitle.font = Appearance.default.font.getFont(forTypo: .h8)
+            guestLiveButton.buttonTitle.font = appearance.font.getFont(forTypo: .h8)
             
-            liveFromDeviceButton.buttonTitle.font = Appearance.default.font.getFont(forTypo: .h8)
+            liveFromDeviceButton.buttonTitle.font = appearance.font.getFont(forTypo: .h8)
             liveFromDeviceButton.buttonTitle.textColor = .white
             liveFromDeviceButton.dashIndicatorView.isHidden = false
             
@@ -206,16 +206,16 @@ class NewGoLiveFooterView: UIView {
     }
 }
 
-class CustomToggleButton: UIView {
+class CustomToggleButton: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let buttonTitle: UILabel = {
+    lazy var buttonTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
         label.text = "Single/Multi Guest Live".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         return label
     }()
@@ -255,7 +255,7 @@ class CustomToggleButton: UIView {
     }
     
     func setupConstraints(){
-        actionButton.pin(to: self)
+        actionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             buttonTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2),
             buttonTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2),

@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import IsometrikStream
 
-class ScheduleStreamView: UIView {
+class ScheduleStreamView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -39,10 +39,10 @@ class ScheduleStreamView: UIView {
         return view
     }()
     
-    let closeActionButton: UIButton = {
+    lazy var closeActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         return button
     }()
@@ -76,22 +76,22 @@ class ScheduleStreamView: UIView {
         return imageView
     }()
     
-    let defaultProfileView: CustomDefaultProfileView = {
+    lazy var defaultProfileView: CustomDefaultProfileView = {
         let view = CustomDefaultProfileView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 40
-        view.initialsText.font = Appearance.default.font.getFont(forTypo: .h3)
+        view.initialsText.font = appearance.font.getFont(forTypo: .h3)
         return view
     }()
     
     ///:
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.textAlignment = .center
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         return label
     }()
     
@@ -104,12 +104,12 @@ class ScheduleStreamView: UIView {
         return label
     }()
     
-    let goLiveButton: UIButton = {
+    lazy var goLiveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Go Live".localized, for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.backgroundColor = .white
         button.layer.cornerRadius = 22.5
         button.ismTapFeedBack()
@@ -149,8 +149,8 @@ class ScheduleStreamView: UIView {
     }
     
     func setupConstraints() {
-        thumbImageView.pin(to: self)
-        backCoverView.pin(to: self)
+        thumbImageView.ism_pin(to: self)
+        backCoverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             closeActionButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10),
             closeActionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),

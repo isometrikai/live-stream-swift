@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveCustomToggleView: UIView {
+class GoLiveCustomToggleView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -19,15 +19,15 @@ class GoLiveCustomToggleView: UIView {
             
             if isSelected {
                 if activeColor == .black {
-                    toggleImageView.image = Appearance.default.images.toggleOnDark
+                    toggleImageView.image = appearance.images.toggleOnDark
                 } else {
-                    toggleImageView.image = Appearance.default.images.toggleOn
+                    toggleImageView.image = appearance.images.toggleOn
                 }
             } else {
                 if activeColor == .black {
-                    toggleImageView.image = Appearance.default.images.toggleOffDark
+                    toggleImageView.image = appearance.images.toggleOffDark
                 } else {
-                    toggleImageView.image = Appearance.default.images.toggleOff
+                    toggleImageView.image = appearance.images.toggleOff
                 }
             }
             
@@ -42,11 +42,11 @@ class GoLiveCustomToggleView: UIView {
         return imageView
     }()
     
-    let toggleTitleLabel: UILabel = {
+    lazy var toggleTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Use Persistent RTMP Stream Key".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .white
         return label
     }()

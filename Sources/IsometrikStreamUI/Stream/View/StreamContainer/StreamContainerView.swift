@@ -146,9 +146,9 @@ class StreamContainerView: UIView {
     }
     
     func setupConstraints(){
-        dismissButton.pin(to: self)
-        streamAnimationPopup.pin(to: self)
-        videoContainer.pin(to: self)
+        dismissButton.ism_pin(to: self)
+        streamAnimationPopup.ism_pin(to: self)
+        videoContainer.ism_pin(to: self)
         NSLayoutConstraint.activate([
             streamHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             streamHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),

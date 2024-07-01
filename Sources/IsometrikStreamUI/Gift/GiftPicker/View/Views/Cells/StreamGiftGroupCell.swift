@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamGiftGroupCell: UICollectionViewCell {
+class StreamGiftGroupCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -40,12 +40,12 @@ class StreamGiftGroupCell: UICollectionViewCell {
         return imageView
     }()
     
-    let groupTitle: UILabel = {
+    lazy var groupTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray.withAlphaComponent(0.5)
         label.text = "Group name"
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         return label
     }()
@@ -80,7 +80,7 @@ class StreamGiftGroupCell: UICollectionViewCell {
     }
     
     func setUpConstraints(){
-        cardView.pin(to: self)
+        cardView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             giftGroupImage.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 10),
             giftGroupImage.centerXAnchor.constraint(equalTo: cardView.centerXAnchor),
@@ -105,7 +105,7 @@ class StreamGiftGroupCell: UICollectionViewCell {
         if let imgString = data.giftImage, imgString != "", let imageUrl = URL(string: imgString) {
             giftGroupImage.kf.setImage(with: imageUrl)
         } else {
-            giftGroupImage.image = Appearance.default.images.giftPlaceholder
+            giftGroupImage.image = appearance.images.giftPlaceholder
         }
     }
     

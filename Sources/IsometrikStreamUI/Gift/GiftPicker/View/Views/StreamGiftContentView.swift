@@ -69,8 +69,8 @@ class StreamGiftContentView: UIView {
     }
     
     func setUpConstraints(){
-        loaderView.pin(to: self)
-        indicator.pin(to: self)
+        loaderView.ism_pin(to: self)
+        indicator.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             headerView.leadingAnchor.constraint(equalTo: leadingAnchor),

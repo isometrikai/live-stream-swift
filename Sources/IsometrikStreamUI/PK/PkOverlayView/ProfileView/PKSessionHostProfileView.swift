@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKSessionHostProfileView: UIView {
+class PKSessionHostProfileView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -27,22 +27,22 @@ class PKSessionHostProfileView: UIView {
         return view
     }()
     
-    let profileImageView: UIImageView = {
+    lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 17.5
-        imageView.layer.borderColor = Appearance.default.colors.appPink.cgColor
+        imageView.layer.borderColor = appearance.colors.appPink.cgColor
         imageView.layer.borderWidth = 2
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
-    let defaultProfileImageView: CustomDefaultProfileView = {
+    lazy var defaultProfileImageView: CustomDefaultProfileView = {
         let imageView = CustomDefaultProfileView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 17.5
-        imageView.layer.borderColor = Appearance.default.colors.appPink.cgColor
+        imageView.layer.borderColor = appearance.colors.appPink.cgColor
         imageView.layer.borderWidth = 2
         return imageView
     }()
@@ -56,22 +56,22 @@ class PKSessionHostProfileView: UIView {
         return stackView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "@tannvi"
         label.textColor = .white
         label.textAlignment = .left
-        label.font = Appearance.default.font.getFont(forTypo: .h7)
+        label.font = appearance.font.getFont(forTypo: .h7)
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Host".localized
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .left
         return label
     }()
@@ -109,8 +109,8 @@ class PKSessionHostProfileView: UIView {
     }
     
     func setLeftConstraints(){
-        gradientView.pin(to: self)
-        pkProfileOverlay.pin(to: self)
+        gradientView.ism_pin(to: self)
+        pkProfileOverlay.ism_pin(to: self)
         NSLayoutConstraint.activate([
             profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -183,7 +183,7 @@ class PKSessionHostProfileView: UIView {
 
 }
 
-class PKHostProfileOverlayView: UIView {
+class PKHostProfileOverlayView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -195,22 +195,22 @@ class PKHostProfileOverlayView: UIView {
         return view
     }()
     
-    let hostTag: UIButton = {
+    lazy var hostTag: UIButton = {
         let view = UIButton()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appRed
+        view.backgroundColor = appearance.colors.appRed
         view.setTitle("  Host  ", for: .normal)
         view.setTitleColor(.white, for: .normal)
-        view.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        view.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         view.layer.cornerRadius = 3
         return view
     }()
     
-    let ringImageView:UIImageView = {
+    lazy var ringImageView:UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.image = Appearance.default.images.hostRing
+        imageView.image = appearance.images.hostRing
         return imageView
     }()
     
@@ -230,12 +230,12 @@ class PKHostProfileOverlayView: UIView {
         return imageView
     }()
     
-    let playerName: UILabel = {
+    lazy var playerName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "@tannvi"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h7)
+        label.font = appearance.font.getFont(forTypo: .h7)
         label.textAlignment = .left
         return label
     }()
@@ -270,7 +270,7 @@ class PKHostProfileOverlayView: UIView {
     func addGlowView(){
         let glowView = UIView(frame: CGRect(x: 0, y: 0, width: 65, height: 60))
         glowView.layer.shadowOffset = .zero
-        glowView.layer.shadowColor = Appearance.default.colors.appPink.cgColor
+        glowView.layer.shadowColor = appearance.colors.appPink.cgColor
         glowView.layer.shadowRadius = 10
         glowView.layer.shadowOpacity = 0.5
         glowView.layer.shadowPath = UIBezierPath(rect: glowView.bounds).cgPath
@@ -278,7 +278,7 @@ class PKHostProfileOverlayView: UIView {
     }
     
     func setupConstraints(){
-        ringImageView.pin(to: profileView)
+        ringImageView.ism_pin(to: profileView)
         NSLayoutConstraint.activate([
             
             hostTag.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DefaultAddProductCollectionViewCell: UICollectionViewCell {
+class DefaultAddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -22,19 +22,19 @@ class DefaultAddProductCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let defaultButtonImage: UIImageView = {
+    lazy var defaultButtonImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = Appearance.default.images.add.withRenderingMode(.alwaysTemplate)
+        image.image = appearance.images.add.withRenderingMode(.alwaysTemplate)
         image.tintColor = .white
         return image
     }()
     
-    let defaultLabel: UILabel = {
+    lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Add Products".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = .white
         return label
     }()
@@ -60,7 +60,7 @@ class DefaultAddProductCollectionViewCell: UICollectionViewCell {
     }
     
     func setupConstraints(){
-        defaultCoverView.pin(to: self)
+        defaultCoverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             defaultButtonImage.centerYAnchor.constraint(equalTo: defaultCoverView.centerYAnchor, constant: -15),
             defaultButtonImage.centerXAnchor.constraint(equalTo: defaultCoverView.centerXAnchor),

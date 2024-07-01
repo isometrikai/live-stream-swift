@@ -13,7 +13,7 @@ protocol SelectedProductActionDelegate {
     func didProductRemoved(with index: Int)
 }
 
-class SelectedProductCollectionViewCell: UICollectionViewCell {
+class SelectedProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -62,7 +62,7 @@ class SelectedProductCollectionViewCell: UICollectionViewCell {
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close, for: .normal)
+        button.setImage(appearance.images.close, for: .normal)
         button.backgroundColor = .black.withAlphaComponent(0.5)
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
@@ -95,8 +95,8 @@ class SelectedProductCollectionViewCell: UICollectionViewCell {
     }
     
     func setupConstraints(){
-        productCoverView.pin(to: self)
-        productImageView.pin(to: productCoverView)
+        productCoverView.ism_pin(to: self)
+        productImageView.ism_pin(to: productCoverView)
         NSLayoutConstraint.activate([
             infoView.leadingAnchor.constraint(equalTo: productCoverView.leadingAnchor),
             infoView.trailingAnchor.constraint(equalTo: productCoverView.trailingAnchor),

@@ -9,7 +9,7 @@
 import UIKit
 
 @available(iOS 15, *)
-class ScheduleStreamPopupViewController: UIViewController {
+class ScheduleStreamPopupViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -30,7 +30,7 @@ class ScheduleStreamPopupViewController: UIViewController {
     lazy var navHeaderView: CustomHeaderView = {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.headerTitle.font = Appearance.default.font.getFont(forTypo: .h3)
+        view.headerTitle.font = appearance.font.getFont(forTypo: .h3)
         view.headerTitle.textColor = .black
         
         view.headerTitle.text = "Schedule Stream".localized
@@ -38,7 +38,7 @@ class ScheduleStreamPopupViewController: UIViewController {
         view.dividerView.isHidden = false
         
         view.trailingActionButton.isHidden = false
-        view.trailingActionButton.setImage(Appearance.default.images.close, for: .normal)
+        view.trailingActionButton.setImage(appearance.images.close, for: .normal)
         view.trailingActionButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         
         view.backgroundColor = .white
@@ -54,12 +54,12 @@ class ScheduleStreamPopupViewController: UIViewController {
         return view
     }()
     
-    let dateTextLabel: UILabel = {
+    lazy var dateTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textAlignment = .center
         return label
     }()
@@ -88,7 +88,7 @@ class ScheduleStreamPopupViewController: UIViewController {
         button.setTitle("Confirm".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)

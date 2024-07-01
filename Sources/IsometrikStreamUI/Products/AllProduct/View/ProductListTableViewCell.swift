@@ -14,7 +14,7 @@ protocol ProductListActionDelegate {
     func didActionButtonTapped(index: Int)
 }
 
-class ProductListTableViewCell: UITableViewCell {
+class ProductListTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -120,7 +120,7 @@ class ProductListTableViewCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Add Discount".localized, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.setTitleColor(UIColor.colorWithHex(color: "#EA5C03"), for: .normal)
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return button
@@ -161,7 +161,7 @@ class ProductListTableViewCell: UITableViewCell {
     }
     
     func setupConstraints(){
-        productImage.pin(to: productCoverView)
+        productImage.ism_pin(to: productCoverView)
         NSLayoutConstraint.activate([
             
             productCoverView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
@@ -289,7 +289,7 @@ class ProductListTableViewCell: UITableViewCell {
             }
         }
         
-        checkBoxImage.image =  productData.isSelected ? Appearance.default.images.checkedCheckbox : Appearance.default.images.uncheckedCheckbox
+        checkBoxImage.image =  productData.isSelected ? appearance.images.checkedCheckbox : appearance.images.uncheckedCheckbox
         
         if myStore {
             actionButton.isHidden = productData.isSelected ? false : true
@@ -306,17 +306,17 @@ class ProductListTableViewCell: UITableViewCell {
         let price = String(format: "%.2f", price)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5")
         ]
         
         let attribute3 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#5FCF4C")
         ]
         
@@ -343,13 +343,13 @@ class ProductListTableViewCell: UITableViewCell {
         let earnings = earning.clean
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
-            NSAttributedString.Key.foregroundColor: Appearance.default.colors.appGreen
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.foregroundColor: appearance.colors.appGreen
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
-            NSAttributedString.Key.foregroundColor: Appearance.default.colors.appGreen
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.foregroundColor: appearance.colors.appGreen
         ]
         
         let attributedString = NSMutableAttributedString()

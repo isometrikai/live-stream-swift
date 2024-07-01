@@ -38,7 +38,7 @@ class StreamPreviewVideoView: UIView {
     }
     
     func setUpConstraints(){
-        playerView.pin(to: self)
+        playerView.ism_pin(to: self)
     }
 
 }

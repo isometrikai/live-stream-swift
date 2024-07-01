@@ -8,17 +8,17 @@
 
 import UIKit
 
-class DisclaimerView: UIView {
+class DisclaimerView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let disclaimerLabel: UILabel = {
+    lazy var disclaimerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "We moderate Live Broadcasts. Smoking Vulgarity, porn,indecent exposure, child Pornograpgy is NOT Allowedand will be Banned. Live broadcasts are monitored 24 Hours a day. \n\nWarning: Third-party Top-up or recharge Is subject to account closure, suspension, Or permanent ban".localized + "."
         label.textColor = .black
         label.numberOfLines = 0
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     
@@ -36,7 +36,7 @@ class DisclaimerView: UIView {
         button.layer.borderWidth = 2
         button.layer.cornerRadius = 22.5
         button.setTitle("Got it".localized + "!", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         button.backgroundColor = .black

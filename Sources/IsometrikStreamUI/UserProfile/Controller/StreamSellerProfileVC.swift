@@ -177,7 +177,7 @@ class StreamSellerProfileVC: UIViewController {
 //    
 //    func setupConstraints(){
 //        
-//        noDataView.pin(to: self.view)
+//        noDataView.ism_pin(to: self.view)
 //        NSLayoutConstraint.activate([
 //            reportButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
 //            reportButton.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),

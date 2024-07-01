@@ -10,16 +10,16 @@ import UIKit
 
 extension UIButton {
     
-    func ismTapFeedBack() {
+    public func ismTapFeedBack() {
         addTarget(self, action: #selector(ism_animateDown), for: [.touchDown, .touchDragEnter])
         addTarget(self, action: #selector(ism_animateUp), for: [.touchDragExit, .touchCancel, .touchUpInside, .touchUpOutside])
     }
     
-    @objc private func ism_animateDown(sender: UIButton) {
+    @objc public func ism_animateDown(sender: UIButton) {
             ism_animate(sender, transform: CGAffineTransform.identity.scaledBy(x: 0.95, y: 0.95))
     }
     
-    @objc private func ism_animateUp(sender: UIButton) {
+    @objc public func ism_animateUp(sender: UIButton) {
         ism_animate(sender, transform: .identity)
     }
     

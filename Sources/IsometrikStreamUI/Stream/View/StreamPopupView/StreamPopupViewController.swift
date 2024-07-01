@@ -13,7 +13,7 @@ enum StreamPopupAction {
     case ok
 }
 
-class StreamPopupViewController: UIViewController {
+class StreamPopupViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -26,20 +26,20 @@ class StreamPopupViewController: UIViewController {
         return view
     }()
     
-    let popupCardView: UIView = {
+    lazy var popupCardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appGrayBackground
+        view.backgroundColor = appearance.colors.appGrayBackground
         view.layer.cornerRadius = 5
         return view
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Are you sure that you want to end your live video".localized + "?"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         label.numberOfLines = 0
         return label
     }()
@@ -57,13 +57,13 @@ class StreamPopupViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Cancel".localized, for: .normal)
-        button.setTitleColor(Appearance.default.colors.appColor, for: .normal)
+        button.setTitleColor(appearance.colors.appColor, for: .normal)
         button.layer.cornerRadius = 5
-        button.layer.borderColor = Appearance.default.colors.appColor.cgColor
+        button.layer.borderColor = appearance.colors.appColor.cgColor
         button.layer.borderWidth = 1.5
         button.backgroundColor = .black
         button.ismTapFeedBack()
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -74,9 +74,9 @@ class StreamPopupViewController: UIViewController {
         button.setTitle("Yes", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 5
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.backgroundColor = appearance.colors.appColor
         button.ismTapFeedBack()
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.addTarget(self, action: #selector(okButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -102,7 +102,7 @@ class StreamPopupViewController: UIViewController {
     }
     
     func setupConstraints(){
-        backCoverView.pin(to: view)
+        backCoverView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             
             popupCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),

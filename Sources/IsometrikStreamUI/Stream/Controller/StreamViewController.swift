@@ -8,12 +8,11 @@
 
 import UIKit
 
-class StreamViewController: UIViewController {
+final public class StreamViewController: UIViewController {
 
     // MARK: - PROPERTIES
     
     var viewModel:StreamViewModel
-//    let cartVM = CartVM()
     
     lazy var streamCollectionView: UICollectionView = {
         
@@ -50,7 +49,7 @@ class StreamViewController: UIViewController {
     
     // MARK: - MAIN
     
-    init(viewModel: StreamViewModel) {
+    public init(viewModel: StreamViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.setupDefaults()
@@ -60,19 +59,19 @@ class StreamViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
         setupDefaults()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         UIApplication.shared.isIdleTimerDisabled = false
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
@@ -81,7 +80,7 @@ class StreamViewController: UIViewController {
         self.removePlayer()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
@@ -93,7 +92,7 @@ class StreamViewController: UIViewController {
     }
     
     func setupConstraints(){
-        countDownView.pin(to: view)
+        countDownView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             streamCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             streamCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

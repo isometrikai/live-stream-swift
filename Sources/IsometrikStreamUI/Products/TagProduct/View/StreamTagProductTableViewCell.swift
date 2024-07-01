@@ -14,7 +14,7 @@ protocol TaggedProductDelegate {
     func didPinItemTapped(index: Int)
 }
 
-class StreamTagProductTableViewCell: UITableViewCell {
+class StreamTagProductTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -68,7 +68,7 @@ class StreamTagProductTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Pin Item".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h7)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.ismTapFeedBack()
         button.backgroundColor = .black
         button.layer.cornerRadius = 15
@@ -177,17 +177,17 @@ class StreamTagProductTableViewCell: UITableViewCell {
         let price = String(format: "%.2f", price)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5")
         ]
         
         let attribute3 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#5FCF4C")
         ]
         

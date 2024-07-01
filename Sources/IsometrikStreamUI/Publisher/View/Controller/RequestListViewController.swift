@@ -9,18 +9,18 @@ import UIKit
 import MBProgressHUD
 import IsometrikStream
 
-class RequestListViewController: UIViewController {
+class RequestListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
     var viewModel = PublisherViewModel()
     var delegate: StreamRequestListActionDelegate?
     
-    let headerView: StreamChildControllerHeaderView = {
+    lazy var headerView: StreamChildControllerHeaderView = {
         let view = StreamChildControllerHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerLabel.text = "Requests"
-        view.headerImage.image = Appearance.default.images.requestList.withRenderingMode(.alwaysTemplate)
+        view.headerImage.image = appearance.images.requestList.withRenderingMode(.alwaysTemplate)
         view.headerImage.tintColor = .black
         view.countLabel.text = "0"
         return view
@@ -39,11 +39,11 @@ class RequestListViewController: UIViewController {
         return tableview
     }()
     
-    let defaultView: StreamDefaultEmptyView = {
+    lazy var defaultView: StreamDefaultEmptyView = {
         let view = StreamDefaultEmptyView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = false
-        view.defaultImageView.image = Appearance.default.images.noViewers
+        view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Requests Found"
         return view
     }()

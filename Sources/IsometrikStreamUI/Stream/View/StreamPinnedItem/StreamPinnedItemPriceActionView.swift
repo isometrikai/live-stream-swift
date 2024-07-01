@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamPinnedItemPriceActionView: UIView {
+class StreamPinnedItemPriceActionView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -41,12 +41,12 @@ class StreamPinnedItemPriceActionView: UIView {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        backgroundColor = Appearance.default.colors.appColor
+        backgroundColor = appearance.colors.appColor
         addSubview(priceLabel)
     }
     
     func setupConstraints(){
-        priceLabel.pin(to: self)
+        priceLabel.ism_pin(to: self)
     }
     
     func priceAttributedTitle(symbol: String, price: Double , orginalPrice: Double) -> NSAttributedString {
@@ -55,12 +55,12 @@ class StreamPinnedItemPriceActionView: UIView {
         let price = String(format: "%.2f", price)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
@@ -79,12 +79,12 @@ class StreamPinnedItemPriceActionView: UIView {
     func bidAttributeTitle(symbol: String, price: Double, titleLabel: String) -> NSAttributedString {
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         

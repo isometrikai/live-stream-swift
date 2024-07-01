@@ -69,8 +69,8 @@ class CustomStreamOptionView: UIView {
     }
     
     func setupConstraints(){
-        backgroundView.pin(to: self)
-        optionButton.pin(to: self)
+        backgroundView.ism_pin(to: self)
+        optionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             optionImageView.widthAnchor.constraint(equalToConstant: 24),
             optionImageView.heightAnchor.constraint(equalToConstant: 24),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension StreamViewController {
+extension StreamViewController: AppearanceProvider {
     
     func sendHeart(){
         
@@ -52,7 +52,7 @@ extension StreamViewController {
                 
                 heart.center = CGPoint(x: fountainX, y: fountainY)
                 let imageToSend =  UIImage(named: imageToUse)?.withRenderingMode(.alwaysTemplate)
-                heart.animateInView(view: self.view, imageToUse: (imageToSend ?? Appearance.default.images.reaction))
+                heart.animateInView(view: self.view, imageToUse: (imageToSend ?? self.appearance.images.reaction))
                 
             }
         }

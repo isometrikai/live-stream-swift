@@ -8,22 +8,22 @@
 
 import UIKit
 
-class PKInviteDefaultView: UIView {
+class PKInviteDefaultView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let defaultImage: UIImageView = {
+    lazy var defaultImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.noViewers
+        imageView.image = appearance.images.noViewers
         return imageView
     }()
     
-    let defaultText: UILabel = {
+    lazy var defaultText: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "No one to invite."
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textAlignment = .center
         label.textColor = .white
         return label

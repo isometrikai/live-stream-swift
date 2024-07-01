@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKRecieveInvitationViewController: UIViewController {
+class PKRecieveInvitationViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -33,29 +33,29 @@ class PKRecieveInvitationViewController: UIViewController {
         return stackView
     }()
     
-    let linkImage: UIImageView = {
+    lazy var linkImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.image = Appearance.default.images.linking
+        imageView.image = appearance.images.linking
         return imageView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textAlignment = .center
         return label
     }()
     
-    let descriptionLabel: UILabel = {
+    lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.textColor = Appearance.default.colors.appLightGray
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.textColor = appearance.colors.appLightGray
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         return label
     }()
@@ -82,10 +82,10 @@ class PKRecieveInvitationViewController: UIViewController {
     lazy var rejectButton: UIButton = {
         let button = UIButton()
         button.setTitle("Reject", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.backgroundColor = .clear
-        button.setTitleColor(Appearance.default.colors.appLightGray, for: .normal)
-        button.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.7).cgColor
+        button.setTitleColor(appearance.colors.appLightGray, for: .normal)
+        button.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.7).cgColor
         button.layer.borderWidth = 1
         button.ismTapFeedBack()
         button.layer.cornerRadius = 25
@@ -96,8 +96,8 @@ class PKRecieveInvitationViewController: UIViewController {
     lazy var acceptButton: UIButton = {
         let button = UIButton()
         button.setTitle("Accept", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
+        button.backgroundColor = appearance.colors.appColor
         button.setTitleColor(.white, for: .normal)
         button.ismTapFeedBack()
         button.layer.cornerRadius = 25
@@ -131,7 +131,7 @@ class PKRecieveInvitationViewController: UIViewController {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = Appearance.default.colors.appDarkGray
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(profileDefaultStack)
         view.addSubview(profileStackView)
         view.addSubview(linkImage)
@@ -193,7 +193,7 @@ class PKRecieveInvitationViewController: UIViewController {
                 }
             }
         }
-        imageView.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.5).cgColor
+        imageView.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.5).cgColor
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 50
         imageView.clipsToBounds = true
@@ -207,7 +207,7 @@ class PKRecieveInvitationViewController: UIViewController {
         let initials = text.prefix(2).uppercased()
         defaultView.initialsText.text = initials
         
-        defaultView.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.5).cgColor
+        defaultView.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.5).cgColor
         defaultView.layer.borderWidth = 1
         defaultView.layer.cornerRadius = 50
         defaultView.clipsToBounds = true

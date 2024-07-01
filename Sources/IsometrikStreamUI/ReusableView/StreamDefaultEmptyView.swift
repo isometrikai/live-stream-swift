@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamDefaultEmptyView: UIView {
+class StreamDefaultEmptyView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -18,13 +18,13 @@ class StreamDefaultEmptyView: UIView {
         return imageView
     }()
     
-    let defaultLabel: UILabel = {
+    lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.text = "No Data Found".localized
         
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .black
         
         label.textAlignment = .center

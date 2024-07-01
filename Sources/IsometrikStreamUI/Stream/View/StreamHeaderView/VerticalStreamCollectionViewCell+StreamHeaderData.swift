@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-extension VerticalStreamCollectionViewCell {
+extension VerticalStreamCollectionViewCell: AppearanceProvider {
     
     func setStreamHeaderView(){
         
@@ -51,11 +51,11 @@ extension VerticalStreamCollectionViewCell {
         if streamStatus == .scheduled {
             streamStatusView.isHidden = true
             headerView.cartButton(canBeShown: true)
-            viewerCountView.iconImageView.image = Appearance.default.images.rsvpUser.withRenderingMode(.alwaysTemplate)
+            viewerCountView.iconImageView.image = appearance.images.rsvpUser.withRenderingMode(.alwaysTemplate)
         } else {
             streamStatusView.isHidden = false
             headerView.cartButton(canBeShown: false)
-            viewerCountView.iconImageView.image = Appearance.default.images.eye.withRenderingMode(.alwaysTemplate)
+            viewerCountView.iconImageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
         }
         
         switch streamUserType {
@@ -153,7 +153,6 @@ extension VerticalStreamCollectionViewCell {
             }
         }
         
-
         let initialText = "\(firstName?.prefix(1) ?? "U")\(lastName?.prefix(1) ?? "n")".uppercased()
         headerView.profileView.defaultProfileView.initialsText.text = initialText
         
@@ -163,7 +162,7 @@ extension VerticalStreamCollectionViewCell {
         
         let statusView = streamContainer.streamHeaderView.streamStatusView
         statusView.liveButton.setTitle(connectionStatus ? "LIVE" : "connecting", for: .normal)
-        statusView.liveButton.backgroundColor = connectionStatus ? Appearance.default.colors.appGreen : .red
+        statusView.liveButton.backgroundColor = connectionStatus ? appearance.colors.appGreen : .red
         
         if connectionStatus {
             UIView.animate(withDuration: 1, delay: 0, options: [.repeat, .autoreverse]) {

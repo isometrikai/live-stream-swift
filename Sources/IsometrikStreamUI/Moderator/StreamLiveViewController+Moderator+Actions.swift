@@ -29,7 +29,7 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
                 
                 controller.titleLabel.text = title ?? ""
                 controller.infoLabel.text =  subtitle ?? ""
-                controller.infoLabel.font = Appearance.default.font.getFont(forTypo: .h8)
+                controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
                 controller.infoLabel.textColor = .lightGray
                 
                 controller.cancelButton.setTitle("Cancel".localized, for: .normal)
@@ -38,7 +38,7 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
             } else {
                 controller.titleLabel.text = title ?? ""
                 controller.infoLabel.text =  subtitle ?? ""
-                controller.infoLabel.font = Appearance.default.font.getFont(forTypo: .h8)
+                controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
                 controller.infoLabel.textColor = .lightGray
                 
                 controller.cancelButton.setTitle("Got It".localized, for: .normal)
@@ -51,7 +51,7 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
             
             controller.titleLabel.text = "You're currently moderating the broadcast".localized
             controller.infoLabel.text = "Being a moderator you can kickout members and viewers, reply to and delete messages".localized + "."
-            controller.infoLabel.font = Appearance.default.font.getFont(forTypo: .h8)
+            controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
             controller.infoLabel.textColor = .lightGray
             
             controller.cancelButton.setTitle("Got It".localized, for: .normal)
@@ -62,7 +62,7 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
             
             controller.titleLabel.text = title ?? "You're currently moderating the broadcast".localized
             controller.infoLabel.text = subtitle ?? "Being a moderator you can kickout members and viewers, reply to and delete messages".localized + "."
-            controller.infoLabel.font = Appearance.default.font.getFont(forTypo: .h8)
+            controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
             controller.infoLabel.textColor = .lightGray
             
             controller.cancelButton.setTitle("Got It".localized, for: .normal)

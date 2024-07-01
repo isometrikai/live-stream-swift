@@ -15,7 +15,7 @@ struct BattleProgressData {
     var withDuration: CGFloat
 }
 
-class CustomBattleProgressView: UIView {
+class CustomBattleProgressView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -37,21 +37,21 @@ class CustomBattleProgressView: UIView {
         return v
     }()
     
-    let label1: UILabel = {
+    lazy var label1: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.textAlignment = .left
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
-    let label2: UILabel = {
+    lazy var label2: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.textAlignment = .right
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     

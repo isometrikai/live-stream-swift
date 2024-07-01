@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamProfileBottomActionView: UIView {
+class StreamProfileBottomActionView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -33,13 +33,13 @@ class StreamProfileBottomActionView: UIView {
         return button
     }()
     
-    let followButton: UIButton = {
+    lazy var followButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.white, for: .normal)
-        button.layer.borderColor = Appearance.default.colors.appSecondary.cgColor
+        button.layer.borderColor = appearance.colors.appSecondary.cgColor
         button.layer.borderWidth = 0
         button.backgroundColor = .lightGray.withAlphaComponent(0.5)
         button.isEnabled = false

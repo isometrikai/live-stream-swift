@@ -105,7 +105,7 @@ class CustomVideoContainer: UIView {
     }
     
     func setupConstraints(){
-        videoContainerCollectionView.pin(to: self)
+        videoContainerCollectionView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             pkOverlayView.topAnchor.constraint(equalTo: topAnchor, constant: ism_windowConstant.getTopPadding + 90),
             pkOverlayView.leadingAnchor.constraint(equalTo: leadingAnchor),

@@ -19,7 +19,7 @@ extension StreamRequestListActionDelegate {
     func didDeclineActionTapped(_ index: Int) {}
 }
 
-class StreamRequestListTableViewCell: UITableViewCell {
+class StreamRequestListTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -61,8 +61,8 @@ class StreamRequestListTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Accept", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appColor
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.backgroundColor = appearance.colors.appColor
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 15
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(acceptButtonTapped), for: .touchUpInside)
@@ -74,8 +74,8 @@ class StreamRequestListTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Decline", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = Appearance.default.colors.appRed
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.backgroundColor = appearance.colors.appRed
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 15
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(declineButtonTapped), for: .touchUpInside)
@@ -89,10 +89,10 @@ class StreamRequestListTableViewCell: UITableViewCell {
         return label
     }()
     
-    let statusLabelInfo: UILabel = {
+    lazy var statusLabelInfo: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     
@@ -150,11 +150,11 @@ class StreamRequestListTableViewCell: UITableViewCell {
     
     func setAttributedText(name: String, userName:String, requestOn: Date) {
                 
-        let attributedText = NSMutableAttributedString(attributedString: NSAttributedString(string: "\(name)\n", attributes: [NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6)!, NSAttributedString.Key.foregroundColor: UIColor.white]))
+        let attributedText = NSMutableAttributedString(attributedString: NSAttributedString(string: "\(name)\n", attributes: [NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6)!, NSAttributedString.Key.foregroundColor: UIColor.white]))
         
 //        attributedText.append(NSAttributedString(string: "\(userName)\n", attributes: [NSAttributedString.Key.font: UIFont.ism_customFont(ofType: .regular, withSize: 12, enableAspectRatio: false), NSAttributedString.Key.foregroundColor: UIColor.white]))
         
-        attributedText.append(NSAttributedString(string: "\(requestOn.ism_getCustomMessageTime())", attributes: [NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8)! , NSAttributedString.Key.foregroundColor: UIColor.white]))
+        attributedText.append(NSAttributedString(string: "\(requestOn.ism_getCustomMessageTime())", attributes: [NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)! , NSAttributedString.Key.foregroundColor: UIColor.white]))
         
         
         infoLabel.attributedText = attributedText

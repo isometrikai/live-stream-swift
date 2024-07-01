@@ -8,15 +8,15 @@
 
 import UIKit
 
-class PKCongratulationBannerView: UIView {
+class PKCongratulationBannerView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.text = "Congratulation to @tannvi"
         label.textAlignment = .center
         return label
@@ -38,7 +38,7 @@ class PKCongratulationBannerView: UIView {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        backgroundColor = Appearance.default.colors.appPink
+        backgroundColor = appearance.colors.appPink
         addSubview(titleLabel)
     }
     

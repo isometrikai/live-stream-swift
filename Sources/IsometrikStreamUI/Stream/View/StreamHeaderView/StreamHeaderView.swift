@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamHeaderView: UIView {
+class StreamHeaderView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -48,10 +48,10 @@ class StreamHeaderView: UIView {
         return image
     }()
     
-    let cartBadge: UIButton = {
+    lazy var cartBadge: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .black
         button.layer.cornerRadius = 10
@@ -66,24 +66,24 @@ class StreamHeaderView: UIView {
         return button
     }()
     
-    let viewerCountView: customFeatureView = {
+    lazy var viewerCountView: customFeatureView = {
         let view = customFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.iconImageView.image = Appearance.default.images.eye.withRenderingMode(.alwaysTemplate)
+        view.iconImageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
         view.iconImageView.tintColor = .white
         view.featureLabel.text = "0"
         view.featureLabel.textColor = .white
-        view.featureLabel.font = Appearance.default.font.getFont(forTypo: .h8)
+        view.featureLabel.font = appearance.font.getFont(forTypo: .h8)
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 12.5
         view.backgroundColor = .black.withAlphaComponent(0.5)
         return view
     }()
     
-    let closeButton: UIButton = {
+    lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         button.ismTapFeedBack()
         button.layer.cornerRadius = 15
@@ -92,13 +92,13 @@ class StreamHeaderView: UIView {
     
     //:
     
-    let streamTitleLabel: UILabel = {
+    lazy var streamTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .white
         label.numberOfLines = 2
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKOverlayView: UIView {
+class PKOverlayView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -26,38 +26,38 @@ class PKOverlayView: UIView {
         return view
     }()
     
-    let vsAnimatedView: UIImageView = {
+    lazy var vsAnimatedView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.battleVsLogo
+        imageView.image = appearance.images.battleVsLogo
         imageView.isHidden = true
         return imageView
     }()
     
-    let startPKBattleButton: UIButton = {
+    lazy var startPKBattleButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setBackgroundImage(Appearance.default.images.pkStart, for: .normal)
+        button.setBackgroundImage(appearance.images.pkStart, for: .normal)
         button.isHidden = true
         button.ismTapFeedBack()
         return button
     }()
     
-    let hostToggleButton: UIButton = {
+    lazy var hostToggleButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.pkHostToggle, for: .normal)
+        button.setImage(appearance.images.pkHostToggle, for: .normal)
         button.setTitle(" Make host   ", for: .normal)
         button.backgroundColor = .black.withAlphaComponent(0.5)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 5
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.ismTapFeedBack()
         button.isHidden = true
         return button
     }()
     
-    let battleTimerView: PKBattleTimerView = {
+    lazy var battleTimerView: PKBattleTimerView = {
         let view = PKBattleTimerView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
@@ -83,11 +83,11 @@ class PKOverlayView: UIView {
         return view
     }()
     
-    let drawStatusImage: UIImageView = {
+    lazy var drawStatusImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.image = Appearance.default.images.pkDraw
+        imageView.image = appearance.images.pkDraw
         imageView.isHidden = true
         return imageView
     }()
@@ -100,7 +100,7 @@ class PKOverlayView: UIView {
         setupConstraints()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.battleProgressView.layerData = BattleProgressData(color1: Appearance.default.colors.appCyan2, color2: Appearance.default.colors.appPink, width: 15, withDuration: 0.2)
+            self.battleProgressView.layerData = BattleProgressData(color1: self.appearance.colors.appCyan2, color2: self.appearance.colors.appPink, width: 15, withDuration: 0.2)
         }
     }
     
@@ -129,14 +129,14 @@ class PKOverlayView: UIView {
         addSubview(hostToggleButton)
         
         countDownView.count = 4
-        countDownView.numberLabel.textColor = Appearance.default.colors.appYellow2
-        countDownView.numberLabel.font = Appearance.default.font.getFont(forTypo: .h1)
+        countDownView.numberLabel.textColor = appearance.colors.appYellow2
+        countDownView.numberLabel.font = appearance.font.getFont(forTypo: .h1)
         countDownView.backgroundColor = .black.withAlphaComponent(0.2)
         
     }
     
     func setupConstraints(){
-        countDownView.pin(to: self)
+        countDownView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             congratulationBannerView.leadingAnchor.constraint(equalTo: leadingAnchor),

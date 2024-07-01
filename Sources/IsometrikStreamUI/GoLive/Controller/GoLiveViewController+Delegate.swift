@@ -10,7 +10,7 @@ import UIKit
 
 extension GoLiveViewController: UIScrollViewDelegate {
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.view.endEditing(true)
     }
     

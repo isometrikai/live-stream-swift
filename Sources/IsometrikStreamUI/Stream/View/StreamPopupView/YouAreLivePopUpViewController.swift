@@ -19,7 +19,7 @@ protocol YouAreLivePopUpViewControllerProtocol: AnyObject {
     func tapButtonClick(tap: YouAreTap)
 }
 
-class YouAreLivePopUpViewController: UIViewController {
+class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -43,28 +43,28 @@ class YouAreLivePopUpViewController: UIViewController {
         return view
     }()
     
-    let crownImageView: UIImageView = {
+    lazy var crownImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.live
+        imageView.image = appearance.images.live
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "You’re LIVE".localized
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "We’ve sent a notification to your followers. Your fans will start to join soon".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.numberOfLines = 0
         label.textColor = .black
         label.textAlignment = .center
@@ -76,7 +76,7 @@ class YouAreLivePopUpViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("OK".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.backgroundColor = .black
         button.ismTapFeedBack()
         button.layer.cornerCurve = .continuous
@@ -116,7 +116,7 @@ class YouAreLivePopUpViewController: UIViewController {
     }
     
     func setupConstraints(){
-        backCoverView.pin(to: view)
+        backCoverView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             cardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomStepperButtonView: UIView {
+class CustomStepperButtonView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -20,29 +20,29 @@ class CustomStepperButtonView: UIView {
         return stackView
     }()
     
-    let leadingActionButton: UIButton = {
+    lazy var leadingActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.plus.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.plus.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = .black
         button.ismTapFeedBack()
         return button
     }()
     
-    let stepperCountLabel: UILabel = {
+    lazy var stepperCountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "0"
         return label
     }()
     
-    let trailingActionButton: UIButton = {
+    lazy var trailingActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.removeCircle.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.removeCircle.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = .black
         button.ismTapFeedBack()
         return button
@@ -70,7 +70,7 @@ class CustomStepperButtonView: UIView {
     }
     
     func setupConstraints(){
-        contentStackView.pin(to: self)
+        contentStackView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             leadingActionButton.widthAnchor.constraint(equalToConstant: 50),
             leadingActionButton.heightAnchor.constraint(equalToConstant: 50),

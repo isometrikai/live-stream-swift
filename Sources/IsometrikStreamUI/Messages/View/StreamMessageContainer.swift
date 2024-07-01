@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamMessageContainer: UIView {
+class StreamMessageContainer: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -31,9 +31,9 @@ class StreamMessageContainer: UIView {
     lazy var scrollToBottomButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.arrowDown.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.arrowDown.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .black
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.backgroundColor = appearance.colors.appColor
         button.layer.cornerRadius = 17.5
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.black.cgColor
@@ -63,7 +63,7 @@ class StreamMessageContainer: UIView {
     }
     
     func setupConstraints(){
-        messageTableView.pin(to: self)
+        messageTableView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             scrollToBottomButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             scrollToBottomButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),

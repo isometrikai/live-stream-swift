@@ -8,32 +8,32 @@
 
 import UIKit
 
-class PKChallengeDurationCollectionViewCell: UICollectionViewCell {
+class PKChallengeDurationCollectionViewCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
     override var isSelected: Bool {
         didSet {
-            cardView.layer.borderColor = isSelected ? Appearance.default.colors.appColor.cgColor : Appearance.default.colors.appLightGray.withAlphaComponent(0.5).cgColor
-            durationLabel.textColor = isSelected ? Appearance.default.colors.appColor : Appearance.default.colors.appLightGray
+            cardView.layer.borderColor = isSelected ? appearance.colors.appColor.cgColor : appearance.colors.appLightGray.withAlphaComponent(0.5).cgColor
+            durationLabel.textColor = isSelected ? appearance.colors.appColor : appearance.colors.appLightGray
         }
     }
     
-    let cardView: UIView = {
+    lazy var cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.5).cgColor
+        view.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.5).cgColor
         view.layer.borderWidth = 1.5
         view.layer.cornerRadius = 20
         return view
     }()
     
-    let durationLabel: UILabel = {
+    lazy var durationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = Appearance.default.colors.appLightGray
+        label.textColor = appearance.colors.appLightGray
         label.text = "1 min"
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         return label
     }()
@@ -59,8 +59,8 @@ class PKChallengeDurationCollectionViewCell: UICollectionViewCell {
     }
     
     func setupConstraints(){
-        cardView.pin(to: self)
-        durationLabel.pin(to: cardView)
+        cardView.ism_pin(to: self)
+        durationLabel.ism_pin(to: cardView)
     }
     
 }

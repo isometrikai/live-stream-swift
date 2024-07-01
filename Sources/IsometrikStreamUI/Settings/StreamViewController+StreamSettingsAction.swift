@@ -200,7 +200,7 @@ extension StreamViewController: StreamSettingDelegate {
         let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
         let userType = viewModel.streamUserType
         
-        let reportAction = StreamSettingData(settingLabel: "Report".localized, settingImage: Appearance.default.images.report, streamSettingType: .report)
+        let reportAction = StreamSettingData(settingLabel: "Report".localized, settingImage: appearance.images.report, streamSettingType: .report)
         
         switch streamStatus {
         case .started:
@@ -210,19 +210,19 @@ extension StreamViewController: StreamSettingDelegate {
             let audioStatus = !currentSession.isAudioMute
             let videoStatus = !currentSession.isVideoMute
             
-            let audioImage = audioStatus ? Appearance.default.images.speakerOn : Appearance.default.images.speakerOff
+            let audioImage = audioStatus ? appearance.images.speakerOn : appearance.images.speakerOff
             
             let audioLabel = audioStatus ? "Mute Audio".localized : "Unmute Audio".localized
             
             let audioAction = StreamSettingData(settingLabel: audioLabel, settingImage: audioImage, streamSettingType: .audio)
             
-            let videoImage = videoStatus ? Appearance.default.images.videoCamera : Appearance.default.images.videoCameraOff
+            let videoImage = videoStatus ? appearance.images.videoCamera : appearance.images.videoCameraOff
             
             let videoLabel = videoStatus ? "Disable Camera".localized : "Enable Camera".localized
             
             let cameraAction = StreamSettingData(settingLabel: videoLabel, settingImage: videoImage, streamSettingType: .camera)
             
-            let speakerImage = audioStatus ? Appearance.default.images.speakerOn : Appearance.default.images.speakerOff
+            let speakerImage = audioStatus ? appearance.images.speakerOn : appearance.images.speakerOff
             
             let speakerLabel = audioStatus ? "Mute Volume".localized : "Unmute Volume".localized
             

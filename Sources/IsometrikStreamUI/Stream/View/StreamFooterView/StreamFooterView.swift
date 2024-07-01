@@ -13,7 +13,7 @@ enum BottomActionsUI {
     case button
 }
 
-class StreamFooterView: UIView {
+class StreamFooterView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -41,7 +41,7 @@ class StreamFooterView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Say Something".localized + "..", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.backgroundColor = .black.withAlphaComponent(0.4)
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()
@@ -58,12 +58,12 @@ class StreamFooterView: UIView {
         return view
     }()
     
-    let actionButton: UIButton = {
+    lazy var actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .white
         button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.layer.cornerRadius = 25
         button.imageView?.tintColor = .black
         button.ismTapFeedBack()
@@ -114,7 +114,7 @@ class StreamFooterView: UIView {
     }
     
     func setupConstraints(){
-        activityIndicatorView.pin(to: loaderView)
+        activityIndicatorView.ism_pin(to: loaderView)
         NSLayoutConstraint.activate([
             messageTextInputView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             messageTextInputView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),

@@ -8,26 +8,26 @@
 
 import UIKit
 
-class AddModeratorHeader: UIView {
+class AddModeratorHeader: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Add Moderators".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textAlignment = .center
         label.textColor = .black
         return label
     }()
     
-    let descriptionLabel: UILabel = {
+    lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Add moderator to a broadcast who can kickout members, or viewers, remove messages and reply to a message".localized + "."
         label.textColor = .lightGray
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textAlignment = .center
         label.numberOfLines = 0
         return label

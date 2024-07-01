@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveUploaderLoaderView: UIView {
+class GoLiveUploaderLoaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -27,12 +27,12 @@ class GoLiveUploaderLoaderView: UIView {
         return view
     }()
     
-    let infoLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.text = "Uploading..."
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
 
@@ -77,7 +77,7 @@ class GoLiveUploaderLoaderView: UIView {
     }
     
     func setUpConstraints(){
-        coverView.pin(to: self)
+        coverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
             cardView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),

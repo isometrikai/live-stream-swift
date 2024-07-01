@@ -29,7 +29,7 @@ protocol StreamSettingDelegate {
     func didTapSettingOptionFor(actionType: StreamSettingType)
 }
 
-class StreamSettingViewController: UIViewController {
+class StreamSettingViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -57,7 +57,7 @@ class StreamSettingViewController: UIViewController {
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .black
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
@@ -80,7 +80,7 @@ class StreamSettingViewController: UIViewController {
     }
     
     func setupConstraints(){
-        settingTableView.pin(to: view)
+        settingTableView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             settingTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             settingTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),

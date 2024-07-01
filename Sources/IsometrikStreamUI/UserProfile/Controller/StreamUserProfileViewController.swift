@@ -28,7 +28,7 @@ protocol StreamUserProfileDelegate {
     func didUserProfileOptionTapped(actionType: UserProfileActionType, messageData: ISMComment?)
 }
 
-class StreamUserProfileViewController: UIViewController {
+class StreamUserProfileViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -39,7 +39,7 @@ class StreamUserProfileViewController: UIViewController {
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close, for: .normal)
+        button.setImage(appearance.images.close, for: .normal)
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -80,18 +80,18 @@ class StreamUserProfileViewController: UIViewController {
         return imageView
     }()
     
-    let defaultProfileView: CustomDefaultProfileView = {
+    lazy var defaultProfileView: CustomDefaultProfileView = {
         let defaultView = CustomDefaultProfileView()
         defaultView.layer.cornerRadius = 35
-        defaultView.initialsText.font = Appearance.default.font.getFont(forTypo: .h4)
+        defaultView.initialsText.font = appearance.font.getFont(forTypo: .h4)
         return defaultView
     }()
     
-    let userNameLabel: UILabel = {
+    lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textColor = .black
         return label
     }()
@@ -134,8 +134,8 @@ class StreamUserProfileViewController: UIViewController {
     
     func setUpConstraints(){
         
-        profileImage.pin(to: profileCoverView)
-        defaultProfileView.pin(to: profileCoverView)
+        profileImage.ism_pin(to: profileCoverView)
+        defaultProfileView.ism_pin(to: profileCoverView)
         NSLayoutConstraint.activate([
             
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),

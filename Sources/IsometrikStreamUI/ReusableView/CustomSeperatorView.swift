@@ -8,14 +8,14 @@
 
 import UIKit
 
-class CustomSeperatorView : UIView {
+class CustomSeperatorView : UIView, AppearanceProvider {
     
     // MARK: - Properties
     
-    let seperatorView: UIView = {
+    lazy var seperatorView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = Appearance.default.colors.appGrayBackground
+        v.backgroundColor = appearance.colors.appGrayBackground
         return v
     }()
     

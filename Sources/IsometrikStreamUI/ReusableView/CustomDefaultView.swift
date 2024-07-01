@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomDefaultView: UIView {
+class CustomDefaultView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -29,24 +29,24 @@ class CustomDefaultView: UIView {
         return imageView
     }()
     
-    let defaultTitleLabel: UILabel = {
+    lazy var defaultTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
-        label.font = Appearance.default.font.getFont(forTypo: .h3)
+        label.font = appearance.font.getFont(forTypo: .h3)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
     
-    let defaultActionButton: UIButton = {
+    lazy var defaultActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 20
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.backgroundColor = appearance.colors.appColor
         button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         button.ismTapFeedBack()
         return button

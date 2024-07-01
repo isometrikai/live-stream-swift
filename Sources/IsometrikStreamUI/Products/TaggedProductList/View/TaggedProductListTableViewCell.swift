@@ -15,7 +15,7 @@ protocol TaggedProductListActionDelegate {
     func didMessageTapped(_ index: Int)
 }
 
-class TaggedProductListTableViewCell: UITableViewCell {
+class TaggedProductListTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     var isFromRecordedStream: Bool = false
@@ -79,7 +79,7 @@ class TaggedProductListTableViewCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .black
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         button.layer.cornerRadius = 17.5
@@ -92,7 +92,7 @@ class TaggedProductListTableViewCell: UITableViewCell {
     lazy var chatButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.message.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.message.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         button.backgroundColor = .black
         button.layer.cornerRadius = 17.5
@@ -214,17 +214,17 @@ class TaggedProductListTableViewCell: UITableViewCell {
         let price = String(format: "%.2f", price)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h5),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h5),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h5),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h5),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5")
         ]
         
         let attribute3 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#5FCF4C")
         ]
         

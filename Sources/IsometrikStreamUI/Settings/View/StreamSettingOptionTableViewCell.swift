@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamSettingOptionTableViewCell: UITableViewCell {
+class StreamSettingOptionTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -18,21 +18,21 @@ class StreamSettingOptionTableViewCell: UITableViewCell {
         }
     }
     
-    let settingImage: UIImageView = {
+    lazy var settingImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.close.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.close.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .black
         return imageView
     }()
     
-    let settingLabel: UILabel = {
+    lazy var settingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.text = "Mute my audio"
         
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .black
         
         return label

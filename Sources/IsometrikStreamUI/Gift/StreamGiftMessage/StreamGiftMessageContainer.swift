@@ -52,7 +52,7 @@ class StreamGiftMessageContainerView: UIView {
     }
     
     func setupConstraints(){
-        giftTableView.pin(to: self)
+        giftTableView.ism_pin(to: self)
     }
     
     func updateMaskedGradient(){

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamingInfoMessageView: UIView {
+class StreamingInfoMessageView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     var messageData: ISMComment? {
@@ -27,19 +27,19 @@ class StreamingInfoMessageView: UIView {
         return image
     }()
     
-    let backCardView: UIView = {
+    lazy var backCardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appColor
+        view.backgroundColor = appearance.colors.appColor
         view.layer.cornerRadius = 10
         return view
     }()
     
-    let infoLabel: UILabel = {
+    lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white.withAlphaComponent(0.8)
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         return label
     }()
@@ -79,6 +79,7 @@ class StreamingInfoMessageView: UIView {
     }
     
     func manageData(){
+        
         guard let data = messageData else {
             return
         }

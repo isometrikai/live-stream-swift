@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKUserTableViewCell: UITableViewCell {
+class PKUserTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -22,11 +22,11 @@ class PKUserTableViewCell: UITableViewCell {
     
     var actionButtonCallback: ((_ index: Int) -> ())?
     
-    let userProfileImage: UIImageView = {
+    lazy var userProfileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.5).cgColor
+        imageView.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.5).cgColor
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
@@ -53,11 +53,11 @@ class PKUserTableViewCell: UITableViewCell {
         return stackView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
     
@@ -74,10 +74,10 @@ class PKUserTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.setTitle("Invite", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
-        button.setTitleColor(Appearance.default.colors.appColor, for: .normal)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
+        button.setTitleColor(appearance.colors.appColor, for: .normal)
         button.layer.borderWidth = 1
-        button.layer.borderColor = Appearance.default.colors.appColor.cgColor
+        button.layer.borderColor = appearance.colors.appColor.cgColor
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 15
         button.ismTapFeedBack()
@@ -148,7 +148,7 @@ class PKUserTableViewCell: UITableViewCell {
            
         
         titleLabel.text = "@\(data.userName ?? "")"
-        subtitleLabel.ism_setLabelWithLeftImage(withImage: Appearance.default.images.eye, imageColor: Appearance.default.colors.appLightGray, imageSize: 13, text: "\(data.viewerCount ?? 0)", font: Appearance.default.font.getFont(forTypo: .h8)!, textColor: Appearance.default.colors.appLightGray)
+        subtitleLabel.ism_setLabelWithLeftImage(withImage: appearance.images.eye, imageColor: appearance.colors.appLightGray, imageSize: 13, text: "\(data.viewerCount ?? 0)", font: appearance.font.getFont(forTypo: .h8)!, textColor: appearance.colors.appLightGray)
             
         if let userName = data.userName {
             

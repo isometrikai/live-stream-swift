@@ -8,24 +8,24 @@
 
 import UIKit
 
-class PKBattleTimerView: UIView {
+class PKBattleTimerView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let coverImage: UIImageView = {
+    lazy var coverImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.battleTimerOverlay
+        imageView.image = appearance.images.battleTimerOverlay
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    let timerLabel: UILabel = {
+    lazy var timerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
-        label.textColor = Appearance.default.colors.appYellow2
+        label.font = appearance.font.getFont(forTypo: .h8)
+        label.textColor = appearance.colors.appYellow2
         label.textAlignment = .center
         return label
     }()
@@ -50,7 +50,7 @@ class PKBattleTimerView: UIView {
     }
     
     func setupConstraints(){
-        coverImage.pin(to: self)
+        coverImage.ism_pin(to: self)
         NSLayoutConstraint.activate([
             timerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             timerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),

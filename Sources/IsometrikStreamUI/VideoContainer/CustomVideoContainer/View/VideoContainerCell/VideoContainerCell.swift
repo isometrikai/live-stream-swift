@@ -16,7 +16,7 @@ protocol VideoContainerActionDelegate {
     func didRTMPMemberViewTapped(index: Int)
 }
 
-class VideoContainerCell: UICollectionViewCell {
+class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -90,13 +90,13 @@ class VideoContainerCell: UICollectionViewCell {
     
     //:
     
-    let muteImage: CustomVideoContainerImageView = {
+    lazy var muteImage: CustomVideoContainerImageView = {
         let view = CustomVideoContainerImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 15
         view.backgroundColor = .black.withAlphaComponent(0.7)
         
-        view.cardImage.image = Appearance.default.images.speakerOff.withRenderingMode(.alwaysTemplate)
+        view.cardImage.image = appearance.images.speakerOff.withRenderingMode(.alwaysTemplate)
         view.cardImage.tintColor = .white
         view.cardImage.contentMode = .scaleAspectFit
         view.cardImageWidthAnchor?.constant = 10
@@ -114,7 +114,7 @@ class VideoContainerCell: UICollectionViewCell {
         
         view.cardButton.addTarget(self, action: #selector(moreOptionTapped), for: .touchUpInside)
         
-        view.cardImage.image = Appearance.default.images.more2.withRenderingMode(.alwaysTemplate)
+        view.cardImage.image = appearance.images.more2.withRenderingMode(.alwaysTemplate)
         view.cardImage.tintColor = .white
         view.cardImageWidthAnchor?.constant = 10
         view.cardImageHeightAnchor?.constant = 10
@@ -208,10 +208,10 @@ class VideoContainerCell: UICollectionViewCell {
     
     func setupConstraints(){
         //rtmpDefaultView.pin(to: self)
-        videoView.pin(to: self)
-        sessionProfileView.pin(to: self)
-        profileView.pin(to: self)
-        battleProfileView.pin(to: self)
+        videoView.ism_pin(to: self)
+        sessionProfileView.ism_pin(to: self)
+        profileView.ism_pin(to: self)
+        battleProfileView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             muteImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             muteImage.bottomAnchor.constraint(equalTo: self.sessionProfileView.profilePicture.topAnchor, constant: -5),
@@ -270,11 +270,11 @@ class VideoContainerCell: UICollectionViewCell {
             
             if videoSession.userData?.isAdmin != nil || videoSession.userData?.isAdmin ?? false {
                 // host
-                battleProfileView.coverImageView.image = Appearance.default.images.battleHostBackground
+                battleProfileView.coverImageView.image = appearance.images.battleHostBackground
                 
             } else {
                 // guest
-                battleProfileView.coverImageView.image = Appearance.default.images.battleGuestBackground
+                battleProfileView.coverImageView.image = appearance.images.battleGuestBackground
             }
             
             pkSessionGuestProfile.data = videoSession.userData
@@ -287,7 +287,7 @@ class VideoContainerCell: UICollectionViewCell {
                 
                 // show winner image
                 winningStatusImage.isHidden = false
-                winningStatusImage.image = Appearance.default.images.pkWinner
+                winningStatusImage.image = appearance.images.pkWinner
                 
                 // show confetti
                 confettiView.isHidden = false
@@ -304,7 +304,7 @@ class VideoContainerCell: UICollectionViewCell {
                 
                 // show looser image
                 winningStatusImage.isHidden = false
-                winningStatusImage.image = Appearance.default.images.pkLoser
+                winningStatusImage.image = appearance.images.pkLoser
                 
                 // hide confetti
                 confettiView.isHidden = true
@@ -382,7 +382,7 @@ class VideoContainerCell: UICollectionViewCell {
         
         guard let view = videoSession.liveKitVideoView else { return }
         self.videoView.addSubview(view)
-        view.pin(to: self.videoView)
+        view.ism_pin(to: self.videoView)
         
     }
     
@@ -484,25 +484,25 @@ class VideoContainerCell: UICollectionViewCell {
         switch userType {
         case .viewer:
             
-            rtmpDefaultView.defaultImageView.image = Appearance.default.images.joinStream
+            rtmpDefaultView.defaultImageView.image = appearance.images.joinStream
             rtmpDefaultView.defaultLabel.text = "Join"
             
             break
         case .host:
             
-            rtmpDefaultView.defaultImageView.image = Appearance.default.images.plus
+            rtmpDefaultView.defaultImageView.image = appearance.images.plus
             rtmpDefaultView.defaultLabel.text = "Add"
             
             break
         case .member:
             
-            rtmpDefaultView.defaultImageView.image = Appearance.default.images.joinStream
+            rtmpDefaultView.defaultImageView.image = appearance.images.joinStream
             rtmpDefaultView.defaultLabel.text = "Waiting.."
             
             break
         case .moderator:
             
-            rtmpDefaultView.defaultImageView.image = Appearance.default.images.joinStream
+            rtmpDefaultView.defaultImageView.image = appearance.images.joinStream
             rtmpDefaultView.defaultLabel.text = "Join"
             
             break
@@ -517,7 +517,7 @@ class VideoContainerCell: UICollectionViewCell {
             self.rtmpDefaultView.layer.sublayers?.filter{ $0 is CAGradientLayer }.forEach{ $0.removeFromSuperlayer() }
         }
         
-        self.rtmpDefaultView.ism_setGradient(withColors: [Appearance.default.colors.appSecondary.cgColor, Appearance.default.colors.appColor.cgColor], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 1))
+        self.rtmpDefaultView.ism_setGradient(withColors: [appearance.colors.appSecondary.cgColor, appearance.colors.appColor.cgColor], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 1))
     }
     
 }

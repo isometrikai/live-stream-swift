@@ -17,7 +17,7 @@ enum RotationDirection: CGFloat {
 
 let PI = CGFloat(M_PI)
 
-public class FloatingHeartView: UIView {
+public class FloatingHeartView: UIView, AppearanceProvider {
 
     static let heartSize: CGFloat = 36
     static let burstDelay: TimeInterval = 0.1
@@ -44,7 +44,7 @@ public class FloatingHeartView: UIView {
 
     public func animateInView(view: UIView, imageToUse: UIImage) {
         heartImageView?.image = imageToUse
-        heartImageView?.tintColor = Appearance.default.colors.appColor
+        heartImageView?.tintColor = appearance.colors.appColor
         guard let rotationDirection = RotationDirection(rawValue: CGFloat(1 - Int(2 * randomNumber(cap: 2)))) else { return }
         prepareForAnimation()
         performBloomAnimation()

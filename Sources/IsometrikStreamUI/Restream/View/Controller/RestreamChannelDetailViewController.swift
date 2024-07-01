@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 import IsometrikStream
 
-class RestreamChannelDetailViewController: UIViewController {
+class RestreamChannelDetailViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -34,18 +34,18 @@ class RestreamChannelDetailViewController: UIViewController {
     lazy var backButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.back.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.back.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .black
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return button
     }()
     
-    let headerTitle: UILabel = {
+    lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Channel Name"
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     
@@ -78,20 +78,20 @@ class RestreamChannelDetailViewController: UIViewController {
         return toggleView
     }()
     
-    let channelTextView: FormTextView = {
+    lazy var channelTextView: FormTextView = {
         let view = FormTextView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.customTextLabel.text = "www.example.com/"
         view.customTextLabel.textColor = .black
 
         view.formTextImageView.isHidden = false
-        view.formTextImageView.image = Appearance.default.images.youtubeLogo
+        view.formTextImageView.image = appearance.images.youtubeLogo
         view.textLabelLeadingAnchor?.constant = 55
 
         return view
     }()
 
-    let rtmpURLView: FormTextWithTitleView = {
+    lazy var rtmpURLView: FormTextWithTitleView = {
         let view = FormTextWithTitleView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.formTitleLabel.text = "RTMP URL".localized
@@ -105,7 +105,7 @@ class RestreamChannelDetailViewController: UIViewController {
             string: "Enter RTMP url".localized,
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5"),
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8)!
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)!
             ]
         )
         
@@ -120,7 +120,7 @@ class RestreamChannelDetailViewController: UIViewController {
         view.formTitleLabel.textColor = .black
         
         view.formTextView.copyButton.isHidden = false
-        view.formTextView.copyButton.setImage(Appearance.default.images.eye.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.formTextView.copyButton.setImage(appearance.images.eye.withRenderingMode(.alwaysTemplate), for: .normal)
         view.formTextView.copyButton.imageView?.tintColor = .darkGray
         
         view.formTextView.customTextLabel.isHidden = true
@@ -132,7 +132,7 @@ class RestreamChannelDetailViewController: UIViewController {
             string: "Enter Stream key".localized,
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5"),
-                NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8)!
+                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)!
             ]
         )
         
@@ -155,7 +155,7 @@ class RestreamChannelDetailViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Save".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 25
         button.backgroundColor = .black
         button.ismTapFeedBack()

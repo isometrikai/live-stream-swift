@@ -8,23 +8,23 @@
 
 import UIKit
 
-class PKPunishmentBannerView: UIView {
+class PKPunishmentBannerView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let bannerView: UIView = {
+    lazy var bannerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appCyan
+        view.backgroundColor = appearance.colors.appCyan
         view.layer.cornerRadius = 10
         return view
     }()
     
-    let punishmentLabel: UILabel = {
+    lazy var punishmentLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.text = "Taking Punishment : Loser accept punishment from winner".localized
         label.textAlignment = .center
         return label

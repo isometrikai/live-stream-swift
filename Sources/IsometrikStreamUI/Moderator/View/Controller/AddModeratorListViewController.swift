@@ -10,7 +10,7 @@ import UIKit
 import MBProgressHUD
 import IsometrikStream
 
-class AddModeratorListViewController: UIViewController {
+class AddModeratorListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -69,21 +69,21 @@ class AddModeratorListViewController: UIViewController {
         return view
     }()
     
-    let noUserFoundImage: UIImageView = {
+    lazy var noUserFoundImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.noViewers
+        imageView.image = appearance.images.noViewers
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    let noUserFoundLabel: UILabel = {
+    lazy var noUserFoundLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "No user found"
         label.textAlignment = .center
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
 

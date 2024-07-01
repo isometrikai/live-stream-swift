@@ -8,7 +8,7 @@
 
 import UIKit
 
-class customFeatureView: UIView {
+class customFeatureView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -18,12 +18,12 @@ class customFeatureView: UIView {
         return imageView
     }()
     
-    let featureLabel: UILabel = {
+    lazy var featureLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "--"
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
     
@@ -54,7 +54,7 @@ class customFeatureView: UIView {
     }
     
     func setupConstraints(){
-        actionButton.pin(to: self)
+        actionButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),

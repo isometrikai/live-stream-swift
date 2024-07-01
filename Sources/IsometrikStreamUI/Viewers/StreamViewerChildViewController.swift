@@ -10,7 +10,7 @@ import MBProgressHUD
 import IsometrikStream
 
 
-class StreamViewerChildViewController: UIViewController {
+class StreamViewerChildViewController: UIViewController, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -74,11 +74,11 @@ class StreamViewerChildViewController: UIViewController {
         return tableView
     }()
     
-    let defaultView: StreamDefaultEmptyView = {
+    lazy var defaultView: StreamDefaultEmptyView = {
         let view = StreamDefaultEmptyView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
-        view.defaultImageView.image = Appearance.default.images.noViewers
+        view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Viewers Found".localized
         return view
     }()
@@ -96,7 +96,7 @@ class StreamViewerChildViewController: UIViewController {
         refreshControl.addTarget(self, action:
                                     #selector(self.refreshAction),
                                  for: UIControl.Event.valueChanged)
-        refreshControl.tintColor = Appearance.default.colors.appColor
+        refreshControl.tintColor = appearance.colors.appColor
         return refreshControl
     }()
     
@@ -125,7 +125,7 @@ class StreamViewerChildViewController: UIViewController {
     }
     
     func setupConstraints(){
-        defaultView.pin(to: view)
+        defaultView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -377,16 +377,16 @@ extension StreamViewerChildViewController: StreamViewerActionDelegate {
     
 }
 
-class StreamChildControllerHeaderView: UIView {
+class StreamChildControllerHeaderView: UIView, AppearanceProvider{
     
     // MARK: - PROPERTIES
     var infoCountStackViewTrailing: NSLayoutConstraint?
     
-    let headerLabel: UILabel = {
+    lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     
@@ -399,19 +399,19 @@ class StreamChildControllerHeaderView: UIView {
         return stackView
     }()
     
-    let countLabel: UILabel = {
+    lazy var countLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0"
         label.textColor = .darkGray
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
     
-    let headerImage: UIImageView = {
+    lazy var headerImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = Appearance.default.images.eye.withRenderingMode(.alwaysTemplate)
+        imageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = .black
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -424,14 +424,14 @@ class StreamChildControllerHeaderView: UIView {
         return view
     }()
     
-    let actionButton: UIButton = {
+    lazy var actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 17.5
         button.isHidden = true
-        button.backgroundColor = Appearance.default.colors.appColor
+        button.backgroundColor = appearance.colors.appColor
         button.ismTapFeedBack()
         return button
     }()

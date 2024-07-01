@@ -15,7 +15,7 @@ enum RouteType {
     case push
 }
 
-class AllProductsViewController: UIViewController {
+class AllProductsViewController: UIViewController, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -41,7 +41,7 @@ class AllProductsViewController: UIViewController {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerTitle.text = "Add Products".localized
-        view.headerTitle.font = Appearance.default.font.getFont(forTypo: .h3)
+        view.headerTitle.font = appearance.font.getFont(forTypo: .h3)
         view.headerTitle.textAlignment = .center
         view.dividerView.isHidden = true
         return view
@@ -308,7 +308,7 @@ class AllProductsViewController: UIViewController {
         case .present:
             
             headerView.trailingActionButton.isHidden = false
-            headerView.trailingActionButton.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+            headerView.trailingActionButton.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
             headerView.trailingActionButton.imageView?.tintColor = .black
             headerView.trailingActionButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
             
@@ -316,7 +316,7 @@ class AllProductsViewController: UIViewController {
         case .push:
             
             headerView.leadingActionButton.isHidden = false
-            headerView.leadingActionButton.setImage(Appearance.default.images.back, for: .normal)
+            headerView.leadingActionButton.setImage(appearance.images.back, for: .normal)
             headerView.leadingActionButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
             
             break

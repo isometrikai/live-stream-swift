@@ -8,22 +8,22 @@
 
 import UIKit
 
-class PKCustomLoaderView: UIView {
+class PKCustomLoaderView: UIView, AppearanceProvider {
 
     // MARK:- PROPERTIES
     
-    let outerBar:UIView = {
+    lazy var outerBar:UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appColor.withAlphaComponent(0.2)
+        view.backgroundColor = appearance.colors.appColor.withAlphaComponent(0.2)
         view.clipsToBounds = true
         return view
     }()
     
-    let innerBar: UIView = {
+    lazy var innerBar: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appColor
+        view.backgroundColor = appearance.colors.appColor
         return view
     }()
     

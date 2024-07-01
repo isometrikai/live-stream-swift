@@ -14,7 +14,7 @@ protocol GoLiveAddProductActionDelegate {
     func didRemoveProductTapped(index: Int)
 }
 
-class GoLiveAddProductsView: UIView {
+class GoLiveAddProductsView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -31,11 +31,11 @@ class GoLiveAddProductsView: UIView {
         return view
     }()
     
-    let headerTitle: UILabel = {
+    lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Add Products".localized + "*"
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         label.textColor = .white
         return label
     }()
@@ -45,7 +45,7 @@ class GoLiveAddProductsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("+" + "Add".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h4)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.ismTapFeedBack()
         button.isHidden = true
         return button

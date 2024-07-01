@@ -8,15 +8,15 @@
 
 import UIKit
 
-class CustomDefaultProfileView: UIView {
+final public class CustomDefaultProfileView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let initialsText: UILabel = {
+    public lazy var initialsText: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
-        label.textColor = Appearance.default.colors.appColor
+        label.font = appearance.font.getFont(forTypo: .h8)
+        label.textColor = appearance.colors.appColor
         label.text = "--"
         label.textAlignment = .center
         return label
@@ -44,7 +44,7 @@ class CustomDefaultProfileView: UIView {
     }
     
     func setupConstraints(){
-        initialsText.pin(to: self)
+        initialsText.ism_pin(to: self)
     }
 
 }

@@ -13,7 +13,7 @@ protocol AddProductActionDelegate {
     func didClearTapped(index: Int)
 }
 
-class AddProductCollectionViewCell: UICollectionViewCell {
+class AddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -55,30 +55,30 @@ class AddProductCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
     
-    let productCategoryLabel: UILabel = {
+    lazy var productCategoryLabel: UILabel = {
         let label = UILabel()
         label.text = "Product Brand".localized
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Appearance.default.font.getFont(forTypo: .h7)
+        label.font = appearance.font.getFont(forTypo: .h7)
         label.textColor = UIColor.colorWithHex(color: "#9797BE")
         return label
     }()
     
-    let productLabel: UILabel = {
+    lazy var productLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Product title".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = .black
         return label
     }()
     
-    let priceInfoLabel: UILabel = {
+    lazy var priceInfoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.numberOfLines = 2
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         label.textColor = .black
         return label
     }()
@@ -86,7 +86,7 @@ class AddProductCollectionViewCell: UICollectionViewCell {
     lazy var clearButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close, for: .normal)
+        button.setImage(appearance.images.close, for: .normal)
         button.backgroundColor = .white
         button.layer.cornerRadius = 11
         button.ismTapFeedBack()
@@ -135,7 +135,7 @@ class AddProductCollectionViewCell: UICollectionViewCell {
     }
     
     func setupConstraints(){
-        productCardView.pin(to: self)
+        productCardView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             productImage.leadingAnchor.constraint(equalTo: productCardView.leadingAnchor),
@@ -252,17 +252,17 @@ class AddProductCollectionViewCell: UICollectionViewCell {
         let price = String(format: "%.2f", price)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h5),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h5),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h6),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5")
         ]
         
         let attribute3 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#5FCF4C")
         ]
         
@@ -289,12 +289,12 @@ class AddProductCollectionViewCell: UICollectionViewCell {
         let earnings = String(format: "%.2f", earning)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
         

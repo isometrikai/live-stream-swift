@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTMPOptionsContainerView: UIView {
+class RTMPOptionsContainerView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -173,7 +173,7 @@ class RTMPOptionsContainerView: UIView {
         view.formTextView.customTextLabel.text = "Choose Date and Time".localized
         view.formTextView.customTextLabel.textColor = .white
         view.formTextView.copyButton.isHidden = false
-        view.formTextView.copyButton.setImage(Appearance.default.images.calendar.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.formTextView.copyButton.setImage(appearance.images.calendar.withRenderingMode(.alwaysTemplate), for: .normal)
         view.formTextView.copyButton.tintColor = .white
         view.formTextView.tapActionButton.isHidden = false
         view.formTextView.tapActionButton.addTarget(self, action: #selector(dateTimeSelectorTapped), for: .touchUpInside)
@@ -220,7 +220,7 @@ class RTMPOptionsContainerView: UIView {
     
     func setupConstraints(){
         
-        scrollView.pin(to: self)
+        scrollView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             profileView.leadingAnchor.constraint(equalTo: leadingAnchor),

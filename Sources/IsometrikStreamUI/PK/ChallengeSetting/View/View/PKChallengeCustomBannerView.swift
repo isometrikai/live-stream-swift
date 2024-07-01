@@ -8,15 +8,15 @@
 
 import UIKit
 
-class PKChallengeCustomBannerView: UIView {
+class PKChallengeCustomBannerView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let bannerImage: UIImageView = {
+    lazy var bannerImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.image = Appearance.default.images.winnersCup
+        imageView.image = appearance.images.winnersCup
         return imageView
     }()
     
@@ -29,22 +29,22 @@ class PKChallengeCustomBannerView: UIView {
         return stackView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Winner takes all".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
-        label.textColor = Appearance.default.colors.appGreen
+        label.font = appearance.font.getFont(forTypo: .h4)
+        label.textColor = appearance.colors.appGreen
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "This would transfer all the gifts earned by the looser to the winner".localized
         label.numberOfLines = 0
         label.textColor = .black
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -63,7 +63,7 @@ class PKChallengeCustomBannerView: UIView {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        backgroundColor = Appearance.default.colors.appLightGreen
+        backgroundColor = appearance.colors.appLightGreen
         addSubview(bannerImage)
         addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)

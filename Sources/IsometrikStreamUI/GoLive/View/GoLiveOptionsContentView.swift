@@ -60,7 +60,7 @@ class GoLiveOptionsContentView: UIView {
     }
     
     func setupConstraints(){
-        rtmpOptionsContainerView.pin(to: self)
+        rtmpOptionsContainerView.ism_pin(to: self)
     }
     
     func manageTargets(){

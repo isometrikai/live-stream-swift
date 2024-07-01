@@ -89,11 +89,11 @@ class VerticalStreamCollectionViewCell: UICollectionViewCell {
     }
     
     func setupConstraints(){
-        scheduleStreamView.pin(to: self)
-        previewPlayerView.pin(to: self)
-        streamContainer.pin(to: self)
-        streamLoader.pin(to: self)
-        streamEndView.pin(to: self)
+        scheduleStreamView.ism_pin(to: self)
+        previewPlayerView.ism_pin(to: self)
+        streamContainer.ism_pin(to: self)
+        streamLoader.ism_pin(to: self)
+        streamEndView.ism_pin(to: self)
         
         //let estimatedRatioHeight = (UIScreen.main.bounds.width * (16/9))
         

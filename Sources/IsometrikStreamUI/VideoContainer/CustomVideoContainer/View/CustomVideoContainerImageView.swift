@@ -47,7 +47,7 @@ class CustomVideoContainerImageView: UIView {
     }
     
     func setupConstraints(){
-        cardButton.pin(to: self)
+        cardButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             cardImage.centerXAnchor.constraint(equalTo: centerXAnchor),
             cardImage.centerYAnchor.constraint(equalTo: centerYAnchor)

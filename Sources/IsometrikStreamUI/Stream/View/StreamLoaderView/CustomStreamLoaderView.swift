@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class CustomStreamLoaderView: UIView {
+class CustomStreamLoaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -53,10 +53,10 @@ class CustomStreamLoaderView: UIView {
     //:
     
     
-    let thumbnailImageView: UIImageView = {
+    lazy var thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = Appearance.default.colors.appColor
+        imageView.backgroundColor = appearance.colors.appColor
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
@@ -68,10 +68,10 @@ class CustomStreamLoaderView: UIView {
         return view
     }()
     
-    let closeActionButton: UIButton = {
+    lazy var closeActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(Appearance.default.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = .white
         return button
     }()
@@ -131,9 +131,9 @@ class CustomStreamLoaderView: UIView {
     }
     
     func setupConstraints(){
-        backCoverView.pin(to: self)
-        thumbnailImageView.pin(to: self)
-        thumbStack.pin(to: self)
+        backCoverView.ism_pin(to: self)
+        thumbnailImageView.ism_pin(to: self)
+        thumbStack.ism_pin(to: self)
         NSLayoutConstraint.activate([
             closeActionButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 10),
             closeActionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
@@ -182,7 +182,7 @@ class CustomStreamLoaderView: UIView {
             scaleAnimation.toValue = 1.1
             scaleAnimation.fillMode = .forwards
             scaleAnimation.isRemovedOnCompletion = false
-            circularLayer.strokeColor = Appearance.default.colors.appColor.withAlphaComponent(0.8).cgColor
+            circularLayer.strokeColor = appearance.colors.appColor.withAlphaComponent(0.8).cgColor
         } else {
             scaleAnimation.duration = 0.2
             scaleAnimation.fromValue = 1.1

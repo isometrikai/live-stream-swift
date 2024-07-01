@@ -16,7 +16,7 @@ protocol StreamRequestsActionDelegate {
     func didLeaveStream()
 }
 
-class StreamRequestsViewController: UIViewController {
+class StreamRequestsViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -41,23 +41,23 @@ class StreamRequestsViewController: UIViewController {
         return stackView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Title label".ism_localized
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h5)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Default Subtitle label".ism_localized
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
         label.textAlignment = .center
         return label
@@ -78,7 +78,7 @@ class StreamRequestsViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 30
         button.ismTapFeedBack()
@@ -90,10 +90,10 @@ class StreamRequestsViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h6)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 30
-        button.backgroundColor = Appearance.default.colors.appRed
+        button.backgroundColor = appearance.colors.appRed
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         return button
@@ -273,7 +273,7 @@ class StreamRequestsViewController: UIViewController {
             customImageView.imageView.image = UIImage()
         }
         
-        customImageView.defaultImageView.initialsText.font = Appearance.default.font.getFont(forTypo: .h4)
+        customImageView.defaultImageView.initialsText.font = appearance.font.getFont(forTypo: .h4)
         customImageView.defaultImageView.initialsText.text = initials.uppercased()
         
         return customImageView
@@ -403,8 +403,8 @@ class customPublishingImageView: UIView {
     }
     
     func setupConstraints(){
-        imageView.pin(to: self)
-        defaultImageView.pin(to: self)
+        imageView.ism_pin(to: self)
+        defaultImageView.ism_pin(to: self)
     }
     
 }

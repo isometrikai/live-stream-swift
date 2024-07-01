@@ -9,11 +9,11 @@
 import UIKit
 import Kingfisher
 
-class GoLiveViewController: UIViewController {
+final public class GoLiveViewController: UIViewController {
 
     // MARK: - PROPERTIES
     
-    var viewModel: GoLiveViewModel
+    public var viewModel: GoLiveViewModel
     
     let cameraView: UIView = {
         let view = UIView()
@@ -69,7 +69,7 @@ class GoLiveViewController: UIViewController {
     
     // MARK: - MAIN
     
-    init(viewModel: GoLiveViewModel) {
+    public init(viewModel: GoLiveViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -78,7 +78,7 @@ class GoLiveViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigations()
         setupViews()
@@ -89,11 +89,11 @@ class GoLiveViewController: UIViewController {
         setDataForEdit()
     }
     
-    open override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         createSession()
     }
     
-    open override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupLivePreview()
         removeObservers()
@@ -119,9 +119,9 @@ class GoLiveViewController: UIViewController {
     
     func setupConstraints(){
         
-        cameraView.pin(to: view)
-        blackCoverView.pin(to: view)
-        customLoaderView.pin(to: view)
+        cameraView.ism_pin(to: view)
+        blackCoverView.ism_pin(to: view)
+        customLoaderView.ism_pin(to: view)
         
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),

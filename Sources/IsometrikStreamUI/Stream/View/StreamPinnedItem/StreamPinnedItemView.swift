@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamPinnedItemView: UIView {
+class StreamPinnedItemView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -65,34 +65,34 @@ class StreamPinnedItemView: UIView {
         return stackView
     }()
     
-    let productCategoryLabel: UILabel = {
+    lazy var productCategoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Product Brand".localized
         
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = UIColor.colorWithHex(color: "#9797BE")
         
         return label
     }()
     
-    let productLabel: UILabel = {
+    lazy var productLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Product title".localized
         
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = .black
         
         return label
     }()
     
-    let priceInfoLabel: UILabel = {
+    lazy var priceInfoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 2
         
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textColor = .black
         
         return label
@@ -109,12 +109,12 @@ class StreamPinnedItemView: UIView {
     
     // Timer view
     
-    let timerButton: UIButton = {
+    lazy var timerButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("--:--", for: .normal)
-        button.setImage(Appearance.default.images.timer.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = Appearance.default.colors.appColor
+        button.setImage(appearance.images.timer.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.imageView?.tintColor = appearance.colors.appColor
         button.titleLabel?.font = UIFont.monospacedSystemFont(ofSize: 13, weight: .semibold)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 15
@@ -155,7 +155,7 @@ class StreamPinnedItemView: UIView {
     }
     
     func setupConstraints(){
-        clickableAreaButton.pin(to: self)
+        clickableAreaButton.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             coverCardView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -218,17 +218,17 @@ class StreamPinnedItemView: UIView {
         if isOutOfStock {
             updateFlagView.isHidden = false
             updateFlagView.setTitle("out of stock".uppercased(), for: .normal)
-            updateFlagView.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+            updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         } else {
             if discountedPercentage == 0 {
                 updateFlagView.isHidden = true
                 updateFlagView.setTitle("", for: .normal)
-                updateFlagView.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+                updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
                 priceInfoLabel.text = "\(basePrice) \(currencySymbol)"
             } else {
                 updateFlagView.isHidden = false
                 updateFlagView.setTitle("\(discountedPercentage)% OFF", for: .normal)
-                updateFlagView.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+                updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
                 priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(finalPrice), orginalPrice: basePrice, discount: discountedPercentage)
             }
         }
@@ -268,17 +268,17 @@ class StreamPinnedItemView: UIView {
         let price = String(format: "%.2f", price)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.black
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#BCBCE5")
         ]
         
         let attribute3 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color: "#5FCF4C")
         ]
         
@@ -305,12 +305,12 @@ class StreamPinnedItemView: UIView {
         let earnings = String(format: "%.2f", earning)
         
         let attribute1 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h8),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8),
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
         
         let attribute2 = [
-            NSAttributedString.Key.font: Appearance.default.font.getFont(forTypo: .h7),
+            NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7),
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
         

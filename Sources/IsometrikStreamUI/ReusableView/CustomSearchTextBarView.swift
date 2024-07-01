@@ -8,31 +8,31 @@
 
 import UIKit
 
-class CustomSearchTextBarView: UIView {
+class CustomSearchTextBarView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let searchBackgroundView: UIView = {
+    lazy var searchBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appLightGray
+        view.backgroundColor = appearance.colors.appLightGray
         view.layer.cornerRadius = 20.0
         return view
     }()
     
-    let searchImage: UIImageView = {
+    lazy var searchImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = Appearance.default.images.search
+        image.image = appearance.images.search
         image.contentMode = .center
         return image
     }()
     
-    let searchTextField: UITextField = {
+    lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Search"
-        textField.font = Appearance.default.font.getFont(forTypo: .h6)
+        textField.font = appearance.font.getFont(forTypo: .h6)
         textField.textColor = .black
         textField.clearButtonMode = .whileEditing
         return textField

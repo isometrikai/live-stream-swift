@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileFeatureView: UIView {
+class ProfileFeatureView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -21,18 +21,18 @@ class ProfileFeatureView: UIView {
         return stackView
     }()
     
-    let followersView: customFeatureView = {
+    lazy var followersView: customFeatureView = {
         let view = customFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.iconImageView.image = Appearance.default.images.user
+        view.iconImageView.image = appearance.images.user
         view.featureLabel.text = "--"
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 15
-        view.backgroundColor = Appearance.default.colors.appLightBlue
+        view.backgroundColor = appearance.colors.appLightBlue
         return view
     }()
     
-    let coinView: customFeatureView = {
+    lazy var coinView: customFeatureView = {
         let view = customFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.iconImageView.image = UIImage(named: "starYello")?.withRenderingMode(.alwaysTemplate)
@@ -40,7 +40,7 @@ class ProfileFeatureView: UIView {
         view.featureLabel.text = "--"
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 15
-        view.backgroundColor = Appearance.default.colors.appLightYellow
+        view.backgroundColor = appearance.colors.appLightYellow
         return view
     }()
     

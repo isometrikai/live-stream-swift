@@ -8,15 +8,15 @@
 
 import UIKit
 
-class FormTextWithTitleView: UIView {
+class FormTextWithTitleView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let formTitleLabel: UILabel = {
+    lazy var formTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Form Title Text".localized
-        label.font = Appearance.default.font.getFont(forTypo: .h6)
+        label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .white
         return label
     }()

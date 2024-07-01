@@ -9,36 +9,36 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKSendInvitationRequestViewController: UIViewController {
+class PKSendInvitationRequestViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
     let viewModel: PKSendInvitationViewModel
     
-    let profileView: UIImageView = {
+    lazy var profileView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "ism_UserDefault")
         imageView.layer.cornerRadius = 50
-        imageView.layer.borderColor = Appearance.default.colors.appLightGray.withAlphaComponent(0.3).cgColor
+        imageView.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.3).cgColor
         imageView.layer.borderWidth = 1
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    let defaultProfileView: CustomDefaultProfileView = {
+    lazy var defaultProfileView: CustomDefaultProfileView = {
         let defaultView = CustomDefaultProfileView()
         defaultView.layer.cornerRadius = 50
-        defaultView.initialsText.font = Appearance.default.font.getFont(forTypo: .h3)
+        defaultView.initialsText.font = appearance.font.getFont(forTypo: .h3)
         return defaultView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h4)
+        label.font = appearance.font.getFont(forTypo: .h4)
         label.textAlignment = .center
         label.text = ""
         return label
@@ -48,8 +48,8 @@ class PKSendInvitationRequestViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.textColor = Appearance.default.colors.appLightGray
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.textColor = appearance.colors.appLightGray
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
         label.text = ""
         return label
@@ -67,10 +67,10 @@ class PKSendInvitationRequestViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Close", for: .normal)
-        button.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h5)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 25
-        button.backgroundColor = Appearance.default.colors.appRed
+        button.backgroundColor = appearance.colors.appRed
         button.isHidden = true
         button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         return button
@@ -101,7 +101,7 @@ class PKSendInvitationRequestViewController: UIViewController {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = Appearance.default.colors.appDarkGray
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(defaultProfileView)
         view.addSubview(profileView)
         

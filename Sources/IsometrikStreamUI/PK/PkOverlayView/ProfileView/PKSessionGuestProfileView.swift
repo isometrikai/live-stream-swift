@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKSessionGuestProfileView: UIView {
+class PKSessionGuestProfileView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -27,22 +27,22 @@ class PKSessionGuestProfileView: UIView {
         return view
     }()
     
-    let profileImageView: UIImageView = {
+    lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 17.5
-        imageView.layer.borderColor = Appearance.default.colors.appCyan2.cgColor
+        imageView.layer.borderColor = appearance.colors.appCyan2.cgColor
         imageView.layer.borderWidth = 2
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
-    let defaultProfileImageView: CustomDefaultProfileView = {
+    lazy var defaultProfileImageView: CustomDefaultProfileView = {
         let imageView = CustomDefaultProfileView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 17.5
-        imageView.layer.borderColor = Appearance.default.colors.appCyan2.cgColor
+        imageView.layer.borderColor = appearance.colors.appCyan2.cgColor
         imageView.layer.borderWidth = 2
         return imageView
     }()
@@ -56,22 +56,22 @@ class PKSessionGuestProfileView: UIView {
         return stackView
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "@tannvi"
         label.textColor = .white
         label.textAlignment = .right
-        label.font = Appearance.default.font.getFont(forTypo: .h7)
+        label.font = appearance.font.getFont(forTypo: .h7)
         return label
     }()
     
-    let subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Guest"
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .right
         return label
     }()
@@ -109,8 +109,8 @@ class PKSessionGuestProfileView: UIView {
     }
     
     func setRightConstraints(){
-        gradientView.pin(to: self)
-        pkProfileOverlay.pin(to: self)
+        gradientView.ism_pin(to: self)
+        pkProfileOverlay.ism_pin(to: self)
         NSLayoutConstraint.activate([
             profileImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -179,7 +179,7 @@ class PKSessionGuestProfileView: UIView {
 
 }
 
-class PKGuestProfileOverlayView: UIView {
+class PKGuestProfileOverlayView: UIView, AppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -191,22 +191,22 @@ class PKGuestProfileOverlayView: UIView {
         return view
     }()
     
-    let guestTag: UIButton = {
+    lazy var guestTag: UIButton = {
         let view = UIButton()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = Appearance.default.colors.appPurple
+        view.backgroundColor = appearance.colors.appPurple
         view.setTitle("  Guest  ", for: .normal)
         view.setTitleColor(.white, for: .normal)
-        view.titleLabel?.font = Appearance.default.font.getFont(forTypo: .h8)
+        view.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         view.layer.cornerRadius = 3
         return view
     }()
     
-    let ringImageView:UIImageView = {
+    lazy var ringImageView:UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.image = Appearance.default.images.guestRing
+        imageView.image = appearance.images.guestRing
         return imageView
     }()
     
@@ -226,12 +226,12 @@ class PKGuestProfileOverlayView: UIView {
         return imageView
     }()
     
-    let playerName: UILabel = {
+    lazy var playerName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .white
-        label.font = Appearance.default.font.getFont(forTypo: .h8)
+        label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .right
         return label
     }()
@@ -266,7 +266,7 @@ class PKGuestProfileOverlayView: UIView {
     func addGlowView(){
         let glowView = UIView(frame: CGRect(x: 0, y: 0, width: 65, height: 60))
         glowView.layer.shadowOffset = .zero
-        glowView.layer.shadowColor = Appearance.default.colors.appCyan2.cgColor
+        glowView.layer.shadowColor = appearance.colors.appCyan2.cgColor
         glowView.layer.shadowRadius = 10
         glowView.layer.shadowOpacity = 0.5
         glowView.layer.shadowPath = UIBezierPath(rect: glowView.bounds).cgPath
@@ -274,7 +274,7 @@ class PKGuestProfileOverlayView: UIView {
     }
     
     func setupConstraints(){
-        ringImageView.pin(to: profileView)
+        ringImageView.ism_pin(to: profileView)
         NSLayoutConstraint.activate([
             
             guestTag.centerXAnchor.constraint(equalTo: profileView.centerXAnchor),
