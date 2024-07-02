@@ -93,7 +93,22 @@ class StreamingInfoMessageView: UIView, AppearanceProvider {
             self.defaultImage.alpha = 1
             
             self.infoLabel.text = data.message
-            self.defaultImage.image = UIImage(named: "\(data.senderImage ?? "")")?.withRenderingMode(.alwaysTemplate)
+            
+            var eventImage: UIImage = UIImage()
+            let streamUserEvents = StreamUserEvents(rawValue: data.senderImage ?? "")
+            
+            switch streamUserEvents {
+            case .kickout, .removedAsModerator:
+                eventImage = self.appearance.images.userKickedOut
+            case .joined, .addAsModerator:
+                eventImage = self.appearance.images.userJoined
+            case .left, .leftAsModerator:
+                eventImage = self.appearance.images.userLeft
+            default:
+                break
+            }
+            
+            self.defaultImage.image = eventImage.withRenderingMode(.alwaysTemplate)
             self.defaultImage.tintColor = .white
             
         }

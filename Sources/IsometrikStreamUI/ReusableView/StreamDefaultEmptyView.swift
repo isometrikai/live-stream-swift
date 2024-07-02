@@ -21,12 +21,9 @@ class StreamDefaultEmptyView: UIView, AppearanceProvider {
     lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
         label.text = "No Data Found".localized
-        
         label.font = appearance.font.getFont(forTypo: .h6)
-        label.textColor = .black
-        
+        label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0
         return label

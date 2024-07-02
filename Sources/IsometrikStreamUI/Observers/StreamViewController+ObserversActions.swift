@@ -86,7 +86,7 @@ extension StreamViewController {
         let timeStamp = viewerData.timestamp ?? 0
         let message = "\(senderName)" + " " + "joined the audience".localized
         
-        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: "ism_stream_joined", senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.joined.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
         
         addStreamInfoMessage(message: messageInfo)
         
@@ -116,7 +116,7 @@ extension StreamViewController {
         let timeStamp = viewerData.timestamp ?? 0
         let message = "\(senderName)" + " " + "left the audience".localized
         
-        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: "ism_stream_left", senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.left.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
         
         addStreamInfoMessage(message: messageInfo)
         
@@ -159,7 +159,7 @@ extension StreamViewController {
         let timeStamp = viewerData.timestamp ?? 0
         let message = "\(senderName) " + " " + "has been kicked out of the audience by".localized + " \(removedBy)"
         
-        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: "ism_stream_kickedout", senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.kickout.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
         
         addStreamInfoMessage(message: messageInfo)
         
@@ -348,7 +348,7 @@ extension StreamViewController {
             let timeStamp = Int64(userData.timestamp ?? 0)
             let message = "\(senderName) " + "has been added to the moderator's group of broadcast by".localized + " \(userData.initiatorName ?? "")"
             
-            let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: "ism_stream_joined", senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+            let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.addAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
             addStreamInfoMessage(message: messageInfo)
             
@@ -394,7 +394,7 @@ extension StreamViewController {
             let timeStamp = Int64(userData.timestamp ?? 0)
             let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by".localized + "\(userData.initiatorName ?? "")."
             
-            let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: "ism_stream_kickedout", senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+            let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.removedAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
             addStreamInfoMessage(message: messageInfo)
             
@@ -437,7 +437,7 @@ extension StreamViewController {
             let timeStamp = Int64(userData.timestamp ?? 0)
             let message = "\(senderName) " + "left from the moderator's group of broadcast by".localized + " \(streamerName)"
             
-            let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: "ism_stream_left", senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+            let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.leftAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
             addStreamInfoMessage(message: messageInfo)
             
@@ -452,7 +452,8 @@ extension StreamViewController {
     @objc func pubsubMessagePublished(notification: NSNotification){
         
         guard let pubsubMessage = notification.userInfo?["data"] as? PubsubEvent,
-              let isometrik = viewModel.isometrik
+              let isometrik = viewModel.isometrik,
+              isometrik.getUserSession().getUserType() != .viewer
         else { return }
         
         if pubsubMessage.customType == "PkInvite" {

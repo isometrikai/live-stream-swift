@@ -625,6 +625,9 @@ extension StreamViewController: StreamCellActionDelegate {
         case .stopPKBattle:
             stopPKBattleTapped()
             break
+        case .groupInvite:
+            openGoLiveWith()
+            break
         case .none:
             debugPrint("None")
         }
@@ -852,16 +855,24 @@ extension StreamViewController {
         
         let controller = StreamRequestsViewController(publisherStatus: viewModel.publisher, isometrik: isometrik, streamInfo: streamData, requestingType: requestType, user: viewerData)
         
-        // Set up the presentation controller
-        let sheetController = UISheetPresentationController(presentedViewController: controller, presenting: nil)
-        sheetController.detents = [.medium(), .large()]
-        sheetController.prefersGrabberVisible = true // Show grabber
-        
-        // Present the bottom sheet
-        controller.modalPresentationStyle = .custom
-        
         controller.imagesArr = images
         //controller.delegate = self
+        
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.45  // 60% of the screen height
+                }
+                sheet.detents = [customDetent, .medium()]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
         
         self.present(controller, animated: true)
         
@@ -876,14 +887,52 @@ extension StreamViewController {
         
         let controller = RequestListViewController(isometrik: isometrik, streamData: streamData)
         
-        // Set up the presentation controller
-        let sheetController = UISheetPresentationController(presentedViewController: controller, presenting: nil)
-        sheetController.detents = [.medium(), .large()]
-        sheetController.prefersGrabberVisible = true // Show grabber
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.6  // 60% of the screen height
+                }
+                sheet.detents = [customDetent, .medium()]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
         
-        // Present the bottom sheet
-        controller.modalPresentationStyle = .custom
         self.present(controller, animated: true)
+    }
+    
+    func openGoLiveWith(){
+        
+        guard let isometrik = viewModel.isometrik,
+              let streamsData = viewModel.streamsData,
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
+        let controller = GoLiveWithViewController(isometrik: isometrik, streamData: streamData)
+        
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.6  // 60% of the screen height
+                }
+                sheet.detents = [customDetent, .medium()]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
+        
+        self.present(controller, animated: true)
+        
     }
     
 }

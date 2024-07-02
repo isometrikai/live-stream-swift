@@ -57,23 +57,25 @@ public struct ISM_Image {
     public var calendar: UIImage = loadImageSafely(with: "ic_calendar")
     public var close2: UIImage = loadImageSafely(with: "ic_close2")
     public var golive: UIImage = loadImageSafely(with: "ic_golive")
-    public var schedule2: UIImage = loadImageSafely(with: "ic_coin")
-    public var copyLink: UIImage = loadImageSafely(with: "ic_schedule2")
-    public var instagramLogo: UIImage = loadImageSafely(with: "ism_copy_link")
-    public var toggleOffDark: UIImage = loadImageSafely(with: "ism_instagram_logo")
-    public var toggleOff: UIImage = loadImageSafely(with: "ism_toggle_off_dark")
-    public var toggleOnDark: UIImage = loadImageSafely(with: "ism_toggle_on_dark")
-    public var toggleOn: UIImage = loadImageSafely(with: "ism_toggle_on")
+    public var schedule2: UIImage = loadImageSafely(with: "ic_schedule2")
+    public var copyLink: UIImage = loadImageSafely(with: "ism_copy_link")
+    
+    public var instagramLogo: UIImage = loadImageSafely(with: "ism_instagram_logo")
     public var twitchLogo: UIImage = loadImageSafely(with: "ism_twitch_logo")
     public var youtubeLogo: UIImage = loadImageSafely(with: "ism_youtube_logo")
     
+    public var toggleOffDark: UIImage = loadImageSafely(with: "ism_toggle_off_dark")
+    public var toggleOff: UIImage = loadImageSafely(with: "ism_toggle_off")
+    public var toggleOnDark: UIImage = loadImageSafely(with: "ism_toggle_on_dark")
+    public var toggleOn: UIImage = loadImageSafely(with: "ism_toggle_on")
+    
     // pk icons
-    public var joinStream: UIImage = loadImageSafely(with: "ism_youtube_logo")
-    public var winnersCup: UIImage = loadImageSafely(with: "ism_youtube_logo")
-    public var guestRing: UIImage = loadImageSafely(with: "ism_youtube_logo")
-    public var hostRing: UIImage = loadImageSafely(with: "ism_youtube_logo")
-    public var linking: UIImage = loadImageSafely(with: "ism_youtube_logo")
-    public var pkDraw: UIImage = loadImageSafely(with: "ism_youtube_logo")
+    public var joinStream: UIImage = loadImageSafely(with: "ic_join_stream")
+    public var winnersCup: UIImage = loadImageSafely(with: "ism_cup")
+    public var guestRing: UIImage = loadImageSafely(with: "ism_guest_ring")
+    public var hostRing: UIImage = loadImageSafely(with: "ism_host_ring")
+    public var linking: UIImage = loadImageSafely(with: "ism_linking")
+    public var pkDraw: UIImage = loadImageSafely(with: "ism_pk_draw")
     public var pkHostToggle: UIImage = loadImageSafely(with: "ism_pk_hostToggle")
     public var pkLoser: UIImage = loadImageSafely(with: "ism_pk_loser")
     public var pkStart: UIImage = loadImageSafely(with: "ism_pk_start")
@@ -125,6 +127,7 @@ public struct ISM_Image {
     public var more2: UIImage = loadImageSafely(with: "ism_more")
     public var product: UIImage = loadImageSafely(with: "ism_product")
     public var share2: UIImage = loadImageSafely(with: "ism_share")
+    public var groupInvite: UIImage = loadImageSafely(with: "ism_group_invite")
     
     // general icons
     public var back: UIImage = loadImageSafely(with: "ic_back")
@@ -144,8 +147,6 @@ public struct ISM_Image {
     public var block: UIImage = loadImageSafely(with: "ism_block")
     public var videoCameraOff: UIImage = loadImageSafely(with: "ism_camera_off")
     public var videoCamera: UIImage = loadImageSafely(with: "ism_camera")
-    public var deletedMsg: UIImage = loadImageSafely(with: "ism_del_msg")
-    public var kickout: UIImage = loadImageSafely(with: "ism_kickout")
     public var live: UIImage = loadImageSafely(with: "ism_live")
     public var message: UIImage = loadImageSafely(with: "ism_message")
     public var moderator: UIImage = loadImageSafely(with: "ism_moderator")
@@ -157,10 +158,15 @@ public struct ISM_Image {
     public var removeCircle: UIImage = loadImageSafely(with: "ism_round_remove_circle")
     public var speakerOff: UIImage = loadImageSafely(with: "ism_speaker_off")
     public var speakerOn: UIImage = loadImageSafely(with: "ism_speaker")
-    public var userJoined: UIImage = loadImageSafely(with: "ism_user_joined")
-    public var userKickedOut: UIImage = loadImageSafely(with: "ism_user_kickedOut")
-    public var userLeft: UIImage = loadImageSafely(with: "ism_user_left")
     public var user: UIImage = loadImageSafely(with: "ism_user")
+    
+    
+    // Message events
+    public var deletedMsg: UIImage = loadImageSafely(with: "ism_del_msg")
+    public var userLeft: UIImage = loadImageSafely(with: "ism_user_left")
+    public var userKickedOut: UIImage = loadImageSafely(with: "ism_user_kickedOut")
+    public var kickout: UIImage = loadImageSafely(with: "ism_kickout")
+    public var userJoined: UIImage = loadImageSafely(with: "ism_user_joined")
     
     public init() {}
     

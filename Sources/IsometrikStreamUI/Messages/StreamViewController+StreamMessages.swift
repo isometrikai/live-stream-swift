@@ -31,7 +31,7 @@ extension StreamViewController {
         
         let streamMessageViewModel = viewModel.streamMessageViewModel
         guard let streamMessageViewModel else { return }
-        streamMessageViewModel.sendMessage(messageType: messageType ,message: messageText){message,error in }
+        streamMessageViewModel.sendMessage(messageType: messageType ,message: messageText){ message,error in }
         
 //        if let _ = viewModel.scheduleStreamMessageViewModel, LiveStreamStatus(rawValue: streamData.status) == .scheduled {
 //            viewModel.scheduleStreamMessageViewModel?.sendMessages(message: messageText)
@@ -58,6 +58,9 @@ extension StreamViewController {
         
         // Handle according to messageType
         let messageType = ISMStreamMessageType(rawValue: Int(message.messageType ?? 0))
+        
+        // setting message height initially too
+        self.setHeightForMessages()
         
         switch messageType {
         case .text, .productBought:
@@ -225,6 +228,7 @@ extension StreamViewController {
             }
             
         }
+        
     }
     
     @objc func stopAnimatingStreamAnimationPopup(){

@@ -21,7 +21,7 @@ class RequestListViewController: UIViewController, AppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerLabel.text = "Requests"
         view.headerImage.image = appearance.images.requestList.withRenderingMode(.alwaysTemplate)
-        view.headerImage.tintColor = .black
+        view.headerImage.tintColor = .white
         view.countLabel.text = "0"
         return view
     }()
@@ -78,7 +78,7 @@ class RequestListViewController: UIViewController, AppearanceProvider {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(requestListTableView)
         view.addSubview(defaultView)

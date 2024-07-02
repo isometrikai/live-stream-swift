@@ -385,7 +385,7 @@ class StreamChildControllerHeaderView: UIView, AppearanceProvider{
     lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
@@ -403,7 +403,7 @@ class StreamChildControllerHeaderView: UIView, AppearanceProvider{
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0"
-        label.textColor = .darkGray
+        label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h6)
         return label
     }()
@@ -412,7 +412,7 @@ class StreamChildControllerHeaderView: UIView, AppearanceProvider{
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = .black
+        imageView.tintColor = .white
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()

@@ -22,19 +22,15 @@ class StreamSettingOptionTableViewCell: UITableViewCell, AppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = appearance.images.close.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = .black
+        imageView.tintColor = .white
         return imageView
     }()
     
     lazy var settingLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
-        label.text = "Mute my audio"
-        
         label.font = appearance.font.getFont(forTypo: .h6)
-        label.textColor = .black
-        
+        label.textColor = .white
         return label
     }()
     
@@ -78,9 +74,6 @@ class StreamSettingOptionTableViewCell: UITableViewCell, AppearanceProvider {
 
         settingImage.image = data.settingImage
         settingLabel.text = data.settingLabel
-        settingLabel.textColor = data.labelColor
-        
-        settingImage.tintColor = data.labelColor
         
     }
     

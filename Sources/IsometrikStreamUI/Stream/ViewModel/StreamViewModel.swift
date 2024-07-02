@@ -29,6 +29,15 @@ enum PKStopAction: String {
     case stop = "STOP"
 }
 
+enum StreamUserEvents: String {
+    case kickout
+    case joined
+    case left
+    case addAsModerator
+    case removedAsModerator
+    case leftAsModerator
+}
+
 typealias streamResponse = ((String?) -> Void)
 typealias productResponse = ((Result<Any?, IsometrikError>) -> Void)
 

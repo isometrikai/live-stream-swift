@@ -91,7 +91,7 @@ extension StreamViewController {
                 
                 switch response {
                 case .accept:
-                    self.pkInviteAccepted(streamInfo: streamInfo)
+                    self.pkInviteAccepted(inviteId: inviteId, streamInfo: streamInfo)
                     break
                 case .reject:
                     break
@@ -165,7 +165,7 @@ extension StreamViewController {
         
     }
     
-    func pkInviteAccepted(streamInfo: ISM_PK_Stream?){
+    func pkInviteAccepted(inviteId: String, streamInfo: ISM_PK_Stream?){
         
         guard let streamInfo,
               let isometrik = viewModel.isometrik
@@ -192,7 +192,7 @@ extension StreamViewController {
             viewModel.selectedStreamIndex = IndexPath(row: 0, section: 0)
             viewModel.streamsData?.removeAll()
             
-            let stream = ISMStream(streamId: streamId, startTime: Int64(streamInfo.startDateTime.unwrap) ,rtcToken: rtcToken, isPkChallenge: true, isometrikUserID: initiatorId, status: "STARTED")
+            let stream = ISMStream(streamId: streamId, startTime: Int64(streamInfo.startDateTime.unwrap) ,rtcToken: rtcToken, isPkChallenge: true, pkInviteId: inviteId, isometrikUserID: initiatorId, status: "STARTED")
             
             viewModel.streamsData = [stream]
             

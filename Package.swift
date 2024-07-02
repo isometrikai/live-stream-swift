@@ -27,7 +27,8 @@ let package = Package(
         .package(url: "https://github.com/cloudinary/cloudinary_ios", from: "5.0.0"),
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON", from: "5.0.2"),
         .package(url: "https://github.com/emqx/CocoaMQTT", from: "2.1.6"),
-        .package(url: "https://github.com/onevcat/Kingfisher", from: "7.12.0")
+        .package(url: "https://github.com/onevcat/Kingfisher", from: "7.12.0"),
+        .package(url: "https://github.com/kasketis/netfox", from: "1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -48,7 +49,8 @@ let package = Package(
                 .product(name: "Toast", package: "toast-swift"),
                 .product(name: "MBProgressHUD", package: "mbprogresshud"),
                 .product(name: "Cloudinary", package: "cloudinary_ios"),
-                .product(name: "Kingfisher", package: "kingfisher")
+                .product(name: "Kingfisher", package: "kingfisher"),
+                .product(name: "netfox", package: "netfox")
             ],
             resources: [
                 .process("Resources")

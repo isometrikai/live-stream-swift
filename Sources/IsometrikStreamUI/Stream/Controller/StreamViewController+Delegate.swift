@@ -181,6 +181,7 @@ extension StreamViewController {
             streamLoader.isHidden = true
             
             // if schedule stream is of current user changing the viewType to host
+            
             let streamUserId = streamData.userDetails?.isomatricChatUserId ?? ""
             let currentUserId = isometrik.getUserSession().getUserId()
             

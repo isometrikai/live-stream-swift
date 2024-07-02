@@ -44,7 +44,6 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Title label".ism_localized
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h5)
         label.numberOfLines = 0
@@ -55,7 +54,6 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Default Subtitle label".ism_localized
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
@@ -77,7 +75,6 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 30
@@ -103,6 +100,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = appearance.colors.appDarkGray
         setupViews()
         setupConstraints()
     }
@@ -155,10 +153,14 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                 imageView.clipsToBounds = true
                 userImageStackView.addArrangedSubview(imageView)
             }
-            titleLabel.text = "Request to be a co-publisher in the live video".ism_localized
-            subtitleLabel.text = "Once you join a live video as a co-publisher, anybody canwatch and some of your followers may get notified".ism_localized
+            titleLabel.text = "Request to be a co-publisher in the live video"
+            subtitleLabel.text = "Once you join a live video as a co-publisher, anybody canwatch and some of your followers may get notified"
             
             actionButton.setTitle("Send Request", for: .normal)
+            
+            actionButton.backgroundColor = appearance.colors.appColor
+            actionButton.setTitleColor(.black, for: .normal)
+            
             break
             
         case .accepting:
@@ -185,9 +187,13 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                 actionStackView.ism_removeFullyAllArrangedSubviews()
                 actionStackView.addArrangedSubview(actionButton)
                 
-                titleLabel.text = "\(streamInfo.userDetails?.firstName ?? "") " + " \(streamInfo.userDetails?.lastName ?? "")" + " has accepted your request to join the live video as a co-publisher".ism_localized
-                subtitleLabel.text = "you can now join the live video as a co-publisher and start publishing".ism_localized
+                titleLabel.text = "\(streamInfo.userDetails?.firstName ?? "") " + " \(streamInfo.userDetails?.lastName ?? "")" + " has accepted your request to join the live video as a co-publisher"
+                subtitleLabel.text = "you can now join the live video as a co-publisher and start publishing"
                 actionButton.setTitle("Start Video".ism_localized, for: .normal)
+                
+                actionButton.backgroundColor = appearance.colors.appColor
+                actionButton.setTitleColor(.black, for: .normal)
+                
             } else if isPending {
                 
                 actionStackView.ism_removeFullyAllArrangedSubviews()
@@ -196,10 +202,13 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                 
                 deleteButton.setTitle("Delete", for: .normal)
                 
-                titleLabel.text = "Your request to be a co-publisher in the live broadcaster is pending".ism_localized
-                subtitleLabel.text = "You can either continue watching until".ism_localized + " \(streamInfo.userDetails?.firstName ?? "") " + " \(streamInfo.userDetails?.lastName ?? "") " + "accepts your request or delete request".ism_localized
+                titleLabel.text = "Your request to be a co-publisher in the live broadcaster is pending"
+                subtitleLabel.text = "You can either continue watching until" + " \(streamInfo.userDetails?.firstName ?? "") " + " \(streamInfo.userDetails?.lastName ?? "") " + "accepts your request or delete request"
                 
                 actionButton.setTitle("Continue".ism_localized, for: .normal)
+                
+                actionButton.backgroundColor = .white
+                actionButton.setTitleColor(.black, for: .normal)
                 
             } else {
                 
@@ -214,7 +223,10 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                 
                 subtitleLabel.text = "You can either continue watching or exit from the live stream"
                 
-                actionButton.setTitle("Continue".ism_localized, for: .normal)
+                actionButton.setTitle("Continue", for: .normal)
+                
+                actionButton.backgroundColor = .white
+                actionButton.setTitleColor(.black, for: .normal)
                 
             }
             break
@@ -225,7 +237,6 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     }
     
     func setupViews(){
-        view.backgroundColor = .black.withAlphaComponent(0.8)
         view.addSubview(userImageStackView)
         view.addSubview(titleLabel)
         view.addSubview(subtitleLabel)

@@ -23,6 +23,7 @@ enum StreamOption: Int {
     case settings
     case request
     case requestList
+    case groupInvite
     case pkInvite
     case stopPKBattle
     case endPKInvite
@@ -252,6 +253,17 @@ class StreamOptionsView: UIView, AppearanceProvider {
         return view
     }()
     
+    lazy var groupInviteView: CustomStreamOptionView = {
+        let view = CustomStreamOptionView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.optionImageView.image = appearance.images.groupInvite
+        view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
+        view.layer.cornerRadius = 22.5
+        view.optionButton.tag = StreamOption.groupInvite.rawValue
+        view.isHidden = true
+        return view
+    }()
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
@@ -269,6 +281,7 @@ class StreamOptionsView: UIView, AppearanceProvider {
     func setupViews(){
         addSubview(optionStackView)
         
+        optionStackView.addArrangedSubview(groupInviteView)
         optionStackView.addArrangedSubview(pkInviteView)
         optionStackView.addArrangedSubview(stopPKBattleView)
         optionStackView.addArrangedSubview(endPKInviteView)
@@ -341,7 +354,10 @@ class StreamOptionsView: UIView, AppearanceProvider {
             endPKInviteView.heightAnchor.constraint(equalToConstant: 45),
             
             stopPKBattleView.widthAnchor.constraint(equalToConstant: 45),
-            stopPKBattleView.heightAnchor.constraint(equalToConstant: 45)
+            stopPKBattleView.heightAnchor.constraint(equalToConstant: 45),
+            
+            groupInviteView.widthAnchor.constraint(equalToConstant: 45),
+            groupInviteView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
     

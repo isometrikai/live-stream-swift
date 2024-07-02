@@ -20,8 +20,9 @@ extension VerticalStreamCollectionViewCell {
         else { return }
         
         let streamUserType = viewModel.streamUserType
-        let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status ?? "")
+        let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status)
         let streamMembers = viewModel.streamMembers
+        let isPKEnabled = isometrik.isPKBattlesEnabled()
         
         // PK flags
         let isPKStream = streamData.isPkChallenge.unwrap
@@ -42,7 +43,7 @@ extension VerticalStreamCollectionViewCell {
         
         /*
          
-         [.bidder, .camera, .microphone, .store, .share, .highlight, .loved, .speaker , .report, .wallet, .analytics, .request, .requestList, .gift, .pkInvite, .endPKInvite, .stopPKBattle]
+         [.bidder, .camera, .microphone, .store, .share, .highlight, .loved, .speaker , .report, .wallet, .analytics, .request, .requestList, .gift, .pkInvite, .endPKInvite, .stopPKBattle, .groupInvite]
          
          */
         
@@ -65,10 +66,10 @@ extension VerticalStreamCollectionViewCell {
                             if currentUserInMemberList {
                                 viewModel.streamOptions += [] // .startPublishing
                             } else {
-                                viewModel.streamOptions += [] // .request
+                                viewModel.streamOptions += [.request]
                             }
                         } else {
-                            viewModel.streamOptions += [] // .request
+                            viewModel.streamOptions += [.request]
                         }
                     }
                 }
@@ -93,14 +94,18 @@ extension VerticalStreamCollectionViewCell {
                 
                 viewModel.streamOptions = [.share, .settings, .camera, .analytics]
                 
-                if isPKStream {
-                    if pkIdExist {
-                        viewModel.streamOptions += [.stopPKBattle]
+                if isPKEnabled {
+                    if isPKStream {
+                        if pkIdExist {
+                            viewModel.streamOptions += [.stopPKBattle]
+                        } else {
+                            viewModel.streamOptions += [.endPKInvite]
+                        }
                     } else {
-                        viewModel.streamOptions += [.endPKInvite]
+                        viewModel.streamOptions += [.pkInvite, .requestList, .groupInvite]
                     }
                 } else {
-                    viewModel.streamOptions += [.pkInvite]
+                    viewModel.streamOptions += [.request, .requestList, .groupInvite]
                 }
                 
                 break

@@ -6,8 +6,8 @@
 //
 
 import UIKit
-import Kingfisher
 import IsometrikStream
+import Kingfisher
 
 class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
 
@@ -181,7 +181,9 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
             
             userNameLabel.text = senderName
             if profileImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-                //userProfile.kf.setImage(with: profileImage)
+                if let profileImageUrl = URL(string: profileImage) {
+                    self.userProfile.kf.setImage(with: profileImageUrl)
+                }
             } else {
                 userProfile.image = UIImage()
             }
@@ -199,7 +201,9 @@ class StreamGiftsTableViewCell: UITableViewCell, AppearanceProvider {
                 
             coinLabel.text = "sent".ism_localized + ", \(recieverName) : " + " \(giftModel.coinsValue ?? 0) " + "coins".ism_localized
             
-            //self.giftImage.kf.setImage(with: giftMessage)
+            if let giftMessageUrl = URL(string: giftMessage) {
+                self.giftImage.kf.setImage(with: giftMessageUrl)
+            }
             
         }
     }

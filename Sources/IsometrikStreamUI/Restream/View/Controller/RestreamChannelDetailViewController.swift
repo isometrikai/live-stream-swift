@@ -293,7 +293,7 @@ class RestreamChannelDetailViewController: UIViewController, AppearanceProvider 
         
         headerTitle.text = channelName
         enableToggleView.toggleTitleLabel.text = "Enable stream on".localized + " \(channelName)"
-        channelTextView.formTextImageView.image = UIImage(named: "\(channelTypeData.image)")
+        channelTextView.formTextImageView.image = channelTypeData.image
         channelTextView.customTextLabel.text = "\(channelTypeData.staticDomainURL)"
         infoLabelView.formLabel.text = "You have to enter the".localized + " \(channelName) " + "stream URL here \"Click here to know more\"".localized
         infoLabelView.formLabel.highlight(searchedText: "Click here to know more".localized, color: UIColor.colorWithHex(color: "#0A11D5"))

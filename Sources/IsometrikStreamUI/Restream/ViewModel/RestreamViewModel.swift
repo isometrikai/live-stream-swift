@@ -6,12 +6,13 @@
 //  Copyright © 2023 Rahul Sharma. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import IsometrikStream
 
 struct RestreamTypeData {
     let staticDomainURL: String
-    let image: String
+    let image: UIImage
 }
 
 class RestreamViewModel {
@@ -117,17 +118,17 @@ class RestreamViewModel {
         
         switch type {
         case .facebook:
-            return RestreamTypeData(staticDomainURL: "", image: "")
+            return RestreamTypeData(staticDomainURL: "", image: UIImage())
         case .youtube:
-            return RestreamTypeData(staticDomainURL: "www.youtube.com/", image: "ism_youtube_logo")
+            return RestreamTypeData(staticDomainURL: "www.youtube.com/", image: Appearance.default.images.youtubeLogo)
         case .twitch:
-            return RestreamTypeData(staticDomainURL: "www.twitch.com/", image: "ism_twitch_logo")
+            return RestreamTypeData(staticDomainURL: "www.twitch.com/", image: Appearance.default.images.twitchLogo)
         case .twitter:
-            return RestreamTypeData(staticDomainURL: "", image: "")
+            return RestreamTypeData(staticDomainURL: "", image: UIImage())
         case .linkedin:
-            return RestreamTypeData(staticDomainURL: "", image: "")
+            return RestreamTypeData(staticDomainURL: "", image: UIImage())
         case .custom:
-            return RestreamTypeData(staticDomainURL: "www.instagram.com/", image: "ism_instagram_logo")
+            return RestreamTypeData(staticDomainURL: "www.instagram.com/", image: Appearance.default.images.instagramLogo)
         }
         
     }

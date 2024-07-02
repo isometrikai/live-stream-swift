@@ -21,7 +21,7 @@ enum StreamSettingType {
 struct StreamSettingData {
     let settingLabel: String
     let settingImage: UIImage
-    var labelColor: UIColor = .black
+    var labelColor: UIColor = .white
     var streamSettingType: StreamSettingType?
 }
 
@@ -51,6 +51,7 @@ class StreamSettingViewController: UIViewController, AppearanceProvider {
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.contentInset = .init(top: 15, left: 0, bottom: 0, right: 0)
+        tableView.backgroundColor = .clear
         return tableView
     }()
     
@@ -58,7 +59,7 @@ class StreamSettingViewController: UIViewController, AppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = .black
+        button.imageView?.tintColor = .white
         button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -74,7 +75,7 @@ class StreamSettingViewController: UIViewController, AppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(settingTableView)
         view.addSubview(closeButton)
     }

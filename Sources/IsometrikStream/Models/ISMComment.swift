@@ -119,7 +119,10 @@ public struct ISMComment: Codable {
                 senderId: String? = nil,
                 sentAt: Int64? = nil,
                 streamInfo: ISMStream? = nil,
-                deletionTime: Int64? = nil, has_replies: Bool? = nil, metaData: MessageMetaDataBody? = nil) {
+                deletionTime: Int64? = nil, 
+                has_replies: Bool? = nil,
+                metaData: MessageMetaDataBody? = nil
+    ) {
         self.messageId = messageId
         self.messageType = messageType
         self.message = message

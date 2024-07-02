@@ -23,7 +23,7 @@ class StreamDeleteMessageTableViewCell: UITableViewCell, AppearanceProvider {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.layer.cornerRadius = 15
-        image.image = appearance.images.removeCircle
+        image.image = appearance.images.deletedMsg
         return image
     }()
     
