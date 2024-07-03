@@ -28,6 +28,7 @@ enum StreamOption: Int {
     case stopPKBattle
     case endPKInvite
     case gift
+    case startPublishing
 }
 
 protocol StreamOptionActionDelegate {
@@ -264,6 +265,18 @@ class StreamOptionsView: UIView, AppearanceProvider {
         return view
     }()
     
+    lazy var startPublishView: CustomStreamOptionView = {
+        let view = CustomStreamOptionView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.optionImageView.image = appearance.images.live
+        view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
+        view.optionButton.tag =  StreamOption.startPublishing.rawValue
+        view.layer.cornerRadius = 22.5
+        view.backgroundView.backgroundColor = appearance.colors.appGreen
+        view.isHidden = true
+        return view
+    }()
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
@@ -281,6 +294,7 @@ class StreamOptionsView: UIView, AppearanceProvider {
     func setupViews(){
         addSubview(optionStackView)
         
+        optionStackView.addArrangedSubview(startPublishView)
         optionStackView.addArrangedSubview(groupInviteView)
         optionStackView.addArrangedSubview(pkInviteView)
         optionStackView.addArrangedSubview(stopPKBattleView)
@@ -357,7 +371,10 @@ class StreamOptionsView: UIView, AppearanceProvider {
             stopPKBattleView.heightAnchor.constraint(equalToConstant: 45),
             
             groupInviteView.widthAnchor.constraint(equalToConstant: 45),
-            groupInviteView.heightAnchor.constraint(equalToConstant: 45)
+            groupInviteView.heightAnchor.constraint(equalToConstant: 45),
+            
+            startPublishView.widthAnchor.constraint(equalToConstant: 45),
+            startPublishView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
     

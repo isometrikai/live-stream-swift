@@ -8,11 +8,11 @@
 
 import UIKit
 
-class CustomHeaderView: UIView, AppearanceProvider {
+public class CustomHeaderView: UIView, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let headerTitle: UILabel = {
+    public let headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -24,7 +24,7 @@ class CustomHeaderView: UIView, AppearanceProvider {
     
     // Leading action button
     
-    let leadingActionStackView: UIStackView = {
+    public let leadingActionStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fillEqually
@@ -33,7 +33,7 @@ class CustomHeaderView: UIView, AppearanceProvider {
         return stackView
     }()
     
-    let leadingActionButton: UIButton = {
+    public let leadingActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.ismTapFeedBack()
@@ -45,7 +45,7 @@ class CustomHeaderView: UIView, AppearanceProvider {
     
     // Trailing action button
     
-    let trailingActionStackView: UIStackView = {
+    public let trailingActionStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fillEqually
@@ -54,7 +54,7 @@ class CustomHeaderView: UIView, AppearanceProvider {
         return stackView
     }()
     
-    let trailingActionButton: UIButton = {
+    public let trailingActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.ismTapFeedBack()
@@ -66,7 +66,7 @@ class CustomHeaderView: UIView, AppearanceProvider {
     
     // Trailing action button
     
-    let trailingActionButton2: UIButton = {
+    public let trailingActionButton2: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.ismTapFeedBack()
@@ -78,7 +78,7 @@ class CustomHeaderView: UIView, AppearanceProvider {
     
     //:
     
-    let dividerView: UIView = {
+    public let dividerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .lightGray.withAlphaComponent(0.2)

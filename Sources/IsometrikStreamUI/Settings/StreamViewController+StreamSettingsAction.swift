@@ -23,6 +23,7 @@ extension StreamViewController: StreamSettingDelegate {
         let streamInitiatorId = streamData.userDetails?.isomatricChatUserId ?? ""
         let userType = viewModel.streamUserType
         let getIsometrik = isometrik.getIsometrik()
+        let userId = isometrik.getUserSession().getUserId()
         let videoContainer = visibleCell.streamContainer.videoContainer
         
         let isScheduledStream = (streamData.status == "SCHEDULED")
@@ -56,10 +57,13 @@ extension StreamViewController: StreamSettingDelegate {
             switch userType {
             case .viewer, .moderator:
                 
-                guard let currentSession = visibleCell.streamContainer.videoContainer.videoSessions[safe: 0] else { return }
-                currentSession.isAudioMute = !currentSession.isAudioMute
-                getIsometrik.setAudioStatusForRemoteSession(uid: streamInitiatorId.ism_userIdUInt() ?? UInt(), status: currentSession.isAudioMute)
-                videoContainer.videoContainerCollectionView.reloadData()
+                let uid = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
+                self.getVideoSessionAndIndexWithId(uId: uid) { session, index in
+                    guard let session else { return }
+                    session.isAudioMute = !session.isAudioMute
+                    getIsometrik.setAudioStatusForRemoteSession(uid: streamInitiatorId.ism_userIdUInt() ?? UInt(), status: session.isAudioMute)
+                    videoContainer.videoContainerCollectionView.reloadData()
+                }
                 
                 break
             case .member:
@@ -72,14 +76,17 @@ extension StreamViewController: StreamSettingDelegate {
         case .audio:
             
             switch userType {
+            case .host, .member:
                 
-            case .host:
+                let uid = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
+                self.getVideoSessionAndIndexWithId(uId: uid) { session, index in
+                    guard let session else { return }
+                    session.isAudioMute = !session.isAudioMute
+                    getIsometrik.setMuteStatusForAudio(status: session.isAudioMute)
+                    videoContainer.videoContainerCollectionView.reloadData()
+                }
                 
-                guard let currentSession = visibleCell.streamContainer.videoContainer.videoSessions[safe: 0] else { return }
-                currentSession.isAudioMute = !currentSession.isAudioMute
-                getIsometrik.setMuteStatusForAudio(status: currentSession.isAudioMute)
-                videoContainer.videoContainerCollectionView.reloadData()
-                
+                break
             default:
                 break
             }
@@ -88,13 +95,17 @@ extension StreamViewController: StreamSettingDelegate {
         case .camera:
             
             switch userType {
-            case .host:
+            case .host, .member:
                 
-                guard let currentSession = visibleCell.streamContainer.videoContainer.videoSessions[safe: 0] else { return }
-                currentSession.isVideoMute = !currentSession.isVideoMute
-                getIsometrik.setMuteStatusForVideo(status: currentSession.isVideoMute)
-                videoContainer.videoContainerCollectionView.reloadData()
+                let uid = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
+                self.getVideoSessionAndIndexWithId(uId: uid) { session, index in
+                    guard let session else { return }
+                    session.isVideoMute = !session.isVideoMute
+                    getIsometrik.setMuteStatusForVideo(status: session.isVideoMute)
+                    videoContainer.videoContainerCollectionView.reloadData()
+                }
                 
+                break
             default:
                 break
             }
@@ -129,8 +140,6 @@ extension StreamViewController: StreamSettingDelegate {
                 self.dismiss(animated: true) {
                     self.present(popupController, animated: true)
                 }
-                
-                
                 
                 break
             default:
@@ -191,13 +200,13 @@ extension StreamViewController: StreamSettingDelegate {
     
     func openStreamSettingController(){
         
-        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+        guard let isometrik = viewModel.isometrik,
               let streamsData = viewModel.streamsData, streamsData.count > 0,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let settingController = StreamSettingViewController()
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status)
         let userType = viewModel.streamUserType
         
         let reportAction = StreamSettingData(settingLabel: "Report".localized, settingImage: appearance.images.report, streamSettingType: .report)
@@ -205,42 +214,46 @@ extension StreamViewController: StreamSettingDelegate {
         switch streamStatus {
         case .started:
             
-            guard let currentSession = visibleCell.streamContainer.videoContainer.videoSessions[safe: 0] else { return }
-            
-            let audioStatus = !currentSession.isAudioMute
-            let videoStatus = !currentSession.isVideoMute
-            
-            let audioImage = audioStatus ? appearance.images.speakerOn : appearance.images.speakerOff
-            
-            let audioLabel = audioStatus ? "Mute Audio".localized : "Unmute Audio".localized
-            
-            let audioAction = StreamSettingData(settingLabel: audioLabel, settingImage: audioImage, streamSettingType: .audio)
-            
-            let videoImage = videoStatus ? appearance.images.videoCamera : appearance.images.videoCameraOff
-            
-            let videoLabel = videoStatus ? "Disable Camera".localized : "Enable Camera".localized
-            
-            let cameraAction = StreamSettingData(settingLabel: videoLabel, settingImage: videoImage, streamSettingType: .camera)
-            
-            let speakerImage = audioStatus ? appearance.images.speakerOn : appearance.images.speakerOff
-            
-            let speakerLabel = audioStatus ? "Mute Volume".localized : "Unmute Volume".localized
-            
-            let speakerAction = StreamSettingData(settingLabel: speakerLabel, settingImage: speakerImage, streamSettingType: .speaker)
-            
-            switch userType {
-            case .viewer:
-                settingController.settingData = [speakerAction, reportAction]
-                break
-            case .member:
-                //settingController.settingData = [speakerAction, reportAction]
-                break
-            case .host:
-                settingController.settingData = [audioAction, cameraAction]
-                break
-            case .moderator:
-                settingController.settingData = [speakerAction]
-                break
+            let uid = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
+            self.getVideoSessionAndIndexWithId(uId: uid) { [weak self] session, index in
+                guard let currentSession = session, let self else { return }
+                
+                let audioStatus = !currentSession.isAudioMute
+                let videoStatus = !currentSession.isVideoMute
+                
+                let audioImage = audioStatus ? self.appearance.images.speakerOn : self.appearance.images.speakerOff
+                
+                let audioLabel = audioStatus ? "Mute Audio".localized : "Unmute Audio".localized
+                
+                let audioAction = StreamSettingData(settingLabel: audioLabel, settingImage: audioImage, streamSettingType: .audio)
+                
+                let videoImage = videoStatus ? self.appearance.images.videoCamera : self.appearance.images.videoCameraOff
+                
+                let videoLabel = videoStatus ? "Disable Camera".localized : "Enable Camera".localized
+                
+                let cameraAction = StreamSettingData(settingLabel: videoLabel, settingImage: videoImage, streamSettingType: .camera)
+                
+                let speakerImage = audioStatus ? self.appearance.images.speakerOn : self.appearance.images.speakerOff
+                
+                let speakerLabel = audioStatus ? "Mute Volume".localized : "Unmute Volume".localized
+                
+                let speakerAction = StreamSettingData(settingLabel: speakerLabel, settingImage: speakerImage, streamSettingType: .speaker)
+                
+                switch userType {
+                case .viewer:
+                    settingController.settingData = [speakerAction, reportAction]
+                    break
+                case .member:
+                    settingController.settingData = [audioAction, cameraAction]
+                    break
+                case .host:
+                    settingController.settingData = [audioAction, cameraAction]
+                    break
+                case .moderator:
+                    settingController.settingData = [speakerAction]
+                    break
+                }
+                
             }
             
             break
@@ -280,6 +293,24 @@ extension StreamViewController: StreamSettingDelegate {
         }
         
         present(settingController, animated: true, completion: nil)
+        
+    }
+    
+    func getVideoSessionAndIndexWithId(uId: UInt, completion: @escaping (VideoSession? , Int) -> Void) {
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        
+        let videoSessions = visibleCell.streamContainer.videoContainer.videoSessions
+        for i in 0..<videoSessions.count {
+            let session = videoSessions[i]
+            if session.uid == uId {
+                completion(session, i)
+                break
+            }
+            if i == videoSessions.count - 1 {
+                completion(nil, 0)
+            }
+        }
         
     }
     

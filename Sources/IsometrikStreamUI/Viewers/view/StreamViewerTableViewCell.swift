@@ -23,7 +23,6 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var userType: StreamUserType?
     var isometrik: IsometrikSDK?
     var delegate: StreamViewerActionDelegate?
     var data: ISMViewer? {
@@ -60,8 +59,7 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = ""
-        label.textColor = .black
+        label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
@@ -69,7 +67,6 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
     lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "user@isometrik.io \nToday 12:34 AM"
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
@@ -88,12 +85,12 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Kickout".ism_localized, for: .normal)
+        button.setTitle("Kickout", for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 15
-        button.backgroundColor = .black
+        button.backgroundColor = appearance.colors.appColor
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return button
     }()
@@ -182,18 +179,15 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
     func manageData(){
         
         guard let data,
-              let isometrik,
-              let userType
+              let isometrik
         else {
             return
         }
         
-        userProfile.image = UIImage()
-        
         let timeInterval = TimeInterval(data.joinTime ?? 0)
         let customDate = Date(timeIntervalSince1970: timeInterval / 1000)
         let time = customDate.ism_getCustomMessageTime()
-        
+        let userType = isometrik.getUserSession().getUserType()
         
         if data.imagePath != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let imageUrl = URL(string: data.imagePath ?? "") {
@@ -205,19 +199,20 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
             userProfile.image = UIImage()
         }
         
-        titleLabel.text = data.name
         if let username = data.name {
             defaultProfile.initialsText.text = username.prefix(2).uppercased()
         }
         
+        titleLabel.text = data.name
         subtitleLabel.text = ""
         joiningLabel.text = "\(time)"
         
-        
-        if userType == .viewer {
+        switch userType {
+        case .viewer:
             actionButton.isHidden = true
-        } else if userType == .host || userType == .moderator {
+        case .host, .moderator:
             actionButton.isHidden = false
+            
             switch actionType {
             case .add:
                 actionButton.setTitle("Add", for: .normal)
@@ -233,7 +228,8 @@ class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
                 }
                 
             }
-        } else {
+            
+        default:
             actionButton.isHidden = true
         }
         

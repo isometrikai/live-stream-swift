@@ -40,6 +40,7 @@ extension GoLiveWithViewController: UITableViewDelegate, UITableViewDataSource {
 extension GoLiveWithViewController {
     
     func configureViewerCell(cell: UITableViewCell){
+        
         guard let cell = cell as? StreamViewerTableViewCell,
               let indexPath = self.contentTableView.indexPath(for: cell)
         else { return }
@@ -47,12 +48,11 @@ extension GoLiveWithViewController {
         cell.actionType = .add
         cell.isometrik = viewModel.isometrik
         cell.data = viewModel.viewers[indexPath.row]
-        cell.actionType = .add
-        
         cell.selectionStyle = .none
         cell.tag = indexPath.row
         cell.delegate = self
         cell.contentView.isUserInteractionEnabled = false
+        
     }
     
     func configureUserCell(cell: UITableViewCell){
@@ -151,11 +151,11 @@ extension GoLiveWithViewController: StreamViewerActionDelegate, StreamMemberList
     }
     
     func addViewerAsMember(_ viewerData: ISMViewer, _ index: Int) {
+        
         viewModel.addMember(userId: viewerData.viewerId.unwrap) { result in
             
             switch result {
             case .success:
-                
                 // Updating UI
                 self.viewModel.viewers.remove(at: index)
                 

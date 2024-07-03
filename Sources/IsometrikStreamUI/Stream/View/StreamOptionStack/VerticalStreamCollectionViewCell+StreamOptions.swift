@@ -43,7 +43,7 @@ extension VerticalStreamCollectionViewCell {
         
         /*
          
-         [.bidder, .camera, .microphone, .store, .share, .highlight, .loved, .speaker , .report, .wallet, .analytics, .request, .requestList, .gift, .pkInvite, .endPKInvite, .stopPKBattle, .groupInvite]
+         [.bidder, .camera, .microphone, .store, .share, .highlight, .loved, .speaker , .report, .wallet, .analytics, .request, .requestList, .gift, .pkInvite, .endPKInvite, .stopPKBattle, .groupInvite, .startPublishing]
          
          */
         
@@ -58,13 +58,13 @@ extension VerticalStreamCollectionViewCell {
             case .viewer:
                 
                 if isRTMPIngest {
-                    viewModel.streamOptions = [.gift, .share]
+                    viewModel.streamOptions = [.gift, .share, .request]
                 } else {
                     viewModel.streamOptions = [.gift, .share, .loved]
                     if !isPKStream {
                         if streamMembers.count > 0 {
                             if currentUserInMemberList {
-                                viewModel.streamOptions += [] // .startPublishing
+                                viewModel.streamOptions += [.startPublishing]
                             } else {
                                 viewModel.streamOptions += [.request]
                             }
@@ -102,7 +102,10 @@ extension VerticalStreamCollectionViewCell {
                             viewModel.streamOptions += [.endPKInvite]
                         }
                     } else {
-                        viewModel.streamOptions += [.pkInvite, .requestList, .groupInvite]
+                        if streamMembers.count == 1 {
+                            viewModel.streamOptions += [.pkInvite]
+                        }
+                        viewModel.streamOptions += [.requestList, .groupInvite]
                     }
                 } else {
                     viewModel.streamOptions += [.request, .requestList, .groupInvite]

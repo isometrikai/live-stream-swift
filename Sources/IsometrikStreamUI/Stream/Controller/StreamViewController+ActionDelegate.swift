@@ -379,11 +379,19 @@ extension StreamViewController: StreamCellActionDelegate {
         }
         
         if let sheet = controller.sheetPresentationController {
-            let customDetent = UISheetPresentationController.Detent.custom { context in
-                return context.maximumDetentValue * 0.55
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.6  // 60% of the screen height
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
             }
-            sheet.detents = [customDetent]
-            sheet.selectedDetentIdentifier = customDetent.identifier
         }
         
         present(controller, animated: true, completion: nil)
@@ -628,8 +636,11 @@ extension StreamViewController: StreamCellActionDelegate {
         case .groupInvite:
             openGoLiveWith()
             break
-        case .none:
-            debugPrint("None")
+        case .startPublishing:
+            didStartPublishingVideo()
+            break
+        default:
+            break
         }
         
     }
@@ -921,7 +932,7 @@ extension StreamViewController {
                 let customDetent = UISheetPresentationController.Detent.custom { context in
                     return context.maximumDetentValue * 0.6  // 60% of the screen height
                 }
-                sheet.detents = [customDetent, .medium()]
+                sheet.detents = [customDetent]
                 sheet.selectedDetentIdentifier = customDetent.identifier
                 sheet.preferredCornerRadius = 0
             } else {
@@ -931,8 +942,13 @@ extension StreamViewController {
             }
         }
         
+        controller.modalPresentationStyle = .pageSheet
         self.present(controller, animated: true)
         
+    }
+    
+    func didStartPublishingVideo(){
+        switchProfile()
     }
     
 }

@@ -608,11 +608,11 @@ extension StreamViewController {
             viewModel.fetchStreamMembers() { error in
                 if error == nil {
                     DispatchQueue.main.async {
-                        visibleCell.viewModel = viewModel
+                        visibleCell.viewModel = self.viewModel
                         self.handleMemberChanges()
                     }
                 } else {
-                    visibleCell.viewModel = viewModel
+                    visibleCell.viewModel = self.viewModel
                     print(error ?? "")
                 }
             }

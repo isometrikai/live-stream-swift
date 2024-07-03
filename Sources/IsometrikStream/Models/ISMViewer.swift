@@ -37,12 +37,13 @@ public struct ISMViewer: Codable, Equatable, Hashable {
     public var isFollow: Int?
     public var isPrivate: Bool?
     public private(set) var coinsSent: Int?
+    public private(set) var metaData: ISMMetaData?
     
     /// Codable keys to confirm Codable protocol
     enum CodingKeys: String, CodingKey {
         case viewerId = "userId"
         case viewerUserId
-        case identifier = "viewerIdentifier"
+        case identifier = "userIdentifier"
         case name = "userName"
         case imagePath = "userProfileImageUrl"
         case joinTime = "sessionStartTime"
@@ -52,6 +53,7 @@ public struct ISMViewer: Codable, Equatable, Hashable {
         case coinsSent
         case isFollow = "isFollow"
         case isPrivate
+        case metaData
     }
     
     /// `Initialization` for viewer info
@@ -67,7 +69,8 @@ public struct ISMViewer: Codable, Equatable, Hashable {
                 imagePath: String? = nil,
                 joinTime: Int64? = nil,
                 streamUserId: String? = nil,
-                isFollow: Int? = nil) {
+                isFollow: Int? = nil,
+                metaData: ISMMetaData? = nil) {
         self.viewerId = viewerId
         self.identifier = identifier
         self.name = name
@@ -75,6 +78,7 @@ public struct ISMViewer: Codable, Equatable, Hashable {
         self.joinTime = joinTime
         self.streamUserId = streamUserId
         self.isFollow = isFollow
+        self.metaData = metaData
     }
     
     /// Public initlizer decoder.
@@ -97,6 +101,7 @@ public struct ISMViewer: Codable, Equatable, Hashable {
         }
         
         coinsSent = try? values.decodeIfPresent(Int.self, forKey: .coinsSent)
+        metaData = try? values.decodeIfPresent(ISMMetaData.self, forKey: .metaData)
     }
     
     /// Encode user model.
@@ -113,6 +118,7 @@ public struct ISMViewer: Codable, Equatable, Hashable {
         try? container.encode(joinTime, forKey: .joinTime)
         try? container.encode(isFollow, forKey: .isFollow)
         try? container.encode(streamUserId, forKey: .streamUserId)
+        try? container.encode(metaData, forKey: .metaData)
     }
     
     public static func == (lhs: ISMViewer, rhs: ISMViewer) -> Bool {

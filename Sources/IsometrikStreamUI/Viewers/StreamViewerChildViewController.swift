@@ -117,7 +117,7 @@ class StreamViewerChildViewController: UIViewController, AppearanceProvider {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(defaultView)
         view.addSubview(tableView)
@@ -130,7 +130,7 @@ class StreamViewerChildViewController: UIViewController, AppearanceProvider {
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 40),
+            headerView.heightAnchor.constraint(equalToConstant: 60),
             
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -241,7 +241,6 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
         let data = viewers[safe: indexPath.row]
         cell.actionType = .kickout
         cell.isometrik = isometrik
-        cell.userType = userType
         cell.data = data
         cell.selectionStyle = .none
         cell.tag = indexPath.row

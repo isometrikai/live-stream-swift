@@ -32,7 +32,7 @@ protocol StreamSettingDelegate {
 class StreamSettingViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
-    
+
     var streamViewModel: StreamViewModel?
     var delegate: StreamSettingDelegate?
     

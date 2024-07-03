@@ -59,11 +59,11 @@ public struct ISMMember: Codable {
 }
 
 // MARK: - MetaData
-public struct ISMMetaData: Codable {
-    public let lastName, firstName, userID, profilePic: String?
+public struct ISMMetaData: Codable, Hashable {
+    public let lastName, firstName, userID, userName, profilePic: String?
 
     enum CodingKeys: String, CodingKey {
-        case lastName, firstName
+        case lastName, firstName, userName
         case userID = "userId"
         case profilePic
     }

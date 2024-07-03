@@ -259,7 +259,6 @@ extension IsometrikStream {
                     failure(error)
                 }
                 print(error.localizedDescription)
-
             }
         }
 

@@ -37,7 +37,7 @@ extension UIViewController {
         removeFromParent()
     }
     
-    func ism_showAlert(_ title: String, message: String) {
+    public func ism_showAlert(_ title: String, message: String) {
         
         // create the alert
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)

@@ -166,11 +166,16 @@ extension StreamViewController {
         
         //:
         
-        if let url = URL(string: streamImage) {
-            cell.streamThumbnailImage.kf.setImage(with: url)
-        } else {
+        if viewModel.streamMembers.count > 1 {
             cell.streamThumbnailImage.image = UIImage()
+        } else {
+            if let url = URL(string: streamImage) {
+                cell.streamThumbnailImage.kf.setImage(with: url)
+            } else {
+                cell.streamThumbnailImage.image = UIImage()
+            }
         }
+        
         
         // Verify scheduled stream scenarios
         

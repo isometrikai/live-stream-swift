@@ -23,10 +23,6 @@ class StreamTaggedProductList: UIViewController, AppearanceProvider {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerTitle.text = "All Products"
-        
-//        Fonts.setFont(view.headerTitle, fontFamiy: .monstserrat(.Bold), size: .custom(18), color: .black)
-        
-        
         view.headerTitle.textAlignment = .center
         
         view.trailingActionButton.isHidden = false

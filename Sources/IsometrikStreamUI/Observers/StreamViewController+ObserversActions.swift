@@ -24,9 +24,11 @@ extension StreamViewController {
     @objc func mqttMemberAdded(notification: NSNotification){
         
         guard let memberData = notification.userInfo?["data"] as? MemberAddEvent,
-              let visibleCell = fullyVisibleCells(streamCollectionView) else {
-            return
-        }
+              let visibleCell = fullyVisibleCells(streamCollectionView),
+              let streamsData = viewModel.streamsData,
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+              streamData.streamId == memberData.streamId
+        else { return }
         
         // if member in viewer list remove it from viewer list
         self.viewModel.streamViewers.removeAll { viewer in
@@ -49,6 +51,44 @@ extension StreamViewController {
     }
     
     @objc func mqttMemberRemoved(notification: NSNotification){
+        
+        guard let memberData = notification.userInfo?["data"] as? MemberRemoveEvent,
+              let isometrik = viewModel.isometrik,
+              let visibleCell = fullyVisibleCells(streamCollectionView),
+              let streamsData = viewModel.streamsData,
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+              streamData.streamId == memberData.streamId
+        else { return }
+        
+        // locally remove session and refresh the sessions
+        self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll { session in
+            session.userData?.userID == memberData.memberId
+        }
+
+        // Removing video session from copublisher side when getting kickout
+        viewModel.fetchStreamMembers { error in
+            
+            if error == nil {
+                DispatchQueue.main.async {
+                    visibleCell.viewModel = self.viewModel
+                    self.handleMemberChanges()
+                }
+            } else {
+                print(error ?? "")
+            }
+            
+        }
+        
+        if memberData.memberId == isometrik.getUserSession().getUserId() {
+            endTimer()
+            isometrik.getIsometrik().leaveChannel()
+            self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
+            
+            
+            visibleCell.streamEndView.isHidden = false
+            visibleCell.streamEndView.streamEndMessageLabel.text = "The host has kickout you from the stream."
+            visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
+        }
         
     }
     

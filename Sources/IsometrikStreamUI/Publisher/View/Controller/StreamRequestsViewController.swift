@@ -11,7 +11,7 @@ import IsometrikStream
 
 protocol StreamRequestsActionDelegate {
     func didRequestToCoPublisher(user: ISMStreamUser , streamInfo: ISMStream)
-    func didStartPublishingVideo(streamInfo: ISMStream)
+    func didStartPublishingVideo()
     func didDeleteRequestTapped(user: ISMStreamUser , streamInfo: ISMStream)
     func didLeaveStream()
 }
@@ -327,7 +327,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
             let existInMemberList = existenceInMemberList(memberId: currentUserId)
             
             if isAccepted && existInMemberList {
-                delegate?.didStartPublishingVideo(streamInfo: streamInfo)
+                delegate?.didStartPublishingVideo()
                 dismiss(animated: true)
             } else if isPending {
                 dismiss(animated: true)
