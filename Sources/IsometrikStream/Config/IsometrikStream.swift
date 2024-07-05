@@ -13,7 +13,7 @@ public protocol IsometrikStreamDelegate {
 }
 
 /// An object that coordinates a group of related Isometrik network events
-public class IsometrikStream : NSObject {
+public class IsometrikStream: NSObject {
     
     /// Instance identifier
     public let instanceID: UUID

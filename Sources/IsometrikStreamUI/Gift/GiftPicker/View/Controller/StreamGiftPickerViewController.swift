@@ -137,6 +137,29 @@ class StreamGiftPickerViewController: UIViewController {
     }
     
     @objc func getMoreTapped(){
+        let viewModel = BuyCoinsViewModel(isometrik: self.viewModel.isometrik)
+        let controller = BuyCoinsViewController(viewModel: viewModel)
+        
+        let navigationController = UINavigationController(rootViewController: controller)
+        navigationController.modalPresentationStyle = .pageSheet
+        
+        if let sheet = navigationController.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.7  // 60% of the screen height
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
+        
+        present(navigationController, animated: true, completion: nil)
         
     }
 

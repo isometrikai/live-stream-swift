@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import IsometrikStream
 
 extension BuyCoinsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     

@@ -114,6 +114,9 @@ extension StreamViewController {
         // fetching pinned product data if any
         self.fetchPinnedProductInStream()
         
+        // fetch copublish status
+        self.fetchStatusOfCoPublishRequest { _ in }
+        
     }
     
     func toggleMicrophone(){

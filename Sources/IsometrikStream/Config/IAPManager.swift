@@ -1,25 +1,24 @@
 import Foundation
 import StoreKit
-import IsometrikStream
 
-class IAPManager: NSObject {
+final public class IAPManager: NSObject {
     
     // MARK: - Custom Types
     
-    enum IAPManagerError: Error {
+    public enum IAPManagerError: Error {
         case noProductIDsFound
         case noProductsFound
         case paymentWasCancelled
         case productRequestFailed
     }
     
-    var applePlans = [SKProduct]()
-    var products: [String: SKProduct] = [:]
+    public var applePlans = [SKProduct]()
+    public var products: [String: SKProduct] = [:]
 
     
     // MARK: - Properties
     
-    static let shared = IAPManager()
+    public static let shared = IAPManager()
     var onReceiveProductsHandler: ((Result<[SKProduct], IAPManagerError>) -> Void)?
     var onBuyProductHandler: ((Result<Bool, Error>) -> Void)?
     var totalRestoredPurchases = 0
@@ -32,7 +31,7 @@ class IAPManager: NSObject {
     
     // MARK: - General Methods
     
-    func getPriceFormatted(for product: SKProduct) -> String? {
+    public func getPriceFormatted(for product: SKProduct) -> String? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.locale = product.priceLocale
@@ -40,21 +39,21 @@ class IAPManager: NSObject {
     }
     
     
-    func startObserving() {
+    public func startObserving() {
         SKPaymentQueue.default().add(self)
     }
 
-    func stopObserving() {
+    public func stopObserving() {
         SKPaymentQueue.default().remove(self)
     }
     
-    func canMakePayments() -> Bool {
+    public func canMakePayments() -> Bool {
         return SKPaymentQueue.canMakePayments()
     }
     
     // MARK: - Get IAP Products
     
-    func getProducts(productIdsFrombacken:[String], withHandler productsReceiveHandler: @escaping (_ result: Result<[SKProduct], IAPManagerError>) -> Void) {
+    public func getProducts(productIdsFrombacken:[String], withHandler productsReceiveHandler: @escaping (_ result: Result<[SKProduct], IAPManagerError>) -> Void) {
         // Keep the handler (closure) that will be called when requesting for
         // products on the App Store is finished.
         onReceiveProductsHandler = productsReceiveHandler
@@ -72,16 +71,16 @@ class IAPManager: NSObject {
     
     // MARK: - Purchase Products
     
-    func buy(product: SKProduct, withHandler handler: @escaping ((_ result: Result<Bool, Error>) -> Void)) {
+    public func buy(product: SKProduct, withHandler handler: @escaping ((_ result: Result<Bool, Error>) -> Void)) {
         let payment = SKPayment(product: product)
         SKPaymentQueue.default().add(payment)
-
+        
         // Keep the completion handler.
         onBuyProductHandler = handler
     }
        
     
-    func restorePurchases(withHandler handler: @escaping ((_ result: Result<Bool, Error>) -> Void)) {
+    public func restorePurchases(withHandler handler: @escaping ((_ result: Result<Bool, Error>) -> Void)) {
         onBuyProductHandler = handler
         totalRestoredPurchases = 0
         SKPaymentQueue.default().restoreCompletedTransactions()
@@ -91,7 +90,8 @@ class IAPManager: NSObject {
 
 // MARK: - SKPaymentTransactionObserver
 extension IAPManager: SKPaymentTransactionObserver {
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    
+    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         transactions.forEach { (transaction) in
             switch transaction.transactionState {
             case .purchased:
@@ -127,7 +127,7 @@ extension IAPManager: SKPaymentTransactionObserver {
     }
     
     
-    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+    public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         if totalRestoredPurchases != 0 {
             onBuyProductHandler?(.success(true))
         } else {
@@ -136,7 +136,7 @@ extension IAPManager: SKPaymentTransactionObserver {
     }
     
     
-    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+    public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         if let error = error as? SKError {
             if error.code != .paymentCancelled {
                 onBuyProductHandler?(.failure(error))
@@ -152,7 +152,7 @@ extension IAPManager: SKPaymentTransactionObserver {
 
 // MARK: - SKProductsRequestDelegate
 extension IAPManager: SKProductsRequestDelegate {
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+    public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         // Get the available products contained in the response.
         let products = response.products
 
@@ -167,12 +167,12 @@ extension IAPManager: SKProductsRequestDelegate {
     }
     
     
-    func request(_ request: SKRequest, didFailWithError error: Error) {
+    public func request(_ request: SKRequest, didFailWithError error: Error) {
         onReceiveProductsHandler?(.failure(.productRequestFailed))
     }
     
     
-    func requestDidFinish(_ request: SKRequest) {
+    public func requestDidFinish(_ request: SKRequest) {
         // Implement this method OPTIONALLY and add any custom logic
         // you want to apply when a product request is finished.
     }
@@ -183,7 +183,7 @@ extension IAPManager: SKProductsRequestDelegate {
 
 // MARK: - IAPManagerError Localized Error Descriptions
 extension IAPManager.IAPManagerError: LocalizedError {
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .noProductIDsFound: return "No In-App Purchase product identifiers were found."
         case .noProductsFound: return "No In-App Purchases were found."
@@ -196,7 +196,7 @@ extension IAPManager.IAPManagerError: LocalizedError {
 // MARK: - usage
 extension IAPManager{
     
-    func getPlansFromApple(productIds: [String],handler: @escaping ((_ result: [SKProduct],_ success:Bool, _ errorString: String?) -> Void)){
+    public func getPlansFromApple(productIds: [String],handler: @escaping ((_ result: [SKProduct],_ success:Bool, _ errorString: String?) -> Void)){
         getProducts(productIdsFrombacken: productIds) { (result) in
             
             DispatchQueue.main.async {
@@ -215,7 +215,7 @@ extension IAPManager{
     }
     
     
-    func generateReceipt() -> String{
+    public func generateReceipt() -> String{
        
         let receiptPath = Bundle.main.appStoreReceiptURL?.path
         if FileManager.default.fileExists(atPath: receiptPath!){
@@ -234,24 +234,24 @@ extension IAPManager{
     }
     
     //save purchase plans from appstore
-      class func savePurchasedPlan(data:[String:Any]){
-          UserDefaults.standard.setValue(data, forKey: "purchaseDetails")
-          UserDefaults.standard.synchronize()
-      }
-      
-      class func getPurchasedPlan()->[String:Any]{
-          if let purchasedProDetails = UserDefaults.standard.object(forKey: "purchaseDetails") as? [String:Any] {
-              return purchasedProDetails
-          }
-          return [:]
-      }
+    public class func savePurchasedPlan(data:[String:Any]){
+        UserDefaults.standard.setValue(data, forKey: "purchaseDetails")
+        UserDefaults.standard.synchronize()
+    }
     
-    class func saveReceiptData(data:[[String:Any]]){
+    public class func getPurchasedPlan()->[String:Any]{
+        if let purchasedProDetails = UserDefaults.standard.object(forKey: "purchaseDetails") as? [String:Any] {
+            return purchasedProDetails
+        }
+        return [:]
+    }
+    
+    public class func saveReceiptData(data:[[String:Any]]){
         UserDefaults.standard.setValue(data, forKey:"receiptData")
         UserDefaults.standard.synchronize()
     }
     
-    class func getReceiptData() -> [[String:Any]]{
+    public class func getReceiptData() -> [[String:Any]]{
         if let data = UserDefaults.standard.value(forKey:"receiptData") as? [[String:Any]] {
             return data
         }
@@ -259,7 +259,7 @@ extension IAPManager{
     }
     
     /// used to get product as per coin value
-    func getProductWithCoin(coin: String) -> SKProduct?{
+    public func getProductWithCoin(coin: String) -> SKProduct?{
         for product in self.applePlans{
             if product.productIdentifier.contains(coin){
                 return product
@@ -269,7 +269,7 @@ extension IAPManager{
     }
     
     /// used to get product as per coin value
-    func getProductWithId(storeId: String) -> SKProduct?{
+    public func getProductWithId(storeId: String) -> SKProduct?{
         for product in self.applePlans{
             if product.productIdentifier == storeId{
                 return product

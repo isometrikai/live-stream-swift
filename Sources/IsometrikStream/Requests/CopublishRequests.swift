@@ -131,9 +131,7 @@ extension IsometrikStream {
         let request =  ISMLiveAPIRequest<Any>(endPoint: CopublishRouter.fetchCopublishRequestStatus(streamId:streamId ), requestBody:nil)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMPublisher, ISMLiveAPIError> ) in
-            
             switch result{
-
             case .success(let streamResponse, _) :
                 DispatchQueue.main.async {
                     completionHandler(streamResponse)

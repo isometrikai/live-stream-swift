@@ -9,28 +9,11 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-protocol StreamRequestsActionDelegate {
-    func didRequestToCoPublisher(user: ISMStreamUser , streamInfo: ISMStream)
-    func didStartPublishingVideo()
-    func didDeleteRequestTapped(user: ISMStreamUser , streamInfo: ISMStream)
-    func didLeaveStream()
-}
-
 class StreamRequestsViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var viewModel = PublisherViewModel()
-    var delegate: StreamRequestsActionDelegate?
-    
-    var stackViewHeightConstraint: NSLayoutConstraint?
-    var stackViewWidthConstraint: NSLayoutConstraint?
-    var imagesArr: [String] = [] {
-        didSet {
-            // Updating UI
-            setupUI()
-        }
-    }
+    var viewModel: PublisherViewModel
     
     let userImageStackView: UIStackView = {
         let stackView = UIStackView()
@@ -105,17 +88,13 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
         setupConstraints()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         self.setupUI()
     }
     
-    init(publisherStatus: ISMPublisher?, isometrik: IsometrikSDK?, streamInfo: ISMStream?, requestingType: RequestingType?, user: ISMStreamUser?) {
+    init(viewModel: PublisherViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        viewModel.publisherStatus = publisherStatus
-        viewModel.requestingType = requestingType
-        viewModel.streamData = streamInfo
-        viewModel.isometrik = isometrik
-        viewModel.user = user
     }
     
     required init?(coder: NSCoder) {
@@ -125,15 +104,26 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupUI(){
+        
+        if let publisherStatus = viewModel.publisherStatus {
+            if publisherStatus.accepted.unwrap {
+                self.viewModel.requestingType = .accepting
+            } else {
+                self.viewModel.requestingType = publisherStatus.pending.unwrap ? .accepting : .sending
+            }
+        } else {
+            self.viewModel.requestingType = .sending
+        }
+        
+        
         // removing previous views first before adding
         userImageStackView.subviews.forEach({ $0.removeFromSuperview() })
         
-        guard let isometrik = viewModel.isometrik,
-              let streamInfo = viewModel.streamData
-        else { return }
+        let isometrik = viewModel.isometrik
+        let streamInfo = viewModel.streamData
         
         let firstName = streamInfo.userDetails?.userName ?? ""
-        let myName = isometrik.getUserSession().getUserName() ?? ""
+        let myName = isometrik.getUserSession().getUserName()
         let initials = [ "\(firstName.prefix(2))", "\(myName.prefix(2))"]
         
         switch viewModel.requestingType {
@@ -142,22 +132,20 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
             actionStackView.ism_removeFullyAllArrangedSubviews()
             actionStackView.addArrangedSubview(actionButton)
             
-            stackViewHeightConstraint?.constant = 65
-            stackViewWidthConstraint?.constant = 110
+            viewModel.stackViewHeightConstraint?.constant = 85
+            viewModel.stackViewWidthConstraint?.constant = 150
             
-            for i in 0..<imagesArr.count {
-                print("IMAGES NAME : ---- > \(imagesArr[i])")
-                let imageView = createImageView(with: imagesArr[i], initials: initials[i])
-                imageView.imageView.layer.cornerRadius = 32.5
-                imageView.defaultImageView.layer.cornerRadius = 32.5
+            for i in 0..<viewModel.imagesArr.count {
+                let imageView = createImageView(with: viewModel.imagesArr[i], initials: initials[i])
+                imageView.imageView.layer.cornerRadius = 42.5
+                imageView.defaultImageView.layer.cornerRadius = 42.5
                 imageView.clipsToBounds = true
                 userImageStackView.addArrangedSubview(imageView)
             }
             titleLabel.text = "Request to be a co-publisher in the live video"
             subtitleLabel.text = "Once you join a live video as a co-publisher, anybody canwatch and some of your followers may get notified"
-            
+
             actionButton.setTitle("Send Request", for: .normal)
-            
             actionButton.backgroundColor = appearance.colors.appColor
             actionButton.setTitleColor(.black, for: .normal)
             
@@ -167,10 +155,10 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
             
             guard let publisherStatus = viewModel.publisherStatus else { return }
             
-            stackViewHeightConstraint?.constant = 100
-            stackViewWidthConstraint?.constant = 100
-            if imagesArr.count > 0 {
-                let imageView = createImageView(with: imagesArr[0], initials: initials[0])
+            viewModel.stackViewHeightConstraint?.constant = 100
+            viewModel.stackViewWidthConstraint?.constant = 100
+            if viewModel.imagesArr.count > 0 {
+                let imageView = createImageView(with: viewModel.imagesArr[0], initials: initials[0])
                 imageView.imageView.layer.cornerRadius = 50
                 imageView.defaultImageView.layer.cornerRadius = 50
                 userImageStackView.addArrangedSubview(imageView)
@@ -189,7 +177,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                 
                 titleLabel.text = "\(streamInfo.userDetails?.firstName ?? "") " + " \(streamInfo.userDetails?.lastName ?? "")" + " has accepted your request to join the live video as a co-publisher"
                 subtitleLabel.text = "you can now join the live video as a co-publisher and start publishing"
-                actionButton.setTitle("Start Video".ism_localized, for: .normal)
+                actionButton.setTitle("Start Video", for: .normal)
                 
                 actionButton.backgroundColor = appearance.colors.appColor
                 actionButton.setTitleColor(.black, for: .normal)
@@ -205,7 +193,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                 titleLabel.text = "Your request to be a co-publisher in the live broadcaster is pending"
                 subtitleLabel.text = "You can either continue watching until" + " \(streamInfo.userDetails?.firstName ?? "") " + " \(streamInfo.userDetails?.lastName ?? "") " + "accepts your request or delete request"
                 
-                actionButton.setTitle("Continue".ism_localized, for: .normal)
+                actionButton.setTitle("Continue", for: .normal)
                 
                 actionButton.backgroundColor = .white
                 actionButton.setTitleColor(.black, for: .normal)
@@ -262,14 +250,13 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
             actionStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             actionStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             actionStackView.heightAnchor.constraint(equalToConstant: 60)
-            
         ])
         
-        stackViewWidthConstraint = userImageStackView.widthAnchor.constraint(equalToConstant: 100)
-        stackViewWidthConstraint?.isActive = true
+        viewModel.stackViewWidthConstraint = userImageStackView.widthAnchor.constraint(equalToConstant: 100)
+        viewModel.stackViewWidthConstraint?.isActive = true
         
-        stackViewHeightConstraint = userImageStackView.heightAnchor.constraint(equalToConstant: 100)
-        stackViewHeightConstraint?.isActive = true
+        viewModel.stackViewHeightConstraint = userImageStackView.heightAnchor.constraint(equalToConstant: 100)
+        viewModel.stackViewHeightConstraint?.isActive = true
     }
     
     func createImageView(with url: String = "", initials: String = "") -> customPublishingImageView {
@@ -292,31 +279,59 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     
     func existenceInMemberList(memberId: String) -> Bool {
         
-        guard let streamsData = viewModel.streamData,
-              let members = streamsData.members
-        else { return false }
+        let streamsData = viewModel.streamData
+        
+        guard let members = streamsData.members else {
+            return false
+        }
         
         let isExist = members.filter { member in
             return member.userID == memberId
         }
         
         return isExist.count > 0
+        
+    }
+    
+    func getRequestStatus(){
+        viewModel.getCopublisherStatus { response in
+            switch response {
+            case .success:
+                self.setupUI()
+                self.viewModel.success_callback?(self.viewModel.publisherStatus)
+                break
+            case .failure(_):
+                self.setupUI()
+                break
+            }
+        }
     }
     
     // MARK: - ACTIONS
     
     @objc func actionButtonTapped(){
         
-        guard let user = viewModel.user,
-              let streamInfo = viewModel.streamData,
-              let isometrik = viewModel.isometrik
-        else {
+        guard let user = viewModel.user else {
             return
         }
         
+        let streamInfo = viewModel.streamData
+        let isometrik = viewModel.isometrik
+        
         if viewModel.requestingType == .sending {
-            delegate?.didRequestToCoPublisher(user: user, streamInfo: streamInfo)
-            dismiss(animated: true)
+            
+            viewModel.sendCopublishingRequest { response in
+                switch response {
+                case .success:
+                    self.getRequestStatus()
+                    break
+                case .failure(let msg):
+                    self.view.showISMLiveErrorToast(message: msg)
+                    break
+                }
+            }
+            
+            
         } else if viewModel.requestingType == .accepting {
             
             let isAccepted = viewModel.publisherStatus?.accepted ?? false
@@ -327,7 +342,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
             let existInMemberList = existenceInMemberList(memberId: currentUserId)
             
             if isAccepted && existInMemberList {
-                delegate?.didStartPublishingVideo()
+                viewModel.delegate?.didStartPublishingVideo()
                 dismiss(animated: true)
             } else if isPending {
                 dismiss(animated: true)
@@ -341,9 +356,12 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
     }
     
     @objc func deleteButtonTapped(){
-        guard let user = viewModel.user , let streamInfo = viewModel.streamData else {
+        
+        guard let user = viewModel.user else {
             return
         }
+        
+        let streamInfo = viewModel.streamData
         
         if viewModel.requestingType == .accepting {
             
@@ -352,16 +370,29 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
 
             if isPending {
                 // call for deleting request
-                dismiss(animated: true)
-                delegate?.didDeleteRequestTapped(user: user, streamInfo: streamInfo)
+                //dismiss(animated: true)
+                viewModel.deleteCopublishingRequest { response in
+                    switch response {
+                    case .success:
+                        self.viewModel.requestingType = .sending
+                        self.viewModel.publisherStatus = nil
+                        self.viewModel.success_callback?(nil)
+                        self.setupUI()
+                        break
+                    case .failure(let msg):
+                        self.view.showISMLiveErrorToast(message: msg)
+                        break
+                    }
+                }
+                
             } else if !isPending && !isAccepted {
                 // leave stream as a viewer
                 dismiss(animated: true)
-                delegate?.didLeaveStream()
+                viewModel.delegate?.didLeaveStream()
             } else {
                 // case when user kicked out
                 dismiss(animated: true)
-                delegate?.didLeaveStream()
+                viewModel.delegate?.didLeaveStream()
             }
             
         }

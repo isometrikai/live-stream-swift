@@ -110,7 +110,6 @@ struct ISMLiveAPIManager {
                     completion(.failure(.decodingError(error)))
                 }
             case 204, 404, 400:
-                
                 completion(.failure(.noResultsFound(httpResponse.statusCode)))
             case 406 :
                 break

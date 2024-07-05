@@ -51,7 +51,7 @@ extension VerticalStreamCollectionViewCell: AppearanceProvider {
         if streamStatus == .scheduled {
             streamStatusView.isHidden = true
             headerView.cartButton(canBeShown: true)
-            viewerCountView.iconImageView.image = appearance.images.rsvpUser.withRenderingMode(.alwaysTemplate)
+            viewerCountView.iconImageView.image = appearance.images.rsvpdUser.withRenderingMode(.alwaysTemplate)
         } else {
             streamStatusView.isHidden = false
             headerView.cartButton(canBeShown: false)

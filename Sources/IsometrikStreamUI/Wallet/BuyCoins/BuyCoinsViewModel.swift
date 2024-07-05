@@ -66,11 +66,9 @@ final public class BuyCoinsViewModel {
         )
         
         isometrik.getIsometrik().purchaseToken(body: walletBody) { response in
-            
             DispatchQueue.main.async {
                 completion(true, nil)
             }
-            
         } failure: { error in
             DispatchQueue.main.async {
                 completion(false, error.localizedDescription)

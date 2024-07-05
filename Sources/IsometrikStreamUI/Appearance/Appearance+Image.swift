@@ -137,7 +137,7 @@ public struct ISM_Image {
     public var doubleArrow: UIImage = loadImageSafely(with: "ic_double_arrow")
     public var emoji: UIImage = loadImageSafely(with: "ic_emoji_button")
     public var eye: UIImage = loadImageSafely(with: "ic_eye")
-    public var rsvpUser: UIImage = loadImageSafely(with: "ic_rsvp_user")
+    public var rsvpdUser: UIImage = loadImageSafely(with: "ic_rsvpd_user")
     public var search: UIImage = loadImageSafely(with: "ic_search")
     public var send: UIImage = loadImageSafely(with: "ic_send_button")
     public var timer: UIImage = loadImageSafely(with: "ic_timer")

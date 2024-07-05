@@ -112,7 +112,7 @@ extension StreamViewController {
         }
     }
     
-    func fetchStatusOfCoPublishRequest(completionHandler: @escaping (ISMPublisher?) -> ()){
+    func fetchStatusOfCoPublishRequest(completion: @escaping(Bool)->Void){
         
         guard let isometrik = viewModel.isometrik,
               let streamsData = viewModel.streamsData,
@@ -122,8 +122,11 @@ extension StreamViewController {
         let streamId = streamData.streamId.unwrap
         
         isometrik.getIsometrik().fetchCopublishRequestStatus(streamId: streamId) { (result) in
-            completionHandler(result)
+            self.viewModel.publisher = result
+            completion(true)
         }failure: { error in
+            self.viewModel.publisher = nil
+            completion(false)
             switch error{
             case .noResultsFound(_):
                 // handle noresults found here
@@ -203,7 +206,7 @@ extension StreamViewController {
         }failure: { error in
             switch error{
             case .noResultsFound(_):
-                // handle noresults found here
+
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {

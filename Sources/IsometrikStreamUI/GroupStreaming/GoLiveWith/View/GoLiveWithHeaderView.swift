@@ -48,7 +48,7 @@ class GoLiveWithHeaderView: UIView, AppearanceProvider {
     lazy var userActionView: GoLiveWithActionView = {
         let actionView = GoLiveWithActionView()
         actionView.translatesAutoresizingMaskIntoConstraints = false
-        actionView.actionImageView.image = appearance.images.rsvpUser.withRenderingMode(.alwaysTemplate)
+        actionView.actionImageView.image = appearance.images.rsvpdUser.withRenderingMode(.alwaysTemplate)
         actionView.actionImageView.tintColor = .white
         actionView.actionLabel.text = "User"
         return actionView

@@ -7,6 +7,7 @@
 
 import Foundation
 import IsometrikStream
+import UIKit
 
 enum PublisherRequest {
     case success
@@ -18,39 +19,45 @@ enum RequestingType {
     case accepting
 }
 
+protocol StreamRequestsActionDelegate {
+    func didRequestToCoPublisher(user: ISMStreamUser , streamInfo: ISMStream)
+    func didStartPublishingVideo()
+    func didDeleteRequestTapped(user: ISMStreamUser , streamInfo: ISMStream)
+    func didLeaveStream()
+}
+
 class PublisherViewModel {
     
-    var isometrik: IsometrikSDK?
-    var streamData: ISMStream?
+    var isometrik: IsometrikSDK
+    var streamData: ISMStream
     var user: ISMStreamUser?
+    
     var requestList: [ISMRequest] = []
-    var publisherStatus: ISMPublisher?
+    var publisherStatus: ISMPublisher? = nil
     var requestingType: RequestingType? = .sending
+    var imagesArr: [String] = []
+    
+    var success_callback: ((ISMPublisher?) -> Void)?
+    var delegate: StreamRequestsActionDelegate?
+    var stackViewHeightConstraint: NSLayoutConstraint?
+    var stackViewWidthConstraint: NSLayoutConstraint?
+    
+    init(isometrik: IsometrikSDK, streamData: ISMStream) {
+        self.isometrik = isometrik
+        self.streamData = streamData
+    }
     
     func getRequestList(completion: @escaping(PublisherRequest) -> Void){
-        
-        guard let isometrik = isometrik else {
-            completion(.failure(msg: "Isometrik found nil!"))
-            return
-        }
-        
-        guard let streamData = streamData else {
-            completion(.failure(msg: "StreamData found nil!"))
-            return
-        }
-        
         let streamId = streamData.streamId.unwrap
-        
         isometrik.getIsometrik().fetchCopublishRequests(streamId: streamId) { result in
-                    self.requestList = result.requests ?? []
-                    completion(.success)
-        }failure: { error in
+            self.requestList = result.requests ?? []
+            completion(.success)
+        } failure: { error in
             switch error{
             case .noResultsFound(_):
                 // handle noresults found here
                 break
             case .invalidResponse:
-             
                 completion(.failure(msg: "CoPublish Error : Invalid Response"))
             case.networkError(let error):
                 completion(.failure(msg: "Network Error \(error.localizedDescription)"))
@@ -63,6 +70,80 @@ class PublisherViewModel {
         
     }
     
+    func sendCopublishingRequest(completion: @escaping(PublisherRequest) -> Void){
+        
+        let streamId = streamData.streamId.unwrap
+        isometrik.getIsometrik().addCopublishRequest(streamId: streamId) { result in
+            DispatchQueue.main.async {
+                completion(.success)
+            }
+        } failure: { error in
+            switch error{
+            case .noResultsFound(_):
+                // handle noresults found here
+                break
+            case .invalidResponse:
+                completion(.failure(msg: "CoPublish Error : Invalid Response"))
+            case.networkError(let error):
+                completion(.failure(msg: "Network Error \(error.localizedDescription)"))
+            case .httpError(let errorCode, let errorMessage):
+                completion(.failure(msg: "\(errorCode) \(errorMessage?.error ?? "")"))
+            default :
+                break
+            }
+        }
+
+        
+    }
+    
+    func getCopublisherStatus(completion: @escaping(PublisherRequest) -> Void){
+        let streamId = streamData.streamId.unwrap
+        isometrik.getIsometrik().fetchCopublishRequestStatus(streamId: streamId) { response in
+            DispatchQueue.main.async {
+                self.publisherStatus = response
+                completion(.success)
+            }
+        } failure: { error in
+            switch error{
+            case .noResultsFound(_):
+                completion(.failure(msg: ""))
+                break
+            case .invalidResponse:
+                completion(.failure(msg: "CoPublish Error : Invalid Response"))
+            case.networkError(let error):
+                completion(.failure(msg: "Network Error \(error.localizedDescription)"))
+            case .httpError(let errorCode, let errorMessage):
+                completion(.failure(msg: "\(errorCode) \(errorMessage?.error ?? "")"))
+            default :
+                break
+            }
+        }
+    }
+    
+    func deleteCopublishingRequest(completion: @escaping(PublisherRequest) -> Void){
+        let streamId = streamData.streamId.unwrap
+        isometrik.getIsometrik().deleteCopublishRequest(streamId: streamId) { response in
+            DispatchQueue.main.async {
+                completion(.success)
+            }
+        } failure: { error in
+            switch error{
+            case .noResultsFound(_):
+                // handle noresults found here
+                break
+            case .invalidResponse:
+                completion(.failure(msg: "CoPublish Error : Invalid Response"))
+            case.networkError(let error):
+                completion(.failure(msg: "Network Error \(error.localizedDescription)"))
+            case .httpError(let errorCode, let errorMessage):
+                completion(.failure(msg: "\(errorCode) \(errorMessage?.error ?? "")"))
+            default :
+                break
+            }
+        }
+
+    }
+
     func addRequest(requestData: ISMRequest, completion: @escaping(Bool) -> Void){
         
         let userId = requestData.userId.unwrap

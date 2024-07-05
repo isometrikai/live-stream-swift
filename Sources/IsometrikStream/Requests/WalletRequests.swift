@@ -36,7 +36,7 @@ extension IsometrikStream {
     
     public func purchaseToken(body: WalletBody, completionHandler: @escaping (PurchasedPlanResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
-        let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.purchaseToken, requestBody: nil)
+        let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.purchaseToken, requestBody: body)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<PurchasedPlanResponseModel, ISMLiveAPIError> ) in
             

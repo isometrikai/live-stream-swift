@@ -25,9 +25,7 @@ extension IsometrikStream {
         let request =  ISMLiveAPIRequest(endPoint: StreamRouter.startStream , requestBody:streamBody)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStream, ISMLiveAPIError> ) in
-            
             switch result{
-                
             case .success(let streamResponse, _) :
                 DispatchQueue.main.async {
                     completionHandler(streamResponse)
@@ -39,7 +37,6 @@ extension IsometrikStream {
                 print(error.localizedDescription)
             }
         }
-    
     }
     
     public func updateScheduleStream(streamBody: StreamBody, completionHandler: @escaping (ISMStream)->(), failure : @escaping (ISMLiveAPIError) -> ()) {

@@ -328,6 +328,29 @@ extension StreamViewController {
     
     @objc func mqttRequestToBeCoPublisherAdded(notification: NSNotification){
         
+        guard let userRequest = notification.userInfo?["data"] as? ISMRequest else {
+            return
+        }
+        
+//        checkUserRequestAlreadyExist(with: userRequest.userId ?? "") { [weak self] isExist in
+//            guard let self = self else { return }
+//            if !isExist {
+//                if self.streamRequests.count == 0 {
+//                    self.streamRequests = [userRequest]
+//                } else {
+//                    self.streamRequests.append(userRequest)
+//                }
+//            }
+//        }
+        
+        let senderName = userRequest.userName ?? ""
+        let timeStamp = Int64(userRequest.requestTime ?? 0)
+        let message = "\(senderName) requested to be a copublisher in a stream."
+        
+        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.joined.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+        
+        addStreamInfoMessage(message: messageInfo)
+        
     }
     
     @objc func mqttRequestToBeCoPublisherRemoved(notification: NSNotification){
@@ -335,6 +358,31 @@ extension StreamViewController {
     }
     
     @objc func mqttCopublishRequestAccepted(notification: NSNotification){
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+              let isometrik = viewModel.isometrik,
+              let userRequest = notification.userInfo?["data"] as? ISMRequest
+        else { return }
+        
+        let currentUserId = isometrik.getUserSession().getUserId()
+        
+        if userRequest.userId == currentUserId {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                
+                self.viewModel.fetchStreamMembers { error in
+                    if error == nil {
+                        visibleCell.viewModel = self.viewModel
+                        self.fetchStatusOfCoPublishRequest { success in
+                            if success {
+                                self.sendRequest()
+                            }
+                        }
+                        self.handleMemberChanges()
+                    }
+                }
+            }
+        }
         
     }
     

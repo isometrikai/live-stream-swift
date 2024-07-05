@@ -13,7 +13,7 @@ class RequestListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var viewModel = PublisherViewModel()
+    var viewModel: PublisherViewModel
     var delegate: StreamRequestListActionDelegate?
     
     lazy var headerView: StreamChildControllerHeaderView = {
@@ -65,10 +65,9 @@ class RequestListViewController: UIViewController, AppearanceProvider {
         removeAllObserver()
     }
     
-    init(isometrik: IsometrikSDK? , streamData: ISMStream?) {
+    init(viewModel: PublisherViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.viewModel.isometrik = isometrik
-        self.viewModel.streamData = streamData
     }
     
     required init?(coder: NSCoder) {
@@ -104,7 +103,7 @@ class RequestListViewController: UIViewController, AppearanceProvider {
     }
     
     func addObservers(){
-        guard let isometrik = viewModel.isometrik else { return }
+        let isometrik = viewModel.isometrik
         
         isometrik.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttRequestToBeCoPublisherAdded), name: ISMMQTTNotificationType.mqttRequestToBeCoPublisherAdded.name, object: nil)
         
@@ -117,8 +116,7 @@ class RequestListViewController: UIViewController, AppearanceProvider {
     }
     
     func removeAllObserver(){
-        
-        guard let isometrik = viewModel.isometrik else { return }
+        let isometrik = viewModel.isometrik
         
         isometrik.getMqttSession().removeObserverForMQTT(self, name: ISMMQTTNotificationType.mqttRequestToBeCoPublisherAdded.name, object: nil)
         isometrik.getMqttSession().removeObserverForMQTT(self, name: ISMMQTTNotificationType.mqttRequestToBeCoPublisherRemoved.name, object: nil)
@@ -242,15 +240,14 @@ extension RequestListViewController: StreamRequestListActionDelegate {
     
     func didAcceptActionTapped(_ index: Int) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamInfo = viewModel.streamData
-        else { return }
+        let isometrik = viewModel.isometrik
+        let streamInfo = viewModel.streamData
         
         let requestByUserId = viewModel.requestList[index].userId ?? ""
         let streamId = streamInfo.streamId ?? ""
         
         isometrik.getIsometrik().acceptCopublishRequest(streamId: streamId, requestByUserId: requestByUserId) { (result) in
-                self.loadRequests()
+            self.loadRequests()
         }failure: { error in
             switch error{
             case .noResultsFound(_):
@@ -262,7 +259,7 @@ extension RequestListViewController: StreamRequestListActionDelegate {
                 }
             case.networkError(let error):
                 self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
-              
+                
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
                     self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
@@ -276,9 +273,8 @@ extension RequestListViewController: StreamRequestListActionDelegate {
     
     func didDeclineActionTapped(_ index: Int) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamInfo = viewModel.streamData
-        else { return }
+        let isometrik = viewModel.isometrik
+        let streamInfo = viewModel.streamData
         
         let requestByUserId = viewModel.requestList[index].userId ?? ""
         let streamId = streamInfo.streamId ?? ""

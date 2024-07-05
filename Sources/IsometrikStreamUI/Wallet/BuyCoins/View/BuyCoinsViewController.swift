@@ -20,9 +20,9 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         view.headerTitle.textAlignment = .center
         
         view.leadingActionButton.isHidden = false
-        view.leadingActionButton.setImage(appearance.images.back.withRenderingMode(.alwaysTemplate), for: .normal)
+        view.leadingActionButton.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
         view.leadingActionButton.imageView?.tintColor = .black
-        view.leadingActionButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        view.leadingActionButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         
         view.dividerView.isHidden = false
         return view
@@ -110,7 +110,7 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
     
     // MARK: - ACTIONS
     
-    @objc func backButtonTapped(){
+    @objc func closeButtonTapped(){
         self.dismiss(animated: true)
     }
 

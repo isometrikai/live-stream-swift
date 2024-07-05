@@ -18,37 +18,31 @@ class GlobalSearchBarView: UIView, AppearanceProvider {
     
     var delegate: GlobalSearchBarActionDelegate?
     
-    let searchCoverView: UIView = {
+    lazy var searchCoverView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = appearance.colors.appLightGray.withAlphaComponent(0.1)
+        view.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.4).cgColor
+        view.layer.borderWidth = 1
         view.layer.cornerRadius = 5
-        view.backgroundColor = UIColor.colorWithHex(color: "#F3F2F2")
         return view
-    }()
-    
-    lazy var searchIconImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = appearance.images.search
-        return imageView
     }()
     
     lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.textColor = UIColor.colorWithHex(color:"#5E5E5E")
-        textField.tintColor = .black
+        textField.placeholder = "Search"
+        textField.font = appearance.font.getFont(forTypo: .h5)
+        textField.textColor = .white
+        textField.tintColor = .white
         
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Search Users".localized,
-            attributes: [
-                NSAttributedString.Key.foregroundColor: UIColor.colorWithHex(color:"#5E5E5E"),
-                NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h6)
-            ]
+            string: "Search Users",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
         
-        textField.font = appearance.font.getFont(forTypo: .h6)
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
         return textField
     }()
     
@@ -77,25 +71,19 @@ class GlobalSearchBarView: UIView, AppearanceProvider {
     
     func setupViews(){
         addSubview(searchCoverView)
-        addSubview(searchIconImage)
-        addSubview(searchTextField)
+        searchCoverView.addSubview(searchTextField)
         addSubview(searchIndicatorView)
     }
     
     func setupConstraints(){
         NSLayoutConstraint.activate([
             
-            searchCoverView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            searchCoverView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
-            searchCoverView.heightAnchor.constraint(equalToConstant: 45),
+            searchCoverView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            searchCoverView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             searchCoverView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            searchCoverView.heightAnchor.constraint(equalToConstant: 45),
             
-            searchIconImage.widthAnchor.constraint(equalToConstant: 20),
-            searchIconImage.heightAnchor.constraint(equalToConstant: 20),
-            searchIconImage.leadingAnchor.constraint(equalTo: searchCoverView.leadingAnchor, constant: 10),
-            searchIconImage.centerYAnchor.constraint(equalTo: searchCoverView.centerYAnchor),
-            
-            searchTextField.leadingAnchor.constraint(equalTo: searchIconImage.trailingAnchor, constant: 5),
+            searchTextField.leadingAnchor.constraint(equalTo: searchCoverView.leadingAnchor, constant: 10),
             searchTextField.trailingAnchor.constraint(equalTo: searchCoverView.trailingAnchor, constant: -10),
             searchTextField.centerYAnchor.constraint(equalTo: searchCoverView.centerYAnchor),
             

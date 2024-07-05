@@ -853,21 +853,22 @@ extension StreamViewController {
         let viewerData = isometrik.getUserSession().getUserModel()
         
         var images:[String] = []
-        var requestType: RequestingType?
         
         images.append("\(streamData.userDetails?.profilePic ?? "")")
         images.append("\(viewerData.imagePath ?? "")")
         
-        if viewModel.publisher != nil {
-            requestType = .accepting
-        } else {
-            requestType = .sending
+        let viewModel = PublisherViewModel(isometrik: isometrik, streamData: streamData)
+        viewModel.user = viewerData
+        viewModel.imagesArr = images
+        viewModel.publisherStatus = self.viewModel.publisher
+        viewModel.delegate = self
+        
+        viewModel.success_callback = { [weak self] publisherStatus in
+            guard let self else { return }
+            self.viewModel.publisher = publisherStatus
         }
         
-        let controller = StreamRequestsViewController(publisherStatus: viewModel.publisher, isometrik: isometrik, streamInfo: streamData, requestingType: requestType, user: viewerData)
-        
-        controller.imagesArr = images
-        //controller.delegate = self
+        let controller = StreamRequestsViewController(viewModel: viewModel)
         
         if let sheet = controller.sheetPresentationController {
             if #available(iOS 16.0, *) {
@@ -896,7 +897,8 @@ extension StreamViewController {
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let controller = RequestListViewController(isometrik: isometrik, streamData: streamData)
+        let viewModel = PublisherViewModel(isometrik: isometrik, streamData: streamData)
+        let controller = RequestListViewController(viewModel: viewModel)
         
         if let sheet = controller.sheetPresentationController {
             if #available(iOS 16.0, *) {
