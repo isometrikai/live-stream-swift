@@ -114,7 +114,6 @@ extension StreamViewController {
             
             // reseting thumbnails
             cell.streamThumbnailImage.image = UIImage()
-            
             return
         }
         
@@ -133,7 +132,12 @@ extension StreamViewController {
         // set stream loader data
         
         streamLoader.streamData = streamData
-        if viewModel.streamUserType == .host || viewModel.streamUserType == .member {
+        if viewModel.streamUserType == .host {
+            streamLoader.isHidden = true
+            if streamData.rtmpIngest.unwrap {
+                self.openRtmpIngestDetail()
+            }
+        } else if viewModel.streamUserType == .member {
             streamLoader.isHidden = true
         } else {
             streamLoader.isHidden = false

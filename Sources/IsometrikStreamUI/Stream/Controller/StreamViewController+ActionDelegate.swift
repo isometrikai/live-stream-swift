@@ -289,7 +289,6 @@ extension StreamViewController: StreamCellActionDelegate {
             
             switch userType {
             case .member:
-                
                 let isPKMember = isometrik.getUserSession().getMemberForPKStatus()
                 if isPKMember {
                     cancelButton.setTitle("Cancel", for: .normal)
@@ -304,8 +303,8 @@ extension StreamViewController: StreamCellActionDelegate {
                 yesButton.setTitle("End Broadcasting", for: .normal)
                 break
             case .viewer:
-                self.dismissViewController()
-                break
+                self.leaveStreamByViewer(userId: userId, streamId: streamId)
+                return
             default: break
             }
             
@@ -667,6 +666,9 @@ extension StreamViewController: StreamCellActionDelegate {
         case .startPublishing:
             didStartPublishingVideo()
             break
+        case .rtmpIngest:
+            openRtmpIngestDetail()
+            break
         default:
             break
         }
@@ -975,6 +977,28 @@ extension StreamViewController {
         controller.modalPresentationStyle = .pageSheet
         self.present(controller, animated: true)
         
+    }
+    
+    func openRtmpIngestDetail(){
+        
+        guard let streamsData = viewModel.streamsData,
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
+        let controller = RTMPIngestViewController()
+        controller.configureData(streamData: streamData)
+        controller.modalPresentationStyle = .pageSheet
+        if #available(iOS 15.0, *) {
+            if #available(iOS 16.0, *) {
+                controller.sheetPresentationController?.prefersGrabberVisible = true
+                controller.sheetPresentationController?.detents = [
+                    .custom(resolver: { context in
+                        return 290 + ism_windowConstant.getBottomPadding
+                    })
+                ]
+            }
+        }
+        self.present(controller, animated: true)
     }
     
     func didStartPublishingVideo(){

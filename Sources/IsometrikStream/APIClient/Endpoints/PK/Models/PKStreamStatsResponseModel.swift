@@ -26,8 +26,8 @@ public struct ISM_PK_StreamStats: Codable {
     public private(set) var secoundUserId: String?
     public private(set) var firstUserDetails: ISM_PK_User?
     public private(set) var secondUserDetails: ISM_PK_User?
-    public private(set) var firstUserCoins: Int?
-    public private(set) var secondUserCoins: Int?
+    public private(set) var firstUserCoins: Double?
+    public private(set) var secondUserCoins: Double?
     public private(set) var timeRemain: Int?
     public private(set) var creationTimestamp: Int64?
 

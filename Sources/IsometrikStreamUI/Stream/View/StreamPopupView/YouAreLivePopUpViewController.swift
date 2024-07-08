@@ -54,7 +54,7 @@ class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "You’re LIVE".localized
+        label.text = "You’re LIVE"
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h4)
         return label
@@ -63,7 +63,7 @@ class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
     lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "We’ve sent a notification to your followers. Your fans will start to join soon".localized
+        label.text = "We’ve sent a notification to your followers. Your fans will start to join soon"
         label.font = appearance.font.getFont(forTypo: .h6)
         label.numberOfLines = 0
         label.textColor = .lightGray
@@ -86,13 +86,12 @@ class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
         return button
     }()
     
-    let safeAreaCoverView: UIView = {
+    lazy var safeAreaCoverView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         return view
     }()
-    
     
     // MARK: - MAIN
     
@@ -153,7 +152,7 @@ class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
     @objc func okButtonTapped(){
         if delegate != nil {
             delegate?.tapButtonClick(tap: .okTap)
-        }else {
+        } else {
             dismiss(animated: true, completion: nil)
         }
     }

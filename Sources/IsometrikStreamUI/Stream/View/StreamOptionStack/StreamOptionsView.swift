@@ -29,6 +29,7 @@ enum StreamOption: Int {
     case endPKInvite
     case gift
     case startPublishing
+    case rtmpIngest
 }
 
 protocol StreamOptionActionDelegate {
@@ -277,6 +278,18 @@ class StreamOptionsView: UIView, AppearanceProvider {
         return view
     }()
     
+    lazy var rtmpIngestView: CustomStreamOptionView = {
+        let view = CustomStreamOptionView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.optionImageView.image = appearance.images.linking
+        view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
+        view.optionButton.tag =  StreamOption.rtmpIngest.rawValue
+        view.layer.cornerRadius = 22.5
+        view.backgroundView.backgroundColor = .white
+        view.isHidden = true
+        return view
+    }()
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
@@ -294,6 +307,7 @@ class StreamOptionsView: UIView, AppearanceProvider {
     func setupViews(){
         addSubview(optionStackView)
         
+        optionStackView.addArrangedSubview(rtmpIngestView)
         optionStackView.addArrangedSubview(startPublishView)
         optionStackView.addArrangedSubview(groupInviteView)
         optionStackView.addArrangedSubview(pkInviteView)
@@ -374,7 +388,10 @@ class StreamOptionsView: UIView, AppearanceProvider {
             groupInviteView.heightAnchor.constraint(equalToConstant: 45),
             
             startPublishView.widthAnchor.constraint(equalToConstant: 45),
-            startPublishView.heightAnchor.constraint(equalToConstant: 45)
+            startPublishView.heightAnchor.constraint(equalToConstant: 45),
+            
+            rtmpIngestView.widthAnchor.constraint(equalToConstant: 45),
+            rtmpIngestView.heightAnchor.constraint(equalToConstant: 45)
         ])
     }
     

@@ -133,7 +133,6 @@ extension StreamViewController: StreamSettingDelegate {
                         break
                     default:
                         break
-                        
                     }
                 }
                 

@@ -38,7 +38,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     var baseURL: URL{
         switch self {
         case .startStream, .fetchStreams, .stopStream:
-            return URL(string:"https://admin-\(ISMConfiguration.shared.primaryOrigin)")!
+            return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
         case .getRecordedStream:
             return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
         default:

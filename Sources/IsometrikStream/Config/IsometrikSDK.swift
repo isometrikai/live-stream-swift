@@ -34,7 +34,7 @@ public class IsometrikSDK {
     
     public static func getInstance()-> IsometrikSDK{
         if sharedInstance == nil {
-            sharedInstance = IsometrikSDK(isometrik: IsometrikStream(configuration: ISMConfiguration()))
+            sharedInstance = IsometrikSDK(isometrik: IsometrikStream(configuration: ISMConfiguration.shared))
         }
         return sharedInstance
     }
@@ -66,25 +66,24 @@ public class IsometrikSDK {
         }
         
         let configuration = ISMConfiguration.shared
-        ISMConfiguration.shared.accountId = accountId
-        ISMConfiguration.shared.projectId = projectId
-        ISMConfiguration.shared.keySetId = keysetId
-        ISMConfiguration.shared.licensekey = licenseKey
-        ISMConfiguration.shared.rtcAppId = rtcAppId
-        ISMConfiguration.shared.authToken = authToken
-        ISMConfiguration.shared.userToken = userInfo.userToken.unwrap
-        ISMConfiguration.shared.userSecret = userSecret
-        ISMConfiguration.shared.appSecret = appSecret
         
-        // Product Config
-        
-        ISMConfiguration.shared.storeCategoryId = productConfig.storeCategoryId
-        ISMConfiguration.shared.lang = productConfig.lang
-        ISMConfiguration.shared.language = productConfig.language
-        ISMConfiguration.shared.currencyCode = productConfig.currencyCode
-        ISMConfiguration.shared.currencySymbol = productConfig.currencySymbol
-            
-        //:
+        configuration.updateConfig(
+            licenseKey: licenseKey,
+            accountId: accountId,
+            projectId: projectId,
+            keySetId: keysetId,
+            appSecret: appSecret,
+            userSecret: userSecret,
+            rtcToken: "",
+            userToken: userInfo.userToken.unwrap,
+            authToken: authToken,
+            storeCategoryId: productConfig.storeCategoryId,
+            lang: productConfig.lang,
+            language: productConfig.language,
+            currencyCode: productConfig.currencyCode,
+            currencySymbol: productConfig.currencySymbol,
+            rtcAppId: rtcAppId
+        )
         
         let userSession = UserSession()
         userSession.setUserId(userId: userInfo.userId.unwrap)
