@@ -17,8 +17,7 @@ protocol StreamModeratorsListActionDelegate {
 class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
-    var delegate: StreamModeratorsListActionDelegate?
-    var viewModel = ModeratorViewModel()
+    var viewModel: ModeratorViewModel
     
     let headerView: CustomHeaderView = {
         let view = CustomHeaderView()
@@ -66,24 +65,10 @@ class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
     
     // MARK: - INITIALIZERS
     
-    init(_isometrik: IsometrikSDK?, _streamInfo: ISMStream?) {
+    init(viewModel: ModeratorViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.viewModel.isometrik = _isometrik
-        self.viewModel.streamInfo = _streamInfo
-        
-        // initializing configurations
-        let headerTitle = headerView.headerTitle
-        headerTitle.text = "Moderators".localized
-        headerTitle.font = appearance.font.getFont(forTypo: .h3)
-        headerTitle.textAlignment = .left
-        
-        let trailingActionButton = self.headerView.trailingActionButton2
-        trailingActionButton.setTitle("+" + "Add".localized, for: .normal)
-        trailingActionButton.setTitleColor(.white, for: .normal)
-        trailingActionButton.isHidden = false
-        trailingActionButton.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
-        trailingActionButton.backgroundColor = .black
-        
+        self.setupInitials()
     }
     
     required init?(coder: NSCoder) {
@@ -100,12 +85,16 @@ class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        // removing previous loaded data
+        viewModel.skip = 0
+        viewModel.moderatorList.removeAll()
+        
         MBProgressHUD.showAdded(to: self.view, animated: true)
         viewModel.getModerators { [weak self] in
             guard let self else { return }
             MBProgressHUD.hide(for: self.view, animated: true)
             self.tableView.reloadData()
-            
             self.headerView.headerTitle.text = "Moderators".localized + " (\(self.viewModel.moderatorList.count))"
         }
     }
@@ -113,7 +102,7 @@ class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(defaultView)
         view.addSubview(tableView)
@@ -144,6 +133,23 @@ class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
         ])
     }
     
+    func setupInitials(){
+        
+        // initializing configurations
+        let headerTitle = headerView.headerTitle
+        headerTitle.text = "Moderators".localized
+        headerTitle.font = appearance.font.getFont(forTypo: .h3)
+        headerTitle.textAlignment = .left
+        
+        let trailingActionButton = self.headerView.trailingActionButton2
+        trailingActionButton.setTitle("+" + "Add".localized, for: .normal)
+        trailingActionButton.setTitleColor(appearance.colors.appSecondary, for: .normal)
+        trailingActionButton.isHidden = false
+        trailingActionButton.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
+        trailingActionButton.backgroundColor = appearance.colors.appColor
+        
+    }
+    
     // MARK: - ACTIONS
     
     @objc func refreshAction(){
@@ -158,7 +164,7 @@ class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
     
     @objc func addButtonTapped(){
         self.dismiss(animated: true)
-        delegate?.openListForSelectingModerators()
+        viewModel.delegate?.openListForSelectingModerators()
     }
 
 }
@@ -172,9 +178,11 @@ extension StreamModeratorsListViewController: UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DynamicUserInfoTableViewCell", for: indexPath) as! DynamicUserInfoTableViewCell
         
+        let isometrik = viewModel.isometrik
+        
         let userData = viewModel.moderatorList[indexPath.row]
-        let currentUserId = viewModel.isometrik?.getUserSession().getUserId()
-        let currentUserType = viewModel.isometrik?.getUserSession().getUserType()
+        let currentUserId = isometrik.getUserSession().getUserId()
+        let currentUserType = isometrik.getUserSession().getUserType()
         
         cell.userData = userData
         cell.backgroundColor = .clear
@@ -190,19 +198,21 @@ extension StreamModeratorsListViewController: UITableViewDelegate, UITableViewDa
         }
         
         // if current user is host show remove button
-        cell.actionButton.setTitle("Remove".localized, for: .normal)
+        cell.actionButton.setTitle("Remove", for: .normal)
         cell.actionButtonWidth?.constant = 100
         
         cell.actionButton_callback = { [weak self] data in
             
+            guard let self else { return }
+            
             // remove this user as a moderator
-            self?.removeModerator(userData: data)
+            self.removeModerator(userData: data)
             
             // remove this user from the list and update
-            self?.viewModel.moderatorList.remove(at: indexPath.row)
-            self?.tableView.reloadData()
+            self.viewModel.moderatorList.remove(at: indexPath.row)
+            self.tableView.reloadData()
             
-            self?.headerView.headerTitle.text = "Moderators".localized + " (\(self?.viewModel.moderatorList.count ?? 0))"
+            self.headerView.headerTitle.text = "Moderators" + " (\(self.viewModel.moderatorList.count))"
             
         }
         
@@ -220,11 +230,11 @@ extension StreamModeratorsListViewController {
     
     func removeModerator(userData: ISMStreamUser){
         
-        guard let streamInfo = viewModel.streamInfo,
-              let isometrik = viewModel.isometrik else { return }
+        let streamInfo = viewModel.streamInfo
+        let isometrik = viewModel.isometrik
         
-        let moderatorId = userData.userId ?? ""
-        let streamId = streamInfo.streamId ?? ""
+        let moderatorId = userData.userId.unwrap
+        let streamId = streamInfo.streamId.unwrap
         let initiatorId = isometrik.getUserSession().getUserId()
         
         isometrik.getIsometrik().removeModerator(streamId: streamInfo.streamId ?? "", moderatorId: moderatorId, initiatorId: initiatorId) { moderator in

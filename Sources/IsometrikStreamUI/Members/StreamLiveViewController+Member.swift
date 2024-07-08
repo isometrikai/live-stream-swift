@@ -181,7 +181,7 @@ extension StreamViewController {
                 /// leave channel.
                 isometrik.getIsometrik().leaveChannel()
                 self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
-                self.navigationController?.popViewController(animated: true)
+                self.dismissViewController()
             }
          
         } failure: { error in
@@ -199,7 +199,7 @@ extension StreamViewController {
                 }
                 isometrik.getIsometrik().leaveChannel()
                 self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
-                self.navigationController?.popViewController(animated: true)
+                self.dismissViewController()
             }
         }
         

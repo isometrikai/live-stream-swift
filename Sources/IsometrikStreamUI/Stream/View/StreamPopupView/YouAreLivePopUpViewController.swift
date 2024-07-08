@@ -75,9 +75,9 @@ class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("OK".localized, for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
-        button.backgroundColor = .black
+        button.backgroundColor = appearance.colors.appColor
         button.ismTapFeedBack()
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 26.5

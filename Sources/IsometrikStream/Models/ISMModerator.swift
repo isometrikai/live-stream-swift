@@ -16,7 +16,7 @@ public struct ISMModerator: Codable {
 }
 
 // MARK: - Moderator
-public struct Moderator: Codable {
+public struct Moderator: Codable, Equatable {
     public let moderatorProfilePic: String?
     public let moderatorName, moderatorIdentifier, moderatorID: String?
     public let isAdmin: Bool?

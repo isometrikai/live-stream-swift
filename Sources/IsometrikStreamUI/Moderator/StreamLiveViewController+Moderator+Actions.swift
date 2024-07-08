@@ -105,9 +105,11 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let controller = StreamModeratorsListViewController(_isometrik: isometrik, _streamInfo: streamData)
+        let viewModel = ModeratorViewModel(streamInfo: streamData, isometrik: isometrik)
+        viewModel.delegate = self
+        
+        let controller = StreamModeratorsListViewController(viewModel: viewModel)
         controller.modalPresentationStyle = .pageSheet
-        controller.delegate = self
         
         if let sheet = controller.sheetPresentationController {
             let customDetent = UISheetPresentationController.Detent.custom { context in
@@ -128,13 +130,15 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let controller = AddModeratorListViewController(_isometrik: isometrik, _streamInfo: streamData)
-        
-        controller.modalPresentationStyle = .pageSheet
-        controller.change_callback = { [weak self] in
+        let viewModel = ModeratorViewModel(streamInfo: streamData, isometrik: isometrik)
+        viewModel.change_callback = { [weak self] in
             guard let self else { return }
             self.openModeratorsListInStream()
         }
+        
+        let controller = AddModeratorListViewController(viewModel: viewModel)
+        
+        controller.modalPresentationStyle = .pageSheet
         
         if let sheet = controller.sheetPresentationController {
             let customDetent = UISheetPresentationController.Detent.custom { context in

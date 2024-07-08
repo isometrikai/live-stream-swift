@@ -37,7 +37,6 @@ class StreamPopupViewController: UIViewController, AppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Are you sure that you want to end your live video".localized + "?"
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h3)
         label.numberOfLines = 0
@@ -56,7 +55,6 @@ class StreamPopupViewController: UIViewController, AppearanceProvider {
     lazy var cancelButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Cancel".localized, for: .normal)
         button.setTitleColor(appearance.colors.appColor, for: .normal)
         button.layer.cornerRadius = 5
         button.layer.borderColor = appearance.colors.appColor.cgColor
@@ -71,7 +69,6 @@ class StreamPopupViewController: UIViewController, AppearanceProvider {
     lazy var yesButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Yes", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 5
         button.backgroundColor = appearance.colors.appColor

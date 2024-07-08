@@ -21,7 +21,6 @@ class DynamicUserInfoTableViewCell: UITableViewCell, AppearanceProvider {
     }
     
     var actionButtonWidth: NSLayoutConstraint?
-    
     var actionButton_callback: ((_ userData: ISMStreamUser)->Void)?
     
     let userProfilePicture: UIImageView = {
@@ -55,7 +54,7 @@ class DynamicUserInfoTableViewCell: UITableViewCell, AppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
@@ -73,8 +72,8 @@ class DynamicUserInfoTableViewCell: UITableViewCell, AppearanceProvider {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Add".localized, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
+        button.backgroundColor = appearance.colors.appColor
         button.layer.cornerRadius = 17.5
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
@@ -98,6 +97,7 @@ class DynamicUserInfoTableViewCell: UITableViewCell, AppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
+        backgroundColor = .clear
         addSubview(defaultUserProfilePicture)
         addSubview(userProfilePicture)
         

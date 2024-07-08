@@ -167,6 +167,8 @@ extension StreamViewController {
                 
             self.viewModel.streamUserType = .member
             isometrik.getUserSession().setUserType(userType: .member)
+            
+            isometrik.getUserSession().setMemberForPKStatus(false)
                 
             /// remove from viewer list
             // Pending

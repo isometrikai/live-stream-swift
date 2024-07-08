@@ -266,30 +266,58 @@ extension StreamViewController: StreamCellActionDelegate {
               let streamData = streamsData[safe: index]
         else { return }
         
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status)
         
         let isGuestUser = isometrik.getUserSession().getUserType() == .guest
         let streamId = streamData.streamId.unwrap
         let userId = isometrik.getUserSession().getUserId()
+        let userType = viewModel.streamUserType
         
         if isGuestUser {
             self.leaveStreamByViewer(userId: userId, streamId: streamId)
             return 
         }
         
-        if streamStatus == .started && (viewModel.streamUserType == .host || viewModel.streamUserType == .member){
+        if streamStatus == .started {
             let popupController = StreamPopupViewController()
+            
+            let titleLabel = popupController.titleLabel
+            let cancelButton = popupController.cancelButton
+            let yesButton = popupController.yesButton
+            
+            titleLabel.text = "Are you sure that you want to end your live video ?"
+            
+            switch userType {
+            case .member:
+                
+                let isPKMember = isometrik.getUserSession().getMemberForPKStatus()
+                if isPKMember {
+                    cancelButton.setTitle("Cancel", for: .normal)
+                    yesButton.setTitle("Stop Publishing", for: .normal)
+                } else {
+                    cancelButton.setTitle("Leave Broadcasting", for: .normal)
+                    yesButton.setTitle("Stop Publishing", for: .normal)
+                }
+                break
+            case .host:
+                cancelButton.setTitle("Cancel", for: .normal)
+                yesButton.setTitle("End Broadcasting", for: .normal)
+                break
+            case .viewer:
+                self.dismissViewController()
+                break
+            default: break
+            }
+            
+            
             popupController.modalPresentationStyle = .overCurrentContext
             popupController.modalTransitionStyle = .crossDissolve
-            
             popupController.actionCallback = { [weak self] streamAction in
                 self?.didTapOnClosingAction(withOption: streamAction, index: index)
             }
             
             self.present(popupController, animated: true)
         } else {
-            
-            self.dismissViewController()
             
 //            let controller = StreamSellerProfileVC()
 //            controller.userId = streamData.userDetails?.id ?? ""

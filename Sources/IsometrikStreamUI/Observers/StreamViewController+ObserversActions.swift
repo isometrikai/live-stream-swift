@@ -324,6 +324,25 @@ extension StreamViewController {
     
     @objc func mqttPublisherStopped(notification: NSNotification){
         
+        guard let data = notification.userInfo?["data"] as? MemberLeaveEvent else {
+            return
+        }
+        
+        let timeStamp = Int64(Date().timeIntervalSince1970)
+        let message = "\(data.memberName ?? "") " + " " + "in the publisher group, is not live anymore".ism_localized
+        
+        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.left.rawValue, senderName: "\(data.memberName ?? "")", senderId: "", sentAt: timeStamp)
+        
+        addStreamInfoMessage(message: messageInfo)
+        
+        viewModel.fetchStreamMembers { error in
+            if error == nil {
+                self.handleMemberChanges()
+            } else {
+                print(error ?? "")
+            }
+        }
+        
     }
     
     @objc func mqttRequestToBeCoPublisherAdded(notification: NSNotification){
@@ -366,7 +385,7 @@ extension StreamViewController {
         
         let currentUserId = isometrik.getUserSession().getUserId()
         
-        if userRequest.userId == currentUserId {
+        if userRequest.userId == currentUserId, viewModel.streamUserType == .viewer {
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 
@@ -388,9 +407,68 @@ extension StreamViewController {
     
     @objc func mqttCopublishRequestDenied(notification: NSNotification){
         
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+              let isometrik = viewModel.isometrik,
+              let userRequest = notification.userInfo?["data"] as? ISMRequest
+        else { return }
+        
+        let currentUserId = isometrik.getUserSession().getUserId()
+        
+        if userRequest.userId == currentUserId, viewModel.streamUserType == .viewer {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                
+                self.viewModel.fetchStreamMembers { error in
+                    if error == nil {
+                        visibleCell.viewModel = self.viewModel
+                        self.fetchStatusOfCoPublishRequest { success in
+                            if success {
+                                self.sendRequest()
+                            }
+                        }
+                        visibleCell.viewModel = self.viewModel
+                        self.handleMemberChanges()
+                    }
+                }
+            }
+        }
     }
     
     @objc func mqttProfileSwitched(notification: NSNotification){
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+              let profileData = notification.userInfo?["data"] as? ProfileSwitched else {
+            return
+        }
+        
+        let userType = viewModel.streamUserType
+        
+        if userType == .host {
+            if let switchedViewerIndex = viewModel.streamViewers.firstIndex(where: {
+                $0.viewerId == profileData.userId
+            }){
+                viewModel.streamViewers.remove(at: switchedViewerIndex)
+            }
+        }
+        
+        viewModel.fetchStreamMembers { error in
+            if error == nil {
+                DispatchQueue.main.async {
+                    visibleCell.viewModel = self.viewModel
+                    self.handleMemberChanges()
+                }
+            } else {
+                print(error ?? "")
+            }
+        }
+        
+        let senderName = profileData.userName ?? ""
+        let timeStamp = Int64(profileData.timeStamp ?? "")
+        let message = "\(senderName) added as a coPublisher to a stream."
+        
+        let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.joined.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
+        
+        addStreamInfoMessage(message: messageInfo)
         
     }
     

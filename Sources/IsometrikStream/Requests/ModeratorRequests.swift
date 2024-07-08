@@ -14,9 +14,9 @@ import Foundation
 
 extension IsometrikStream {
     
-    public func fetchModerators(streamId: String,  completionHandler: @escaping (ISMModerator)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+    public func fetchModerators(streamId: String, skip: Int, limit: Int = 20, completionHandler: @escaping (ISMModerator)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
         
-        let request =  ISMLiveAPIRequest<Any>(endPoint: ModeratorRouter.fetchModerators(streamId:streamId , searchTags: nil) , requestBody:nil)
+        let request =  ISMLiveAPIRequest<Any>(endPoint: ModeratorRouter.fetchModerators(streamId: streamId, searchTags: nil, limit: limit, skip: skip) , requestBody:nil)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMModerator, ISMLiveAPIError> ) in
             

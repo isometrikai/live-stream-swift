@@ -13,28 +13,7 @@ import IsometrikStream
 class AddModeratorListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
-    
-    var isometrik: IsometrikSDK?
-    var streamInfo: ISMStream?
-    var moderatorViewModel = ModeratorViewModel()
-    
-    var change_callback: (()->Void)?
-    
-    var users: [ISMStreamUser] = [] {
-        didSet {
-            userListTableView.reloadData()
-        }
-    }
-    
-    var searchedUsers: [ISMStreamUser] = [] {
-        didSet {
-            userListTableView.reloadData()
-        }
-    }
-    
-    var skip = 0
-    var pageTokenisupdated: Bool = true
-    var isDataLoading: Bool = true
+    var viewModel: ModeratorViewModel
     
     let headerView: AddModeratorHeader = {
         let view = AddModeratorHeader()
@@ -89,16 +68,14 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
 
     // MARK: - INITIALIZERS
     
-    init(_isometrik: IsometrikSDK?, _streamInfo: ISMStream) {
+    init(viewModel: ModeratorViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.isometrik = _isometrik
-        self.streamInfo = _streamInfo
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     // MARK: - MAIN
     
@@ -115,11 +92,10 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(searchBarView)
         view.addSubview(userListTableView)
-        
         view.addSubview(noUserFoundView)
         noUserFoundView.addSubview(noUserFoundImage)
         noUserFoundView.addSubview(noUserFoundLabel)
@@ -164,20 +140,37 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
     }
     
     func fetchUsers(withSearchString: String? = nil) {
-        
-        guard let isometrik = isometrik else { return }
-        
-        moderatorViewModel.isometrik = isometrik
-        
         MBProgressHUD.showAdded(to: view, animated: true)
-        moderatorViewModel.getUserList(searchString: nil) { response in
+        viewModel.getUserList(searchString: withSearchString) { response in
             MBProgressHUD.hide(for: self.view, animated: true)
+            self.searchBarView.stopAnimating()
             switch response {
                 case .success:
-                self.users = self.moderatorViewModel.userList
+                
+                if withSearchString != nil, self.viewModel.searchedUserList.isEmpty {
+                    self.noUserFoundLabel.text = "No user found with" + withSearchString.unwrap
+                    self.noUserFoundView.isHidden = false
+                    self.userListTableView.isHidden = true
+                    return
+                } else {
+                    self.noUserFoundView.isHidden = true
+                    self.userListTableView.isHidden = false
+                }
+                
+                DispatchQueue.main.async {
+                    self.userListTableView.reloadData()
+                }
+                
                 break
-                case .error(let error):
-                    print(error)
+                case .error(_):
+                if withSearchString != nil, self.viewModel.searchedUserList.isEmpty {
+                    self.noUserFoundLabel.text = "No user found with" + withSearchString.unwrap
+                    self.noUserFoundView.isHidden = false
+                    self.userListTableView.isHidden = true
+                } else {
+                    self.noUserFoundView.isHidden = true
+                    self.userListTableView.isHidden = false
+                }
             }
         }
         
@@ -185,7 +178,7 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
     
     func loadMoreItems() {
         DispatchQueue.main.async {
-            if self.users.count.isMultiple(of: 10) {
+            if self.viewModel.userList.count.isMultiple(of: self.viewModel.limit) {
                 self.fetchUsers()
             }
         }
@@ -266,7 +259,7 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
         
         // show alert before adding
         let alert = UIAlertController(
-            title: "Are you sure want to add".localized + "\"\(userData.name.unwrap)\" " + "as a moderator".localized + "?",
+            title: "Are you sure want to add" + "\"\(userData.name.unwrap)\" " + "as a moderator" + "?",
             message: "",
             preferredStyle: .alert
         )
@@ -276,42 +269,25 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
                                       handler: { _ in
             
             // add that user as a moderator
-            self.addModerator(userData: userData)
+            self.viewModel.addModerator(userId: userData.userId.unwrap)
             
-            let isSearchingUser = self.moderatorViewModel.isSearchingUser ?? false
+            let isSearchingUser = self.viewModel.isSearchingUser
             
             // remove that user from the list and update
             if isSearchingUser {
-                self.searchedUsers.remove(at: indexPath.row)
+                self.viewModel.searchedUserList.remove(at: indexPath.row)
             } else {
-                self.users.remove(at: indexPath.row)
+                self.viewModel.userList.remove(at: indexPath.row)
             }
             
             self.userListTableView.reloadData()
             self.dismiss(animated: true)
-            self.change_callback?()
+            self.viewModel.change_callback?()
             
         }))
         
         alert.addAction(UIAlertAction(title: "Cancel".localized, style: .destructive))
         self.present(alert, animated: true, completion: nil)
-        
-    }
-    
-    func addModerator(userData: ISMStreamUser){
-        
-        
-        guard let streamInfo = streamInfo,
-              let isometrik = isometrik else { return }
-        
-        let moderatorId = userData.userId ?? ""
-        let initiatorId = streamInfo.createdBy ?? ""
-        
-        isometrik.getIsometrik().addModerator(streamId: streamInfo.streamId ?? "", moderatorId: moderatorId, initiatorId: initiatorId) { result in
-            print(result)
-        } failure: { error in
-            print(error)
-        }
         
     }
 
@@ -320,30 +296,28 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
 extension AddModeratorListViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if moderatorViewModel.isSearchingUser {
-            return searchedUsers.count
+        if viewModel.isSearchingUser {
+            return viewModel.searchedUserList.count
         } else {
-            return users.count
+            return viewModel.userList.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DynamicUserInfoTableViewCell") as! DynamicUserInfoTableViewCell
         
-        if moderatorViewModel.isSearchingUser {
-            cell.userData = searchedUsers[indexPath.row]
+        if viewModel.isSearchingUser {
+            cell.userData = viewModel.searchedUserList[indexPath.row]
         } else {
-            cell.userData = users[indexPath.row]
+            cell.userData = viewModel.userList[indexPath.row]
         }
         
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         cell.contentView.isUserInteractionEnabled = false
         
         cell.actionButton_callback = { [weak self] userdata in
-            
             guard let self else { return }
             self.handleAddAction(userData: userdata, indexPath: indexPath)
-            
         }
         
         cell.backgroundColor = .clear
@@ -357,17 +331,17 @@ extension AddModeratorListViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        isDataLoading = false
+        viewModel.isDataLoading = false
         self.view.endEditing(true)
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         
-        if !(moderatorViewModel.isSearchingUser) {
+        if !(viewModel.isSearchingUser) {
             if ((userListTableView.contentOffset.y + userListTableView.frame.size.height) >= userListTableView.contentSize.height)
             {
-                if !isDataLoading{
-                    isDataLoading = true
+                if !viewModel.isDataLoading{
+                    viewModel.isDataLoading = true
                     loadMoreItems()
                 }
             }
@@ -379,63 +353,29 @@ extension AddModeratorListViewController: GlobalSearchBarActionDelegate {
     
     func didSearchTextFieldDidChange(withText: String) {
         
-        moderatorViewModel.searchTimer?.invalidate()
-        moderatorViewModel.isSearchingUser = withText == "" ? false : true
+        viewModel.isSearchingUser = withText == "" ? false : true
         
         if withText == "" {
             searchBarView.stopAnimating()
             noUserFoundView.isHidden = true
             userListTableView.isHidden = false
-            searchedUsers = []
-            users = []
-            moderatorViewModel.skip = 0
-            moderatorViewModel.userList = []
+            viewModel.searchedUserList = []
+            viewModel.userList = []
+            viewModel.skip = 0
             
             fetchUsers()
             return
         }
         
-        self.searchedUsers = []
-        self.moderatorViewModel.skip = 0
+        viewModel.searchedUserList = []
+        viewModel.skip = 0
         self.userListTableView.reloadData()
         
         searchBarView.startAnimating()
         
-        moderatorViewModel.searchTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { [weak self] (timer) in
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                
-                guard let self else { return }
-                
-                //Use search text and perform the query
-                self.moderatorViewModel.getUserList(searchString: withText.lowercased()) { result in
-                 
-                    DispatchQueue.main.async {
-                        self.searchBarView.stopAnimating()
-                    }
-                    
-                    switch result {
-                    case .success:
-                        if self.moderatorViewModel.searchedUserList.isEmpty {
-                            self.noUserFoundLabel.text = "No user found with".localized + " \"\(withText)\" "
-                            self.noUserFoundView.isHidden = false
-                            self.userListTableView.isHidden = true
-                            return
-                        }
-                        self.noUserFoundView.isHidden = true
-                        self.userListTableView.isHidden = false
-                        DispatchQueue.main.async {
-                            self.searchedUsers = self.moderatorViewModel.searchedUserList
-                        }
-                        
-                        break
-                    case .error(_):
-                        self.noUserFoundLabel.text = "No user found with".localized + " \"\(withText)\" "
-                        self.noUserFoundView.isHidden = false
-                        self.userListTableView.isHidden = true
-                    }
-                }
-            }
-        })
+        viewModel.debouncer.debounce {
+            self.fetchUsers(withSearchString: withText.lowercased())
+        }
         
     }
     

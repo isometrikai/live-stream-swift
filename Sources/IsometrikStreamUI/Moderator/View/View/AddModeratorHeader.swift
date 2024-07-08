@@ -15,17 +15,17 @@ class AddModeratorHeader: UIView, AppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Add Moderators".localized
+        label.text = "Add Moderators"
         label.font = appearance.font.getFont(forTypo: .h4)
         label.textAlignment = .center
-        label.textColor = .black
+        label.textColor = .white
         return label
     }()
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Add moderator to a broadcast who can kickout members, or viewers, remove messages and reply to a message".localized + "."
+        label.text = "Add moderator to a broadcast who can kickout members, or viewers, remove messages and reply to a message."
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h6)
         label.textAlignment = .center

@@ -19,7 +19,7 @@ extension IsometrikStream {
     
         let request =  ISMLiveAPIRequest<Any>(endPoint: ISMLiveUserRouter.fetchUsers(skip: skip, searchTag: searchTag, limit: limit),requestBody: nil)
         
-        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMUsersData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMUsersData, ISMLiveAPIError> ) in
             
             switch result{
                 

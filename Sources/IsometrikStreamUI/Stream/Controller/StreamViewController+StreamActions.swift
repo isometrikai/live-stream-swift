@@ -26,12 +26,42 @@ extension StreamViewController {
         switch option {
         case .cancel:
             
+            switch userType {
+            case .member:
+                
+                if !(streamData.isPkChallenge.unwrap) {
+                    updatePublishStatus(streamInfo: streamData, memberId: userId, publishStatus: false) { result in
+                        /// leave channel.
+                        isometrik.getIsometrik().leaveChannel()
+                        
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions = []
+                            self.dismissViewController()
+                        }
+                    }
+                }
+                
+                break
+            default: break
+            }
+            
             break
         case .ok:
             
-            if userType == .host {
+            switch userType {
+            case .member:
+                if streamData.isPkChallenge.unwrap {
+                    endPKInvite(inviteId: streamData.pkInviteId.unwrap)
+                } else {
+                    leaveStreamByMember()
+                }
+                break
+            case .host:
                 stopLiveStream(streamId: streamId, userId: userId)
                 self.endTimer()
+                break
+            default: break
             }
             
             break

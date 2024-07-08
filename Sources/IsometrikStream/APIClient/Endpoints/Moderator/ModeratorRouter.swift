@@ -10,7 +10,7 @@ import Foundation
 
 enum ModeratorRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
-    case fetchModerators(streamId: String, searchTags: String?)
+    case fetchModerators(streamId: String, searchTags: String?, limit: Int, skip: Int)
     case stopModerating(streamId: String)
     case addModerator
     case removeModerator(streamId: String, moderatorId: String)
@@ -67,11 +67,11 @@ enum ModeratorRouter: ISMLiveURLConvertible, CustomStringConvertible {
         var param: [String: String] = [:]
         
         switch self {
-        case let .fetchModerators(streamId, searchTag):
+        case let .fetchModerators(streamId, searchTag, limit, skip):
             param = [
                 "streamId": "\(streamId)",
-                "limit": "20",
-                "skip": "0"
+                "limit": "\(limit)",
+                "skip": "\(skip)"
             ]
             
             if let searchTag {

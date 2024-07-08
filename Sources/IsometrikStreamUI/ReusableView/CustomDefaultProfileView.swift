@@ -39,7 +39,7 @@ final public class CustomDefaultProfileView: UIView, AppearanceProvider {
     func setupViews(){
         translatesAutoresizingMaskIntoConstraints = false
         layer.masksToBounds = true
-        backgroundColor = .darkGray
+        backgroundColor = appearance.colors.appSecondary
         addSubview(initialsText)
     }
     

@@ -16,7 +16,7 @@ public class CustomHeaderView: UIView, AppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
-        label.textColor = .black
+        label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
         return label

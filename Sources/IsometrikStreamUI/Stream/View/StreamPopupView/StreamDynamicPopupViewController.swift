@@ -30,10 +30,10 @@ class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
         return view
     }()
     
-    let cardView: UIView = {
+    lazy var cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
+        view.backgroundColor = appearance.colors.appDarkGray
         return view
     }()
     
@@ -41,7 +41,7 @@ class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
-        label.textColor = .black
+        label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h4)
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -51,7 +51,7 @@ class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
     lazy var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.colorWithHex(color: "#BCBCE5")
+        label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h4)
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -73,7 +73,7 @@ class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
         button.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         button.setTitle("Cancel".localized, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .lightGray.withAlphaComponent(0.5)
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()
@@ -86,9 +86,9 @@ class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
         button.addTarget(self, action:
                             #selector(actionButtonTapped), for: .touchUpInside)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.layer.cornerRadius = 25
-        button.backgroundColor = .black
+        button.backgroundColor = appearance.colors.appColor
         button.layer.masksToBounds = true
         button.ismTapFeedBack()
         return button

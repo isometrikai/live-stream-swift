@@ -187,9 +187,9 @@ class StreamAnalyticsController: UIViewController, AppearanceProvider {
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .black
+        button.backgroundColor = appearance.colors.appColor
         button.setTitle("Done".localized, for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h4)
         button.layer.cornerRadius = 25
         button.ismTapFeedBack()

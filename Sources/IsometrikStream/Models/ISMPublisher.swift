@@ -95,7 +95,7 @@ public struct ISMRequest: Codable {
     }
 }
 
-struct ProfileSwitched {
+public struct ProfileSwitched {
     public var streamId: String?
     public var viewersCount: Int?
     public var userProfilePic: String?
