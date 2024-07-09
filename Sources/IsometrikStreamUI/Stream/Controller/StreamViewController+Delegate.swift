@@ -124,6 +124,8 @@ extension StreamViewController {
         let streamImage = streamData.streamImage.unwrap
         
         let videoContainer = cell.streamContainer.videoContainer
+        videoContainer.delegate = self
+        
         let streamLoader = cell.streamLoader
         let scheduleStreamView = cell.scheduleStreamView
         let streamEndView = cell.streamEndView

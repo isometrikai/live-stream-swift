@@ -35,7 +35,6 @@ extension VerticalStreamCollectionViewCell: StreamCellActionDelegate {
     
         streamFooterView.messageTextInputView.emojiButton.addTarget(self, action: #selector(messageTextViewEmojiButtonTapped), for: .touchUpInside)
         streamFooterView.messageTextInputView.sendButton.addTarget(self, action: #selector(messageTextViewSendButtonTapped), for: .touchUpInside)
-        
         streamFooterView.actionButton.addTarget(self, action: #selector(alternateActionButtonTapped), for: .touchUpInside)
         
         //:
@@ -43,7 +42,6 @@ extension VerticalStreamCollectionViewCell: StreamCellActionDelegate {
         // stream container pinned item targets
         
         let pinnedView = streamContainer.streamItemPinnedView
-        
         pinnedView.clickableAreaButton.addTarget(self, action: #selector(productDetailsTapped), for: .touchUpInside)
         
         //:

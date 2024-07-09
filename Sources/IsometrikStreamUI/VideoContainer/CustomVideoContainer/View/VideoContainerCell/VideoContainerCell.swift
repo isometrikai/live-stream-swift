@@ -114,7 +114,7 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
         
         view.cardButton.addTarget(self, action: #selector(moreOptionTapped), for: .touchUpInside)
         
-        view.cardImage.image = appearance.images.more2.withRenderingMode(.alwaysTemplate)
+        view.cardImage.image = appearance.images.more1.withRenderingMode(.alwaysTemplate)
         view.cardImage.tintColor = .white
         view.cardImageWidthAnchor?.constant = 10
         view.cardImageHeightAnchor?.constant = 10
@@ -135,7 +135,7 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
     
     // MARK: - RTMP DEFAULT VIEW
     
-    let rtmpDefaultView: CustomRTMPMemberView = {
+    lazy var rtmpDefaultView: CustomRTMPMemberView = {
         let view = CustomRTMPMemberView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isHidden = true
@@ -188,7 +188,7 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
     
     func setupViews(){
         backgroundColor = .black
-        //addSubview(rtmpDefaultView)
+        addSubview(rtmpDefaultView)
         addSubview(sessionProfileView)
         addSubview(videoView)
         
@@ -202,12 +202,12 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
         addSubview(pkSessionGuestProfile)
         addSubview(pkSessionHostProfile)
         
-        //addSubview(moreOptionView)
+        addSubview(moreOptionView)
         addSubview(battleProfileView)
     }
     
     func setupConstraints(){
-        //rtmpDefaultView.pin(to: self)
+        rtmpDefaultView.ism_pin(to: self)
         videoView.ism_pin(to: self)
         sessionProfileView.ism_pin(to: self)
         profileView.ism_pin(to: self)
@@ -218,10 +218,10 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
             muteImage.widthAnchor.constraint(equalToConstant: 30),
             muteImage.heightAnchor.constraint(equalToConstant: 30),
             
-//            moreOptionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
-//            moreOptionView.widthAnchor.constraint(equalToConstant: 24),
-//            moreOptionView.heightAnchor.constraint(equalToConstant: 24),
-//            moreOptionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 8),
+            moreOptionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
+            moreOptionView.widthAnchor.constraint(equalToConstant: 24),
+            moreOptionView.heightAnchor.constraint(equalToConstant: 24),
+            moreOptionView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 8),
             
             pkSessionGuestProfile.leadingAnchor.constraint(equalTo: leadingAnchor),
             pkSessionGuestProfile.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -490,7 +490,8 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
             break
         case .host:
             
-            rtmpDefaultView.defaultImageView.image = appearance.images.plus
+            rtmpDefaultView.defaultImageView.image = appearance.images.requestList.withRenderingMode(.alwaysTemplate)
+            rtmpDefaultView.defaultImageView.tintColor = appearance.colors.appSecondary
             rtmpDefaultView.defaultLabel.text = "Add"
             
             break
@@ -511,13 +512,8 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
         case .guest:
             break
         }
+        self.rtmpDefaultView.backgroundColor = appearance.colors.appColor
         
-        // clearing all layer before putting gradient layer to prevent gradient redundancy
-        if let _ = self.rtmpDefaultView.layer.sublayers {
-            self.rtmpDefaultView.layer.sublayers?.filter{ $0 is CAGradientLayer }.forEach{ $0.removeFromSuperlayer() }
-        }
-        
-        self.rtmpDefaultView.ism_setGradient(withColors: [appearance.colors.appSecondary.cgColor, appearance.colors.appColor.cgColor], startPoint: CGPoint(x: 0, y: 0), endPoint: CGPoint(x: 1, y: 1))
     }
     
 }

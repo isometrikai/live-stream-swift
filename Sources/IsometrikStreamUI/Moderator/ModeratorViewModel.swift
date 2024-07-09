@@ -22,7 +22,6 @@ class ModeratorViewModel: NSObject {
     
     var skip = 0
     var limit = 10
-    var pageTokenisupdated: Bool = true
     var isDataLoading: Bool = true
     
     var isSearchingUser: Bool = false

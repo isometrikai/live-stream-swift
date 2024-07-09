@@ -8,11 +8,14 @@
 
 import Foundation
 
-// MARK: - Welcome
 public struct ISMMembersData: Codable {
     public let msg: String?
     public let members: [ISMMember]?
     public let membersCount: Int?
+}
+
+public struct ISMEligibleMemberData: Codable {
+    public let streamEligibleMembers: [ISMMember]?
 }
 
 // MARK: - Member

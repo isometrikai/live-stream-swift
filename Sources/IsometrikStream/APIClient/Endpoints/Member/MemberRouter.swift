@@ -10,6 +10,7 @@ import UIKit
 enum MemberRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
     case addMember
+    case fetchEligibleMembers(streamId: String, searchTag: String?, skip: Int, limit: Int)
     case fetchMembers(streamId: String, searchTag: String?, skip: Int, limit: Int)
     case leaveMember(streamId: String)
     case removeMember(streamId: String, memberId: String)
@@ -21,6 +22,8 @@ enum MemberRouter: ISMLiveURLConvertible, CustomStringConvertible {
         switch self {
         case .addMember:
             return "Add member to a stream"
+        case .fetchEligibleMembers:
+            return "Fetch eligible members to add to a stream in a project in an account."
         case .fetchMembers:
             return "Fetch streaming memebers in a stream"
         case .leaveMember:
@@ -44,7 +47,7 @@ enum MemberRouter: ISMLiveURLConvertible, CustomStringConvertible {
         switch self {
         case .addMember :
             return .post
-        case .fetchMembers, .fetchMemberWithUid:
+        case .fetchMembers, .fetchMemberWithUid, .fetchEligibleMembers:
             return .get
         case .updateUserPublishStatus, .updatePublishStatus:
             return .put
@@ -58,6 +61,8 @@ enum MemberRouter: ISMLiveURLConvertible, CustomStringConvertible {
         switch self {
         case .addMember :
             path = "/streaming/v2/member"
+        case .fetchEligibleMembers:
+            path = "/streaming/v2/members/eligible"
         case .fetchMembers :
             path = "/streaming/v2/members"
         case .leaveMember:
@@ -86,7 +91,17 @@ enum MemberRouter: ISMLiveURLConvertible, CustomStringConvertible {
         
         switch self {
         case let .fetchMembers(streamId, searchTag, skip, limit):
+            param = [
+                "limit":"\(limit)",
+                "skip":"\(skip)",
+                "streamId":"\(streamId)"
+            ]
             
+            if let searchTag {
+                param += ["searchTag":"\(searchTag)"]
+            }
+            break
+        case let .fetchEligibleMembers(streamId, searchTag, skip, limit):
             param = [
                 "limit":"\(limit)",
                 "skip":"\(skip)",

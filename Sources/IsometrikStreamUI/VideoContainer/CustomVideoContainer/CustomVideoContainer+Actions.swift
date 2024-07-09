@@ -229,10 +229,10 @@ extension CustomVideoContainer: AppearanceProvider {
         else { return }
         
         
-//        if streamInfo.rtmpIngest ?? false {
-//            cell.rtmpDefaultView.isHidden = false
-//            return
-//        }
+        if streamInfo.rtmpIngest ?? false {
+            cell.rtmpDefaultView.isHidden = false
+            return
+        }
         
         if streamInfo.isPkChallenge ?? false {
             

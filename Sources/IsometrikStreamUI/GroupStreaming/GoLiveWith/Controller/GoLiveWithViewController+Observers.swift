@@ -12,14 +12,14 @@ import IsometrikStream
 extension GoLiveWithViewController {
     
     func addObservers(){
-        guard let isometrik = self.viewModel.isometrik else { return }
+        let isometrik = viewModel.isometrik
         isometrik.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttStreamStopped), name: ISMMQTTNotificationType.mqttStreamStopped.name, object: nil)
         isometrik.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttViewerJoined), name: ISMMQTTNotificationType.mqttViewerJoined.name, object: nil)
         isometrik.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttViewerRemoved), name: ISMMQTTNotificationType.mqttViewerRemoved.name, object: nil)
     }
     
     func removeObservers(){
-        guard let isometrik = self.viewModel.isometrik else { return }
+        let isometrik = self.viewModel.isometrik
         isometrik.getMqttSession().removeObserverForMQTT(self, name: ISMMQTTNotificationType.mqttViewerJoined.name, object: nil)
         isometrik.getMqttSession().removeObserverForMQTT(self, name: ISMMQTTNotificationType.mqttViewerRemoved.name, object: nil)
         isometrik.getMqttSession().removeObserverForMQTT(self, name: ISMMQTTNotificationType.mqttStreamStopped.name, object: nil)

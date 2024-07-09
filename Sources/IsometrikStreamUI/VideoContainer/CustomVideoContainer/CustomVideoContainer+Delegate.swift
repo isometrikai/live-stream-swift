@@ -12,6 +12,18 @@ import IsometrikStream
 extension CustomVideoContainer: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let streamInfo else { return 0 }
+        if streamInfo.rtmpIngest.unwrap {
+            return 5
+        } else if streamInfo.isPkChallenge.unwrap {
+            if videoSessions.count > 2 {
+                /// Just in case video sessions goes more that 2 still show 2 in the cell, for pk case
+                return 2
+            } else {
+                return videoSessions.count
+            }
+        }
+        /// group stream case
         return videoSessions.count
     }
     
@@ -44,12 +56,36 @@ extension CustomVideoContainer: UICollectionViewDelegate, UICollectionViewDelega
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? VideoContainerCell {
+            UIView.animate(withDuration: 0.3) {
+                cell.rtmpDefaultView.transform = .init(scaleX: 0.9, y: 0.9)
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? VideoContainerCell {
+            UIView.animate(withDuration: 0.3) {
+                cell.rtmpDefaultView.transform = .identity
+            }
+        }
+    }
+    
     func configureCompositionalLayout(withCells cellCount: Int) {
+        
+        guard let streamInfo else { return }
         
         var layout: UICollectionViewCompositionalLayout?
 
-        layout = UICollectionViewCompositionalLayout { (sectionNumber, env) in
-            VideoContainerLayout.shared.getLayout(withVideoSession: cellCount)
+        if streamInfo.rtmpIngest.unwrap {
+            layout = UICollectionViewCompositionalLayout { (sectionNumber, env) in
+                VideoContainerLayout.shared.getRTMPLayout(withVideoSession: cellCount)
+            }
+        } else {
+            layout = UICollectionViewCompositionalLayout { (sectionNumber, env) in
+                VideoContainerLayout.shared.getLayout(withVideoSession: cellCount)
+            }
         }
 
         guard let layout = layout else { return }

@@ -16,6 +16,7 @@ enum StreamSettingType {
     case delete
     case edit
     case none
+    case kickout
 }
 
 struct StreamSettingData {

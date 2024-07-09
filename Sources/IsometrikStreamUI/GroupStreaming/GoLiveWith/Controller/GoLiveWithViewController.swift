@@ -14,7 +14,7 @@ class GoLiveWithViewController: UIViewController, AppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let viewModel = GoLiveWithViewModel()
+    let viewModel: GoLiveWithViewModel
     
     lazy var headerView: GoLiveWithHeaderView = {
         let view = GoLiveWithHeaderView()
@@ -50,9 +50,8 @@ class GoLiveWithViewController: UIViewController, AppearanceProvider {
     
     // MARK: - INITIALIZER
     
-    init(isometrik: IsometrikSDK, streamData: ISMStream) {
-        self.viewModel.isometrik = isometrik
-        self.viewModel.streamData = streamData
+    init(viewModel: GoLiveWithViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.viewModel.resetData()
     }
@@ -114,7 +113,6 @@ class GoLiveWithViewController: UIViewController, AppearanceProvider {
         self.defaultView.isHidden = true
         
         if isRefresh {
-            viewModel.viewerPageToken = ""
             viewModel.viewers = []
             contentTableView.reloadData()
         }
@@ -134,6 +132,42 @@ class GoLiveWithViewController: UIViewController, AppearanceProvider {
         }
     }
     
+    func fetchUsers(withSearchString: String? = nil){
+        viewModel.getUsers(searchString: withSearchString) { response in
+            self.headerView.searchBarView.stopAnimating()
+            switch response {
+                case .success:
+                
+                if withSearchString != nil, self.viewModel.searchedUser.isEmpty {
+                    self.defaultView.defaultLabel.text = "No user found with" + withSearchString.unwrap
+                    self.defaultView.isHidden = false
+                    self.contentTableView.isHidden = true
+                    return
+                } else {
+                    self.defaultView.isHidden = true
+                    self.contentTableView.isHidden = false
+                }
+                
+                DispatchQueue.main.async {
+                    self.contentTableView.reloadData()
+                }
+                
+                break
+                case .failure(_):
+                if withSearchString != nil, self.viewModel.searchedUser.isEmpty {
+                    self.defaultView.defaultLabel.text = "No user found with" + withSearchString.unwrap
+                    self.defaultView.isHidden = false
+                    self.contentTableView.isHidden = true
+                } else {
+                    self.defaultView.isHidden = true
+                    self.contentTableView.isHidden = false
+                }
+            }
+            
+        }
+        
+    }
+    
     // MARK: - ACTIONS
     
     @objc func userTapped(){
@@ -143,7 +177,7 @@ class GoLiveWithViewController: UIViewController, AppearanceProvider {
         headerView.searchBarView.searchTextField.text = ""
         headerView.searchBarView.searchTextField.placeholder = "Search Users"
         
-        //getFollowers(isRefresh: true)
+        fetchUsers()
     }
     
     @objc func viewerTapped(){
@@ -158,28 +192,33 @@ class GoLiveWithViewController: UIViewController, AppearanceProvider {
     
     @objc func textFieldDidChange(_ textField: UITextField){
         
+        let text = textField.text ?? ""
+        
         let selectedOption = viewModel.selectedOption
         switch selectedOption {
         case .user:
             
-            if textField.text != "" {
-                self.viewModel.isSearching = true
-            } else {
-                self.viewModel.isSearching = true
+            viewModel.isSearching = text == "" ? false : true
+            
+            if text == "" {
+                headerView.searchBarView.stopAnimating()
+                defaultView.isHidden = true
+                contentTableView.isHidden = false
+                viewModel.searchedUser = []
+                viewModel.users = []
+                viewModel.skip = 0
+                fetchUsers()
+                return
             }
             
-            //getUsers(searchString: textField.text ?? "")
+            headerView.searchBarView.startAnimating()
+            viewModel.debouncer.debounce {
+                self.fetchUsers(withSearchString: text)
+            }
             
         case .viewer:
-            
-            if textField.text != "" {
-                self.viewModel.isSearching = true
-            } else {
-                self.viewModel.isSearching = true
-            }
-            
-        case .none:
-            // do nothing
+            self.viewModel.isSearching = true
+        default: 
             break
         }
         

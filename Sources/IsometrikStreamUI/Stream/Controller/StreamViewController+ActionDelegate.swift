@@ -597,22 +597,14 @@ extension StreamViewController: StreamCellActionDelegate {
             
             break
         case .bidder:
-            debugPrint("Log:: Bidder tapped")
             break
-        case .store:
-            debugPrint("Log:: Store tapped")
-            self.openStreamTagProducts()
+        case .store: openStreamTagProducts()
             break
-        case .camera:
-            debugPrint("Log:: Camera tapped")
-            isometrik.getIsometrik().switchCamera()
+        case .camera: isometrik.getIsometrik().switchCamera()
             break
-        case .microphone:
-            debugPrint("Log:: Microphone tapped")
-            toggleMicrophone()
+        case .microphone: toggleMicrophone()
             break
         case .loved:
-            debugPrint("Log:: Loved tapped")
             if !isGuestUser {
                 self.sendHeart()
                 self.playLikeAnimation(imageToUse: "ic_reaction")
@@ -621,53 +613,38 @@ extension StreamViewController: StreamCellActionDelegate {
             }
             break
         case .speaker:
-            debugPrint("Log:: Speaker tapped")
             break
-        case .more:
-            debugPrint("Log:: More tapped")
-            openStreamSettingController()
+        case .more: openStreamSettingController()
             break
         case .wallet:
             debugPrint("Log:: Wallet tapped")
             break
-        case .analytics:
-            debugPrint("Log:: Analytics tapped")
-            openStreamAnalytics(streamId: streamId)
+        case .analytics: openStreamAnalytics(streamId: streamId)
             break
         case .settings:
-            debugPrint("Log:: Setting tapped")
             if !isGuestUser {
                 self.openStreamSettingController()
             } else {
 //                _ = Helper.LoginPresenter()
             }
             break
-        case .request:
-            self.sendRequest()
+        case .request: sendRequest() 
             break
-        case .requestList:
-            self.requestList()
+        case .requestList: requestList()
             break
-        case .gift:
-            self.giftTapped()
+        case .gift: giftTapped()
             break
-        case .pkInvite:
-            self.pkInviteTapped()
+        case .pkInvite: pkInviteTapped()
             break
-        case .endPKInvite:
-            endPKInviteTapped()
+        case .endPKInvite: endPKInviteTapped()
             break
-        case .stopPKBattle:
-            stopPKBattleTapped()
+        case .stopPKBattle: stopPKBattleTapped()
             break
-        case .groupInvite:
-            openGoLiveWith()
+        case .groupInvite: openGoLiveWith()
             break
-        case .startPublishing:
-            didStartPublishingVideo()
+        case .startPublishing: didStartPublishingVideo()
             break
-        case .rtmpIngest:
-            openRtmpIngestDetail()
+        case .rtmpIngest: openRtmpIngestDetail()
             break
         default:
             break
@@ -891,7 +868,7 @@ extension StreamViewController {
         viewModel.user = viewerData
         viewModel.imagesArr = images
         viewModel.publisherStatus = self.viewModel.publisher
-        viewModel.delegate = self
+        //viewModel.delegate = self
         
         viewModel.success_callback = { [weak self] publisherStatus in
             guard let self else { return }
@@ -956,7 +933,8 @@ extension StreamViewController {
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let controller = GoLiveWithViewController(isometrik: isometrik, streamData: streamData)
+        let viewModel = GoLiveWithViewModel(isometrik: isometrik, streamData: streamData)
+        let controller = GoLiveWithViewController(viewModel: viewModel)
         
         if let sheet = controller.sheetPresentationController {
             if #available(iOS 16.0, *) {

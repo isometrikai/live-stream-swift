@@ -19,55 +19,50 @@ enum GoLiveWithResult {
     case failure(msg: String)
 }
 
-class GoLiveWithViewModel: NSObject {
+class GoLiveWithViewModel {
+    
+    var isometrik: IsometrikSDK
+    var streamData: ISMStream
+    
+    var skip = 0
+    var limit = 20
     
     var selectedOption: GoLiveWithSelectionType? = .user
-    var isometrik: IsometrikSDK?
     var viewers:[ISMViewer] = []
-    var users:[ISMStreamUser] = []
-    var streamData: ISMStream?
-    var userPageToken: String = ""
-    var viewerPageToken: String = ""
-    var canServiceCall: Bool = false
     
     var isSearching: Bool = false
-    var searchedUser: [ISMStreamUser] = []
+    var users: [ISMMember] = []
+    var searchedUser: [ISMMember] = []
     
-    func getUsers(completion: @escaping(GoLiveWithResult) -> Void) {
+    let debouncer = Debouncer(delay: 0.5)
+    
+    init(isometrik: IsometrikSDK, streamData: ISMStream) {
+        self.isometrik = isometrik
+        self.streamData = streamData
+    }
+    
+    func getUsers(searchString: String?, completion: @escaping(GoLiveWithResult) -> Void) {
         
-        guard let isometrik = isometrik else {
-            completion(.failure(msg: "Isometrik found nil!"))
-            return
+        let streamId = streamData.streamId.unwrap
+        
+        isometrik.getIsometrik().fetchEligibleMembers(streamId: streamId, searchString: searchString) { response in
+            if searchString != nil {
+                self.searchedUser = response
+            } else {
+                if self.users.count.isMultiple(of: self.limit) {
+                    self.skip += self.limit
+                }
+                self.users.append(contentsOf: response)
+            }
+            completion(.success)
+        } failure: { error in
+            let error = "Fetch user failure"
+            completion(.failure(msg: error))
         }
-        
-//        isometrik.getIsometrik().fetchUsers(pageToken: userPageToken) { result in
-//            switch result {
-//            case .success(let userData):
-//                if let userData = userData as? ISMUsersData {
-//                    print(userData)
-//                    self.users += userData.users ?? []
-//                    self.userPageToken = userData.pageToken ?? ""
-//                    completion(.success)
-//                }
-//                completion(.failure(msg: "Unknown Error"))
-//
-//            case .failure(let error):
-//                completion(.failure(msg: "\(error.errorMessage)"))
-//            }
-//        }
         
     }
     
     func getViewers(completion: @escaping(GoLiveWithResult) -> Void) {
-        
-        guard let isometrik = isometrik,
-              let streamData = streamData
-        else {
-            DispatchQueue.main.async {
-                completion(.failure(msg: "Isometrik found nil!"))
-            }
-            return
-        }
         
         isometrik.getIsometrik().fetchViewers(streamId: streamData.streamId ?? ""){ [self] (data) in
             self.viewers += data.viewers ?? []
@@ -94,15 +89,6 @@ class GoLiveWithViewModel: NSObject {
     
     func addMember(userId: String, completion: @escaping(GoLiveWithResult) -> Void) {
         
-        guard let isometrik = isometrik,
-              let streamData = streamData
-        else {
-            DispatchQueue.main.async {
-                completion(.failure(msg: "Isometrik found nil!"))
-            }
-            return
-        }
-        
         let streamId = streamData.streamId ?? ""
         let userId = userId
         
@@ -110,7 +96,7 @@ class GoLiveWithViewModel: NSObject {
                 DispatchQueue.main.async {
                     completion(.success)
                 }
-        }failure: { error in
+        } failure: { error in
             switch error{
             case .noResultsFound(_):
                 DispatchQueue.main.async {
@@ -133,15 +119,19 @@ class GoLiveWithViewModel: NSObject {
     }
     
     func resetData(){
-        userPageToken = ""
         users = []
         viewers = []
         selectedOption = .user
+        searchedUser = []
     }
     
     func getCellCount() -> Int {
         if selectedOption == .user {
-            return users.count
+            if isSearching {
+                return searchedUser.count
+            } else {
+                return users.count
+            }
         } else {
             return viewers.count
         }
