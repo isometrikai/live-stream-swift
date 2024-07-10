@@ -92,23 +92,27 @@ extension VerticalStreamCollectionViewCell {
                 break
             case .host:
                 
-                viewModel.streamOptions = [.share, .settings, .camera, .analytics]
-                
-                if isPKEnabled {
-                    if isPKStream {
-                        if pkIdExist {
-                            viewModel.streamOptions += [.stopPKBattle]
+                if isRTMPIngest {
+                    viewModel.streamOptions = [.requestList, .groupInvite, .rtmpIngest]
+                } else {
+                    viewModel.streamOptions = [.share, .settings, .camera, .analytics]
+                    
+                    if isPKEnabled {
+                        if isPKStream {
+                            if pkIdExist {
+                                viewModel.streamOptions += [.stopPKBattle]
+                            } else {
+                                viewModel.streamOptions += [.endPKInvite]
+                            }
                         } else {
-                            viewModel.streamOptions += [.endPKInvite]
+                            if streamMembers.count == 1 {
+                                viewModel.streamOptions += [.pkInvite]
+                            }
+                            viewModel.streamOptions += [.requestList, .groupInvite]
                         }
                     } else {
-                        if streamMembers.count == 1 {
-                            viewModel.streamOptions += [.pkInvite]
-                        }
-                        viewModel.streamOptions += [.requestList, .groupInvite]
+                        viewModel.streamOptions += [.request, .requestList, .groupInvite]
                     }
-                } else {
-                    viewModel.streamOptions += [.request, .requestList, .groupInvite]
                 }
                 
                 break

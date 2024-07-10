@@ -129,3 +129,65 @@ extension StreamViewController: RtcWrapperProtocol {
     
     
 }
+
+extension StreamViewController: VideoContainerActionDelegate {
+    
+    func didMoreOptionTapped(index: Int, videoSession: VideoSession?) {
+        
+        guard let videoSession, let isometrik = viewModel.isometrik else { return }
+        
+        let userData = videoSession.userData
+        let userType = isometrik.getUserSession().getUserType()
+        
+        var settingData: [StreamSettingData] = []
+        
+        let moreSettingController = MoreSettingViewController(session: videoSession, selectedIndex: index)
+        moreSettingController.delegate = self
+        
+        settingData = [
+            StreamSettingData(settingLabel: !videoSession.isAudioMute ? "Mute \"\(userData?.userName ?? "")\" audio" : "Unmute \"\(userData?.userName ?? "")\" audio", settingImage: !videoSession.isAudioMute ? UIImage(systemName: "mic.fill")! : appearance.images.micMuted, streamSettingType: .audio),
+
+            StreamSettingData(settingLabel: !videoSession.isVideoMute ? "Turn off \"\(userData?.userName ?? "")\" video" : "Turn on \"\(userData?.userName ?? "")\" video", settingImage: !videoSession.isVideoMute ? UIImage(systemName: "video.fill")! : appearance.images.videoCameraOff, streamSettingType: .camera)
+        ]
+        
+        if userType == .host {
+            let setting = StreamSettingData(settingLabel: "kickout \"\(userData?.userName ?? "")\" from stream", settingImage: appearance.images.removeCircle, labelColor: appearance.colors.appRed, streamSettingType: .kickout)
+            settingData.insert(setting, at: 0)
+        }
+        
+        moreSettingController.settingsData = settingData
+
+        if let sheet = moreSettingController.sheetPresentationController {
+            
+            // Fixed height detent of 200 points
+            let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
+                return 180 + ism_windowConstant.getBottomPadding
+            }
+            
+            sheet.detents = [fixedHeightDetent]
+        }
+        
+        present(moreSettingController, animated: true, completion: nil)
+        
+    }
+    
+    func didRTMPMemberViewTapped(index: Int) {
+        
+        guard let isometrik = viewModel.isometrik else { return }
+        
+        let userType = isometrik.getUserSession().getUserType()
+        
+        switch userType {
+        case .viewer:
+            sendRequest()
+            break
+        case .host:
+            openGoLiveWith()
+            break
+        default:
+            break
+        }
+        
+    }
+    
+}

@@ -114,7 +114,7 @@ public struct ISM_PK_User: Codable, Hashable {
     public var lastName: String?
     public var profilePic: String?
     public var streamImage: String?
-    public var coins: Int?
+    public var coins: Double?
     public var streamUserId: String?
     public var streamId: String?
     
@@ -138,7 +138,7 @@ public struct ISM_PK_User: Codable, Hashable {
                 lastName: String? = nil,
                 profilePic: String? = nil,
                 streamImage: String? = nil,
-                coins: Int? = 0,
+                coins: Double? = 0,
                 streamUserId: String? = nil,
                 streamId: String? = nil){
         self.userId = userId
@@ -161,7 +161,7 @@ public struct ISM_PK_User: Codable, Hashable {
         lastName =  try? values.decodeIfPresent(String.self, forKey: .lastName)
         profilePic =  try? values.decodeIfPresent(String.self, forKey: .profilePic)
         streamImage =  try? values.decodeIfPresent(String.self, forKey: .streamImage)
-        coins =  try? values.decodeIfPresent(Int.self, forKey: .coins)
+        coins =  try? values.decodeIfPresent(Double.self, forKey: .coins)
         streamUserId =  try? values.decodeIfPresent(String.self, forKey: .streamUserId)
         streamId = try? values.decodeIfPresent(String.self, forKey: .streamId)
         

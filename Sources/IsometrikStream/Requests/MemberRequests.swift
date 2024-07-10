@@ -68,6 +68,26 @@ extension IsometrikStream {
         
     }
     
+    public func fetchEligibleMembers(streamId: String, searchString: String? = nil, skip: Int = 0, limit: Int = 20, completionHandler: @escaping ([ISMMember])->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: MemberRouter.fetchEligibleMembers(streamId:streamId, searchTag: searchString, skip: skip, limit: limit), requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMEligibleMemberData, ISMLiveAPIError> ) in
+    
+            switch result{
+            case .success(let streamResponse, _) :
+                DispatchQueue.main.async {
+                    completionHandler(streamResponse.streamEligibleMembers ?? [])
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+            }
+        }
+        
+    }
+    
     /// Remove member from stream.
     /// - Parameters:
     ///   - streamId: Current runing stream Id, Type should be **String**.

@@ -111,7 +111,7 @@ public struct ISM_Image {
     public var audioUnmuted: UIImage = loadImageSafely(with: "ic_audio_unmuted")
     public var flipCamera: UIImage = loadImageSafely(with: "ic_flip_camera")
     public var heart: UIImage = loadImageSafely(with: "ic_heart")
-    public var muted: UIImage = loadImageSafely(with: "ic_mic_muted")
+    public var micMuted: UIImage = loadImageSafely(with: "ic_mic_muted")
     public var micUnmuted_op: UIImage = loadImageSafely(with: "ic_mic_unmuted_op")
     public var micUnmuted: UIImage = loadImageSafely(with: "ic_mic_unmuted")
     public var more1: UIImage = loadImageSafely(with: "ic_more")

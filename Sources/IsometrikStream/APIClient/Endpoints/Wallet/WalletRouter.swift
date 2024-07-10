@@ -16,7 +16,7 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL{
-        return URL(string:"https://admin-\(ISMConfiguration.shared.primaryOrigin)")!
+        return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {

@@ -15,14 +15,14 @@ class CustomRTMPMemberView: UIView, AppearanceProvider {
     lazy var defaultImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = appearance.images.joinStream
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.textColor = appearance.colors.appSecondary
         label.text = "Join"
         label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
@@ -50,8 +50,7 @@ class CustomRTMPMemberView: UIView, AppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        
-        self.layer.masksToBounds = true
+        layer.masksToBounds = true
         addSubview(defaultImageView)
         addSubview(defaultLabel)
         
@@ -63,7 +62,7 @@ class CustomRTMPMemberView: UIView, AppearanceProvider {
         NSLayoutConstraint.activate([
             defaultImageView.widthAnchor.constraint(equalToConstant: 30),
             defaultImageView.heightAnchor.constraint(equalToConstant: 30),
-            defaultImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            defaultImageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -10),
             defaultImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             defaultLabel.leadingAnchor.constraint(equalTo: leadingAnchor),

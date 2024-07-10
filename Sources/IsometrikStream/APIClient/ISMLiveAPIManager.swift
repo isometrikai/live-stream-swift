@@ -58,7 +58,7 @@ struct ISMLiveAPIManager {
         
         urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue(ISMConfiguration.shared.userSecret, forHTTPHeaderField:"userSecret" )
-        urlRequest.setValue(ISMConfiguration.shared.licensekey, forHTTPHeaderField:"licenseKey")
+        urlRequest.setValue(ISMConfiguration.shared.licenseKey, forHTTPHeaderField:"licenseKey")
         urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField:"userToken" )
         urlRequest.setValue(ISMConfiguration.shared.authToken, forHTTPHeaderField: "authorization")
         urlRequest.setValue(ISMConfiguration.shared.appSecret, forHTTPHeaderField: "appSecret")

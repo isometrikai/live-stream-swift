@@ -28,7 +28,7 @@ open class ISMMQTTSessionWrapper: NSObject {
     var configuration : ISMConfiguration
     
     /// Init funcs.
-    init(configuration : ISMConfiguration = ISMConfiguration()) {
+    init(configuration : ISMConfiguration = ISMConfiguration.shared) {
         self.configuration = configuration
         super.init()
     }
@@ -48,7 +48,7 @@ open class ISMMQTTSessionWrapper: NSObject {
         print("CLIENT ID :: \(self.clientId)")
         
         let userName = "2" + configuration.accountId + configuration.projectId
-        let password = configuration.licensekey + configuration.keySetId
+        let password = configuration.licenseKey + configuration.keySetId
         
         let clientID = clientId + deviceID
         let port = UInt16(configuration.MQTTPort)

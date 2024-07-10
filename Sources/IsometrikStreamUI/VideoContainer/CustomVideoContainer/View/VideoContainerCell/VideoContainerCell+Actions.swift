@@ -15,7 +15,7 @@ extension VideoContainerCell {
     }
     
     @objc func moreOptionTapped(){
-        delegate?.didMoreOptionTapped(index: self.tag, videoSession: nil)
+        delegate?.didMoreOptionTapped(index: self.tag, videoSession: videoSession)
     }
     
 }

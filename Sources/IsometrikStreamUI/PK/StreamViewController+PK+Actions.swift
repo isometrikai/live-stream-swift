@@ -1060,7 +1060,7 @@ extension StreamViewController {
                         
                         let recieverId = (jsonArray["reciverStreamUserId"] as? String).unwrap
                         let coinValue = (jsonArray["coinsValue"] as? Int).unwrap
-                        let totalCoinsRecived = (jsonArray["totalCoinsRecived"] as? Int).unwrap
+                        let totalCoinsRecived = (jsonArray["totalCoinsRecived"] as? Double).unwrap
                         
                         // increase the coins here
                         let streamer1Id = self.viewModel.pkGiftData?.streamer1?.userId ?? ""
@@ -1089,7 +1089,7 @@ extension StreamViewController {
                     
                     let recieverId = (jsonArray["reciverStreamUserId"] as? String).unwrap
                     //let coinValue = (jsonArray["coinsValue"] as? Int).unwrap
-                    let totalCoinsRecived = (jsonArray["totalCoinsRecived"] as? Int).unwrap
+                    let totalCoinsRecived = (jsonArray["totalCoinsRecived"] as? Double).unwrap
                     
                     // increase the coins here
                     let streamer1Id = self.viewModel.pkGiftData?.streamer1?.userId ?? ""

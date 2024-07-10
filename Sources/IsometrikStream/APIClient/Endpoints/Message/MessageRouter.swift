@@ -43,7 +43,7 @@ enum MessageRouter: ISMLiveURLConvertible, CustomStringConvertible {
     var baseURL: URL{
         switch self {
         case .sendHeart:
-            return URL(string:"https://\(ISMConfiguration.shared.secondaryOrigin)")!
+            return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
         default:
             return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
         }
@@ -78,7 +78,7 @@ enum MessageRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .removeMessageReply:
             path = "/streaming/v2/message/reply"
         case .sendHeart:
-            path = "/v1/stream/like"
+            path = "/live/v2/stream/like"
         }
         return path
     }

@@ -67,13 +67,21 @@ extension GoLiveWithViewController {
         cell.isGoLiveWith = true
         cell.delegate = self
         cell.contentView.isUserInteractionEnabled = false
-
-        let user = viewModel.users[indexPath.row]
         
-        let userId = user.userId.unwrap
-        let userName = user.name.unwrap
-        let userIdentifier = user.identifier.unwrap
-        let userProfileImageUrl = user.imagePath.unwrap
+        var usersData: [ISMMember] = []
+        
+        if viewModel.isSearching {
+            usersData = viewModel.searchedUser
+        } else {
+            usersData = viewModel.users
+        }
+        
+        guard let user = usersData[safe: indexPath.row] else { return }
+        
+        let userId = user.userID.unwrap
+        let userName = user.userName.unwrap
+        let userIdentifier = user.userIdentifier.unwrap
+        let userProfileImageUrl = user.userProfileImageURL.unwrap
         let isPublishing = false
         let isAdmin = false
         
@@ -89,11 +97,8 @@ extension GoLiveWithViewController {
         cell.configureCell(member: member)
         
         if !viewModel.isSearching {
-            if indexPath.row == self.viewModel.users.count - 1 { // last cell
-                if self.viewModel.canServiceCall { // more items to fetch
-                    self.viewModel.canServiceCall = false
-                    //getFollowers()
-                }
+            if indexPath.row == self.viewModel.users.count - 1, self.viewModel.users.count.isMultiple(of: self.viewModel.limit) {
+                    self.fetchUsers()
             }
         }
         
@@ -131,7 +136,12 @@ extension GoLiveWithViewController: StreamViewerActionDelegate, StreamMemberList
                 
                 // Updating UI
                 let isSearching = self.viewModel.isSearching
-                self.viewModel.users.remove(at: index)
+                
+                if isSearching {
+                    self.viewModel.searchedUser.remove(at: index)
+                } else {
+                    self.viewModel.users.remove(at: index)
+                }
                 
                 self.contentTableView.beginUpdates()
                 let indexPath = IndexPath(row: index, section: 0)

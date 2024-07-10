@@ -162,6 +162,7 @@ class StreamMemberTableViewCell: UITableViewCell, AppearanceProvider {
     }
     
     func configureCell(member memberData: ISMMember?){
+        
         guard var memberData = memberData,
               let isHost = memberData.isAdmin,
               let isPublishing = memberData.isPublishing
@@ -169,10 +170,9 @@ class StreamMemberTableViewCell: UITableViewCell, AppearanceProvider {
             return
         }
         
-        let firstName = memberData.metaData?.firstName ?? ""
-        let lastName = memberData.metaData?.lastName ?? ""
-        let userName = memberData.userName ?? ""
-        let fullName = "\(firstName) \(lastName)"
+        let userName = memberData.userIdentifier.unwrap
+        let fullName = memberData.userName.unwrap
+        let profilePic = memberData.userProfileImageURL.unwrap
         
         self.member = memberData
         
@@ -201,6 +201,7 @@ class StreamMemberTableViewCell: UITableViewCell, AppearanceProvider {
                         userType.isHidden = false
                         userType.backgroundColor = appearance.colors.appColor
                         userType.setTitle("Add", for: .normal)
+                        userType.setTitleColor(appearance.colors.appSecondary, for: .normal)
                     } else {
                         userType.isHidden = true
                     }
@@ -208,19 +209,15 @@ class StreamMemberTableViewCell: UITableViewCell, AppearanceProvider {
                     userType.isHidden = true
                 }
                 
-                statusView.isHidden = false
+                statusView.isHidden = true
                 statusView.backgroundColor = appearance.colors.appRed
                 
             }
         }
         
-        if let imagePath = memberData.metaData?.profilePic {
-            if imagePath != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-                if let imagePathUrl = URL(string: imagePath){
-                    userProfile.kf.setImage(with: imagePathUrl)
-                }
-            } else {
-                userProfile.image = UIImage()
+        if profilePic != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !(profilePic.isEmpty) {
+            if let imagePathUrl = URL(string: profilePic){
+                userProfile.kf.setImage(with: imagePathUrl)
             }
         } else {
             userProfile.image = UIImage()
