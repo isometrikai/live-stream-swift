@@ -1,11 +1,3 @@
-//
-//  UserSession.swift
-//  Yelo
-//
-//  Created by Dheeraj Kumar Sharma on 10/08/23.
-//  Copyright © 2023 rahulSharma. All rights reserved.
-//
-
 import UIKit
 
 public enum UserType {
@@ -22,7 +14,7 @@ public enum PkBattleStatus {
     case off
 }
 
-public class UserSession: NSObject {
+public class IsometrikUserSession: NSObject {
     
     private var userType: UserType = .none
     private var memberForPK: Bool = false
@@ -31,7 +23,7 @@ public class UserSession: NSObject {
     private var isRTMPStream: Bool = false
     private var currentStreamData: ISMStream?
     
-    public static var shared = UserSession()
+    public static var shared = IsometrikUserSession()
     
     // MARK: - SETTERS
     

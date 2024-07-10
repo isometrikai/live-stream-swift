@@ -22,7 +22,10 @@ extension VerticalStreamCollectionViewCell {
         let streamUserType = viewModel.streamUserType
         let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status)
         let streamMembers = viewModel.streamMembers
-        let isPKEnabled = isometrik.isPKBattlesEnabled()
+        
+        let isPKEnabled = isometrik.getStreamOptionsConfiguration().isPKEnabled
+        let isGroupStreaming = isometrik.getStreamOptionsConfiguration().isGroupStreamingEnabled
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductEnabled
         
         // PK flags
         let isPKStream = streamData.isPkChallenge.unwrap
@@ -66,10 +69,14 @@ extension VerticalStreamCollectionViewCell {
                             if currentUserInMemberList {
                                 viewModel.streamOptions += [.startPublishing]
                             } else {
-                                viewModel.streamOptions += [.request]
+                                if isGroupStreaming {
+                                    viewModel.streamOptions += [.request]
+                                }
                             }
                         } else {
-                            viewModel.streamOptions += [.request]
+                            if isGroupStreaming {
+                                viewModel.streamOptions += [.request]
+                            }
                         }
                     }
                 }
@@ -108,11 +115,20 @@ extension VerticalStreamCollectionViewCell {
                             if streamMembers.count == 1 {
                                 viewModel.streamOptions += [.pkInvite]
                             }
-                            viewModel.streamOptions += [.requestList, .groupInvite]
+                            if isGroupStreaming {
+                                viewModel.streamOptions += [.requestList, .groupInvite]
+                            }
                         }
                     } else {
-                        viewModel.streamOptions += [.request, .requestList, .groupInvite]
+                        if isGroupStreaming {
+                            viewModel.streamOptions += [.requestList, .groupInvite]
+                        }
                     }
+                    
+                    if isProductEnabled {
+                        viewModel.streamOptions += [.store]
+                    }
+                    
                 }
                 
                 break

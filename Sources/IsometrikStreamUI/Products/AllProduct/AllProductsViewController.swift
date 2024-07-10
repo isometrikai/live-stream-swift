@@ -41,6 +41,7 @@ class AllProductsViewController: UIViewController, AppearanceProvider {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerTitle.text = "Add Products".localized
+        view.headerTitle.textColor = .black
         view.headerTitle.font = appearance.font.getFont(forTypo: .h3)
         view.headerTitle.textAlignment = .center
         view.dividerView.isHidden = true

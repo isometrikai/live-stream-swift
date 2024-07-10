@@ -124,12 +124,6 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         // animate to the required action
         footerView.animateStreamTypeActions(action: actionType)
         
-        let stackView = contentView.rtmpOptionsContainerView.toggleStackView
-        let persistentRTMPView = contentView.rtmpOptionsContainerView.rtmpStreamKeyToggle
-        let rtmpURLView = contentView.rtmpOptionsContainerView.rtmpURLView
-        let streamKeyView = contentView.rtmpOptionsContainerView.streamKeyView
-        let infoLabelView = contentView.rtmpOptionsContainerView.infoLabelView
-        let helpLabelView = contentView.rtmpOptionsContainerView.helpLabelView
         let profileView = contentView.rtmpOptionsContainerView.profileView
         
         switch actionType {
@@ -139,23 +133,8 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
             contentView.rtmpOptionsContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
             
             viewModel.isPersistentRTMPKey = false
-            
             viewModel.isRTMPStream = false
-            
-            persistentRTMPView.isHidden = true
-            stackView.removeArrangedSubview(persistentRTMPView)
-            
-            rtmpURLView.isHidden = true
-            stackView.removeArrangedSubview(rtmpURLView)
-            
-            streamKeyView.isHidden = true
-            stackView.removeArrangedSubview(streamKeyView)
-            
-            infoLabelView.isHidden = true
-            stackView.removeArrangedSubview(infoLabelView)
-            
-            helpLabelView.isHidden = true
-            stackView.removeArrangedSubview(helpLabelView)
+            setupConditionalContent()
             
             break
         case .fromDevice:
@@ -172,21 +151,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
             profileView.clearImageButton.isHidden = true
             
             viewModel.isRTMPStream = true
-            
-            persistentRTMPView.isHidden = false
-            stackView.addArrangedSubview(persistentRTMPView)
-            
-            rtmpURLView.isHidden = false
-            stackView.addArrangedSubview(rtmpURLView)
-            
-            streamKeyView.isHidden = false
-            stackView.addArrangedSubview(streamKeyView)
-            
-            infoLabelView.isHidden = false
-            stackView.addArrangedSubview(infoLabelView)
-            
-            helpLabelView.isHidden = false
-            stackView.addArrangedSubview(helpLabelView)
+            setupConditionalContent()
             
             break
         }
@@ -195,124 +160,158 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
     
 }
 
-// MARK: - CONTENT ACTIONS
+// MARK: - CONTENT SETUP ACTION
 
-extension GoLiveViewController: LiveOptionsActionDelegate {
+extension GoLiveViewController {
     
-    func didToggleOptionTapped(withStreamOption: StreamOptionToggle) {
+    func setupConditionalContent(){
+        
+        let isometrik = viewModel.isometrik
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductEnabled
+        let isRestreamEnabled = isometrik.getStreamOptionsConfiguration().isRestreamEnabled
+        let isScheduleEnabled = isometrik.getStreamOptionsConfiguration().isScheduleStreamOptionEnabled
+        let isRTMPEnabled = isometrik.getStreamOptionsConfiguration().isRTMPStreamEnabled
         
         let rtmpContainerView = contentView.rtmpOptionsContainerView
-        let stackview = rtmpContainerView.toggleStackView
+        let restreamBroadCastToggle = rtmpContainerView.restreamBroadCastToggle
+        let rtmpStreamKeyToggle = rtmpContainerView.rtmpStreamKeyToggle
+        
+        let toggleStackview = rtmpContainerView.toggleStackView
         let contentStackView = rtmpContainerView.contentStackView
-        let rtmpURLView = contentView.rtmpOptionsContainerView.rtmpURLView
-        let streamKeyView = contentView.rtmpOptionsContainerView.streamKeyView
-        let infoLabelView = contentView.rtmpOptionsContainerView.infoLabelView
-        let helpLabelView = contentView.rtmpOptionsContainerView.helpLabelView
-        let restreamDetailLink = contentView.rtmpOptionsContainerView.restreamOption
-        let addProductView = rtmpContainerView.addProductView
         let restreamOption = rtmpContainerView.restreamOption
+        let addProductView = rtmpContainerView.addProductView
         let scheduleToggle = rtmpContainerView.scheduleToggle
-        let dateSelectorView = rtmpContainerView.dateTimeSelectorView
+        let dateTimeSelectorView = rtmpContainerView.dateTimeSelectorView
+        let infoLabelView = rtmpContainerView.infoLabelView
+        let rtmpURLView = rtmpContainerView.rtmpURLView
+        let streamKeyView = rtmpContainerView.streamKeyView
+        let helpLabelView = rtmpContainerView.helpLabelView
         let goLiveButton = footerView.goLiveButton
         
-        switch withStreamOption {
-        case .hdBroadCast:
-            
-            viewModel.isHdBroadcast = !viewModel.isHdBroadcast
-            
-            rtmpContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
-            
-        case .recordBroadCast:
-            
-            viewModel.recordBroadcast = !viewModel.recordBroadcast
-            
-            rtmpContainerView.animateToggles(withStreamOption: .recordBroadCast, isSelected: viewModel.recordBroadcast)
-            
-        case .restreamBroadcast:
-            
-            viewModel.restreamBroadcast = !viewModel.restreamBroadcast
-            
-            rtmpContainerView.animateToggles(withStreamOption: .restreamBroadcast, isSelected: viewModel.restreamBroadcast)
-            
+        
+        if isRestreamEnabled {
+            toggleStackview.addArrangedSubview(restreamBroadCastToggle)
             if viewModel.restreamBroadcast {
-                
                 contentStackView.addArrangedSubview(restreamOption)
-                contentStackView.addArrangedSubview(addProductView)
-                contentStackView.addArrangedSubview(scheduleToggle)
-                contentStackView.addArrangedSubview(dateSelectorView)
-                restreamDetailLink.isHidden = false
+            } else {
+                contentStackView.removeArrangedSubview(restreamOption)
+            }
+        }
+        
+        if isRTMPEnabled {
+            if viewModel.currenStreamType == .fromDevice {
+                rtmpStreamKeyToggle.isHidden = false
+                toggleStackview.addArrangedSubview(rtmpStreamKeyToggle)
                 
+                if !viewModel.isPersistentRTMPKey {
+                    
+                    contentStackView.removeArrangedSubview(rtmpURLView)
+                    contentStackView.removeArrangedSubview(streamKeyView)
+                    contentStackView.removeArrangedSubview(helpLabelView)
+                    
+                    rtmpURLView.isHidden = true
+                    streamKeyView.isHidden = true
+                    helpLabelView.isHidden = true
+                    
+                    contentStackView.addArrangedSubview(infoLabelView)
+                    // change the text in info label
+                    infoLabelView.formLabel.text = "If you disable PERSISTENT RTMP URL you will get a new URL and a stream key every time you start a new stream"
+                    
+                } else {
+                    
+                    rtmpURLView.isHidden = false
+                    streamKeyView.isHidden = false
+                    infoLabelView.isHidden = false
+                    helpLabelView.isHidden = false
+                    
+                    contentStackView.addArrangedSubview(rtmpURLView)
+                    contentStackView.addArrangedSubview(streamKeyView)
+                    contentStackView.addArrangedSubview(infoLabelView)
+                    contentStackView.addArrangedSubview(helpLabelView)
+                    
+                    // change the text in info label
+                    infoLabelView.formLabel.text = "Please copy paste the STREAM KEY and the STREAM URL  into your RTMP streaming device."
+                }
             } else {
                 
-                contentStackView.removeArrangedSubview(restreamDetailLink)
-                restreamDetailLink.isHidden = true
+                toggleStackview.removeArrangedSubview(rtmpStreamKeyToggle)
                 
-            }
-            
-        case .persistentRTMPKey:
-            
-            viewModel.isPersistentRTMPKey = !viewModel.isPersistentRTMPKey
-            
-            rtmpContainerView.animateToggles(withStreamOption: .persistentRTMPKey, isSelected: viewModel.isPersistentRTMPKey)
-            
-            if !viewModel.isPersistentRTMPKey {
+                contentStackView.removeArrangedSubview(rtmpURLView)
+                contentStackView.removeArrangedSubview(streamKeyView)
+                contentStackView.removeArrangedSubview(infoLabelView)
+                contentStackView.removeArrangedSubview(helpLabelView)
                 
-                // if user disable the persistent
-                stackview.removeArrangedSubview(rtmpURLView)
-                stackview.removeArrangedSubview(streamKeyView)
-                stackview.removeArrangedSubview(helpLabelView)
-        
-                // hide views
+                rtmpStreamKeyToggle.isHidden = true
                 rtmpURLView.isHidden = true
                 streamKeyView.isHidden = true
+                infoLabelView.isHidden = true
                 helpLabelView.isHidden = true
-                
-                // change the text in info label
-                infoLabelView.formLabel.text = "If you disable PERSISTENT RTMP URL you will get a new URL and a stream key every time you start a new stream".localized
-                
-            } else {
-                
-                // removing it before to maintain order
-                stackview.removeArrangedSubview(infoLabelView)
-                
-                // unhide hidden views
-                rtmpURLView.isHidden = false
-                streamKeyView.isHidden = false
-                helpLabelView.isHidden = false
-                
-                // if user enable the persistent
-                stackview.addArrangedSubview(rtmpURLView)
-                stackview.addArrangedSubview(streamKeyView)
-                stackview.addArrangedSubview(infoLabelView)
-                stackview.addArrangedSubview(helpLabelView)
-                
-                // change the text in info label
-                infoLabelView.formLabel.text = "Please copy paste the STREAM KEY and the STREAM URL  into your RTMP streaming device".localized + "."
             }
-            
-        case .scheduleStream:
-            
-            viewModel.isScheduleStream = !viewModel.isScheduleStream
-            rtmpContainerView.animateToggles(withStreamOption: .scheduleStream, isSelected: viewModel.isScheduleStream)
+        }
+        
+        
+        if isProductEnabled {
+            contentStackView.addArrangedSubview(addProductView)
+        }
+        
+        if isScheduleEnabled {
+            contentStackView.addArrangedSubview(scheduleToggle)
             
             if viewModel.isScheduleStream {
                 
                 // change action button state
                 goLiveButton.setTitle("Schedule Stream".localized, for: .normal)
                 
-                contentStackView.addArrangedSubview(dateSelectorView)
-                dateSelectorView.isHidden = false
+                contentStackView.addArrangedSubview(dateTimeSelectorView)
                 
             } else {
-                contentStackView.removeArrangedSubview(dateSelectorView)
-                dateSelectorView.isHidden = true
+                contentStackView.removeArrangedSubview(dateTimeSelectorView)
                 
                 viewModel.scheduleFor = nil
-                self.contentView.rtmpOptionsContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = "Choose Date and Time".localized
+                rtmpContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = "Choose Date and Time".localized
                 
                 goLiveButton.setTitle("Go Live".localized, for: .normal)
-                
             }
+            
+        }
+        
+    }
+    
+}
+
+
+// MARK: - CONTENT DELEGATE ACTIONS
+
+extension GoLiveViewController: LiveOptionsActionDelegate {
+    
+    func didToggleOptionTapped(withStreamOption: StreamOptionToggle) {
+        
+        let rtmpContainerView = contentView.rtmpOptionsContainerView
+        
+        switch withStreamOption {
+        case .hdBroadCast:
+            viewModel.isHdBroadcast = !viewModel.isHdBroadcast
+            rtmpContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
+            
+        case .recordBroadCast:
+            viewModel.recordBroadcast = !viewModel.recordBroadcast
+            rtmpContainerView.animateToggles(withStreamOption: .recordBroadCast, isSelected: viewModel.recordBroadcast)
+            
+        case .restreamBroadcast:
+            viewModel.restreamBroadcast = !viewModel.restreamBroadcast
+            rtmpContainerView.animateToggles(withStreamOption: .restreamBroadcast, isSelected: viewModel.restreamBroadcast)
+            setupConditionalContent()
+            
+        case .persistentRTMPKey:
+            viewModel.isPersistentRTMPKey = !viewModel.isPersistentRTMPKey
+            rtmpContainerView.animateToggles(withStreamOption: .persistentRTMPKey, isSelected: viewModel.isPersistentRTMPKey)
+            setupConditionalContent()
+            
+        case .scheduleStream:
+            
+            viewModel.isScheduleStream = !viewModel.isScheduleStream
+            rtmpContainerView.animateToggles(withStreamOption: .scheduleStream, isSelected: viewModel.isScheduleStream)
+            setupConditionalContent()
             
             break
         }
@@ -460,6 +459,14 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
     }
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer){
+        
+        let isometrik = viewModel.isometrik
+        let isRTMPEnabled = isometrik.getStreamOptionsConfiguration().isRTMPStreamEnabled
+        
+        // Disabling the gesture if rtmp is disabled
+        if !isRTMPEnabled {
+            return
+        }
         
         // Disabling gestures if editing
         if viewModel.isEditing { return }

@@ -14,9 +14,12 @@ extension VerticalStreamCollectionViewCell {
     func setStreamFooterView(){
         
         guard let viewModel,
+              let isometrik = viewModel.isometrik,
               let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
+        
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductEnabled
         
         let streamUserType = viewModel.streamUserType
         let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
@@ -25,12 +28,19 @@ extension VerticalStreamCollectionViewCell {
         let scheduleDate = Date(timeIntervalSince1970: Double(scheduleStartTime))
         let scheduleDateString = scheduleDate.ism_getCustomMessageTime(dateFormat: "d MMM, hh:mm a").uppercased()
         
-        let dynamicActionButton = streamContainer.streamFooterView.actionButton
+        let footerView = streamContainer.streamFooterView
+        let footerActionButton = footerView.actionButton
 
         switch streamUserType {
         case .viewer:
             
-            self.streamContainer.streamFooterView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+            footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+            
+//            if isProductEnabled {
+//                footerView.toggleBottomActionUI(for: .button)
+//            } else {
+//                footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+//            }
             
 //            if streamStatus == .scheduled {
 //                
@@ -70,7 +80,15 @@ extension VerticalStreamCollectionViewCell {
             break
         case .host:
             
-            self.streamContainer.streamFooterView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+            if isProductEnabled {
+                footerView.toggleBottomActionUI(for: .button)
+                
+                footerActionButton.setTitle("Pin Product", for: .normal)
+                footerActionButton.setImage(UIImage(), for: .normal)
+            } else {
+                footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+            }
+            
             
 //            if streamStatus == .scheduled {
 //                

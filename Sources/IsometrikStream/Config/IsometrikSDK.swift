@@ -11,26 +11,14 @@ import UIKit
 public class IsometrikSDK {
     
     private var isometrik: IsometrikStream
-    private var userSession: UserSession?
+    private var userSession: IsometrikUserSession?
     private var mqttSession: ISMMQTTSessionWrapper?
-    
-    private var streams: [ISMStream]?
-    
-    private var willBeHostUserId: String?
-    
-    /// If need to add custom profile controller
-    private var isCustomProfileView: Bool?
-    
-    /// if need to add custom ending stream controller
-    private var isCustomEndingStreamView: Bool?
-    
-    /// if need to add custom gift controller
-    private var isCustomGiftView: Bool?
-    
-    /// whether pk battle feature is enabled or not
-    private var isPKBattlesEnable: Bool?
+    private var streamOptionsConfiguration: ISMOptionsConfiguration?
     
     private static var sharedInstance : IsometrikSDK!
+    
+    private var streams: [ISMStream]?
+    private var willBeHostUserId: String?
     
     public static func getInstance()-> IsometrikSDK{
         if sharedInstance == nil {
@@ -39,19 +27,26 @@ public class IsometrikSDK {
         return sharedInstance
     }
     
-    public func setStreams(streams: [ISMStream]?) {
-        self.streams = streams
-    }
-    
-    public func setHostUserId(userId: String){
-        self.willBeHostUserId = userId
-    }
-    
     init(isometrik: IsometrikStream) {
         self.isometrik = isometrik
     }
     
-    public func createConfiguration(accountId: String, projectId: String , keysetId: String, licenseKey: String, appSecret: String, userSecret: String, rtcAppId: String , userInfo: ISMStreamUser, isCustomProfileView: Bool = false , isCustomEndingStreamView: Bool = false , isCustomGiftView: Bool = false , isPKBattlesEnable: Bool = false, authToken: String = "",banubaClientToken : String = "", userToken: String = "", userType: UserType = .none, productConfig: ISMProductConfiguration) {
+    public func createConfiguration(
+        accountId: String,
+        projectId: String,
+        keysetId: String, 
+        licenseKey: String,
+        appSecret: String,
+        userSecret: String,
+        rtcAppId: String ,
+        userInfo: ISMStreamUser,
+        authToken: String = "",
+        banubaClientToken : String = "",
+        userToken: String = "",
+        userType: UserType = .none,
+        productConfig: ISMProductConfiguration,
+        streamOptionsConfiguration: ISMOptionsConfiguration
+    ) {
         
         if accountId.isEmpty {
             fatalError("Pass a valid accountId for isometrik sdk initialization.")
@@ -85,7 +80,7 @@ public class IsometrikSDK {
             rtcAppId: rtcAppId
         )
         
-        let userSession = UserSession()
+        let userSession = IsometrikUserSession()
         userSession.setUserId(userId: userInfo.userId.unwrap)
         userSession.setUserName(userName: userInfo.name.unwrap)
         userSession.setUserImage(userImage: userInfo.imagePath.unwrap)
@@ -94,12 +89,7 @@ public class IsometrikSDK {
         userSession.setLastName(userName: userInfo.lastName.unwrap)
         userSession.setUserType(userType: userType)
         
-        self.isCustomProfileView = isCustomProfileView
-        self.isCustomGiftView = isCustomGiftView
-        self.isCustomEndingStreamView = isCustomEndingStreamView
-        self.isPKBattlesEnable = isPKBattlesEnable
-        
-        
+        self.streamOptionsConfiguration = streamOptionsConfiguration
         self.isometrik = IsometrikStream(configuration: configuration)
         self.userSession = userSession
         
@@ -118,7 +108,7 @@ public class IsometrikSDK {
         return self.willBeHostUserId ?? ""
     }
     
-    public func getUserSession() -> UserSession {
+    public func getUserSession() -> IsometrikUserSession {
         if userSession == nil {
             fatalError("Create configuration before trying to access user session object.")
         }
@@ -136,32 +126,19 @@ public class IsometrikSDK {
         return isometrik
     }
     
-    public func isCustomProfileViewAdded() -> Bool {
-        if isCustomProfileView == nil {
-            fatalError("Create configuration before trying to access custom profile view status.")
+    public func getStreamOptionsConfiguration() -> ISMOptionsConfiguration {
+        if streamOptionsConfiguration == nil {
+            return ISMOptionsConfiguration()
         }
-        return isCustomProfileView!
+        return streamOptionsConfiguration!
     }
     
-    public func isCustomEndingStreamViewAdded() -> Bool {
-        if isCustomEndingStreamView == nil {
-            fatalError("Create configuration before trying to access custom ending view status.")
-        }
-        return isCustomEndingStreamView!
+    public func setStreams(streams: [ISMStream]?) {
+        self.streams = streams
     }
     
-    public func isCustomGiftViewAdded() -> Bool {
-        if isCustomGiftView == nil {
-            fatalError("Create configuration before trying to access custom gift view status.")
-        }
-        return isCustomGiftView!
-    }
-    
-    public func isPKBattlesEnabled() -> Bool {
-        if isPKBattlesEnable == nil {
-            fatalError("Create configuration before trying to access pkBattle status.")
-        }
-        return isPKBattlesEnable!
+    public func setHostUserId(userId: String){
+        self.willBeHostUserId = userId
     }
     
     func onTerminate() {

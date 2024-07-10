@@ -1,9 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Appscrip 3Embed on 03/07/24.
-//
 
 import UIKit
 import IsometrikStream

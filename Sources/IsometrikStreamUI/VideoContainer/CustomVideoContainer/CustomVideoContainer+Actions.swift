@@ -60,7 +60,7 @@ extension CustomVideoContainer: AppearanceProvider {
         else { return }
         
         if streamInfo.isPkChallenge.unwrap {
-            if !isometrik.isPKBattlesEnabled() {
+            if !isometrik.getStreamOptionsConfiguration().isPKEnabled {
                 pkOverlayView.isHidden = true
             } else {
                 if videoSessions.count > 1 {

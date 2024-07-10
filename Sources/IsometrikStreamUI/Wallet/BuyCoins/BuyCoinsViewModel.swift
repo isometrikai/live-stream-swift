@@ -6,6 +6,7 @@ import StoreKit
 final public class BuyCoinsViewModel {
     
     var coinPlansData: CoinPlansResponseModel?
+    var walletBalance: WalletBalance?
     var coinPlans: [CoinPlan] = []
     var skProducts: [SKProduct] = []
     
@@ -13,6 +14,19 @@ final public class BuyCoinsViewModel {
     
     public init(isometrik: IsometrikSDK) {
         self.isometrik = isometrik
+    }
+    
+    func getWalletBalance(completion: @escaping(_ success: Bool, _ error: String?)->Void){
+        isometrik.getIsometrik().getWalletBalance { response in
+            self.walletBalance = response.data
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+        } failure: { error in
+            DispatchQueue.main.async {
+                completion(false, error.localizedDescription)
+            }
+        }
     }
     
     func getCoinPlans(completion: @escaping(_ success: Bool, _ error: String?) -> Void){

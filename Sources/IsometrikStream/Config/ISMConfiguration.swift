@@ -54,7 +54,7 @@ public class ISMConfiguration {
         storeCategoryId: String = "",
         lang: String = "en",
         language: String = "en",
-        currencyCode: String = "",
+        currencyCode: String = "INR",
         currencySymbol: String = ""
     ) {
         self.primaryOrigin = primaryOrigin

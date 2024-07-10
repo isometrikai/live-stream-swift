@@ -24,6 +24,10 @@ enum GoLiveStreamType: Int {
     case fromDevice
 }
 
+protocol ISMProductDelegate {
+    
+}
+
 typealias response = ((Bool) -> Void)
 
 final public class GoLiveViewModel {

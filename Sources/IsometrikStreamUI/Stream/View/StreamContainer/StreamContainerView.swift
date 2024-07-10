@@ -141,7 +141,6 @@ class StreamContainerView: UIView {
         addSubview(disclaimerView)
         
         addSubview(streamAnimationPopup)
-        
         addSubview(streamFooterView)
     }
     
@@ -153,7 +152,7 @@ class StreamContainerView: UIView {
             streamHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             streamHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
             streamHeaderView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            streamHeaderView.heightAnchor.constraint(equalToConstant: 130),
+            streamHeaderView.heightAnchor.constraint(equalToConstant: 90),
             
             streamGiftMessageView.bottomAnchor.constraint(equalTo: streamMessageView.topAnchor, constant: -10),
             streamGiftMessageView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.6),
@@ -180,7 +179,7 @@ class StreamContainerView: UIView {
             topGradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topGradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
             topGradientView.topAnchor.constraint(equalTo: topAnchor),
-            topGradientView.heightAnchor.constraint(equalToConstant: 200),
+            topGradientView.heightAnchor.constraint(equalToConstant: ism_windowConstant.getTopPadding + 90),
             
             bottomGradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomGradientView.trailingAnchor.constraint(equalTo: trailingAnchor),

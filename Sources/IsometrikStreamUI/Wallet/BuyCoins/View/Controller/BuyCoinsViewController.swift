@@ -28,6 +28,12 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         return view
     }()
     
+    let walletBalanceHeaderView: CoinBalanceHeaderView = {
+        let view = CoinBalanceHeaderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var coinPlanCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         
@@ -46,6 +52,7 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         collectionView.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         collectionView.backgroundColor = .clear
         collectionView.delaysContentTouches = false
+        
         return collectionView
     }()
     
@@ -64,7 +71,8 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         super.viewDidLoad()
         setUpViews()
         setUpConstraints()
-        loadData()
+        getPlans()
+        getWalletBalance()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -80,6 +88,7 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
     func setUpViews(){
         view.backgroundColor = .white
         view.addSubview(headerView)
+        view.addSubview(walletBalanceHeaderView)
         view.addSubview(coinPlanCollectionView)
     }
     
@@ -90,22 +99,42 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 50),
             
+            walletBalanceHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            walletBalanceHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            walletBalanceHeaderView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            walletBalanceHeaderView.heightAnchor.constraint(equalToConstant: 100),
+            
             coinPlanCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             coinPlanCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             coinPlanCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            coinPlanCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor)
+            coinPlanCollectionView.topAnchor.constraint(equalTo: walletBalanceHeaderView.bottomAnchor)
         ])
     }
     
-    func loadData(){
+    func getPlans(){
         viewModel.getCoinPlans { success, error in
             if success {
                 self.coinPlanCollectionView.reloadData()
+                self.getWalletBalance()
             } else {
                 guard let error else { return }
                 print(error)
             }
         }
+    }
+    
+    func getWalletBalance(){
+        viewModel.getWalletBalance { success, error in
+            if success {
+                self.setupWalletBalance()
+            } else {
+                print(error)
+            }
+        }
+    }
+    
+    func setupWalletBalance(){
+        walletBalanceHeaderView.configureView(data: viewModel.walletBalance)
     }
     
     // MARK: - ACTIONS

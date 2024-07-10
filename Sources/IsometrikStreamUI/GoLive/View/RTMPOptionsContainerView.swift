@@ -207,15 +207,9 @@ class RTMPOptionsContainerView: UIView, AppearanceProvider {
         // toggle stack view
         toggleStackView.addArrangedSubview(hdBroadCastToggle)
         toggleStackView.addArrangedSubview(recordBroadCastToggle)
-        toggleStackView.addArrangedSubview(restreamBroadCastToggle)
         //:
         
         scrollView.addSubview(contentStackView)
-        contentStackView.addArrangedSubview(restreamOption)
-        contentStackView.addArrangedSubview(addProductView)
-        contentStackView.addArrangedSubview(scheduleToggle)
-        contentStackView.addArrangedSubview(dateTimeSelectorView)
-        
     }
     
     func setupConstraints(){

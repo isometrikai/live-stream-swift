@@ -256,7 +256,7 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
         
         guard let isometrik else { return }
         
-        if isometrik.isPKBattlesEnabled() && isPKStream {
+        if isometrik.getStreamOptionsConfiguration().isPKEnabled && isPKStream {
             
             moreOptionView.isHidden = true
             

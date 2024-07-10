@@ -18,14 +18,13 @@ public typealias ISMMQTTSessionWrapperCompletionBlock = (Result<String, Error>) 
 open class ISMMQTTSessionWrapper: NSObject {
     
     var mqtt: CocoaMQTT?
+    var configuration : ISMConfiguration
     
     /// User Id using for client Id.
     var clientId: String = ""
     var isometrikId: String = ""
     
     public var isConnected = false
-    
-    var configuration : ISMConfiguration
     
     /// Init funcs.
     init(configuration : ISMConfiguration = ISMConfiguration.shared) {

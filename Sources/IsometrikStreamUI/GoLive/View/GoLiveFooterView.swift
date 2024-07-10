@@ -117,9 +117,6 @@ class NewGoLiveFooterView: UIView, AppearanceProvider {
         addSubview(bottomActionView)
         
         bottomActionView.addSubview(bottomActionStack)
-        bottomActionStack.addArrangedSubview(guestLiveButton)
-        bottomActionStack.addArrangedSubview(liveFromDeviceButton)
-        
         bottomActionView.addSubview(dividerView)
     }
     

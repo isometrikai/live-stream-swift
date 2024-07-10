@@ -144,27 +144,45 @@ final public class GoLiveViewController: UIViewController {
     
     func setDefaults(){
         
-        let rtmpUrlView = contentView.rtmpOptionsContainerView.rtmpURLView.formTextView
-        let streamKeyView = contentView.rtmpOptionsContainerView.streamKeyView.formTextView
+        let isometrik = viewModel.isometrik
+        let isRTMPEnabled = isometrik.getStreamOptionsConfiguration().isRTMPStreamEnabled
+        let isRestreamEnabled = isometrik.getStreamOptionsConfiguration().isRestreamEnabled
         
-        let scrollView = contentView.rtmpOptionsContainerView.scrollView
+        let footerBottomActionStack = footerView.bottomActionStack
+        
+        let contentContainerView = contentView.rtmpOptionsContainerView
+        let rtmpUrlView = contentContainerView.rtmpURLView.formTextView
+        let streamKeyView = contentContainerView.streamKeyView.formTextView
+        let guestLiveButton = footerView.guestLiveButton
+        let liveFromDeviceButton = footerView.liveFromDeviceButton
+        
+        let scrollView = contentContainerView.scrollView
         scrollView.delegate = self
         
         // setting guest live option as default
         viewModel.currenStreamType = .guestLive
         didGoLiveStreamTypeActionTapped(with: .guestLive)
-        headerView.animatePaidStreamsButton(isPremium: false)
         
-        viewModel.getUserDetails { success in
-            if !success { return }
+        headerView.animatePaidStreamsButton(isPremium: true)
+        
+        if isRTMPEnabled {
+            viewModel.getUserDetails { success in
+                if !success { return }
+                
+                rtmpUrlView.customTextLabel.textColor = .white
+                rtmpUrlView.customTextLabel.text = self.viewModel.rtmpURL
+                
+                streamKeyView.copyButton.isHidden = false
+                streamKeyView.customTextLabel.textColor = .white
+                streamKeyView.customTextLabel.text = self.viewModel.streamKey
+            }
             
-            rtmpUrlView.customTextLabel.textColor = .white
-            rtmpUrlView.customTextLabel.text = self.viewModel.rtmpURL
-            
-            streamKeyView.copyButton.isHidden = false
-            streamKeyView.customTextLabel.textColor = .white
-            streamKeyView.customTextLabel.text = self.viewModel.streamKey
+            footerBottomActionStack.addArrangedSubview(guestLiveButton)
+            footerBottomActionStack.addArrangedSubview(liveFromDeviceButton)
+        } else {
+            footerBottomActionStack.addArrangedSubview(guestLiveButton)
         }
+
         
     }
     
