@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SwiftyJSON
 
 
 protocol ISMLiveURLConvertible{
@@ -99,7 +98,6 @@ struct ISMLiveAPIManager {
                 completion(.failure(.invalidResponse))
                 return
             }
-            print(JSON(data))
             
             switch httpResponse.statusCode {
             case 200:

@@ -19,6 +19,8 @@ final public class BuyCoinsViewModel {
     func getWalletBalance(completion: @escaping(_ success: Bool, _ error: String?)->Void){
         isometrik.getIsometrik().getWalletBalance { response in
             self.walletBalance = response.data
+            let balance = response.data?.balance ?? 0
+            UserDefaultsProvider.shared.setWalletBalance(data: balance)
             DispatchQueue.main.async {
                 completion(true, nil)
             }
@@ -65,7 +67,7 @@ final public class BuyCoinsViewModel {
         
         var planId = ""
         
-        let data = IAPManager.getPurchasedPlan()
+        let data = UserDefaultsProvider.shared.getPurchaseDetails()
         if let productId = data["productId"] as? String {
             let planData = self.coinPlansData?.data?.filter({$0.appStoreProductIdentifier == productId})
             planId = planData?.first?.planId ?? ""

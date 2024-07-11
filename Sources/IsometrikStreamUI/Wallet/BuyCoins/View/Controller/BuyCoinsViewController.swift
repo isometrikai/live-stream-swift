@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import IsometrikStream
 
 public final class BuyCoinsViewController: UIViewController, AppearanceProvider {
 
@@ -72,7 +73,7 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         setUpViews()
         setUpConstraints()
         getPlans()
-        getWalletBalance()
+        setupWalletBalance()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -115,7 +116,7 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         viewModel.getCoinPlans { success, error in
             if success {
                 self.coinPlanCollectionView.reloadData()
-                self.getWalletBalance()
+                self.setupWalletBalance()
             } else {
                 guard let error else { return }
                 print(error)
@@ -123,18 +124,17 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         }
     }
     
-    func getWalletBalance(){
+    func setupWalletBalance(){
+        
+        let walletBalance = UserDefaultsProvider.shared.getWalletBalance()
+        walletBalanceHeaderView.configureView(balance: walletBalance)
+        
         viewModel.getWalletBalance { success, error in
             if success {
-                self.setupWalletBalance()
-            } else {
-                print(error)
+                self.walletBalanceHeaderView.configureView(balance: self.viewModel.walletBalance?.balance ?? 0)
             }
         }
-    }
-    
-    func setupWalletBalance(){
-        walletBalanceHeaderView.configureView(data: viewModel.walletBalance)
+        
     }
     
     // MARK: - ACTIONS

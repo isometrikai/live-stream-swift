@@ -94,11 +94,8 @@ class CoinBalanceHeaderView: UIView, AppearanceProvider {
         ])
     }
     
-    func configureView(data: WalletBalance?){
-        guard let data else { return }
-        let balance = Int(data.balance ?? 0)
-        
-        balanceLabel.text = "\(balance) coins"
+    func configureView(balance: Float64){
+        balanceLabel.text = "\(Int64(balance)) coins"
     }
     
 }

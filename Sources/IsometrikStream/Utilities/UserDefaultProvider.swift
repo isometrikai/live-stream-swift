@@ -74,5 +74,42 @@ public class UserDefaultsProvider: NSObject {
         return "https://cdn.getfudo.com/adminAssets/0/0/Logo.png"
     }
     
-        
+    // MARK: - Wallet details
+    
+    public func setPurchaseDetails(data: [String:Any]){
+        UserDefaults.standard.setValue(data, forKey: "purchaseDetails")
+        UserDefaults.standard.synchronize()
+    }
+    
+    public func getPurchaseDetails() -> [String:Any] {
+        if let details = UserDefaults.standard.object(forKey: "purchaseDetails") as? [String : Any] {
+            return details
+        }
+        return [:]
+    }
+    
+    public func setReceiptData(data: [[String: Any]]){
+        UserDefaults.standard.setValue(data, forKey: "receiptData")
+        UserDefaults.standard.synchronize()
+    }
+    
+    public class func getReceiptData() -> [[String:Any]]{
+        if let data = UserDefaults.standard.value(forKey: "receiptData") as? [[String:Any]] {
+            return data
+        }
+        return [[:]]
+    }
+    
+    public func setWalletBalance(data: Float64){
+        UserDefaults.standard.setValue(data, forKey: "walletBalance")
+        UserDefaults.standard.synchronize()
+    }
+       
+    public func getWalletBalance() -> Float64 {
+        if let data = UserDefaults.standard.value(forKey: "walletBalance") as? Float64 {
+            return data
+        }
+        return 0
+    }
+    
 }

@@ -261,4 +261,25 @@ extension IsometrikStream {
 
    }
     
+    public func getPresignedUrl(streamTitle: String, mediaExtension: String, completionHandler: @escaping (ISMPresignedUrlResponse)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.getPresignedUrl(streamTitle: streamTitle, mediaExtension: mediaExtension) , requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMPresignedUrlResponse, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
 }

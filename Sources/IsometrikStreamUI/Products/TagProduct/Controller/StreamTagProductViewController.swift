@@ -86,7 +86,7 @@ class StreamTagProductViewController: UIViewController, AppearanceProvider {
         // Load the default initials
         self.defaultView.isHidden = true
         DispatchQueue.main.async {
-            self.defaultView.playAnimation(for: "Box-animation")
+            self.defaultView.playAnimation(for: self.appearance.json.emptyBoxAnimation)
             self.defaultView.defaultLabel.text = "No tagged product found".localized
         }
         

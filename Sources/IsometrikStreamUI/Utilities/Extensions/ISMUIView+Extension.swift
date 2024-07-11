@@ -54,6 +54,90 @@ extension UIView {
         self.layer.insertSublayer(gradient, at: 0)
     }
     
+    func ism_applyCoinsAnimation(indexAt: Int, fromView: UIView, coins: String, image: UIImage) {
+        let bubbleImageView: UIImageView
+        let size: CGSize = image.size
+        
+        bubbleImageView = UIImageView(image: image)
+        bubbleImageView.frame = CGRect(x: self.frame.size.width - 45,
+                                       y: self.frame.size.height - 20,
+                                       width: size.width, height: size.height)
+        self.addSubview(bubbleImageView)
+        
+        let zigzagPath = UIBezierPath()
+        let oX: CGFloat = bubbleImageView.frame.origin.x
+        let oY: CGFloat = bubbleImageView.frame.origin.y
+        
+        zigzagPath.move(to: CGPoint(x: oX, y: oY))
+        var ey: CGFloat = 0
+        var ex: CGFloat = 0
+        
+        switch indexAt {
+        case 6:
+            ex = oX + 27
+            ey = oY - 56 * 2
+        case 5:
+            ex = oX + 20
+            ey = oY - 60 * 2
+        case 4:
+            ex = oX + 3
+            ey = oY - 80 * 2
+        case 3:
+            ex = oX - 34
+            ey = oY - 70 * 2
+        case 2:
+            ex = oX - 20
+            ey = oY - 100 * 2
+        case 1:
+            ex = oX - 3
+            ey = oY - 40 * 2
+        default:
+            break
+        }
+        
+        let coinsText = UILabel()
+        if indexAt == 5 {
+            coinsText.text = coins
+            coinsText.font = UIFont.systemFont(ofSize: 0.1)
+            coinsText.textColor = .yellow
+            var frameForCoins: CGRect = bubbleImageView.frame
+            frameForCoins.origin.x += 100
+            frameForCoins.size.width = 120
+            frameForCoins.size.height = 40
+            coinsText.frame = frameForCoins
+            self.addSubview(coinsText)
+        }
+        
+        zigzagPath.addLine(to: CGPoint(x: ex, y: ey))
+        
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            bubbleImageView.removeFromSuperview()
+            coinsText.removeFromSuperview()
+        }
+        
+        var animationTime = 0.5
+        if indexAt == 5 {
+            animationTime = 0.8
+            coinsText.font = UIFont.systemFont(ofSize: 0.2)
+            coinsText.alpha = 0.2
+            UIView.animate(withDuration: 0.5) {
+                coinsText.alpha = 1.0
+                coinsText.font = UIFont.boldSystemFont(ofSize: 40)
+            }
+        }
+        
+        let pathAnimation = CAKeyframeAnimation(keyPath: "position")
+        pathAnimation.duration = animationTime
+        pathAnimation.path = zigzagPath.cgPath
+        pathAnimation.fillMode = .forwards
+        pathAnimation.isRemovedOnCompletion = false
+        bubbleImageView.layer.add(pathAnimation, forKey: "movingAnimation")
+        coinsText.layer.add(pathAnimation, forKey: "movingAnimation")
+        CATransaction.commit()
+    }
+
+    
 }
 
 extension UIStackView {

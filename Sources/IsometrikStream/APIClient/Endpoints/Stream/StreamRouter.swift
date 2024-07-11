@@ -19,6 +19,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     case getSingleStream(streamId: String)
     case getRecordedStream
     case updateScheduledStream
+    case getPresignedUrl(streamTitle: String, mediaExtension: String)
     
     var description: String {
         switch self {
@@ -32,6 +33,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .getSingleStream: return "get particular stream"
         case .getRecordedStream: return "get recorded stream"
         case .updateScheduledStream: return "update scheduled stream"
+        case .getPresignedUrl: return "For uploading stream image cover"
         }
     }
     
@@ -39,7 +41,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         switch self {
         case .startStream, .fetchStreams, .stopStream:
             return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
-        case .getRecordedStream:
+        case .getRecordedStream, .getPresignedUrl:
             return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
         default:
             return URL(string:"https://\(ISMConfiguration.shared.secondaryOrigin)")!
@@ -80,6 +82,8 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             path = "/streaming/v2/stream/recordings"
         case .updateScheduledStream:
             path = "/v1/updatestream"
+        case .getPresignedUrl:
+            path = "/streaming/v2/stream/presignedurl"
         }
         return path
     }
@@ -96,7 +100,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case let .deleteStream(streamId):
             param = ["streamId":"\(streamId)"]
             break
-        case let .fetchStreams(streamQuery) :
+        case let .fetchStreams(streamQuery):
             if let streamQuery = streamQuery {
                 
                 if let streamId = streamQuery.streamId {
@@ -138,6 +142,11 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case let .getSingleStream(streamId):
             param = ["streamId":"\(streamId)"]
             break
+        case let .getPresignedUrl(streamTitle, mediaExtension):
+            param = [
+                "streamTitle": "\(streamTitle)",
+                "mediaExtension": "\(mediaExtension)"
+            ]
         default:
             break
             

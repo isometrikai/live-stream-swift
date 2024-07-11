@@ -40,6 +40,7 @@ final public class GoLiveViewModel {
     var isometrik: IsometrikSDK
     var productViewModel: ProductViewModel
     var currenStreamType: GoLiveStreamType = .guestLive
+    let uploadingManager = UploadingManager()
     
     var isPaid: Bool = false
     var paidAmount: Int = 0
@@ -71,6 +72,8 @@ final public class GoLiveViewModel {
     var rtmpURL: String = "rtmp://rtmp.isometrik.io"
     var streamKey: String = ""
     var videoPreviewUrl: URL?
+    var presignedUrlString: String?
+    var mediaUrlString: String?
     
     var selectedCoins: Int = 0
     
@@ -252,12 +255,32 @@ final public class GoLiveViewModel {
     
     // MARK: Stream Uploads
     
-    func uploadImage(image: UIImage, completion: @escaping (_ imageUrl: String?)-> Void) {
-        CloudinaryWrapper.uploadImage(image: image) { imageURL in
+    func getPresignedUrl(streamTitle: String, completion: @escaping (_ success: Bool, _ error: String?)-> Void) {
+        
+        isometrik.getIsometrik().getPresignedUrl(streamTitle: streamTitle, mediaExtension: "jpeg") { response in
+            self.presignedUrlString = response.presignedUrl.unwrap
+            self.mediaUrlString = response.mediaUrl.unwrap
             DispatchQueue.main.async {
-                completion(imageURL)
+                completion(true, nil)
+            }
+        } failure: { error in
+            DispatchQueue.main.async {
+                completion(false, error.localizedDescription)
             }
         }
+        
+    }
+    
+    func uploadStreamCover(image: UIImage, _ completion: @escaping (UploadStatus) -> Void){
+        
+        if let presignedUrlString, let presignedUrl = URL(string: presignedUrlString) {
+            uploadingManager.uploadImageToS3(presignedURL: presignedUrl, image: image) { result in
+                DispatchQueue.main.async {
+                    completion(result)
+                }
+            }
+        }
+        
     }
     
     func uploadVideo(url: URL?, completion: @escaping (_ videoUrl: String?) -> Void) {

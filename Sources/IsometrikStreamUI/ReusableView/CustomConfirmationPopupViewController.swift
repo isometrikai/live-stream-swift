@@ -39,7 +39,7 @@ class CustomConfirmationPopupViewController: UIViewController, AppearanceProvide
         setupConstraints()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.playAnimation(for: "success-animation")
+            self.playAnimation(for: self.appearance.json.successAnimation)
         }
         
     }

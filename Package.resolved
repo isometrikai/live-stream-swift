@@ -10,15 +10,6 @@
       }
     },
     {
-      "identity" : "cloudinary_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/cloudinary/cloudinary_ios",
-      "state" : {
-        "revision" : "b4daed17183f45a1ef3045983ee8255dc1979122",
-        "version" : "5.0.0"
-      }
-    },
-    {
       "identity" : "cocoamqtt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/emqx/CocoaMQTT",
@@ -97,15 +88,6 @@
       "state" : {
         "revision" : "9f0c76544701845ad98716f3f6a774a892152bcb",
         "version" : "1.26.0"
-      }
-    },
-    {
-      "identity" : "swiftyjson",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyJSON/SwiftyJSON",
-      "state" : {
-        "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
-        "version" : "5.0.2"
       }
     },
     {

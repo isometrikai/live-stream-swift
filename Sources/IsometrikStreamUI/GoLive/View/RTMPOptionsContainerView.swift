@@ -145,7 +145,6 @@ class RTMPOptionsContainerView: UIView, AppearanceProvider {
     let restreamOption: RestreamOptionView = {
         let view = RestreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.isHidden = true
         return view
     }()
     

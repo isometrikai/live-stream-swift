@@ -3,6 +3,8 @@
 
 import Foundation
 import IsometrikStream
+import UIKit
+import AVFoundation
 
 struct GiftsForGroupData {
     
@@ -28,10 +30,12 @@ class StreamGiftViewModel {
     var giftModelData: ISMStreamGiftModelData?
     var giftGroup: [ISMStreamGiftModel] = []
     var giftsInGroup: [GiftsForGroupData] = []
+    var walletBalance: Float64 = 0
     
     var skipForGroup = 0
     var skipForGroupItems = 0
     var limit = 10
+    let contentViewHeight: CGFloat = UIScreen.main.bounds.height * 0.6
     
     // selected gift group data
     var selectedGiftGroupData: ISMStreamGiftModel?
@@ -40,6 +44,9 @@ class StreamGiftViewModel {
     // callbacks
     var sendGift: ((_ giftData: StreamMessageGiftModel) -> Void)?
     var buyCoins: (() -> Void)?
+    
+    var contentBottomConstraint: NSLayoutConstraint?
+    var audioPlayer: AVAudioPlayer?
     
     init(isometrik: IsometrikSDK, streamInfo: ISMStream, recieverGiftData: ISMCustomGiftRecieverData) {
         self.isometrik = isometrik
@@ -130,6 +137,20 @@ class StreamGiftViewModel {
             }
         }
         
+    }
+    
+    func getWalletBalance(completion: @escaping(_ success: Bool, _ error: String?)->Void){
+        isometrik.getIsometrik().getWalletBalance { response in
+            self.walletBalance = response.data?.balance ?? 0
+            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance)
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+        } failure: { error in
+            DispatchQueue.main.async {
+                completion(false, error.localizedDescription)
+            }
+        }
     }
     
     //:

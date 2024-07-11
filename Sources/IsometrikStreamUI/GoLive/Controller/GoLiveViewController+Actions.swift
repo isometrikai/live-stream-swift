@@ -13,7 +13,7 @@ import IsometrikStream
 
 // MARK: - HEADER ACTIONS
 
-extension GoLiveViewController: GoLiveHeaderActionDelegate {
+extension GoLiveViewController: GoLiveHeaderActionDelegate, AppearanceProvider {
     
     func didClearImageButtonTapped() {
         let profileView = contentView.rtmpOptionsContainerView.profileView
@@ -59,10 +59,10 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         let streamTextView = profileView.streamTextView.text
         let profileImageView = profileView.profileCoverImageView
         
-//        if streamTextView == "Add description..." {
-//            self.ism_showAlert("Error", message: "Stream Title Required!")
-//            return
-//        }
+        if streamTextView == "Add description..." {
+            self.ism_showAlert("Error", message: "Stream Title Required!")
+            return
+        }
         
         // show user error if mqtt connection not connected
         if !(isometrik.getMqttSession().isConnected) {
@@ -82,37 +82,60 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
             }
         }
         
-//        if let image = profileImageView.image {
-//            ISMLiveShowLoader.shared.startLoading()
-//            
-//            let description = streamTextView.unwrap
-//            let userData = isometrik.getUserSession().getUserModel()
-//            
-//            viewModel.uploadImage(image: image) { imageUrl in
-//                let imageUrlString = String(imageUrl ?? "")
-//                self.startNewStream(userData: userData, description: description, imagePath: imageUrlString, videoPath: "")
-//            }
-//            
-//        } else {
-//            
-//            // Add condition for fromDevice case only
-//            if viewModel.currenStreamType == .fromDevice {
-//                self.ism_showAlert("Error", message: "Stream Cover Image required".localized + "!")
-//                return
-//            }
-//            
-//            ISMLiveShowLoader.shared.startLoading()
-//            let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
-//            viewModel.stillImageOutput.capturePhoto(with: settings, delegate: self)
-//            
-//        }
+        if let image = profileImageView.image {
+            
+            ISMLiveShowLoader.shared.startLoading()
+            
+            let description = streamTextView.unwrap
+            let userData = isometrik.getUserSession().getUserModel()
+            
+            
+            viewModel.getPresignedUrl(streamTitle: description) { success, error in
+                if success {
+                    self.viewModel.uploadStreamCover(image: image) { status in
+                        
+                        switch status {
+                        case .progress(let progress):
+                            print("Upload progress: \(progress * 100)%")
+                            break
+                        case .success:
+                            let userData = isometrik.getUserSession().getUserModel()
+                            self.startNewStream(userData: userData, description: description, imagePath: self.viewModel.mediaUrlString ?? "", videoPath: "")
+                            break
+                        case .failure(let error):
+                            if let error = error {
+                                print("Upload error: \(error.localizedDescription)")
+                            } else {
+                                print("Upload failed with unknown error")
+                            }
+                        }
+                        
+                    }
+                } else {
+                    print(error)
+                }
+            }
+            
+        } else {
+            
+            // Add condition for fromDevice case only
+            if viewModel.currenStreamType == .fromDevice {
+                self.ism_showAlert("Error", message: "Stream Cover Image required".localized + "!")
+                return
+            }
+            
+            ISMLiveShowLoader.shared.startLoading()
+            let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+            viewModel.stillImageOutput.capturePhoto(with: settings, delegate: self)
+            
+        }
         
         
-        ISMLiveShowLoader.shared.startLoading()
-
-        let description = streamTextView.unwrap
-        let userData = isometrik.getUserSession().getUserModel()
-        self.startNewStream(userData: userData, description: description, imagePath: "https://picsum.photos", videoPath: "")
+//        ISMLiveShowLoader.shared.startLoading()
+//
+//        let description = streamTextView.unwrap
+//        let userData = isometrik.getUserSession().getUserModel()
+//        self.startNewStream(userData: userData, description: description, imagePath: "https://picsum.photos", videoPath: "")
         
     }
     
@@ -167,9 +190,9 @@ extension GoLiveViewController {
     func setupConditionalContent(){
         
         let isometrik = viewModel.isometrik
-        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductEnabled
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled
         let isRestreamEnabled = isometrik.getStreamOptionsConfiguration().isRestreamEnabled
-        let isScheduleEnabled = isometrik.getStreamOptionsConfiguration().isScheduleStreamOptionEnabled
+        let isScheduleEnabled = isometrik.getStreamOptionsConfiguration().isScheduleStreamEnabled
         let isRTMPEnabled = isometrik.getStreamOptionsConfiguration().isRTMPStreamEnabled
         
         let rtmpContainerView = contentView.rtmpOptionsContainerView
@@ -192,9 +215,11 @@ extension GoLiveViewController {
         if isRestreamEnabled {
             toggleStackview.addArrangedSubview(restreamBroadCastToggle)
             if viewModel.restreamBroadcast {
+                restreamOption.isHidden = false
                 contentStackView.addArrangedSubview(restreamOption)
             } else {
                 contentStackView.removeArrangedSubview(restreamOption)
+                restreamOption.isHidden = true
             }
         }
         
@@ -613,7 +638,7 @@ extension GoLiveViewController {
                     }
                 }
                 
-                //controller.playAnimation(for: "success-animation")
+                controller.playAnimation(for: self.appearance.json.successAnimation)
                 
                 self.present(controller, animated: true)
                 
@@ -769,7 +794,7 @@ extension GoLiveViewController {
                 }
             }
             
-            //controller.playAnimation(for: "success-animation")
+            controller.playAnimation(for: appearance.json.successAnimation)
             self.present(controller, animated: true)
             
         } failure: { [weak self] error in

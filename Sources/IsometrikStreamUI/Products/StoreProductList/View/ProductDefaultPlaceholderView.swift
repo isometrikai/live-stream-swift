@@ -63,10 +63,10 @@ class ProductDefaultPlaceholderView: UIView, AppearanceProvider {
         ])
     }
     
-    func playAnimation(for fileName: String) {
+    func playAnimation(for filePath: String) {
         
         var animationView: LottieAnimationView?
-        animationView = .init(name: fileName)
+        animationView = .init(filePath: filePath)
         animationView?.frame = animationHolderView.bounds
         animationView?.contentMode = .scaleAspectFit
         animationView?.loopMode = .loop

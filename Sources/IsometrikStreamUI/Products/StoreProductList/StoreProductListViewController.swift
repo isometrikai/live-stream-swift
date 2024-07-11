@@ -92,7 +92,7 @@ class StoreProductListViewController: UIViewController, AppearanceProvider {
         setupNavigations()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.defaultView.playAnimation(for: "Box-animation")
+            self.defaultView.playAnimation(for: self.appearance.json.emptyBoxAnimation)
             self.defaultView.defaultLabel.text = "No Products in this Store".localized
         }
     }

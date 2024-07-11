@@ -23,9 +23,9 @@ extension VerticalStreamCollectionViewCell {
         let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status)
         let streamMembers = viewModel.streamMembers
         
-        let isPKEnabled = isometrik.getStreamOptionsConfiguration().isPKEnabled
-        let isGroupStreaming = isometrik.getStreamOptionsConfiguration().isGroupStreamingEnabled
-        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductEnabled
+        let isPKEnabled = isometrik.getStreamOptionsConfiguration().isPKStreamEnabled
+        let isGroupStreaming = isometrik.getStreamOptionsConfiguration().isGroupStreamEnabled
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled
         
         // PK flags
         let isPKStream = streamData.isPkChallenge.unwrap

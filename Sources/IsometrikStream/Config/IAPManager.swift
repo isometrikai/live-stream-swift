@@ -101,7 +101,7 @@ extension IAPManager: SKPaymentTransactionObserver {
                     let purchaseDetails = ["productId": transactions[0].payment.productIdentifier,
                                            "transactionId": identifier,
                                            "transationDate": date] as [String : Any]
-                    IAPManager.savePurchasedPlan(data: purchaseDetails)
+                    UserDefaultsProvider.shared.setPurchaseDetails(data: purchaseDetails)
                     onBuyProductHandler?(.success(true))
                     SKPaymentQueue.default().finishTransaction(transaction)
                 break;
@@ -234,29 +234,28 @@ extension IAPManager{
     }
     
     //save purchase plans from appstore
-    public class func savePurchasedPlan(data:[String:Any]){
-        UserDefaults.standard.setValue(data, forKey: "purchaseDetails")
-        UserDefaults.standard.synchronize()
-    }
+//    public class func savePurchasedPlan(data:[String:Any]){
+//        UserDefaultsProvider.shared.setPurchaseDetails(data: data)
+//    }
     
-    public class func getPurchasedPlan()->[String:Any]{
-        if let purchasedProDetails = UserDefaults.standard.object(forKey: "purchaseDetails") as? [String:Any] {
-            return purchasedProDetails
-        }
-        return [:]
-    }
+//    public class func getPurchasedPlan()->[String:Any]{
+//        if let purchasedProDetails = UserDefaults.standard.object(forKey: "purchaseDetails") as? [String:Any] {
+//            return purchasedProDetails
+//        }
+//        return [:]
+//    }
     
-    public class func saveReceiptData(data:[[String:Any]]){
-        UserDefaults.standard.setValue(data, forKey:"receiptData")
-        UserDefaults.standard.synchronize()
-    }
-    
-    public class func getReceiptData() -> [[String:Any]]{
-        if let data = UserDefaults.standard.value(forKey:"receiptData") as? [[String:Any]] {
-            return data
-        }
-        return [[:]]
-    }
+//    public class func saveReceiptData(data:[[String:Any]]){
+//        UserDefaults.standard.setValue(data, forKey:"receiptData")
+//        UserDefaults.standard.synchronize()
+//    }
+//    
+//    public class func getReceiptData() -> [[String:Any]]{
+//        if let data = UserDefaults.standard.value(forKey:"receiptData") as? [[String:Any]] {
+//            return data
+//        }
+//        return [[:]]
+//    }
     
     /// used to get product as per coin value
     public func getProductWithCoin(coin: String) -> SKProduct?{
