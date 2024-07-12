@@ -10,7 +10,7 @@ final public class BuyCoinsViewModel {
     var coinPlans: [CoinPlan] = []
     var skProducts: [SKProduct] = []
     
-    private var isometrik: IsometrikSDK
+    public var isometrik: IsometrikSDK
     
     public init(isometrik: IsometrikSDK) {
         self.isometrik = isometrik

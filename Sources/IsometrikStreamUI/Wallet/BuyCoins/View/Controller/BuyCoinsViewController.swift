@@ -29,9 +29,10 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
         return view
     }()
     
-    let walletBalanceHeaderView: CoinBalanceHeaderView = {
+    lazy var walletBalanceHeaderView: CoinBalanceHeaderView = {
         let view = CoinBalanceHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.transactionButton.addTarget(self, action: #selector(transactionButtonTapped), for: .touchUpInside)
         return view
     }()
     
@@ -141,6 +142,12 @@ public final class BuyCoinsViewController: UIViewController, AppearanceProvider 
     
     @objc func closeButtonTapped(){
         self.dismiss(animated: true)
+    }
+    
+    @objc func transactionButtonTapped(){
+        let viewModel = WalletTransactionViewModel(isometrik: viewModel.isometrik)
+        let controller = WalletTransactionViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 
 

@@ -82,22 +82,22 @@ public enum ISM_FontTypography {
 
     private func scaled(font: UIFont?, textStyle: UIFont.TextStyle) -> UIFont {
         
-        let defaultFont = UIFont.systemFont(ofSize: defaultFontSize())
+        let defaultFont = UIFont.systemFont(ofSize: defaultFontSize().0, weight: defaultFontSize().1)
         let fontToUse = font ?? defaultFont
         return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: fontToUse)
         
     }
     
-    private func defaultFontSize() -> CGFloat {
+    private func defaultFontSize() -> (CGFloat, UIFont.Weight) {
         switch self {
-        case .h1: return 40
-        case .h2: return 24
-        case .h3: return 20
-        case .h4: return 16
-        case .h5: return 14
-        case .h6: return 14
-        case .h7: return 12
-        case .h8: return 12
+        case .h1: return (40, .bold)
+        case .h2: return (24, .bold)
+        case .h3: return (20, .semibold)
+        case .h4: return (16, .semibold)
+        case .h5: return (14, .semibold)
+        case .h6: return (14, .medium)
+        case .h7: return (12, .bold)
+        case .h8: return (12, .medium)
         }
     }
     

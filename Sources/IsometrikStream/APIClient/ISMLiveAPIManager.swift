@@ -105,6 +105,24 @@ struct ISMLiveAPIManager {
                     let responseObject = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(responseObject, nil))
                 } catch {
+                    
+                    if let decodingError = error as? DecodingError {
+                        switch decodingError {
+                        case .typeMismatch(let key, let context):
+                            print("Type mismatch for key \(key), context: \(context.debugDescription)")
+                        case .valueNotFound(let type, let context):
+                            print("Value not found for type \(type), context: \(context.debugDescription)")
+                        case .keyNotFound(let key, let context):
+                            print("Key not found: \(key), context: \(context.debugDescription)")
+                        case .dataCorrupted(let context):
+                            print("Data corrupted, context: \(context.debugDescription)")
+                        @unknown default:
+                            print("Unknown decoding error")
+                        }
+                    } else {
+                        print("Error: \(error.localizedDescription)")
+                    }
+                    
                     completion(.failure(.decodingError(error)))
                 }
             case 204, 404, 400:

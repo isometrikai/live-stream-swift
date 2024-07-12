@@ -47,6 +47,18 @@ class CoinBalanceHeaderView: UIView, AppearanceProvider {
         return label
     }()
     
+    lazy var transactionButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Transaction", for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        button.backgroundColor = appearance.colors.appColor
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
+        button.layer.cornerRadius = 4
+        return button
+    }()
+    
     public let dividerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -73,6 +85,7 @@ class CoinBalanceHeaderView: UIView, AppearanceProvider {
         addSubview(infoStackView)
         infoStackView.addArrangedSubview(balanceLabel)
         infoStackView.addArrangedSubview(placeHolderLabel)
+        addSubview(transactionButton)
         addSubview(dividerView)
     }
     
@@ -85,7 +98,11 @@ class CoinBalanceHeaderView: UIView, AppearanceProvider {
             
             infoStackView.leadingAnchor.constraint(equalTo: coinImageView.trailingAnchor, constant: 12),
             infoStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            infoStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            infoStackView.trailingAnchor.constraint(equalTo: transactionButton.leadingAnchor, constant: -8),
+            
+            transactionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            transactionButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            transactionButton.heightAnchor.constraint(equalToConstant: 40),
             
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),

@@ -168,6 +168,10 @@ public struct ISM_Image {
     public var kickout: UIImage = loadImageSafely(with: "ism_kickout")
     public var userJoined: UIImage = loadImageSafely(with: "ism_user_joined")
     
+    // Wallet images
+    public var debitTransaction: UIImage = loadImageSafely(with: "ic_debit")
+    public var creditTransaction: UIImage = loadImageSafely(with: "ic_credit")
+    
     public init() {}
     
 }
