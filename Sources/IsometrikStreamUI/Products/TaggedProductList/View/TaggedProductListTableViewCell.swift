@@ -15,7 +15,7 @@ protocol TaggedProductListActionDelegate {
     func didMessageTapped(_ index: Int)
 }
 
-class TaggedProductListTableViewCell: UITableViewCell, AppearanceProvider {
+class TaggedProductListTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     var isFromRecordedStream: Bool = false

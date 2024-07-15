@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamDeleteMessageTableViewCell: UITableViewCell, AppearanceProvider {
+class StreamDeleteMessageTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -13,7 +13,7 @@ enum StreamPopupAction {
     case ok
 }
 
-class StreamPopupViewController: UIViewController, AppearanceProvider {
+class StreamPopupViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

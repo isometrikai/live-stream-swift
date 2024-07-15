@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-public final class BuyCoinsViewController: UIViewController, AppearanceProvider {
+public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

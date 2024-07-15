@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StoreListTableViewCell: UITableViewCell, AppearanceProvider {
+class StoreListTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

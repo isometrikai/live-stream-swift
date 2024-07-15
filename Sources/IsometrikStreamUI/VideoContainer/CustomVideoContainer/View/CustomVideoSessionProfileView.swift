@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomVideoSessionProfileView: UIView, AppearanceProvider {
+class CustomVideoSessionProfileView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
 
@@ -127,7 +127,7 @@ class CustomVideoSessionProfileView: UIView, AppearanceProvider {
 }
 
 
-class BlurrHolderView: UIView, AppearanceProvider {
+class BlurrHolderView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

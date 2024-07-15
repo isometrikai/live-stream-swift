@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DefaultAddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
+class DefaultAddProductCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

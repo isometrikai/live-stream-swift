@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-class CoinBalanceHeaderView: UIView, AppearanceProvider {
+class CoinBalanceHeaderView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

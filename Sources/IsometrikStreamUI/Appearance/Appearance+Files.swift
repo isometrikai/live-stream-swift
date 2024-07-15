@@ -1,9 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Appscrip 3Embed on 11/07/24.
-//
 
 import Foundation
 
@@ -11,7 +5,7 @@ public struct ISM_Sound {
     
     private static func loadSoundFileSafely(with soundName: String) -> String {
     
-        if let path = Bundle.isometrikStreamBundle.path(forResource: soundName, ofType: "mp3") {
+        if let path = Bundle.isometrikStreamUIBundle.path(forResource: soundName, ofType: "mp3") {
             return path
         } else {
             print(
@@ -32,7 +26,7 @@ public struct ISM_JSON {
     
     private static func loadJSONFileSafely(with fileName: String) -> String {
     
-        if let path = Bundle.isometrikStreamBundle.path(forResource: fileName, ofType: "json") {
+        if let path = Bundle.isometrikStreamUIBundle.path(forResource: fileName, ofType: "json") {
             return path
         } else {
             print(
@@ -48,5 +42,6 @@ public struct ISM_JSON {
     public var emptyBoxAnimation : String = loadJSONFileSafely(with: "Box-animation")
     public var confettiAnimation : String = loadJSONFileSafely(with: "confetti-animation")
     public var successAnimation : String = loadJSONFileSafely(with: "success-animation")
+    public var loaderAnimation : String = loadJSONFileSafely(with: "dot-loader")
     
 }

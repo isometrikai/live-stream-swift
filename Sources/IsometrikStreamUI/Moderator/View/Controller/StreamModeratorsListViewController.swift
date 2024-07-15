@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import MBProgressHUD
 import IsometrikStream
 
 protocol StreamModeratorsListActionDelegate {
     func openListForSelectingModerators()
 }
 
-class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
+class StreamModeratorsListViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     var viewModel: ModeratorViewModel
@@ -90,10 +89,12 @@ class StreamModeratorsListViewController: UIViewController, AppearanceProvider {
         viewModel.skip = 0
         viewModel.moderatorList.removeAll()
         
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         viewModel.getModerators { [weak self] in
             guard let self else { return }
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             self.tableView.reloadData()
             self.headerView.headerTitle.text = "Moderators".localized + " (\(self.viewModel.moderatorList.count))"
         }

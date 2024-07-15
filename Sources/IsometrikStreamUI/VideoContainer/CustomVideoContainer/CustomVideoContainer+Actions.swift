@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-extension CustomVideoContainer: AppearanceProvider {
+extension CustomVideoContainer: ISMStreamUIAppearanceProvider {
     
     func refreshLayout(streamInfo: ISMStream?){
         //reorderSessions()

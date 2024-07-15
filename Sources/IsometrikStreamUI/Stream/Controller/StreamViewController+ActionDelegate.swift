@@ -790,20 +790,20 @@ extension StreamViewController: StreamCellActionDelegate {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "GoLive Error : Invalid Response")
+                    self.view.showToast( message: "GoLive Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
                 }
                 
             default :
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Stream Error: Failed to start a new stream")
+                    self.view.showToast( message: "Stream Error: Failed to start a new stream")
                 }
                 break
             }

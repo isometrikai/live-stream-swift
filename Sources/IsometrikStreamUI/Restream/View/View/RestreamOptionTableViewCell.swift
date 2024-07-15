@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class RestreamOptionTableViewCell: UITableViewCell, AppearanceProvider {
+class RestreamOptionTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKCongratulationBannerView: UIView, AppearanceProvider {
+class PKCongratulationBannerView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

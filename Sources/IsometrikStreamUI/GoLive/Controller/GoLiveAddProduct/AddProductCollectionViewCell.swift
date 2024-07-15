@@ -13,7 +13,7 @@ protocol AddProductActionDelegate {
     func didClearTapped(index: Int)
 }
 
-class AddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
+class AddProductCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

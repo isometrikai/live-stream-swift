@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveProfileView: UIView, AppearanceProvider {
+class GoLiveProfileView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

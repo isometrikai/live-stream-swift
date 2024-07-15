@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MBProgressHUD
+import IsometrikStream
 
 extension StreamTagProductViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -77,13 +77,14 @@ extension StreamTagProductViewController: TaggedProductDelegate {
         if !(productViewModel.taggedProductList.count > 0) { return }
         let productId = productViewModel.taggedProductList[index].childProductID.unwrap
         
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         
         productViewModel.pinProduct(productId: productId) { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
                 let pinnedProductData = self.productViewModel.pinnedProductData
-                print("Pinned Product Data :: \(self.productViewModel.pinnedProductData)")
                 
                 // pass data back and show the pinned product data
                 self.productViewModel.pinnedProduct_Callback?(self.productViewModel)
@@ -91,10 +92,7 @@ extension StreamTagProductViewController: TaggedProductDelegate {
                 // dismiss the controller
                 self.dismiss(animated: true)
                 
-            } else {
-                print(error)
             }
-            
         }
         
     }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveCustomToggleView: UIView, AppearanceProvider {
+class GoLiveCustomToggleView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

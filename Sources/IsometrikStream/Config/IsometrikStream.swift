@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Toast
 
 public protocol IsometrikStreamDelegate {
     func didFail(error: IsometrikError?)

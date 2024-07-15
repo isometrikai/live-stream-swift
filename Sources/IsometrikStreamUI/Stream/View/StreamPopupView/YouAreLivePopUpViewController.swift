@@ -19,7 +19,7 @@ protocol YouAreLivePopUpViewControllerProtocol: AnyObject {
     func tapButtonClick(tap: YouAreTap)
 }
 
-class YouAreLivePopUpViewController: UIViewController, AppearanceProvider {
+class YouAreLivePopUpViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

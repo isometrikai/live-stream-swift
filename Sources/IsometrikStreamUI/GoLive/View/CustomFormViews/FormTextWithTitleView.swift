@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FormTextWithTitleView: UIView, AppearanceProvider {
+class FormTextWithTitleView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

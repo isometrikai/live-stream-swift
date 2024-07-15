@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class CustomStreamLoaderView: UIView, AppearanceProvider {
+class CustomStreamLoaderView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

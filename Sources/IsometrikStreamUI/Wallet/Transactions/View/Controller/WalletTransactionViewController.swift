@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-class WalletTransactionViewController: UIViewController, AppearanceProvider {
+class WalletTransactionViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

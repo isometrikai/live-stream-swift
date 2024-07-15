@@ -19,7 +19,7 @@ enum ActionType {
     case kickout
 }
 
-class StreamViewerTableViewCell: UITableViewCell, AppearanceProvider {
+class StreamViewerTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamGiftPickerViewController: UIViewController, AppearanceProvider {
+class StreamGiftPickerViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     var viewModel: StreamGiftViewModel

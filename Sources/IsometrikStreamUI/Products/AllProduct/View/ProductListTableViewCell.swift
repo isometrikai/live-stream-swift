@@ -14,7 +14,7 @@ protocol ProductListActionDelegate {
     func didActionButtonTapped(index: Int)
 }
 
-class ProductListTableViewCell: UITableViewCell, AppearanceProvider {
+class ProductListTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

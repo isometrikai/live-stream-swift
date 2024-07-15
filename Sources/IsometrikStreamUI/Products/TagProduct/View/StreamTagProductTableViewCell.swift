@@ -14,7 +14,7 @@ protocol TaggedProductDelegate {
     func didPinItemTapped(index: Int)
 }
 
-class StreamTagProductTableViewCell: UITableViewCell, AppearanceProvider {
+class StreamTagProductTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

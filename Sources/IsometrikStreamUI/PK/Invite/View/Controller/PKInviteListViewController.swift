@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKInviteListViewController: UIViewController, AppearanceProvider {
+class PKInviteListViewController: UIViewController, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -166,7 +166,7 @@ extension PKInviteListViewController: UITableViewDelegate, UITableViewDataSource
                         let streamData = self?.viewModel.streamUserList[safe:index]
                         self?.viewModel.linking_CallBack?(streamData)
                     }else{
-                        self?.view.showISMLiveErrorToast( message: errorMessage ?? "")
+                        self?.view.showToast( message: errorMessage ?? "")
                     }
                 }
             })

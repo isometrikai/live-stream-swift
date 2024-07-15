@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class DynamicUserInfoTableViewCell: UITableViewCell, AppearanceProvider {
+class DynamicUserInfoTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

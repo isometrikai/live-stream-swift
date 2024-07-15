@@ -205,14 +205,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Update Publish:\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Update Publish:\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -452,11 +452,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "PK Stop Error: Invalid Response")
+                    self.view.showToast( message: "PK Stop Error: Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "PK Stop Error: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "PK Stop Error: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -513,11 +513,11 @@ extension StreamViewController {
                 
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "PK Winners: Invalid Response")
+                    self.view.showToast( message: "PK Winners: Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "PK Winners: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "PK Winners: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -715,7 +715,7 @@ extension StreamViewController {
                         switch error{
                         case .httpError(let errorCode, let errorMessage):
                             DispatchQueue.main.async{
-                                self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                                self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                             }
                         default :
                             break
@@ -787,11 +787,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "PK Stop Battle Error: Invalid Response")
+                    self.view.showToast( message: "PK Stop Battle Error: Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "PK Stop Battle Error: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "PK Stop Battle Error: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -832,11 +832,11 @@ extension StreamViewController {
                     break
                 case .invalidResponse:
                     DispatchQueue.main.async {
-                        self.view.showISMLiveErrorToast( message: "PK Error: Invalid Response")
+                        self.view.showToast( message: "PK Error: Invalid Response")
                     }
                 case .httpError(let errorCode, let errorMessage):
                     DispatchQueue.main.async{
-                        self.view.showISMLiveErrorToast( message: "PK Error: \(errorCode) \(errorMessage?.error ?? "")")
+                        self.view.showToast( message: "PK Error: \(errorCode) \(errorMessage?.error ?? "")")
                     }
                 default :
                     break

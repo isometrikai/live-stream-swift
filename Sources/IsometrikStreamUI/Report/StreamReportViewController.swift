@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
-import Toast
+import IsometrikStream
 
-class StreamReportViewController: UIViewController, AppearanceProvider {
+class StreamReportViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -47,9 +46,11 @@ class StreamReportViewController: UIViewController, AppearanceProvider {
         setUpConstraints()
         
         // loading reasons
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         userViewModel.getReportReasons { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
                 self.reasonsTableView.reloadData()
             }
@@ -100,12 +101,10 @@ extension StreamReportViewController: UITableViewDelegate, UITableViewDataSource
         let reason = userViewModel.reportReasons[indexPath.row]
         userViewModel.reportAUser(reason: reason) { success, error in
             if success {
-                self.view.makeToast("Successfully Reported".localized + "!", position: .bottom)
-                
+                self.view.showToast(message: "Successfully Reported!")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.dismiss(animated: true)
                 }
-                
             } else {
                 self.ism_showAlert("Error", message: "\(error ?? "")")
             }

@@ -13,7 +13,7 @@ enum BottomActionsUI {
     case button
 }
 
-class StreamFooterView: UIView, AppearanceProvider {
+class StreamFooterView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

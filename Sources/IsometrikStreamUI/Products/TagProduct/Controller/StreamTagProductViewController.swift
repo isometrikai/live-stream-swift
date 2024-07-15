@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
+import IsometrikStream
 
-class StreamTagProductViewController: UIViewController, AppearanceProvider {
+class StreamTagProductViewController: UIViewController, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     var bottomConstraint: NSLayoutConstraint?
@@ -152,7 +152,9 @@ class StreamTagProductViewController: UIViewController, AppearanceProvider {
         self.tagProductTableView.reloadData()
         
         if !isRefreshed {
-            MBProgressHUD.showAdded(to: self.view, animated: true)
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
         } else {
             self.defaultView.isHidden = true
         }
@@ -161,7 +163,7 @@ class StreamTagProductViewController: UIViewController, AppearanceProvider {
         headerView.trailingActionButton2.isHidden = (query != "") ? true : false
         
         productViewModel.fetchTaggedProducts(query: query) { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
                 
                 if self.productViewModel.taggedProductList.count == 0 {

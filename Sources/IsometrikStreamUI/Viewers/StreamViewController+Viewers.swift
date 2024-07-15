@@ -44,7 +44,7 @@ extension StreamViewController {
                 }
                 
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break

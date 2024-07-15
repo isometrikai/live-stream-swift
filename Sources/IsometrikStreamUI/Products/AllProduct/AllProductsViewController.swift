@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MBProgressHUD
 import IsometrikStream
 
 enum RouteType {
@@ -15,7 +14,7 @@ enum RouteType {
     case push
 }
 
-class AllProductsViewController: UIViewController, AppearanceProvider {
+class AllProductsViewController: UIViewController, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -224,11 +223,13 @@ class AllProductsViewController: UIViewController, AppearanceProvider {
         
         if productViewModel.productList.isEmpty || productViewModel.selectedProductList.isEmpty {
             
-            MBProgressHUD.showAdded(to: self.view, animated: true)
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
 
             productViewModel.fetchProducts { success, error in
                 
-                MBProgressHUD.hide(for: self.view, animated: true)
+                CustomLoader.shared.stopLoading()
                 
                 if success {
                     let _ = self.productViewModel!.totalProducts
@@ -255,12 +256,14 @@ class AllProductsViewController: UIViewController, AppearanceProvider {
             }
             
         } else {
-            MBProgressHUD.showAdded(to: self.view, animated: true)
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 
                 guard let self else { return }
                 
-                MBProgressHUD.hide(for: self.view, animated: true)
+                CustomLoader.shared.stopLoading()
                 self.productTableView.isHidden = false
                 self.defaultView.isHidden = true
                 self.updateSelectedProductView()
@@ -280,10 +283,12 @@ class AllProductsViewController: UIViewController, AppearanceProvider {
         
         self.defaultView.isHidden = true
     
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
     
         productViewModel.fetchAllStores() { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
                 if productViewModel.storesList.isEmpty {
                     self.defaultView.isHidden = false
@@ -367,20 +372,22 @@ class AllProductsViewController: UIViewController, AppearanceProvider {
             
             let group = DispatchGroup()
             group.enter()
-            MBProgressHUD.showAdded(to: view, animated: true)
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
             // create offers for change in products
             productViewModel.createOfferAndTagProductToLiveStream { success, error in
                 if success {
                     group.leave()
                 } else {
-                    MBProgressHUD.hide(for: self.view, animated: true)
+                    CustomLoader.shared.stopLoading()
                     self.ism_showAlert("Error", message: "\(error ?? "")")
                 }
             }
             
             group.notify(queue: .main){
                 productViewModel.removeTaggedProducts { success, error in
-                    MBProgressHUD.hide(for: self.view, animated: true)
+                    CustomLoader.shared.stopLoading()
                     if success {
                         self.backButtonTapped()
                     } else {

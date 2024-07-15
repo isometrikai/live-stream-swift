@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension StreamViewController: AppearanceProvider {
+extension StreamViewController: ISMStreamUIAppearanceProvider {
     
     func sendHeart(){
         

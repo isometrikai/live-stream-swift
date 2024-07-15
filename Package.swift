@@ -22,8 +22,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/livekit/client-sdk-swift", from: "2.0.7"),
         .package(url: "https://github.com/airbnb/lottie-ios", from: "4.4.3"),
-        .package(url: "https://github.com/scalessec/Toast-Swift", from: "5.1.1"),
-        .package(url: "https://github.com/jdg/MBProgressHUD", from: "1.2.0"),
         .package(url: "https://github.com/emqx/CocoaMQTT", from: "2.1.6"),
         .package(url: "https://github.com/onevcat/Kingfisher", from: "7.12.0"),
         .package(url: "https://github.com/kasketis/netfox", from: "1.0.0")
@@ -35,7 +33,11 @@ let package = Package(
             name: "IsometrikStream",
             dependencies: [
                 .product(name: "LiveKit", package: "client-sdk-swift"),
-                .product(name: "CocoaMQTT", package: "cocoamqtt")
+                .product(name: "CocoaMQTT", package: "cocoamqtt"),
+                .product(name: "Lottie", package: "lottie-ios")
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .target(
@@ -43,8 +45,6 @@ let package = Package(
             dependencies: [
                 "IsometrikStream",
                 .product(name: "Lottie", package: "lottie-ios"),
-                .product(name: "Toast", package: "toast-swift"),
-                .product(name: "MBProgressHUD", package: "mbprogresshud"),
                 .product(name: "Kingfisher", package: "kingfisher"),
                 .product(name: "netfox", package: "netfox")
             ],

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class ProductDetailsViewController: UIViewController, UITextFieldDelegate, AppearanceProvider {
+class ProductDetailsViewController: UIViewController, UITextFieldDelegate, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     var addButtonBottomConstraint: NSLayoutConstraint?

@@ -7,7 +7,7 @@
 
 import UIKit
 import Photos
-import MBProgressHUD
+import IsometrikStream
 
 extension GoLiveViewController {
     
@@ -104,7 +104,7 @@ extension GoLiveViewController: AVCapturePhotoCaptureDelegate {
         let image = UIImage(data: imageData)
         profileImageView.image = image
         
-        MBProgressHUD.hide(for: self.view, animated: true)
+        CustomLoader.shared.stopLoading()
         
         didGoLiveButtonTapped()
     }

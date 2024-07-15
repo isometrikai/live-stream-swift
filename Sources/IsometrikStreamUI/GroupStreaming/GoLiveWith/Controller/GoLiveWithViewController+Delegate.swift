@@ -152,7 +152,7 @@ extension GoLiveWithViewController: StreamViewerActionDelegate, StreamMemberList
                 
                 break
             case .failure(let msg):
-                self.view.showISMLiveErrorToast( message: msg)
+                self.view.showToast( message: msg)
          
             }
             
@@ -178,7 +178,7 @@ extension GoLiveWithViewController: StreamViewerActionDelegate, StreamMemberList
                 
                 break
             case .failure(let msg):
-                self.view.showISMLiveErrorToast( message: msg)
+                self.view.showToast( message: msg)
             }
             
         }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FormSimpleTextView: UIView, AppearanceProvider {
+class FormSimpleTextView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamRequestsViewController: UIViewController, AppearanceProvider {
+class StreamRequestsViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -326,7 +326,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                     self.getRequestStatus()
                     break
                 case .failure(let msg):
-                    self.view.showISMLiveErrorToast(message: msg)
+                    self.view.showToast(message: msg)
                     break
                 }
             }
@@ -380,7 +380,7 @@ class StreamRequestsViewController: UIViewController, AppearanceProvider {
                         self.setupUI()
                         break
                     case .failure(let msg):
-                        self.view.showISMLiveErrorToast(message: msg)
+                        self.view.showToast(message: msg)
                         break
                     }
                 }

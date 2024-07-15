@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import Toast
 import IsometrikStream
 
-class RTMPIngestViewController: UIViewController, AppearanceProvider {
+class RTMPIngestViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -153,7 +152,7 @@ class RTMPIngestViewController: UIViewController, AppearanceProvider {
         // write to clipboard
         UIPasteboard.general.string = streamKeyView.formTextView.customTextLabel.text ?? ""
 
-        self.view.showISMLiveErrorToast(message:"Stream Key Copied!" )
+        self.view.showToast(message:"Stream Key Copied!" )
 
     }
     
@@ -162,7 +161,7 @@ class RTMPIngestViewController: UIViewController, AppearanceProvider {
         UIPasteboard.general.string = rtmpURLView.formTextView.customTextLabel.text ?? ""
         
         // copied animation
-        self.view.showISMLiveErrorToast(message:"RTMP URL Copied!" )
+        self.view.showToast(message:"RTMP URL Copied!" )
     }
 
 }

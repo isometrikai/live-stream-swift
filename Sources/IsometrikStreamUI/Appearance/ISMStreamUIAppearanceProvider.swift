@@ -1,15 +1,9 @@
-//
-//  Appearance.swift
-//  isometrik-livestream
-//
-//  Created by Appscrip 3Embed on 27/06/24.
-//
 
 import UIKit
 
-public protocol AppearanceProvider: AnyObject {
+public protocol ISMStreamUIAppearanceProvider: AnyObject {
     /// Appearance object to change appearance of the existing views or to use default appearance of the SDK by custom components.
-    var appearance: Appearance { get set }
+    var appearance: ISMStreamUIAppearance { get set }
 
     /// This function is called afther the appearance is registered.
     ///
@@ -20,10 +14,10 @@ public protocol AppearanceProvider: AnyObject {
 
 // MARK: - Protocol extensions for UIView
 
-public extension AppearanceProvider where Self: UIResponder {
+public extension ISMStreamUIAppearanceProvider where Self: UIResponder {
     func appearanceDidRegister() {}
 
-    var appearance: Appearance {
+    var appearance: ISMStreamUIAppearance {
         get {
             // If we have an appearance registered, return it
             if let appearance = associatedAppearance {
@@ -34,7 +28,7 @@ public extension AppearanceProvider where Self: UIResponder {
             // Skip non-providers
             var _next = next
             while _next != nil {
-                if let _next = _next as? AppearanceProvider {
+                if let _next = _next as? ISMStreamUIAppearanceProvider {
                     return _next.appearance
                 } else {
                     _next = _next?.next
@@ -56,8 +50,8 @@ public extension AppearanceProvider where Self: UIResponder {
 private extension UIResponder {
     static var associatedAppearanceKey: UInt8 = 1
 
-    var associatedAppearance: Appearance? {
-        get { objc_getAssociatedObject(self, &Self.associatedAppearanceKey) as? Appearance }
+    var associatedAppearance: ISMStreamUIAppearance? {
+        get { objc_getAssociatedObject(self, &Self.associatedAppearanceKey) as? ISMStreamUIAppearance }
         set { objc_setAssociatedObject(self, &Self.associatedAppearanceKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
 }

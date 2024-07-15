@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RestreamOptionView: UIView, AppearanceProvider {
+class RestreamOptionView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -1,13 +1,7 @@
-//
-//  Appearance.swift
-//  isometrik-livestream
-//
-//  Created by Appscrip 3Embed on 27/06/24.
-//
 
 import UIKit
 
-public struct Appearance {
+public struct ISMStreamUIAppearance {
     
     public var images = ISM_Image()
     public var colors = ISM_Color()
@@ -25,6 +19,6 @@ public struct Appearance {
 
 // MARK: - Appearance + Default
 
-public extension Appearance {
-    static var `default`: Appearance = .init()
+public extension ISMStreamUIAppearance {
+    static var `default`: ISMStreamUIAppearance = .init()
 }

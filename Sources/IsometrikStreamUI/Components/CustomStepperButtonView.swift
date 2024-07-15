@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomStepperButtonView: UIView, AppearanceProvider {
+class CustomStepperButtonView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

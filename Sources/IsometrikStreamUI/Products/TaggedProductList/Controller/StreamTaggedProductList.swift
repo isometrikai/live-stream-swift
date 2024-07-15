@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
+import IsometrikStream
 
-class StreamTaggedProductList: UIViewController, AppearanceProvider {
+class StreamTaggedProductList: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -80,10 +80,12 @@ class StreamTaggedProductList: UIViewController, AppearanceProvider {
     
     func loadData(){
         guard let productViewModel else { return }
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         
         productViewModel.fetchTaggedProducts { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
                 //self.defaultView.isHidden = false
                 self.headerView.headerTitle.text = "All Products"

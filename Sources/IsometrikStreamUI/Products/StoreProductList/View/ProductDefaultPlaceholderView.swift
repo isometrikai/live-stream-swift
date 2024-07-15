@@ -9,7 +9,7 @@
 import UIKit
 import Lottie
 
-class ProductDefaultPlaceholderView: UIView, AppearanceProvider {
+class ProductDefaultPlaceholderView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

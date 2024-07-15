@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKOverlayView: UIView, AppearanceProvider {
+class PKOverlayView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

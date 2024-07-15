@@ -13,7 +13,7 @@ import IsometrikStream
 
 // MARK: - HEADER ACTIONS
 
-extension GoLiveViewController: GoLiveHeaderActionDelegate, AppearanceProvider {
+extension GoLiveViewController: GoLiveHeaderActionDelegate, ISMStreamUIAppearanceProvider {
     
     func didClearImageButtonTapped() {
         let profileView = contentView.rtmpOptionsContainerView.profileView
@@ -66,7 +66,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         
         // show user error if mqtt connection not connected
         if !(isometrik.getMqttSession().isConnected) {
-            self.view.makeToast("connection not established, Try Again".localized + "!",duration: 3.0, position: .bottom)
+            self.view.showToast(message: "connection not established, Try Again!")
             return
         }
         
@@ -84,7 +84,9 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         
         if let image = profileImageView.image {
             
-            ISMLiveShowLoader.shared.startLoading()
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
             
             let description = streamTextView.unwrap
             let userData = isometrik.getUserSession().getUserModel()
@@ -124,18 +126,13 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
                 return
             }
             
-            ISMLiveShowLoader.shared.startLoading()
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
             let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
             viewModel.stillImageOutput.capturePhoto(with: settings, delegate: self)
             
         }
-        
-        
-//        ISMLiveShowLoader.shared.startLoading()
-//
-//        let description = streamTextView.unwrap
-//        let userData = isometrik.getUserSession().getUserModel()
-//        self.startNewStream(userData: userData, description: description, imagePath: "https://picsum.photos", videoPath: "")
         
     }
     
@@ -372,7 +369,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
         UIPasteboard.general.string = viewModel.rtmpURL
         
         // copied animation
-        self.view.makeToast("RTMP URL Copied".localized + "!", duration: 2.0, position: .bottom)
+        self.view.showToast(message: "RTMP URL Copied!")
         
     }
     
@@ -381,7 +378,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
         UIPasteboard.general.string = viewModel.streamKey
         
         // copied animation
-        self.view.makeToast("Stream Key Copied".localized + "!", duration: 2.0, position: .bottom)
+        self.view.showToast(message: "Stream Key Copied!")
     }
     
     func didHelpLabelViewTapped() {
@@ -611,7 +608,7 @@ extension GoLiveViewController {
         isometrik.getIsometrik().startStream(streamBody: streamBody) { stream in
             
             /// Stop loading.
-            ISMLiveShowLoader.shared.stopLoading()
+            CustomLoader.shared.stopLoading()
             
             if self.viewModel.isScheduleStream {
                 
@@ -689,20 +686,20 @@ extension GoLiveViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "GoLive Error : Invalid Response")
+                    self.view.showToast( message: "GoLive Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
                 }
                 
             default :
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Stream Error: Failed to start a new stream")
+                    self.view.showToast( message: "Stream Error: Failed to start a new stream")
                 }
                 break
             }
@@ -768,7 +765,7 @@ extension GoLiveViewController {
             
             guard let self else { return }
             
-            ISMLiveShowLoader.shared.stopLoading()
+            CustomLoader.shared.stopLoading()
             
             let controller = CustomConfirmationPopupViewController()
             controller.infoLabel.text = "Stream Successfully updated" + "!"
@@ -801,7 +798,7 @@ extension GoLiveViewController {
             
             guard let self else { return }
             
-            ISMLiveShowLoader.shared.stopLoading()
+            CustomLoader.shared.stopLoading()
             
             switch error{
             case .noResultsFound(_):
@@ -809,20 +806,20 @@ extension GoLiveViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "GoLive Error : Invalid Response")
+                    self.view.showToast( message: "GoLive Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
                 }
                 
             default :
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Stream Error: Failed to start a new stream")
+                    self.view.showToast( message: "Stream Error: Failed to start a new stream")
                 }
                 break
             }

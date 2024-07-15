@@ -8,7 +8,6 @@
 
 import Foundation
 import IsometrikStream
-import MBProgressHUD
 
 /**
     Extension to manage the `Member` used in the `StreamLiveViewController` class
@@ -43,11 +42,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Join Stream Error : Invalid Response")
+                    self.view.showToast( message: "Join Stream Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Join Stream Error : \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Join Stream Error : \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -73,11 +72,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Add Memeber Error : Invalid Response")
+                    self.view.showToast( message: "Add Memeber Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Add Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Add Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -126,11 +125,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Remove Memeber Error : Invalid Response")
+                    self.view.showToast( message: "Remove Memeber Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Remove Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Remove Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -191,9 +190,9 @@ extension StreamViewController {
                     // handle noresults found here
                     break
                 case .invalidResponse:
-                        self.view.showISMLiveErrorToast( message: "Leave Memeber Error : Invalid Response")
+                        self.view.showToast( message: "Leave Memeber Error : Invalid Response")
                 case .httpError(let errorCode, let errorMessage):
-                        self.view.showISMLiveErrorToast( message: "Leave Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
+                        self.view.showToast( message: "Leave Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
                 default :
                     break
                 }

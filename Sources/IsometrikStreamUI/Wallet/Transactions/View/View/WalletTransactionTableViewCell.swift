@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-class WalletTransactionTableViewCell: UITableViewCell, AppearanceProvider {
+class WalletTransactionTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -102,6 +102,10 @@ class WalletTransactionTableViewCell: UITableViewCell, AppearanceProvider {
             transactionTypeImage.layer.borderWidth = 2
             transactionTypeImage.layer.borderColor = appearance.colors.appRed.cgColor
             break
+        case .credit:
+            transactionTypeImage.image = appearance.images.creditTransaction
+            transactionTypeImage.layer.borderWidth = 2
+            transactionTypeImage.layer.borderColor = appearance.colors.appGreen.cgColor
         default:
             break
         }

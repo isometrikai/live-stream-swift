@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamReportTableViewCell: UITableViewCell, AppearanceProvider {
+class StreamReportTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

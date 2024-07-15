@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeSettingViewController: UIViewController, AppearanceProvider {
+class PKChallengeSettingViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

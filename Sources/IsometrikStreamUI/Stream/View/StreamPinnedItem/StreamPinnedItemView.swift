@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamPinnedItemView: UIView, AppearanceProvider {
+class StreamPinnedItemView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

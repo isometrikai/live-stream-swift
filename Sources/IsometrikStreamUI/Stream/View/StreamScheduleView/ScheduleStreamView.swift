@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import IsometrikStream
 
-class ScheduleStreamView: UIView, AppearanceProvider {
+class ScheduleStreamView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

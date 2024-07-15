@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
 import IsometrikStream
 
-class AddModeratorListViewController: UIViewController, AppearanceProvider {
+class AddModeratorListViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     var viewModel: ModeratorViewModel
@@ -140,9 +139,11 @@ class AddModeratorListViewController: UIViewController, AppearanceProvider {
     }
     
     func fetchUsers(withSearchString: String? = nil) {
-        MBProgressHUD.showAdded(to: view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         viewModel.getUserList(searchString: withSearchString) { response in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             self.searchBarView.stopAnimating()
             switch response {
                 case .success:

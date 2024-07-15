@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-class CoinPlanCollectionViewCell: UICollectionViewCell, AppearanceProvider {
+class CoinPlanCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

@@ -41,7 +41,9 @@ struct ISMLiveAPIManager {
     static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, showLoader : Bool = true, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
         
         if showLoader{
-            ISMLiveShowLoader.shared.startLoading()
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
         }
         
         var urlComponents = URLComponents(url: request.endPoint.baseURL.appendingPathComponent(request.endPoint.path), resolvingAgainstBaseURL: true)
@@ -74,7 +76,7 @@ struct ISMLiveAPIManager {
                 urlRequest.httpBody = jsonBody
             } catch {
                 completion(.failure(.invalidResponse))
-                ISMLiveShowLoader.shared.stopLoading()
+                CustomLoader.shared.stopLoading()
                 return
             }
         }
@@ -82,7 +84,7 @@ struct ISMLiveAPIManager {
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.invalidResponse))
-                ISMLiveShowLoader.shared.stopLoading()
+                CustomLoader.shared.stopLoading()
                 return
             }
             
@@ -167,7 +169,7 @@ struct ISMLiveAPIManager {
             
             
             if showLoader{
-                ISMLiveShowLoader.shared.stopLoading()
+                CustomLoader.shared.stopLoading()
             }
         }
         

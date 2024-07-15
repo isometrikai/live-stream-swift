@@ -33,11 +33,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -63,14 +63,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Accept CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Accept CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -97,14 +97,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Deny CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Deny CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -133,16 +133,16 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Get CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Get CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "CoPublish Error: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -186,7 +186,7 @@ extension StreamViewController {
             switch error{
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -212,14 +212,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "CoPublish \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "CoPublish \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -243,14 +243,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Remove Copublish:\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Remove Copublish:\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -274,14 +274,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Update Copublishers: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Update Copublishers: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break

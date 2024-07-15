@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class CustomHeaderView: UIView, AppearanceProvider {
+public class CustomHeaderView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

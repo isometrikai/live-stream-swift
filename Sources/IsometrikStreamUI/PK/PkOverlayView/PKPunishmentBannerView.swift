@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKPunishmentBannerView: UIView, AppearanceProvider {
+class PKPunishmentBannerView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

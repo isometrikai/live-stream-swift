@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeCustomBannerView: UIView, AppearanceProvider {
+class PKChallengeCustomBannerView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

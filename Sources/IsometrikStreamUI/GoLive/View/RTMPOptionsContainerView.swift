@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTMPOptionsContainerView: UIView, AppearanceProvider {
+class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

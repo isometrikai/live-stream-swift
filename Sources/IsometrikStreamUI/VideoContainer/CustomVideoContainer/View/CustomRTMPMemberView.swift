@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomRTMPMemberView: UIView, AppearanceProvider {
+class CustomRTMPMemberView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

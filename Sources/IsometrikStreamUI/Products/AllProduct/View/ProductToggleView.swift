@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProductToggleView: UIView, AppearanceProvider {
+class ProductToggleView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

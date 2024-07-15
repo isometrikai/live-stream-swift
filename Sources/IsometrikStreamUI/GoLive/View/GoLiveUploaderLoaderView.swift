@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveUploaderLoaderView: UIView, AppearanceProvider {
+class GoLiveUploaderLoaderView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

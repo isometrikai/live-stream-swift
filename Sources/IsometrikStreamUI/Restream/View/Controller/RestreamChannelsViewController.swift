@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
+import IsometrikStream
 
-class RestreamChannelsViewController: UIViewController, AppearanceProvider {
+class RestreamChannelsViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -113,9 +113,11 @@ class RestreamChannelsViewController: UIViewController, AppearanceProvider {
     }
     
     func loadData(){
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         viewModel.getRestreamChannels { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if error == nil {
                 self.restreamChannelTableView.reloadData()
             } else {

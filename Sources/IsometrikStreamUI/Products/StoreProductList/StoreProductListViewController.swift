@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
+import IsometrikStream
 
-class StoreProductListViewController: UIViewController, AppearanceProvider {
+class StoreProductListViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -148,11 +148,13 @@ class StoreProductListViewController: UIViewController, AppearanceProvider {
             productViewModel.storeProductList.removeAll()
             self.storeProductListTableview.reloadData()
             
-            MBProgressHUD.showAdded(to: self.view, animated: true)
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
         }
         
         productViewModel.fetchStoreProducts(storeId: storeId) { success, errorString in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
                 if productViewModel.storeProductList.isEmpty {
                     self.defaultView.isHidden = false

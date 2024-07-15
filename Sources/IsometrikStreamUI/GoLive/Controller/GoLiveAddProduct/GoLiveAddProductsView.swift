@@ -14,7 +14,7 @@ protocol GoLiveAddProductActionDelegate {
     func didRemoveProductTapped(index: Int)
 }
 
-class GoLiveAddProductsView: UIView, AppearanceProvider {
+class GoLiveAddProductsView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

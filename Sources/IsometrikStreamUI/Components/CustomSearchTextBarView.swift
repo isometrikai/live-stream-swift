@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomSearchTextBarView: UIView, AppearanceProvider {
+class CustomSearchTextBarView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

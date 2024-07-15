@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamDefaultEmptyView: UIView, AppearanceProvider {
+class StreamDefaultEmptyView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

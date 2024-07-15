@@ -8,7 +8,7 @@
 
 import UIKit
 
-class customFeatureView: UIView, AppearanceProvider {
+class customFeatureView: UIView, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

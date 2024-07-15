@@ -13,7 +13,7 @@ protocol SelectedProductActionDelegate {
     func didProductRemoved(with index: Int)
 }
 
-class SelectedProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
+class SelectedProductCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearanceProvider {
     
     // MARK: - PROPERTIES
     

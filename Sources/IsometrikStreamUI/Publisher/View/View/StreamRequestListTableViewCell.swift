@@ -19,7 +19,7 @@ extension StreamRequestListActionDelegate {
     func didDeclineActionTapped(_ index: Int) {}
 }
 
-class StreamRequestListTableViewCell: UITableViewCell, AppearanceProvider {
+class StreamRequestListTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

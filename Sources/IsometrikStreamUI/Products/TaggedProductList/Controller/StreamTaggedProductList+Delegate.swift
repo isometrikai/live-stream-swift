@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MBProgressHUD
+import IsometrikStream
 
 extension StreamTaggedProductList: UITableViewDelegate, UITableViewDataSource {
     
@@ -95,9 +95,11 @@ extension StreamTaggedProductList: TaggedProductListActionDelegate {
         }
         
         // normal flow for buy from live stream
-        MBProgressHUD.showAdded(to: self.view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         productViewModel.addProductToCart(productData: productData, buyNow: true) { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
+            CustomLoader.shared.stopLoading()
             if success {
 //                // update cart badge
 //                //visibleCell.setHeaderCartBadgeUpdates()

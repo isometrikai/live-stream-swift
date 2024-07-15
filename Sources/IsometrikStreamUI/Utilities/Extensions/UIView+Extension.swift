@@ -10,9 +10,9 @@ import UIKit
 
 extension UIView {
     
-    func showISMLiveErrorToast( message:String, duration : CGFloat = 3.0){
+    func showToast(message:String, duration : CGFloat = 3.0){
         DispatchQueue.main.async {
-            self.makeToast(message, duration: 5.0, position: .bottom)
+            ToastManager.shared.showToast(message: message, in: self)
         }
     }
     

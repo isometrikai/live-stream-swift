@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKRecieveInvitationViewController: UIViewController, AppearanceProvider {
+class PKRecieveInvitationViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -270,11 +270,11 @@ class PKRecieveInvitationViewController: UIViewController, AppearanceProvider {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "PK Invite: Invalid Response")
+                    self.view.showToast( message: "PK Invite: Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "PK Invite: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "PK Invite: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break

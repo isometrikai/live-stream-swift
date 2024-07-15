@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoreSettingTableViewCell: UITableViewCell, AppearanceProvider {
+class MoreSettingTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     

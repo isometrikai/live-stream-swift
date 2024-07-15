@@ -13,7 +13,7 @@ enum StreamDynamicPopupTap{
     case ok
 }
 
-class StreamDynamicPopupViewController: UIViewController, AppearanceProvider {
+class StreamDynamicPopupViewController: UIViewController, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
