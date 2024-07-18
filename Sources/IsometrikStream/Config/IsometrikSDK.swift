@@ -44,7 +44,6 @@ public class IsometrikSDK {
         banubaClientToken : String = "",
         userToken: String = "",
         userType: UserType = .none,
-        productConfig: ISMProductConfiguration,
         streamOptionsConfiguration: ISMOptionsConfiguration
     ) {
         
@@ -72,11 +71,6 @@ public class IsometrikSDK {
             rtcToken: "",
             userToken: userInfo.userToken.unwrap,
             authToken: authToken,
-            storeCategoryId: productConfig.storeCategoryId,
-            lang: productConfig.lang,
-            language: productConfig.language,
-            currencyCode: productConfig.currencyCode,
-            currencySymbol: productConfig.currencySymbol,
             rtcAppId: rtcAppId
         )
         

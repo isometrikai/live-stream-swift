@@ -142,7 +142,7 @@ extension StreamViewController {
         }
         
         // fetching pinned product data if any
-        self.fetchPinnedProductInStream()
+        //self.fetchPinnedProductInStream()
         
         // fetch copublish status
         self.fetchStatusOfCoPublishRequest { _ in }

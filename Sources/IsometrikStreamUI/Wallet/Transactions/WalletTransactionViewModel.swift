@@ -11,9 +11,11 @@ enum TransactionType: Int {
 class WalletTransactionViewModel {
     
     let isometrik: IsometrikSDK
-    var transactionData: WalletTransactionResponseModel?
+    var totalTransactions: Int64 = 0
     var transactions: [WalletTransactionData] = []
     var selectedTransactionType: TransactionType = .all
+    
+    let refreshControl = UIRefreshControl()
     
     var skip = 0
     var limit = 20
@@ -39,8 +41,16 @@ class WalletTransactionViewModel {
         
         isometrik.getIsometrik().getWalletTransactions(transactionType: transactionType, skip: skip, limit: limit) { response in
             
-            self.transactionData = response
-            self.transactions = response.data ?? []
+            self.totalTransactions = response.totalCount ?? 0
+            
+            let transactions = response.data ?? []
+            if self.transactions.isEmpty {
+                self.transactions = transactions
+            } else {
+                self.transactions.append(contentsOf: transactions)
+            }
+            
+            
             
             if self.transactions.count.isMultiple(of: self.limit) {
                 self.skip += self.limit
@@ -56,6 +66,13 @@ class WalletTransactionViewModel {
             }
         }
         
+    }
+    
+    func canBePaginate() -> Bool {
+        if totalTransactions > transactions.count {
+            return true
+        }
+        return false
     }
     
 }

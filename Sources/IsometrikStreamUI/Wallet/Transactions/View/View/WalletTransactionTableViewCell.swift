@@ -113,7 +113,8 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMStreamUIAppearanceProv
         let obscureTransactionId = obscureString(data.transactionId.unwrap)
         transactionId.text = "TransactionId: \(obscureTransactionId)"
         
-        coinAmount.setTitle("  \(data.amount.unwrap)", for: .normal)
+        let abbreviatedAmount = Int64(data.amount.unwrap).ism_roundedWithAbbreviations
+        coinAmount.setTitle("  \(abbreviatedAmount)", for: .normal)
         
         let timeStampInSec = TimeInterval(Double(data.txnTimeStamp.unwrap) / 1000)
         let date = Date(timeIntervalSince1970: timeStampInSec)

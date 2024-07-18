@@ -6,9 +6,6 @@ public class ISMOptionsConfiguration {
     /// This will activates the delegate methods to add custom profile views within the stream
     private let enableProfileDelegate: Bool
     
-    /// This will activates the delegate methods to add custom product views within the stream
-    private let enableProductDelegate: Bool
-    
     /// This will activates the pk function for a stream
     private let enablePKStream: Bool
     
@@ -32,7 +29,6 @@ public class ISMOptionsConfiguration {
     
     public init(
         enableProfileDelegate: Bool = false,
-        enableProductDelegate: Bool = false,
         enableGroupStream: Bool = false,
         enablePKStream: Bool = false,
         enableProductInStream: Bool = false,
@@ -42,7 +38,6 @@ public class ISMOptionsConfiguration {
         enableScheduleStream: Bool = false
     ) {
         self.enableProfileDelegate = enableProfileDelegate
-        self.enableProductDelegate = enableProductDelegate
         self.enablePKStream = enablePKStream
         self.enableGroupStream = enableGroupStream
         self.enableProductInStream = enableProductInStream
@@ -54,10 +49,6 @@ public class ISMOptionsConfiguration {
     
     public var isProfileDelegateEnabled: Bool {
         return enableProfileDelegate
-    }
-    
-    public var isProductDelegateEnabled: Bool {
-        return enableProductDelegate
     }
     
     public var isPKStreamEnabled: Bool {
@@ -82,6 +73,10 @@ public class ISMOptionsConfiguration {
     
     public var isScheduleStreamEnabled: Bool {
         return enableScheduleStream
+    }
+    
+    public var isPaidStreamEnabled: Bool {
+        return enablePaidStream
     }
     
 }

@@ -64,7 +64,7 @@ class WalletTransactionViewController: UIViewController, ISMStreamUIAppearancePr
         view.backgroundColor = .white
         setUpViews()
         setUpConstraints()
-        loadData()
+        loadData(showLoader: true)
         optionsHeaderView.respondToActionUpdate(for: viewModel.selectedTransactionType)
     }
     
@@ -87,6 +87,10 @@ class WalletTransactionViewController: UIViewController, ISMStreamUIAppearancePr
         transactionTableView.dataSource = self
         
         transactionTableView.register(WalletTransactionTableViewCell.self, forCellReuseIdentifier: "WalletTransactionTableViewCell")
+        
+        viewModel.refreshControl.tintColor = appearance.colors.appSecondary
+        transactionTableView.refreshControl = viewModel.refreshControl
+        viewModel.refreshControl.addTarget(self, action: #selector(refreshControl), for: .valueChanged)
     }
     
     func setUpConstraints(){
@@ -108,8 +112,21 @@ class WalletTransactionViewController: UIViewController, ISMStreamUIAppearancePr
         ])
     }
 
-    func loadData(){
+    func loadData(isRefreshing: Bool = false, showLoader: Bool = false){
+        
+        if showLoader {
+            CustomLoader.shared.startLoading()
+        }
+        
+        if isRefreshing {
+            viewModel.skip = 0
+            viewModel.transactions.removeAll()
+            self.transactionTableView.reloadData()
+        }
+        
         viewModel.getTransactions { success, error in
+            CustomLoader.shared.stopLoading()
+            self.viewModel.refreshControl.endRefreshing()
             if success {
                 self.transactionTableView.reloadData()
             }
@@ -118,22 +135,19 @@ class WalletTransactionViewController: UIViewController, ISMStreamUIAppearancePr
     
     // MARK: - ACTIONS
     
+    @objc func refreshControl(){
+        loadData(isRefreshing: true)
+    }
+    
     @objc func backButtonTapped(){
         self.navigationController?.popViewController(animated: true)
     }
     
     @objc func transactionOptionTapped(_ sender: UIButton) {
-        
-        viewModel.skip = 0
-        viewModel.transactionData = nil
-        viewModel.transactions.removeAll()
-        self.transactionTableView.reloadData()
-        
         let transactionType = TransactionType(rawValue: sender.tag)
-
         viewModel.selectedTransactionType = transactionType ?? .all
         optionsHeaderView.respondToActionUpdate(for: transactionType ?? .all)
-        loadData()
+        loadData(isRefreshing: true, showLoader: true)
     }
 
 }

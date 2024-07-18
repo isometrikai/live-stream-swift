@@ -189,6 +189,34 @@ extension StreamViewController {
         }
     }
     
+    func handle3DGiftMessages(messageData: ISMComment) {
+        
+        viewModel.animated3DGiftTimer?.invalidate()
+        viewModel.animated3DGiftTimer = nil
+        viewModel.animated3DGiftTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.resetGif), userInfo: nil, repeats: false)
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        
+        let message = messageData.message ?? ""
+        let gifCoverImageView = visibleCell.streamContainer.giftAnimationCoverView
+        
+        guard let data = message.data(using: String.Encoding.utf8),
+              let giftModel = try? JSONDecoder().decode(ISMStreamGiftModel.self, from: data) 
+        else { return }
+        
+        let giftURLString = giftModel.giftAnimationImage ?? ""
+        visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
+        if let url = URL(string: giftURLString) {
+            gifCoverImageView.kf.setImage(with: url)
+        }
+        
+    }
+    
+    @objc func resetGif(){
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
+    }
+    
     func playAnimatedGift(messageInfo: ISMComment) {
         
 //        let message = messageInfo.message ?? ""

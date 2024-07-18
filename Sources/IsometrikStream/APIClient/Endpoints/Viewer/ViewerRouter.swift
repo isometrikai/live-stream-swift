@@ -14,6 +14,7 @@ enum ViewerRouter: ISMLiveURLConvertible, CustomStringConvertible {
     case leaveViewer(streamId: String)
     case removeViewer(streamId: String, viewerId: String)
     case fetchViewers(streamId: String, skip: Int = 0, limit: Int = 10, searchTag: String?)
+    case fetchViewersForAnalytics(streamId: String, skip: Int = 0, limit: Int = 10)
     
     var description: String {
         switch self {
@@ -27,12 +28,19 @@ enum ViewerRouter: ISMLiveURLConvertible, CustomStringConvertible {
             return "Remove a viewer from a stream group call."
         case .fetchViewers:
             return "Fetch viewers in a stream group call."
+        case .fetchViewersForAnalytics:
+            return "Fetch viewers for analytics page, after stream ended."
             
         }
     }
     
     var baseURL: URL{
-        return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
+        switch self {
+        case .fetchViewersForAnalytics:
+            return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
+        default:
+            return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
+        }
     }
     
     var method: ISMLiveHTTPMethod {
@@ -59,6 +67,8 @@ enum ViewerRouter: ISMLiveURLConvertible, CustomStringConvertible {
             path = "/streaming/v2/viewer"
         case .fetchViewers:
             path = "/streaming/v2/viewers"
+        case .fetchViewersForAnalytics:
+            path = "/live/v2/stream/viewer"
         }
         return path
     }
@@ -94,6 +104,15 @@ enum ViewerRouter: ISMLiveURLConvertible, CustomStringConvertible {
                     "searchTag": "\(searchTag)"
                 ]
             }
+            
+            break
+        case let .fetchViewersForAnalytics(streamId, skip, limit):
+            
+            param = [
+                "streamId": "\(streamId)",
+                "skip": "\(skip)",
+                "limit": "\(limit)"
+            ]
             
             break
         default: break

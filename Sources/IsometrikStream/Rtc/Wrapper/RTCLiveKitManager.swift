@@ -260,10 +260,10 @@ extension RTCLiveKitManager: RoomDelegate {
                 let session = self.videoSession(of: participantId)
                 session.liveKitVideoView?.track = videoTrack
                 
+                // Update the track
+                self.delegate?.didUpdateVideoTrack(track: videoTrack, uid: participantId)
+                
             }
-            
-            // Update the track
-            self.delegate?.didUpdateVideoTrack(track: videoTrack, uid: participantId)
             
         }
         
@@ -284,10 +284,10 @@ extension RTCLiveKitManager: RoomDelegate {
                 let session = self.videoSession(of: participantId, .remote)
                 session.liveKitVideoView?.track = videoTrack
                 
+                // Update the track
+                self.delegate?.didUpdateVideoTrack(track: videoTrack, uid: participantId)
+                
             }
-            
-            // Update the track
-            self.delegate?.didUpdateVideoTrack(track: videoTrack, uid: participantId)
             
         }
         

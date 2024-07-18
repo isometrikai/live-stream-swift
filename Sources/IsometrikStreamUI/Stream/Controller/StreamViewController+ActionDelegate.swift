@@ -481,8 +481,8 @@ extension StreamViewController: StreamCellActionDelegate {
                 return
             }
             
-            guard let productViewModel = viewModel.streamProductViewModel
-            else { return }
+//            guard let productViewModel = viewModel.streamProductViewModel
+//            else { return }
             
             dynamicActionButton.setTitle("", for: .normal)
             dynamicActionButton.setImage(UIImage(), for: .normal)
@@ -498,38 +498,38 @@ extension StreamViewController: StreamCellActionDelegate {
         case .host:
             
             
-            if streamStatus == .scheduled {
-                
-                // MARK: - SCHEDULE ACTION
-                self.scheduleAction()
-                return
-            }
-            
-            if let productViewModel = viewModel.streamProductViewModel,
-               let _ = productViewModel.pinnedProductData {
-                
-                // to next pinned item
-                dynamicActionButton.setTitle("", for: .normal)
-                dynamicActionButton.setImage(UIImage(), for: .normal)
-                 
-                streamFooterView.startLoader()
-                
-                // pin next product from viewModel
-                productViewModel.pinNextProductInTaggedList { success, error in
-                    streamFooterView.stopLoader()
-                    visibleCell.setStreamFooterView()
-                    if success {
-                        self.setPinnedItemData()
-                    } else {
-                        print(error)
-                    }
-                }
-                
-            } else {
-                
-                // to tagged product list
-                openStreamTagProducts()
-            }
+//            if streamStatus == .scheduled {
+//                
+//                // MARK: - SCHEDULE ACTION
+//                self.scheduleAction()
+//                return
+//            }
+//            
+//            if let productViewModel = viewModel.streamProductViewModel,
+//               let _ = productViewModel.pinnedProductData {
+//                
+//                // to next pinned item
+//                dynamicActionButton.setTitle("", for: .normal)
+//                dynamicActionButton.setImage(UIImage(), for: .normal)
+//                 
+//                streamFooterView.startLoader()
+//                
+//                // pin next product from viewModel
+//                productViewModel.pinNextProductInTaggedList { success, error in
+//                    streamFooterView.stopLoader()
+//                    visibleCell.setStreamFooterView()
+//                    if success {
+//                        self.setPinnedItemData()
+//                    } else {
+//                        print(error)
+//                    }
+//                }
+//                
+//            } else {
+//                
+//                // to tagged product list
+//                openStreamTagProducts()
+//            }
             
             break
         case .moderator:
@@ -598,7 +598,8 @@ extension StreamViewController: StreamCellActionDelegate {
             break
         case .bidder:
             break
-        case .store: openStreamTagProducts()
+        case .store: 
+//            openStreamTagProducts()
             break
         case .camera: isometrik.getIsometrik().switchCamera()
             break

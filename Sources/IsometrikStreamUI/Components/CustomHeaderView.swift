@@ -144,7 +144,7 @@ public class CustomHeaderView: UIView, ISMStreamUIAppearanceProvider {
         ])
     }
     
-    func attributedHeaderTitle(title: String, subtitle: String) -> NSAttributedString {
+    public func attributedHeaderTitle(title: String, subtitle: String) -> NSAttributedString {
         
         let attributedString = NSMutableAttributedString(attributedString: NSAttributedString(string: "\(title)\n", attributes: [
             NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)!,

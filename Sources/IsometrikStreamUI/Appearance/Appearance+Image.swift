@@ -159,6 +159,8 @@ public struct ISM_Image {
     public var speakerOff: UIImage = loadImageSafely(with: "ism_speaker_off")
     public var speakerOn: UIImage = loadImageSafely(with: "ism_speaker")
     public var user: UIImage = loadImageSafely(with: "ism_user")
+    public var premiumBadge: UIImage = loadImageSafely(with: "ism_premium")
+    public var premiumBadgeBG: UIImage = loadImageSafely(with: "ism_premium_bg")
     
     
     // Message events

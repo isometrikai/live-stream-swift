@@ -1,5 +1,5 @@
 //
-//  RTMPOptionsContainerView.swift
+//  GoLiveContentContainerView.swift
 //  PicoAdda
 //
 //  Created by Dheeraj Kumar Sharma on 07/09/23.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
+class GoLiveContentContainerView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -182,6 +182,51 @@ class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
     
     //:
     
+    // PAID ACTION BUTTONS
+
+    let premiumOptionStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        stackView.axis = .horizontal
+        return stackView
+    }()
+    
+    lazy var freeButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.tintColor = .white
+        button.setTitle("Free", for: .normal)
+        button.layer.borderWidth = 1.5
+        button.layer.borderColor = UIColor.white.cgColor
+        button.backgroundColor = .white.withAlphaComponent(0.3)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
+        button.tag = 1
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 5
+        button.addTarget(self, action: #selector(paidStreamButton(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    lazy var premiumButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.tintColor = .white
+        button.setTitle("Premium", for: .normal)
+        button.layer.borderWidth = 1.5
+        button.layer.borderColor = UIColor.white.cgColor
+        button.backgroundColor = .white.withAlphaComponent(0.3)
+        button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
+        button.tag = 2
+        button.layer.masksToBounds = false
+        button.layer.cornerRadius = 5
+        button.addTarget(self, action: #selector(paidStreamButton(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    //:
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
@@ -200,6 +245,9 @@ class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
     
     func setupViews(){
         addSubview(scrollView)
+        
+        scrollView.addSubview(premiumOptionStackView)
+        
         scrollView.addSubview(profileView)
         scrollView.addSubview(toggleStackView)
 
@@ -216,9 +264,16 @@ class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
         scrollView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
+            premiumOptionStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
+            premiumOptionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -15),
+            premiumOptionStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            
+            freeButton.heightAnchor.constraint(equalToConstant: 45),
+            premiumButton.heightAnchor.constraint(equalToConstant: 45),
+            
             profileView.leadingAnchor.constraint(equalTo: leadingAnchor),
             profileView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            profileView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            profileView.topAnchor.constraint(equalTo: premiumOptionStackView.bottomAnchor, constant: 10),
             profileView.heightAnchor.constraint(equalToConstant: 160),
             
             toggleStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -274,6 +329,32 @@ class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
         
     }
     
+    func animatePaidStreamsButton(isPremium: Bool) {
+        if isPremium {
+            premiumButton.backgroundColor = appearance.colors.appColor
+            premiumButton.layer.borderWidth = 0
+            premiumButton.setTitleColor(appearance.colors.appSecondary, for: .normal)
+            premiumButton.imageView?.tintColor = appearance.colors.appSecondary
+            
+            freeButton.backgroundColor = .white.withAlphaComponent(0.2)
+            freeButton.layer.borderWidth = 1.5
+            freeButton.setTitleColor(.white, for: .normal)
+        } else {
+            freeButton.backgroundColor = appearance.colors.appColor
+            freeButton.setTitleColor(appearance.colors.appSecondary, for: .normal)
+            freeButton.layer.borderWidth = 0
+            
+            premiumButton.backgroundColor = .white.withAlphaComponent(0.2)
+            premiumButton.layer.borderWidth = 1.5
+            premiumButton.setTitleColor(.white, for: .normal)
+            
+            // change the title too
+            premiumButton.setTitle(" " + "Premium", for: .normal)
+            premiumButton.setImage(appearance.images.premiumBadge.withRenderingMode(.alwaysTemplate), for: .normal)
+            premiumButton.imageView?.tintColor = .white
+        }
+    }
+    
     // MARK: - ACTIONS
     
     @objc func toggleOptionTapped(_ sender: UIButton) {
@@ -285,6 +366,17 @@ class RTMPOptionsContainerView: UIView, ISMStreamUIAppearanceProvider {
     
     @objc func dateTimeSelectorTapped(){
         delegate?.didDateTimeSelectorTapped()
+    }
+    
+    @objc func paidStreamButton(_ sender: UIButton){
+        
+        var actionType: GoLivePremiumActionType = .free
+        actionType = sender.tag == 1 ? .free : .paid
+        delegate?.didActionButtonTapped(with: actionType)
+        
+        let isPremium = sender.tag == 2
+        animatePaidStreamsButton(isPremium: isPremium)
+        
     }
 
 }

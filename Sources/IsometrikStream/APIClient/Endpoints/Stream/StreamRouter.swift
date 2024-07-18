@@ -20,6 +20,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     case getRecordedStream
     case updateScheduledStream
     case getPresignedUrl(streamTitle: String, mediaExtension: String)
+    case getStreamAnalytics(streamId: String)
     
     var description: String {
         switch self {
@@ -34,12 +35,13 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .getRecordedStream: return "get recorded stream"
         case .updateScheduledStream: return "update scheduled stream"
         case .getPresignedUrl: return "For uploading stream image cover"
+        case .getStreamAnalytics: return "Get stream analytics"
         }
     }
     
     var baseURL: URL{
         switch self {
-        case .startStream, .fetchStreams, .stopStream:
+        case .startStream, .fetchStreams, .stopStream, .getStreamAnalytics:
             return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
         case .getRecordedStream, .getPresignedUrl:
             return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
@@ -84,6 +86,8 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             path = "/v1/updatestream"
         case .getPresignedUrl:
             path = "/streaming/v2/stream/presignedurl"
+        case .getStreamAnalytics:
+            path = "/live/v2/stream/analytics"
         }
         return path
     }
@@ -146,6 +150,10 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             param = [
                 "streamTitle": "\(streamTitle)",
                 "mediaExtension": "\(mediaExtension)"
+            ]
+        case let .getStreamAnalytics(streamId):
+            param = [
+                "streamId": "\(streamId)"
             ]
         default:
             break

@@ -17,14 +17,10 @@ extension StreamViewController: RtcWrapperProtocol {
     public func didUserGoesOffline(user: ISMMember) {}
     
     public func didUpdateVideoTrack(track: VideoTrack?, uid: UInt) {
-        
-        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
-        DispatchQueue.main.async{
-            visibleCell.streamContainer.videoContainer.videoSessions.first {
-                $0.uid == uid
-            }?.liveKitVideoView?.track = track
-        }
-        
+        guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView) else { return }
+        visibleCell.streamContainer.videoContainer.videoSessions.first {
+            $0.uid == uid
+        }?.liveKitVideoView?.track = track
     }
     
     public func videoSessionsDidSet() {

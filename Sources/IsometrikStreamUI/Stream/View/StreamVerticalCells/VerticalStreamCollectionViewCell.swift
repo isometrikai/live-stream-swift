@@ -63,6 +63,8 @@ class VerticalStreamCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {

@@ -19,11 +19,17 @@ class GoLiveAddProductsView: UIView, ISMStreamUIAppearanceProvider {
     // MARK: - PROPERTIES
     
     var delegate: GoLiveAddProductActionDelegate?
-    var productData: [StreamProductModel] = [] {
+    var productData: [ISMProduct] = [] {
         didSet {
             self.productCollectionView.reloadData()
         }
     }
+    
+//    var productData: [StreamProductModel] = [] {
+//        didSet {
+//            self.productCollectionView.reloadData()
+//        }
+//    }
     
     let headerView: UIView = {
         let view = UIView()

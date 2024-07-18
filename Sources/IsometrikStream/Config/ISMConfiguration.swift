@@ -27,13 +27,6 @@ public class ISMConfiguration {
     public var userToken: String
     public var authToken: String
     
-    // Product configurations
-    public var storeCategoryId: String
-    public var lang: String
-    public var language: String
-    public var currencyCode: String
-    public var currencySymbol: String
-    
     // Private initializer to ensure the singleton pattern
     private init(
         primaryOrigin: String = "apis.isometrik.io",
@@ -50,12 +43,7 @@ public class ISMConfiguration {
         appSecret: String = "",
         userSecret: String = "",
         userToken: String = "",
-        authToken: String = "",
-        storeCategoryId: String = "",
-        lang: String = "en",
-        language: String = "en",
-        currencyCode: String = "INR",
-        currencySymbol: String = ""
+        authToken: String = ""
     ) {
         self.primaryOrigin = primaryOrigin
         self.secondaryOrigin = secondaryOrigin
@@ -72,11 +60,6 @@ public class ISMConfiguration {
         self.userSecret = userSecret
         self.userToken = userToken
         self.authToken = authToken
-        self.storeCategoryId = storeCategoryId
-        self.lang = lang
-        self.language = language
-        self.currencyCode = currencyCode
-        self.currencySymbol = currencySymbol
     }
     
     // Method to update configuration (if necessary)
@@ -90,11 +73,6 @@ public class ISMConfiguration {
         rtcToken: String,
         userToken: String,
         authToken: String,
-        storeCategoryId: String,
-        lang: String,
-        language: String,
-        currencyCode: String,
-        currencySymbol: String,
         rtcAppId: String
     ) {
         self.rtcToken = rtcToken
@@ -106,11 +84,6 @@ public class ISMConfiguration {
         self.keySetId = keySetId
         self.appSecret = appSecret
         self.userSecret = userSecret
-        self.storeCategoryId = storeCategoryId
-        self.lang = lang
-        self.language = language
-        self.currencyCode = currencyCode
-        self.currencySymbol = currencySymbol
         self.rtcAppId = rtcAppId
     }
 }

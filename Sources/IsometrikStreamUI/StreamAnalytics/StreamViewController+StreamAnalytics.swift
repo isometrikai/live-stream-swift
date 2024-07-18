@@ -11,18 +11,17 @@ import Foundation
 extension StreamViewController {
     
     func openStreamAnalytics(inStream: Bool = true, streamId: String){
-
-        let analyticsController = StreamAnalyticsController()
         
-        var analyticsViewModel = StreamAnalyticViewModel()
-        analyticsViewModel.streamId = streamId
-        analyticsViewModel.isometrik = viewModel.isometrik
+        guard let isometrik = viewModel.isometrik else { return }
         
-        analyticsController.viewModel = analyticsViewModel
+        let analyticsViewModel = StreamAnalyticViewModel(isometrik: isometrik, streamId: streamId)
+        let analyticsController = StreamAnalyticsController(viewModel: analyticsViewModel)
+        
+        //analyticsController.viewModel = analyticsViewModel
         
         if inStream {
             
-            analyticsController.durationValue = viewModel.totalSeconds
+            analyticsViewModel.durationValue = Int64(viewModel.totalSeconds) * 1000 // converting to milisecs
             
             analyticsController.actionButton.isHidden = false
             analyticsController.closeButton.isHidden = true
@@ -53,7 +52,7 @@ extension StreamViewController {
             analyticsController.modalPresentationStyle = .fullScreen
             
             // dismiss completly only if stream ended
-            analyticsController.dismissCallBack = {
+            analyticsViewModel.dismissCallBack = {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                     self.dismissViewController()
                 }

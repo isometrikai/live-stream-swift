@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ISMLiveHTTPMethod: String {
+public enum ISMLiveHTTPMethod: String {
     case get = "GET"
     case post = "POST"
     case put = "PUT"

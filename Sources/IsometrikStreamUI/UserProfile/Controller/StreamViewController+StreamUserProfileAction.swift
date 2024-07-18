@@ -51,7 +51,7 @@ extension StreamViewController: StreamUserProfileDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 
                 let controller = StreamReportViewController()
-                controller.userViewModel.userId = appUserId
+                //controller.userViewModel.userId = appUserId
                 controller.modalPresentationStyle = .pageSheet
                 
                 if #available(iOS 15.0, *) {

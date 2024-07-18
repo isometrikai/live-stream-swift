@@ -14,15 +14,15 @@ extension WalletTransactionViewController: UITableViewDelegate, UITableViewDataS
         let data = viewModel.transactions[indexPath.row]
         cell.configureCell(data: data)
         
+        cell.selectionStyle = .none
+        
         // pagination logic
         if indexPath.row == viewModel.transactions.count - 1 {
-            let totalCount = viewModel.transactionData?.totalCount ?? 0
-            if totalCount > viewModel.transactions.count {
+            if viewModel.canBePaginate() {
                 self.loadData()
             }
         }
         
-        cell.selectionStyle = .none
         
         return cell
     }

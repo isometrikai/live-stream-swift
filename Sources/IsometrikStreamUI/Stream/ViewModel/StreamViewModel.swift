@@ -52,6 +52,7 @@ final public class StreamViewModel: NSObject {
     var timerForCounter: Timer?
     var disclaimerTimer: Timer?
     var giftTimer: Timer?
+    var animated3DGiftTimer: Timer?
     
     var streamAnimationPopupTimer: Timer?
     
@@ -71,7 +72,7 @@ final public class StreamViewModel: NSObject {
     var streamOptions: [StreamOption] = []
     public var streamUserType: StreamUserType = .viewer
     var streamMessageViewModel: StreamMessageViewModel?
-    var streamProductViewModel: ProductViewModel?
+    //var streamProductViewModel: ProductViewModel?
 //    var profileViewModel = ProfileViewModel()
     var streamMembers: [ISMMember] = []
     var streamViewers: [ISMViewer] = []
@@ -84,7 +85,6 @@ final public class StreamViewModel: NSObject {
     var youAreLiveCallbackAfterCounter:(() -> Void)?
     public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
     var videoContainer: CustomVideoContainer?
-    
     
     func setStreaming(){
         

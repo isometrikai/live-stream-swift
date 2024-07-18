@@ -24,8 +24,9 @@ enum GoLiveStreamType: Int {
     case fromDevice
 }
 
-protocol ISMProductDelegate {
-    
+enum GoLivePremiumActionType {
+    case paid
+    case free
 }
 
 typealias response = ((Bool) -> Void)
@@ -38,7 +39,8 @@ final public class GoLiveViewModel {
     //:
     
     var isometrik: IsometrikSDK
-    var productViewModel: ProductViewModel
+    var actionDelegate: GoLiveActionDelegate?
+    
     var currenStreamType: GoLiveStreamType = .guestLive
     let uploadingManager = UploadingManager()
     
@@ -81,13 +83,15 @@ final public class GoLiveViewModel {
     var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     var stillImageOutput: AVCapturePhotoOutput!
     
-    var selectedProducts: [StreamProductModel] = []
-    var allProducts: [StreamProductModel] = []
+//    var selectedProducts: [StreamProductModel] = []
+//    var allProducts: [StreamProductModel] = []
+    
     var update_callback: ((_ streamId: String)->())?
     
-    public init(isometrik: IsometrikSDK) {
+    public init(isometrik: IsometrikSDK, delegate: GoLiveActionDelegate? = nil) {
         self.isometrik = isometrik
-        self.productViewModel = ProductViewModel(isometrik: isometrik)
+        self.actionDelegate = delegate
+//        self.productViewModel = ProductViewModel(isometrik: isometrik)
     }
     
     func getUserDetails(completion: @escaping response){
@@ -122,93 +126,94 @@ final public class GoLiveViewModel {
 
     func getPayloadForMyProducts() -> [ISMProductToBeTagged] {
         
-        var products: [ISMProductToBeTagged] = []
-        
-        for selectedProduct in selectedProducts {
-            
-            // Only return the product from my store
-            if selectedProduct.storeId != nil && selectedProduct.storeId == self.getStoreId() {
-                let productId = selectedProduct.childProductID ?? ""
-                let categoryId = selectedProduct.categoryJson?.first?.categoryId ?? ""
-                let discountedPercentage = selectedProduct.liveStreamfinalPriceList?.discountPercentage ?? 0
-                let brandId = selectedProduct.brandId ?? ""
-                
-                let product = ISMProductToBeTagged(id:productId, discount: discountedPercentage, parentCategoryId: categoryId, brandId: brandId)
-                products.append(product)
-            } else {
-                break
-            }
-            
-        }
-        
-        return products
-        
+//        var products: [ISMProductToBeTagged] = []
+//        
+//        for selectedProduct in selectedProducts {
+//            
+//            // Only return the product from my store
+//            if selectedProduct.storeId != nil && selectedProduct.storeId == self.getStoreId() {
+//                let productId = selectedProduct.childProductID ?? ""
+//                let categoryId = selectedProduct.categoryJson?.first?.categoryId ?? ""
+//                let discountedPercentage = selectedProduct.liveStreamfinalPriceList?.discountPercentage ?? 0
+//                let brandId = selectedProduct.brandId ?? ""
+//                
+//                let product = ISMProductToBeTagged(id:productId, discount: discountedPercentage, parentCategoryId: categoryId, brandId: brandId)
+//                products.append(product)
+//            } else {
+//                break
+//            }
+//            
+//        }
+//        
+//        return products
+        return []
     }
     
     func getPayloadForOtherProducts() -> [ISMOthersProductToBeTagged] {
         
-        var otherProducts: [ISMOthersProductToBeTagged] = []
-        
-        for selectedProduct in selectedProducts {
-            
-            let storeId = selectedProduct.supplier?.id ?? ""
-            
-            // Only product which are not mine
-            if storeId != self.getStoreId() && !storeId.isEmpty {
-                
-                // check whether products for this store already added in the othersProduct array or not
-                let productForCurrentStore = otherProducts.filter { store in
-                    return store.storeId == storeId
-                }
-                
-                // if so return
-                if productForCurrentStore.count > 0 {
-                    break
-                }
-                
-                var products: [ISMProductToBeTagged] = []
-                
-                // filter the products with the storeId
-                let filteredProduct = selectedProducts.filter { product in
-                    if let productStoreId = product.supplier?.id {
-                        return productStoreId == storeId
-                    } else {
-                        return false
-                    }
-                }
-                
-                for productData in filteredProduct {
-                    let productId = productData.childProductID ?? ""
-                    let categoryId = productData.categoryJson?.first?.categoryId ?? ""
-                    let discountedPercentage = productData.liveStreamfinalPriceList?.discountPercentage ?? 0
-                    let brandId = selectedProduct.brandId ?? ""
-                    
-                    let product = ISMProductToBeTagged(id:productId, discount: discountedPercentage, parentCategoryId: categoryId, brandId: brandId)
-                    products.append(product)
-                }
-                
-                let otherProduct = ISMOthersProductToBeTagged(storeId: storeId, products: products)
-                otherProducts.append(otherProduct)
-                
-            }
-            
-        }
-        
-        return otherProducts
-        
+//        var otherProducts: [ISMOthersProductToBeTagged] = []
+//        
+//        for selectedProduct in selectedProducts {
+//            
+//            let storeId = selectedProduct.supplier?.id ?? ""
+//            
+//            // Only product which are not mine
+//            if storeId != self.getStoreId() && !storeId.isEmpty {
+//                
+//                // check whether products for this store already added in the othersProduct array or not
+//                let productForCurrentStore = otherProducts.filter { store in
+//                    return store.storeId == storeId
+//                }
+//                
+//                // if so return
+//                if productForCurrentStore.count > 0 {
+//                    break
+//                }
+//                
+//                var products: [ISMProductToBeTagged] = []
+//                
+//                // filter the products with the storeId
+//                let filteredProduct = selectedProducts.filter { product in
+//                    if let productStoreId = product.supplier?.id {
+//                        return productStoreId == storeId
+//                    } else {
+//                        return false
+//                    }
+//                }
+//                
+//                for productData in filteredProduct {
+//                    let productId = productData.childProductID ?? ""
+//                    let categoryId = productData.categoryJson?.first?.categoryId ?? ""
+//                    let discountedPercentage = productData.liveStreamfinalPriceList?.discountPercentage ?? 0
+//                    let brandId = selectedProduct.brandId ?? ""
+//                    
+//                    let product = ISMProductToBeTagged(id:productId, discount: discountedPercentage, parentCategoryId: categoryId, brandId: brandId)
+//                    products.append(product)
+//                }
+//                
+//                let otherProduct = ISMOthersProductToBeTagged(storeId: storeId, products: products)
+//                otherProducts.append(otherProduct)
+//                
+//            }
+//            
+//        }
+//        
+//        return otherProducts
+        return []
     }
     
     func getProductIds() -> [String] {
         
-        var products: [String] = []
-        
-        for selectedProduct in selectedProducts {
-            let productId = selectedProduct.childProductID ?? ""
-            products.append(productId)
-        }
-        
-        return products
-        
+//        var products: [String] = []
+//        
+//        for selectedProduct in selectedProducts {
+//            let productId = selectedProduct.childProductID ?? ""
+//            products.append(productId)
+//        }
+//        
+//        return products
+//
+        return []
     }
     
     func getStoreId() -> String {
@@ -233,21 +238,21 @@ final public class GoLiveViewModel {
     
     func getProducts(_ completionBlock: @escaping(_ success: Bool) -> Void){
         
-        guard let streamData else { return }
-        productViewModel.streamInfo = streamData
-        
-        self.productViewModel.fetchTaggedProducts { success, error in
-            if success {
-                self.selectedProducts = self.productViewModel.taggedProductList
-                DispatchQueue.main.async {
-                    completionBlock(true)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    completionBlock(false)
-                }
-            }
-        }
+//        guard let streamData else { return }
+//        productViewModel.streamInfo = streamData
+//        
+//        self.productViewModel.fetchTaggedProducts { success, error in
+//            if success {
+//                self.selectedProducts = self.productViewModel.taggedProductList
+//                DispatchQueue.main.async {
+//                    completionBlock(true)
+//                }
+//            } else {
+//                DispatchQueue.main.async {
+//                    completionBlock(false)
+//                }
+//            }
+//        }
         
     }
     

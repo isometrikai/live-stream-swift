@@ -112,7 +112,8 @@ class CoinBalanceHeaderView: UIView, ISMStreamUIAppearanceProvider {
     }
     
     func configureView(balance: Float64){
-        balanceLabel.text = "\(Int64(balance)) coins"
+        let balanceValue = Int64(balance).ism_roundedWithAbbreviations
+        balanceLabel.text = "\(balanceValue) coins"
     }
     
 }

@@ -8,11 +8,11 @@
 
 import UIKit
 
-class CustomSearchTextBarView: UIView, ISMStreamUIAppearanceProvider {
+final public class CustomSearchTextBarView: UIView, ISMStreamUIAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    lazy var searchBackgroundView: UIView = {
+    public lazy var searchBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = appearance.colors.appLightGray
@@ -20,7 +20,7 @@ class CustomSearchTextBarView: UIView, ISMStreamUIAppearanceProvider {
         return view
     }()
     
-    lazy var searchImage: UIImageView = {
+    public lazy var searchImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
         image.image = appearance.images.search
@@ -28,7 +28,7 @@ class CustomSearchTextBarView: UIView, ISMStreamUIAppearanceProvider {
         return image
     }()
     
-    lazy var searchTextField: UITextField = {
+    public lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Search"

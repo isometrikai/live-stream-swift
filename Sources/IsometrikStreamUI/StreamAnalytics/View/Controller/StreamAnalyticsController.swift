@@ -13,15 +13,7 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
     
     // MARK: - PROPERTIES
     
-    var viewModel: StreamAnalyticViewModel? {
-        didSet {
-            loadData()
-        }
-    }
-    
-    var durationValue: Int?
-    
-    var dismissCallBack: (()->Void)?
+    var viewModel: StreamAnalyticViewModel
     
     let logoCoverView: UIView = {
         let view = UIView()
@@ -199,10 +191,23 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
     
     // MARK: - MAIN
     
+    init(viewModel: StreamAnalyticViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        loadData()
     }
     
     // MARK: - FUNCTIONS
@@ -214,9 +219,7 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
         logoCoverView.addSubview(logoImage)
         
         view.addSubview(closeButton)
-        
         view.addSubview(titleLabel)
-        
         view.addSubview(dividerView)
         view.addSubview(topHorizontalStackView)
         view.addSubview(bottomHorizontalStackView)
@@ -287,10 +290,8 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
     }
     
     func loadData(){
-        guard let viewModel,
-              let isometrik = viewModel.isometrik
-        else { return }
         
+        let isometrik = viewModel.isometrik
         let firstName = isometrik.getUserSession().getFirstName()
         let lastName = isometrik.getUserSession().getLastName()
         let userImage = isometrik.getUserSession().getUserImage()
@@ -308,29 +309,30 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
         defaultImageView.initialsText.font = appearance.font.getFont(forTypo: .h3)
         
         // get stream Analytics
-        //Helper.showPI()
+        CustomLoader.shared.startLoading()
         viewModel.fetchStreamAnalytics { success, error in
-            //Helper.hidePI()
+            CustomLoader.shared.stopLoading()
             if success {
-                guard let analyticData = viewModel.analyticData else { return }
+                guard let analyticData = self.viewModel.analyticData else { return }
+                
                 self.totalHearts.valueLabel.text = "\(analyticData.hearts ?? 0)"
                 self.totalViewers.valueLabel.text = "\(analyticData.totalViewersCount ?? 0)"
-                self.totalOrders.valueLabel.text = "\(analyticData.totalSold ?? 0)"
                 self.totalFollowers.valueLabel.text = "\(analyticData.followers ?? 0)"
                 //self.sellingQuantity.valueLabel.text = "\(analyticData.soldCount ?? 0)"
-                self.earning.valueLabel.text = "\(analyticData.totalSales ?? 0)"
+                self.earning.valueLabel.text = "\(analyticData.totalEarning ?? 0)"
                 
-                if let durationVal = self.durationValue {
-                    self.duration.valueLabel.text = Double(durationVal).asString(style: .positional)
+                if let durationValue = self.viewModel.durationValue {
+                    self.duration.valueLabel.text = Double(durationValue / 1000).asString(style: .positional)
                 } else {
-                    self.duration.valueLabel.text = Double(analyticData.duration ?? 0).asString(style: .positional)
+                    self.duration.valueLabel.text = Double((analyticData.duration ?? 0)/1000).asString(style: .positional)
                 }
                 
             }
         }
+        
         viewModel.fetchStreamAnalyticsViewers { success, error in
             if success {
-                self.viewerContainer.viewers = viewModel.streamViewers
+                self.viewerContainer.viewers = self.viewModel.viewers
             } else {
                 print(error)
             }
@@ -341,7 +343,7 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
     // MARK: - ACTIONS
     
     @objc func actionButtonTapped(){
-        self.dismissCallBack?()
+        self.viewModel.dismissCallBack?()
         self.dismiss(animated: true)
     }
 
@@ -350,13 +352,9 @@ class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider
 extension StreamAnalyticsController: StreamAnalyticViewersActionDelegate {
     
     func didTapFollowButtonTapped(index: Int) {
-        
-        guard let viewModel else { return }
-        
         viewModel.followUser(index: index) {
-            self.viewerContainer.viewers = viewModel.streamViewers
+            self.viewerContainer.viewers = self.viewModel.viewers
         }
-        
     }
     
 }

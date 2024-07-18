@@ -11,82 +11,58 @@ import IsometrikStream
 
 class StreamAnalyticViewModel {
     
-    var service: HttpUtility?
+    var analyticData: StreamAnalyticsResponseModel?
+    var viewerData: StreamAnalyticViewersResponseModel?
+    var viewers: [StreamAnalyticViewers] = []
     
-    var analyticData: StreamAnalyticModel?
-    var streamViewers: [StreamAnalyticViewers] = []
-    var streamId = ""
-    var isometrik: IsometrikSDK?
-    //let profileViewModel = ProfileViewModel()
-    var baseURL = "https://api.foodieapp.net/v1"
+    var skip = 0
+    var limit = 10
     
+    var isometrik: IsometrikSDK
+    var streamId: String
     
-    init(){
-        // set the auth token for web service
-        let authToken = ""
-        var httpUtility = HttpUtility()
-        httpUtility.authToken = authToken
-        self.service = httpUtility
+    var durationValue: Int64?
+    var dismissCallBack: (()->Void)?
+    
+    init(isometrik: IsometrikSDK, streamId: String){
+        self.isometrik = isometrik
+        self.streamId = streamId
     }
     
     func fetchStreamAnalytics(_ completion: @escaping(Bool, String?)->Void) {
-        
-        guard let service,
-              streamId != ""
-        else { return }
-        
-        let url = "\(baseURL)/stream/analytics?streamId=\(streamId)"
 
-        service.getApiData(urlString: url, resultType: StreamAnalyticModel.self) { result, isometrikError in
-            
-            if isometrikError == nil {
-                // success
-                guard let result else { return }
-                
-                self.analyticData = result
-                
-                DispatchQueue.main.async {
-                    completion(true, nil)
-                }
-                
-            } else {
-                // error
-                DispatchQueue.main.async {
-                    completion(false, "error string")
-                }
+        isometrik.getIsometrik().getStreamAnalytics(streamId: streamId) { response in
+            self.analyticData = response
+            DispatchQueue.main.async {
+                completion(true, nil)
             }
-            
+        } failure: { error in
+            DispatchQueue.main.async {
+                completion(false, error.localizedDescription)
+            }
         }
-        
+
     }
     
     func fetchStreamAnalyticsViewers(_ completion: @escaping(Bool, String?)->Void) {
         
-        guard let service,
-              streamId != ""
-        else { return }
-        
-        let url = "\(baseURL)/analytics/stream/viewers?streamId=\(streamId)"
-        
-        service.getApiData(urlString: url, resultType: StreamAnalyticViewersData.self) { result, isometrikError in
+        isometrik.getIsometrik().fetchViewersForAnalytics(streamId: streamId) { response in
             
-            if isometrikError == nil {
-                // success
-                guard let result else { return }
-                
-                self.streamViewers = result.viewers ?? []
-                
-                DispatchQueue.main.async {
-                    completion(true, nil)
-                }
-                
-            } else {
-                // error
-                DispatchQueue.main.async {
-                    completion(false, "error string")
-                }
+            self.viewerData = response
+            self.viewers = response.viewers ?? []
+            
+            if self.viewers.count.isMultiple(of: self.limit) {
+                self.skip += self.limit
             }
             
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+            
+        } failure: { error in
+            DispatchQueue.main.async {
+                completion(false, error.localizedDescription)
+            }
         }
         
     }
@@ -103,9 +79,9 @@ class StreamAnalyticViewModel {
     
     func followUser(index: Int, _ completion: @escaping () -> Void){
         
-        let userId = streamViewers[index].appUserID ?? ""
-        let privacy = streamViewers[index].privacy ?? 0
-        let followStatus = streamViewers[index].followStatus ?? 0
+        let userId = viewers[index].appUserID ?? ""
+        let privacy = viewers[index].privacy ?? 0
+        let followStatus = viewers[index].followStatus ?? 0
         let isFollow = getIsFollowStatus(followStatus: followStatus)
         
 //        profileViewModel.FollowPeopleService(isFollow: !isFollow, peopleId: userId, privicy: privacy)

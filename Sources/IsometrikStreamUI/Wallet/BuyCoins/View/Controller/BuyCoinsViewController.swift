@@ -114,7 +114,9 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
     }
     
     func getPlans(){
+        CustomLoader.shared.startLoading()
         viewModel.getCoinPlans { success, error in
+            CustomLoader.shared.stopLoading()
             if success {
                 self.coinPlanCollectionView.reloadData()
                 self.setupWalletBalance()
@@ -130,7 +132,9 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
         let walletBalance = UserDefaultsProvider.shared.getWalletBalance()
         walletBalanceHeaderView.configureView(balance: walletBalance)
         
+        CustomLoader.shared.startLoading()
         viewModel.getWalletBalance { success, error in
+            CustomLoader.shared.stopLoading()
             if success {
                 self.walletBalanceHeaderView.configureView(balance: self.viewModel.walletBalance?.balance ?? 0)
             }

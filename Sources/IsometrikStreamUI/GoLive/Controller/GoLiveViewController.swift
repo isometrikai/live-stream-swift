@@ -40,7 +40,7 @@ final public class GoLiveViewController: UIViewController {
         let view = GoLiveOptionsContentView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
-        view.rtmpOptionsContainerView.profileView.delegate = self
+        view.goLiveContentContainerView.profileView.delegate = self
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
         swipeRight.direction = .right
@@ -53,8 +53,8 @@ final public class GoLiveViewController: UIViewController {
         return view
     }()
     
-    lazy var footerView: NewGoLiveFooterView = {
-        let view = NewGoLiveFooterView()
+    lazy var footerView: GoLiveFooterView = {
+        let view = GoLiveFooterView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         return view
@@ -150,7 +150,7 @@ final public class GoLiveViewController: UIViewController {
         
         let footerBottomActionStack = footerView.bottomActionStack
         
-        let contentContainerView = contentView.rtmpOptionsContainerView
+        let contentContainerView = contentView.goLiveContentContainerView
         let rtmpUrlView = contentContainerView.rtmpURLView.formTextView
         let streamKeyView = contentContainerView.streamKeyView.formTextView
         let guestLiveButton = footerView.guestLiveButton
@@ -163,7 +163,7 @@ final public class GoLiveViewController: UIViewController {
         viewModel.currenStreamType = .guestLive
         didGoLiveStreamTypeActionTapped(with: .guestLive)
         
-        headerView.animatePaidStreamsButton(isPremium: true)
+        contentView.goLiveContentContainerView.animatePaidStreamsButton(isPremium: false)
         
         if isRTMPEnabled {
             viewModel.getUserDetails { success in
@@ -205,7 +205,7 @@ final public class GoLiveViewController: UIViewController {
         
         // MARK: Updating UI -
         
-        let containerView = contentView.rtmpOptionsContainerView
+        let containerView = contentView.goLiveContentContainerView
         let profileView = containerView.profileView
         let addProductView = containerView.addProductView
         
@@ -227,7 +227,7 @@ final public class GoLiveViewController: UIViewController {
         self.didToggleOptionTapped(withStreamOption: .restreamBroadcast)
         
         // Hidden options
-        let scheduleOption = contentView.rtmpOptionsContainerView.scheduleToggle
+        let scheduleOption = contentView.goLiveContentContainerView.scheduleToggle
         scheduleOption.isHidden = true
         
         footerView.bottomActionView.isHidden = true
@@ -241,7 +241,7 @@ final public class GoLiveViewController: UIViewController {
             if success {
                 containerView.addProductViewHeightConstraint?.constant = 290
                 addProductView.addButton.isHidden = false
-                addProductView.productData = self.viewModel.selectedProducts
+                //addProductView.productData = self.viewModel.selectedProducts
             }
         }
     }

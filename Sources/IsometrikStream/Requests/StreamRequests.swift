@@ -282,4 +282,25 @@ extension IsometrikStream {
         
     }
     
+    public func getStreamAnalytics(streamId: String, completionHandler: @escaping (StreamAnalyticsResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.getStreamAnalytics(streamId: streamId), requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<StreamAnalyticsResponseModel, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
 }

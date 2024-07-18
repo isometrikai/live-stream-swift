@@ -23,7 +23,7 @@ extension StreamViewController: ISMStreamUIAppearanceProvider {
         let senderId = isometrik.getUserSession().getUserId()
         let senderName = isometrik.getUserSession().getUserName()
         
-        isometrik.getIsometrik().sendHeartMessage(streamId: streamId, senderImage: senderImage, senderIdentifier: senderName, senderId: senderId, senderName: senderName, messageType: -2, message: "") { response in
+        isometrik.getIsometrik().sendHeartMessage(streamId: streamId, senderImage: senderImage, senderIdentifier: senderName, senderId: senderId, senderName: senderName, messageType: 3, message: "") { response in
             print(response)
         } failure: { error in
             print(error)

@@ -107,18 +107,28 @@ class StreamContainerView: UIView {
         return container
     }()
     
+    let giftAnimationCoverView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
-        observers()
+        addObservers()
         defaults()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        removeObservers()
     }
     
     // MARK: - FUNCTIONS
@@ -142,12 +152,14 @@ class StreamContainerView: UIView {
         
         addSubview(streamAnimationPopup)
         addSubview(streamFooterView)
+        addSubview(giftAnimationCoverView)
     }
     
     func setupConstraints(){
         dismissButton.ism_pin(to: self)
         streamAnimationPopup.ism_pin(to: self)
         videoContainer.ism_pin(to: self)
+        giftAnimationCoverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
             streamHeaderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             streamHeaderView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -221,9 +233,14 @@ class StreamContainerView: UIView {
         
     }
     
-    func observers(){
+    func addObservers(){
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification) , name: UIResponder.keyboardWillShowNotification , object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification) , name: UIResponder.keyboardWillHideNotification , object: nil)
+    }
+    
+    func removeObservers(){
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func defaults(){
@@ -233,6 +250,8 @@ class StreamContainerView: UIView {
             bottomGradientView.setGradient(withColors: [UIColor.black.withAlphaComponent(0.85).cgColor, UIColor.clear.cgColor], startPoint: CGPoint(x: 0, y: 1), endPoint: CGPoint(x: 0, y: 0))
         }
     }
+    
+    
 
 }
 

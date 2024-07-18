@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-protocol ISMLiveURLConvertible{
+public protocol ISMLiveURLConvertible{
     
     var baseURL : URL{
         get
@@ -31,14 +31,21 @@ protocol ISMLiveURLConvertible{
 }
 
 
-struct  ISMLiveAPIRequest<R> {
+public struct ISMLiveAPIRequest<R> {
+    
     let endPoint : ISMLiveURLConvertible
     let requestBody: R?
+    
+    public init(endPoint: ISMLiveURLConvertible, requestBody: R?) {
+        self.endPoint = endPoint
+        self.requestBody = requestBody
+    }
+    
 }
 
-struct ISMLiveAPIManager {
+public struct ISMLiveAPIManager {
     
-    static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, showLoader : Bool = true, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
+    public static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, showLoader : Bool = true, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
         
         if showLoader{
             DispatchQueue.main.async {

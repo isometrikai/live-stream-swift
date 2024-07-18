@@ -57,17 +57,17 @@ extension GoLiveViewController: UINavigationControllerDelegate, UIImagePickerCon
             
             viewModel.videoPreviewUrl = url
             let uiImage = self.getImageFromVideoUrl(url: url)
-            let profileImage = contentView.rtmpOptionsContainerView.profileView.profileCoverImageView
+            let profileImage = contentView.goLiveContentContainerView.profileView.profileCoverImageView
             profileImage.image = uiImage
-            contentView.rtmpOptionsContainerView.profileView.clearImageButton.isHidden = false
+            contentView.goLiveContentContainerView.profileView.clearImageButton.isHidden = false
         }
         
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.dismiss(animated: true, completion: nil)
             
-            let profileImage = contentView.rtmpOptionsContainerView.profileView.profileCoverImageView
+            let profileImage = contentView.goLiveContentContainerView.profileView.profileCoverImageView
             profileImage.image = pickedImage
-            contentView.rtmpOptionsContainerView.profileView.clearImageButton.isHidden = false
+            contentView.goLiveContentContainerView.profileView.clearImageButton.isHidden = false
             //self.present(cropVC, animated: true, completion: nil)
         }
     }
@@ -98,8 +98,8 @@ extension GoLiveViewController: AVCapturePhotoCaptureDelegate {
         guard let imageData = photo.fileDataRepresentation()
             else { return }
         
-        let profileImageView = contentView.rtmpOptionsContainerView.profileView.profileCoverImageView
-        contentView.rtmpOptionsContainerView.profileView.clearImageButton.isHidden = false
+        let profileImageView = contentView.goLiveContentContainerView.profileView.profileCoverImageView
+        contentView.goLiveContentContainerView.profileView.clearImageButton.isHidden = false
         
         let image = UIImage(data: imageData)
         profileImageView.image = image
