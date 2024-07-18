@@ -110,6 +110,7 @@ class StreamContainerView: UIView {
     let giftAnimationCoverView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFit
         return view
     }()
     

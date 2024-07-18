@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 import IsometrikStream
 
 extension StreamViewController {
@@ -200,14 +201,27 @@ extension StreamViewController {
         let message = messageData.message ?? ""
         let gifCoverImageView = visibleCell.streamContainer.giftAnimationCoverView
         
-        guard let data = message.data(using: String.Encoding.utf8),
-              let giftModel = try? JSONDecoder().decode(ISMStreamGiftModel.self, from: data) 
-        else { return }
         
-        let giftURLString = giftModel.giftAnimationImage ?? ""
-        visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
-        if let url = URL(string: giftURLString) {
-            gifCoverImageView.kf.setImage(with: url)
+        if let data = message.data(using: .utf8) {
+            do {
+                // Remove the outer quotes and double-escaping
+                let trimmedString = String(data: data, encoding: .utf8)?
+                    .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                    .replacingOccurrences(of: "\\\"", with: "\"")
+
+                if let jsonData = trimmedString?.data(using: .utf8) {
+                    let giftModel = try JSONDecoder().decode(ISMStreamGiftModel.self, from: jsonData)
+                    
+                    let giftURLString = giftModel.giftAnimationImage ?? ""
+                    visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
+                    if let url = URL(string: giftURLString) {
+                        gifCoverImageView.kf.setImage(with: url)
+                    }
+                    
+                }
+            } catch {
+                print("Failed to decode JSON: \(error)")
+            }
         }
         
     }

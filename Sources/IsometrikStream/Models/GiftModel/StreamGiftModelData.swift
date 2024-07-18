@@ -30,6 +30,20 @@ public struct ISMStreamGiftModel: Codable {
     public let applicationId: String?
     public let clientName: String?
     
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(String.self, forKey: .id)
+        self.giftTitle = try container.decodeIfPresent(String.self, forKey: .giftTitle)
+        self.giftImage = try container.decodeIfPresent(String.self, forKey: .giftImage)
+        self.giftAnimationImage = try container.decodeIfPresent(String.self, forKey: .giftAnimationImage)
+        self.giftCount = try container.decodeIfPresent(Int.self, forKey: .giftCount)
+        self.giftTag = try container.decodeIfPresent(String.self, forKey: .giftTag)
+        self.virtualCurrency = try container.decodeIfPresent(Int.self, forKey: .virtualCurrency)
+        self.giftGroupId = try container.decodeIfPresent(String.self, forKey: .giftGroupId)
+        self.applicationId = try container.decodeIfPresent(String.self, forKey: .applicationId)
+        self.clientName = try container.decodeIfPresent(String.self, forKey: .clientName)
+    }
+    
 }
 
 
