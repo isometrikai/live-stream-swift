@@ -17,9 +17,10 @@ extension StreamViewController {
     
     func sendCopublishRequest(completionHandler: @escaping (ISMPublisher?) -> ()) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -47,9 +48,10 @@ extension StreamViewController {
     
     func acceptCoPublishRequest(requestByUserId: String, completionHandler: @escaping (Bool) -> ()) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -81,9 +83,10 @@ extension StreamViewController {
     
     func denyCoPublishRequest(userId: String) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -114,9 +117,10 @@ extension StreamViewController {
     
     func fetchStatusOfCoPublishRequest(completion: @escaping(Bool)->Void){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -152,9 +156,10 @@ extension StreamViewController {
     
     func switchProfile() {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -196,9 +201,10 @@ extension StreamViewController {
     
     func fetchCopublishRequests(completionHandler: @escaping (ISMPublisher?) -> Void) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -230,9 +236,9 @@ extension StreamViewController {
     
     func deleteCopublishRequest(user: ISMStreamUser, streamInfo: ISMStream, completionHandler: @escaping (ISMPublisher?) -> Void) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamId = streamInfo.streamId
-        else { return }
+        guard let streamId = streamInfo.streamId else { return }
+        
+        let isometrik = viewModel.isometrik
         
         isometrik.getIsometrik().deleteCopublishRequest(streamId: streamId) { (result) in
             completionHandler(result)
@@ -261,8 +267,9 @@ extension StreamViewController {
     
     func updatePublishStatus(streamInfo: ISMStream, memberId: String, publishStatus: Bool, completionHandler: @escaping(ISMPublisher?) -> ()) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamId = streamInfo.streamId
+        let isometrik = viewModel.isometrik
+        
+        guard let streamId = streamInfo.streamId
         else { return }
         
         isometrik.getIsometrik().updatePublishStatus(streamId: streamId, memberId: memberId, publishStatus: publishStatus) { (result) in
@@ -296,10 +303,11 @@ extension StreamViewController: MoreSettingActionDelegate {
     
     func didOptionTapped(for type: StreamSettingType?, session: VideoSession?, index: Int) {
         
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
         guard let session,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         

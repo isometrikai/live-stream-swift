@@ -68,7 +68,6 @@ public struct ISMLiveAPIManager {
         urlRequest.setValue(ISMConfiguration.shared.userSecret, forHTTPHeaderField:"userSecret" )
         urlRequest.setValue(ISMConfiguration.shared.licenseKey, forHTTPHeaderField:"licenseKey")
         urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField:"userToken" )
-        urlRequest.setValue(ISMConfiguration.shared.authToken, forHTTPHeaderField: "authorization")
         urlRequest.setValue(ISMConfiguration.shared.appSecret, forHTTPHeaderField: "appSecret")
         urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField: "isometrikToken")
         
@@ -77,7 +76,7 @@ public struct ISMLiveAPIManager {
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }
         
-        if let requestBody = request.requestBody as? Codable {
+        if let requestBody = request.requestBody as? Encodable {
             do {
                 let jsonBody = try JSONEncoder().encode(requestBody)
                 urlRequest.httpBody = jsonBody
@@ -95,7 +94,9 @@ public struct ISMLiveAPIManager {
                 return
             }
             
-            print("*****STATUS \(httpResponse.statusCode) ")
+            let endpoint = "\(request.endPoint.baseURL)\(request.endPoint.path)"
+            let endpointMethod = "\(request.endPoint.method)".uppercased()
+            LogManager.shared.logNetwork("Endpoint: \(endpointMethod) \(endpoint), httpStatusCode: \(httpResponse.statusCode)", type: .debug)
             
             if let error = error {
                 completion(.failure(.decodingError(error)))
@@ -118,18 +119,19 @@ public struct ISMLiveAPIManager {
                     if let decodingError = error as? DecodingError {
                         switch decodingError {
                         case .typeMismatch(let key, let context):
-                            print("Type mismatch for key \(key), context: \(context.debugDescription)")
+                            LogManager.shared.logNetwork("Type mismatch for key \(key), context: \(context.debugDescription)", type: .debug)
                         case .valueNotFound(let type, let context):
-                            print("Value not found for type \(type), context: \(context.debugDescription)")
+                            LogManager.shared.logNetwork("Value not found for type \(type), context: \(context.debugDescription)", type: .debug)
                         case .keyNotFound(let key, let context):
-                            print("Key not found: \(key), context: \(context.debugDescription)")
+                            LogManager.shared.logNetwork("Key not found: \(key), context: \(context.debugDescription)", type: .debug)
                         case .dataCorrupted(let context):
-                            print("Data corrupted, context: \(context.debugDescription)")
+                            LogManager.shared.logNetwork("Data corrupted, context: \(context.debugDescription)", type: .debug)
                         @unknown default:
-                            print("Unknown decoding error")
+                            print("")
+                            LogManager.shared.logNetwork("Unknown decoding error", type: .debug)
                         }
                     } else {
-                        print("Error: \(error.localizedDescription)")
+                        LogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
                     }
                     
                     completion(.failure(.decodingError(error)))

@@ -13,9 +13,10 @@ extension StreamViewController {
     
     func pkInviteTapped(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let viewModel = PKInviteUserViewModel(isometrik: isometrik, streamInfo: streamData)
@@ -64,10 +65,10 @@ extension StreamViewController {
     
     func pkInviteRecieved(data: PubsubEvent?){
         
-        guard let pubsubMessage = data,
-              let isometrik = viewModel.isometrik
+        guard let pubsubMessage = data
         else { return }
         
+        let isometrik = viewModel.isometrik
         let userData = pubsubMessage.userMetaData
         let userName = userData?.userName.unwrap
         let firstName = userData?.firstName.unwrap
@@ -124,9 +125,7 @@ extension StreamViewController {
     func pkInviteStatusRecieved(data: PubsubEvent?){
         
         guard let pubsubMessage = data,
-              let metaData = pubsubMessage.metaData,
-              let streamsData = viewModel.streamsData,
-              let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
+              let metaData = pubsubMessage.metaData
         else { return }
         
         let status = metaData.status.unwrap
@@ -134,8 +133,8 @@ extension StreamViewController {
         
         if status == "Accepted" {
                         
-            viewModel.streamsData?[viewModel.selectedStreamIndex.row].pkInviteId = inviteId
-            viewModel.streamsData?[viewModel.selectedStreamIndex.row].isPkChallenge = true
+            viewModel.streamsData[viewModel.selectedStreamIndex.row].pkInviteId = inviteId
+            viewModel.streamsData[viewModel.selectedStreamIndex.row].isPkChallenge = true
             
             viewModel.fetchStreamMembers { error in
                 if error == nil {
@@ -167,12 +166,12 @@ extension StreamViewController {
     
     func pkInviteAccepted(inviteId: String, streamInfo: ISM_PK_Stream?){
         
-        guard let streamInfo,
-              let isometrik = viewModel.isometrik
+        guard let streamInfo
         else { return }
         
         let streamId = streamInfo.streamId.unwrap
         let initiatorId = streamInfo.userId.unwrap
+        let isometrik = viewModel.isometrik
         
         // leave previous channel
         isometrik.getIsometrik().leaveChannel()
@@ -190,7 +189,7 @@ extension StreamViewController {
             isometrik.getIsometrik().setUserRoleInStream(.Broadcaster)
             
             viewModel.selectedStreamIndex = IndexPath(row: 0, section: 0)
-            viewModel.streamsData?.removeAll()
+            viewModel.streamsData.removeAll()
             
             let stream = ISMStream(streamId: streamId, startTime: Int64(streamInfo.startDateTime.unwrap) ,rtcToken: rtcToken, isPkChallenge: true, pkInviteId: inviteId, isometrikUserID: initiatorId, status: "STARTED")
             
@@ -259,12 +258,10 @@ extension StreamViewController {
         DispatchQueue.main.async { [self] in
             
             guard let metaData,
-                  let isometrik = viewModel.isometrik,
-                  let visibleCell = fullyVisibleCells(streamCollectionView),
-                  let streamsData = viewModel.streamsData,
-                  let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
+                  let visibleCell = fullyVisibleCells(streamCollectionView)
             else { return }
             
+            let isometrik = viewModel.isometrik
             let message = metaData.message.unwrap
             let timeInMin = metaData.timeInMin.unwrap
             let pkId = metaData.pkId.unwrap
@@ -273,9 +270,9 @@ extension StreamViewController {
             // updating first and seconds user details
             let streamInfo = metaData.streamData?.first
             
-            self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].firstUserDetails = streamInfo?.firstUserDetails
-            self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].secondUserDetails = streamInfo?.secondUserDetails
-            self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].pkId = pkId
+            self.viewModel.streamsData[viewModel.selectedStreamIndex.row].firstUserDetails = streamInfo?.firstUserDetails
+            self.viewModel.streamsData[viewModel.selectedStreamIndex.row].secondUserDetails = streamInfo?.secondUserDetails
+            self.viewModel.streamsData[viewModel.selectedStreamIndex.row].pkId = pkId
             
             print("START PK EVENT, VIEWER: \(message)")
             print("CREATION TIME ==>> \(creationTime)")
@@ -303,12 +300,13 @@ extension StreamViewController {
     }
     
     func stopPKBattleForBroadcaster(withPkId pkId: String){
+        
         DispatchQueue.main.async {[self] in
-            guard let isometrik = viewModel.isometrik,
-                  let visibleCell = fullyVisibleCells(streamCollectionView),
-                  let streamsData = viewModel.streamsData,
-                  let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
+            
+            guard let visibleCell = fullyVisibleCells(streamCollectionView)
             else { return }
+            
+            let isometrik = viewModel.isometrik
             
             visibleCell.viewModel?.pkBattleTimer?.invalidate()
             visibleCell.hidePKTimerView()
@@ -321,7 +319,7 @@ extension StreamViewController {
             visibleCell.streamContainer.videoContainer.giftData = nil
             
             // update pkId to stream info when PK battle stops for broadcaster
-            self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].pkId = ""
+            self.viewModel.streamsData[viewModel.selectedStreamIndex.row].pkId = ""
             
             visibleCell.viewModel = viewModel
             
@@ -333,11 +331,13 @@ extension StreamViewController {
     func stopPKBattleForViewer(withPKId pkId: String){
         DispatchQueue.main.async {[self] in
             
-            guard let isometrik = viewModel.isometrik,
-                  let visibleCell = fullyVisibleCells(streamCollectionView),
-                  let streamsData = viewModel.streamsData,
+            let streamsData = viewModel.streamsData
+            
+            guard let visibleCell = fullyVisibleCells(streamCollectionView),
                   let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
             else { return }
+            
+            let isometrik = viewModel.isometrik
             
             visibleCell.viewModel?.pkBattleTimer?.invalidate()
             visibleCell.hidePKTimerView()
@@ -346,7 +346,7 @@ extension StreamViewController {
             getPKWinnersData(pkId: pkId)
             
             // update pkId to stream info when PK battle ends
-            self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].pkId = ""
+            self.viewModel.streamsData[viewModel.selectedStreamIndex.row].pkId = ""
             visibleCell.viewModel = viewModel
             
             // reset battle progress bar
@@ -363,9 +363,10 @@ extension StreamViewController {
     
     func handlePKChanges(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamMembers = viewModel.streamMembers
@@ -382,7 +383,7 @@ extension StreamViewController {
             for i in 0..<streamMembers.count {
                 let member = streamMembers[i]
                 if member.isAdmin.unwrap {
-                    self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].initiatorId = member.userID
+                    self.viewModel.streamsData[viewModel.selectedStreamIndex.row].initiatorId = member.userID
                 }
                 
                 // if viewer is in member list show join now popup
@@ -400,11 +401,11 @@ extension StreamViewController {
     
     func endPKInvite(inviteId: String, intentToStop: Bool = false){
         
-        guard let isometrik = viewModel.isometrik,
-              !inviteId.isEmpty,
+        guard !inviteId.isEmpty,
               let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
+        let isometrik = viewModel.isometrik
         let selectedIndexRow = viewModel.selectedStreamIndex.row
         
         isometrik.getIsometrik().endPKLinking(inviteId: inviteId) { result in
@@ -424,7 +425,7 @@ extension StreamViewController {
                 break
             case .host:
                 
-                self.viewModel.streamsData?[selectedIndexRow].isPkChallenge = false
+                self.viewModel.streamsData[selectedIndexRow].isPkChallenge = false
                 if intentToStop == true {
                     isometrik.getIsometrik().leaveChannel()
                 }
@@ -468,8 +469,8 @@ extension StreamViewController {
     
     func getPKWinnersData(pkId: String){
         
-        guard let isometrik = viewModel.isometrik else { return }
-    
+        let isometrik = viewModel.isometrik
+        
         isometrik.getIsometrik().getPKBattleWinners(pkId: pkId) { winnerData in
             
             DispatchQueue.main.async {
@@ -544,9 +545,10 @@ extension StreamViewController {
     func coPublisherLeft(data: MemberLeaveEvent){
         DispatchQueue.main.async {  [self] in
             
+            let isometrik = viewModel.isometrik
+            let streamsData = viewModel.streamsData
+            
             guard let visibleCell = fullyVisibleCells(streamCollectionView),
-                  let isometrik = viewModel.isometrik,
-                  let streamsData = viewModel.streamsData,
                   let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
             else { return }
             
@@ -568,7 +570,7 @@ extension StreamViewController {
             visibleCell.streamContainer.videoContainer.videoSessions =  isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions ?? []
             
             if  isPKChallenge {
-                viewModel.streamsData?[viewModel.selectedStreamIndex.row].isPkChallenge = false
+                viewModel.streamsData[viewModel.selectedStreamIndex.row].isPkChallenge = false
                 
                 switch userType {
                 case .member :
@@ -589,9 +591,9 @@ extension StreamViewController {
                     self.leaveStreamByViewer(userId: userInfo.userId ?? "", streamId:streamId)
                     
                     
-                    viewModel.streamsData?[viewModel.selectedStreamIndex.row].pkInviteId = ""
+                    viewModel.streamsData[viewModel.selectedStreamIndex.row].pkInviteId = ""
                     
-                    joinChannel(streamData: viewModel.streamsData?[viewModel.selectedStreamIndex.row], cell: visibleCell)
+                    joinChannel(streamData: viewModel.streamsData[viewModel.selectedStreamIndex.row], cell: visibleCell)
                     
                     // Notes: only subscribe if the ghost stream was not initiated by host.
                     if  ghostStreamData?.initiatorId != data.memberId{
@@ -630,9 +632,10 @@ extension StreamViewController {
     
     func updateBroadCastingStatusAfterPKEnds(intentToStop: Bool){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         // get previous ghost stream data
@@ -662,7 +665,7 @@ extension StreamViewController {
             }
             
             self.setupDefaults()
-            viewModel.streamsData?[viewModel.selectedStreamIndex.row].pkInviteId = ""
+            viewModel.streamsData[viewModel.selectedStreamIndex.row].pkInviteId = ""
             
             self.streamCollectionView.reloadData()
             
@@ -674,9 +677,10 @@ extension StreamViewController {
         
         DispatchQueue.main.async {[self] in
             
+            let isometrik = viewModel.isometrik
+            let streamsData = viewModel.streamsData
+            
             guard let metaData,
-                  let isometrik = viewModel.isometrik,
-                  let streamsData = viewModel.streamsData,
                   let currentStreamData = streamsData[safe: viewModel.selectedStreamIndex.row]
             else { return }
             
@@ -733,23 +737,21 @@ extension StreamViewController {
     func switchToStream(streamData: ISM_PK_Stream?){
         
         guard let streamData,
-              let visibleIndex = fullyVisibleIndex(streamCollectionView),
-              let currentStreamsData = viewModel.streamsData,
-              let _ = currentStreamsData[safe: viewModel.selectedStreamIndex.row]
+              let visibleIndex = fullyVisibleIndex(streamCollectionView)
         else { return }
         
         // reseting session every time stream changes
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions = []
+            self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions = []
         }
         
         viewModel.selectedStreamIndex = visibleIndex
         viewModel.streamUserType = .viewer
         
         // remove current stream from array
-        if self.viewModel.streamsData?.count ?? 0 >= visibleIndex.row + 1 {
-            self.viewModel.streamsData?.remove(at: visibleIndex.row)
+        if self.viewModel.streamsData.count ?? 0 >= visibleIndex.row + 1 {
+            self.viewModel.streamsData.remove(at: visibleIndex.row)
         }
         
         // create new one and insert
@@ -762,22 +764,17 @@ extension StreamViewController {
         let newStream = ISMStream(streamId: streamData.streamId.unwrap,
                                   startTime: Int64(streamData.startDateTime ?? 0), userDetails: streamData.userDetails, isPkChallenge: true, firstUserDetails: firstUserDetail, secondUserDetails: secondUserDetail)
         
-        self.viewModel.streamsData?.insert(newStream, at: visibleIndex.row)
+        self.viewModel.streamsData.insert(newStream, at: visibleIndex.row)
         self.streamCollectionView.reloadData()
     }
     
     func didChangeToPkEvent(){
-        guard let streamsData = viewModel.streamsData,
-              let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
-        else { return }
-        
-        self.viewModel.streamsData?[viewModel.selectedStreamIndex.row].isPkChallenge = true
+        self.viewModel.streamsData[viewModel.selectedStreamIndex.row].isPkChallenge = true
     }
     
     func stopPKBattle(pkId: String, action: PKStopAction){
         
-        guard let isometrik = viewModel.isometrik else { return }
-        
+        let isometrik = viewModel.isometrik
         isometrik.getIsometrik().stopPKChallenge(pkId: pkId, action: action.rawValue) { result in
                 print(result)
         }failure:  { error in
@@ -814,10 +811,12 @@ extension StreamViewController {
         
         challengeViewModel.startPK_CallBack = { [weak self] timeInMin in
             
-            guard let self,
-                  let time = Int(timeInMin ?? "0"),
-                  let isometrik = viewModel.isometrik,
-                  let streamsData = viewModel.streamsData,
+            guard let self else { return }
+            
+            let isometrik = viewModel.isometrik
+            let streamsData = viewModel.streamsData
+            
+            guard let time = Int(timeInMin ?? "0"),
                   let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
             else { return }
             
@@ -908,7 +907,7 @@ extension StreamViewController {
                     
                     if let hostData = hostData {
                         // change streamInfo initiator info
-                        self.viewModel.streamsData?[self.viewModel.selectedStreamIndex.row].initiatorId = hostData.userID
+                        self.viewModel.streamsData[self.viewModel.selectedStreamIndex.row].initiatorId = hostData.userID
                         
                         // change user Details too
 //                        let userDetail = StreamUserDetails(firstName: hostData.name, isFollow: nil, isStar: nil, lastName: hostData.name, userName: hostData.name, userProfile: hostData.imagePath, walletUserId: hostData.memberId)
@@ -976,8 +975,8 @@ extension StreamViewController {
     
         DispatchQueue.main.async { [self] in
             
-            guard let streamsData = viewModel.streamsData,
-                  let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+            let streamsData = viewModel.streamsData
+            guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
             else { return }
             
             let pkId = streamData.pkId.unwrap
@@ -1040,8 +1039,9 @@ extension StreamViewController {
         
         DispatchQueue.main.async { [self] in
             
+            let streamsData = viewModel.streamsData
+            
             guard let visibleCell = fullyVisibleCells(streamCollectionView),
-                  let streamsData = viewModel.streamsData,
                   let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
             else { return }
             
@@ -1121,7 +1121,7 @@ extension StreamViewController {
                   let visibleCell = fullyVisibleCells(streamCollectionView)
             else { return }
             
-            self.viewModel.streamsData?[self.viewModel.selectedStreamIndex.row].pkId = stats.pkId.unwrap
+            self.viewModel.streamsData[self.viewModel.selectedStreamIndex.row].pkId = stats.pkId.unwrap
 
             let pkId = stats.pkId.unwrap
             if pkId.isEmpty {

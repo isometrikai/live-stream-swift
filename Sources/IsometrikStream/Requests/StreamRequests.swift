@@ -303,4 +303,27 @@ extension IsometrikStream {
         
     }
     
+    
+    public func buyPaidStream(streamId: String, completionHandler: @escaping (ISMPaidStreamResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let bodyData = PaidStreamBody(streamId: streamId)
+        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.buyPaidStream, requestBody: bodyData)
+        
+        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMPaidStreamResponseModel, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
 }

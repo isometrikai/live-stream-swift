@@ -13,9 +13,10 @@ extension StreamViewController {
     
     func giftTapped(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let recieverData = getGiftRecieverData()
         else { return }
         
@@ -32,9 +33,10 @@ extension StreamViewController {
     
     func getGiftRecieverData() -> ISMCustomGiftRecieverData? {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return nil }
         
         var recieverStreamId = ""
@@ -210,9 +212,9 @@ extension StreamViewController {
                     .replacingOccurrences(of: "\\\"", with: "\"")
 
                 if let jsonData = trimmedString?.data(using: .utf8) {
-                    let giftModel = try JSONDecoder().decode(ISMStreamGiftModel.self, from: jsonData)
+                    let giftModel = try JSONDecoder().decode(StreamMessageGiftModel.self, from: jsonData)
                     
-                    let giftURLString = giftModel.giftAnimationImage ?? ""
+                    let giftURLString = giftModel.message ?? ""
                     visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
                     if let url = URL(string: giftURLString) {
                         gifCoverImageView.kf.setImage(with: url)

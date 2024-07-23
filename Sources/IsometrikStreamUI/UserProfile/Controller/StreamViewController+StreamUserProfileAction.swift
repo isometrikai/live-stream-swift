@@ -13,9 +13,10 @@ extension StreamViewController: StreamUserProfileDelegate {
     
     func didUserProfileOptionTapped(actionType: UserProfileActionType, messageData: ISMComment?) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let messageData
         else { return }
         

@@ -433,7 +433,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
         
         let isometrik = viewModel.isometrik
         if isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled {
-            viewModel.actionDelegate?.didAddProductTapped(selectedProductsIds: [], productIds: { productIds in
+            viewModel.externalActionDelegate?.didAddProductTapped(selectedProductsIds: [], productIds: { productIds in
                 // do something with productIds
             }, root: navigationController)
         }
@@ -615,7 +615,7 @@ extension GoLiveViewController {
             isPaid: viewModel.isPaid, 
             isPublicStream: true,
             isRecorded: viewModel.recordBroadcast,
-            paymentAmount: viewModel.paidAmount,
+            amount: viewModel.paidAmount,
             userName: userName,
             rtmpIngest: viewModel.isRTMPStream,
             persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey,
@@ -671,7 +671,7 @@ extension GoLiveViewController {
                 
                 var streamData = stream
                 streamData.isPaid = self.viewModel.isPaid
-                streamData.paymentAmount = Double(self.viewModel.paidAmount)
+                streamData.amount = Double(self.viewModel.paidAmount)
                 streamData.multiLive = self.viewModel.multiLive
                 streamData.selfHosted = self.viewModel.selfHosted
                 streamData.streamImage = imagePath
@@ -765,7 +765,7 @@ extension GoLiveViewController {
             isPublicStream: true,
             isRecorded: viewModel.recordBroadcast,
             isScheduledStream: viewModel.isScheduleStream,
-            paymentAmount: Int(streamData.paymentAmount ?? 0),
+            amount: Int(streamData.amount ?? 0),
             streamTitle: userName, userName: userName,
             rtmpIngest: viewModel.isRTMPStream,
             persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey,
@@ -863,10 +863,8 @@ extension GoLiveViewController {
         let isometrik = viewModel.isometrik
         isometrik.getUserSession().setUserType(userType: .host)
         
-        let viewModel = StreamViewModel()
+        let viewModel = StreamViewModel(isometrik: isometrik, streamsData: streamInfo, delegate: self)
         viewModel.streamUserType = .host
-        viewModel.streamsData = streamInfo
-        viewModel.isometrik = isometrik
         
         let streamController = StreamViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(streamController, animated: true)
@@ -878,4 +876,10 @@ extension GoLiveViewController {
         return fileURL?.pathExtension ?? ""
     }
     
+}
+
+extension GoLiveViewController: ISMStreamActionDelegate {
+    public func didStreamStoreOptionTapped(forUserType: StreamUserType, root: UINavigationController) {
+        viewModel.externalActionDelegate?.didStreamStoreOptionTapped(forUserType: forUserType ,root: root)
+    }
 }

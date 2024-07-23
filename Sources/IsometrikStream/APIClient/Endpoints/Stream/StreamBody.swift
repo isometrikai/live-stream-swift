@@ -30,7 +30,7 @@ public struct StreamBody: Codable, Hashable {
     
     /// Extra properties added for LiveJet
     private let isScheduledStream : Bool?
-    private let paymentAmount: Int?
+    private let amount: Int?
     private let paymentCurrencyCode: String?
     private let paymentType: Int?
     private let streamTags: [String]?
@@ -89,7 +89,7 @@ public struct StreamBody: Codable, Hashable {
         isPublicStream: Bool = false,
         isRecorded: Bool = false,
         isScheduledStream:Bool = false,
-        paymentAmount: Int = 0,
+        amount: Int = 0,
         paymentType: Int = 0,
         streamTags: [String]? = nil,
         streamTitle: String? = nil,
@@ -140,7 +140,7 @@ public struct StreamBody: Codable, Hashable {
         self.isPublicStream = isPublicStream
         self.isRecorded = isRecorded
         self.isScheduledStream = isScheduledStream
-        self.paymentAmount = paymentAmount
+        self.amount = amount
         self.paymentType = paymentType
         self.streamTags = streamTags
         self.streamTitle = streamTitle
@@ -318,6 +318,13 @@ public struct StartStreamBody: Codable {
         self.persistRtmpIngestEndpoint = persistRtmpIngestEndpoint
     }
     
+}
+
+public struct PaidStreamBody: Encodable {
+    let streamId: String
+    init(streamId: String) {
+        self.streamId = streamId
+    }
 }
 
 

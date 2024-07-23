@@ -17,15 +17,8 @@ extension StreamViewController {
     
     func sendMessage(messageText: String, messageOfType: ISMStreamMessageType = .text) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
-              !messageText.isEmpty
+        guard !messageText.isEmpty
         else { return }
-        
-        // no action if guest user
-        let isGuestUser = (isometrik.getUserSession().getUserType() == .guest)
-        if isGuestUser { return }
         
         let messageType = Int64(messageOfType.rawValue)
         

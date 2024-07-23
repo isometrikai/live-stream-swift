@@ -17,10 +17,10 @@ extension StreamViewController {
     
     func joinStreamAsViewer(streamData: ISMStream , cell: VerticalStreamCollectionViewCell?, _ completion: @escaping (_ success: Bool?, _ errorString: String?)->Void){
         
-        guard let isometrik = viewModel.isometrik,
-              let cell
+        guard let cell
         else { return }
         
+        let isometrik = viewModel.isometrik
         let userId = isometrik.getUserSession().getUserId()
         let streamId = streamData.streamId.unwrap
         
@@ -55,7 +55,7 @@ extension StreamViewController {
     
     func joinChannelAsViewer(rtcToken: String, streamId: String){
         
-        guard let isometrik = viewModel.isometrik else { return }
+        let isometrik = viewModel.isometrik
         let userId = isometrik.getUserSession().getUserId()
         
         viewModel.configureRTCToken(rtcToken: rtcToken)
@@ -68,14 +68,14 @@ extension StreamViewController {
     
     func leaveStreamByViewer(userId: String, streamId: String, exit: Bool = true) {
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView)
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
-        isometrik.getIsometrik().leaveChannel()
+        let isometrik = viewModel.isometrik
         visibleCell.streamLoader.isHidden = false
         
         isometrik.getIsometrik().leaveViewer(streamId: streamId, viewerId: userId) { viewer in
+            isometrik.getIsometrik().leaveChannel()
             if exit {
                 self.dismissViewController()
             }

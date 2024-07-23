@@ -23,9 +23,10 @@ extension StreamViewController {
     
     @objc func mqttMemberAdded(notification: NSNotification){
         
+        let streamsData = viewModel.streamsData
+        
         guard let memberData = notification.userInfo?["data"] as? MemberAddEvent,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               streamData.streamId == memberData.streamId
         else { return }
@@ -52,16 +53,18 @@ extension StreamViewController {
     
     @objc func mqttMemberRemoved(notification: NSNotification){
         
+        let streamsData = viewModel.streamsData
+        
         guard let memberData = notification.userInfo?["data"] as? MemberRemoveEvent,
-              let isometrik = viewModel.isometrik,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               streamData.streamId == memberData.streamId
         else { return }
         
+        let isometrik = viewModel.isometrik
+        
         // locally remove session and refresh the sessions
-        self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll { session in
+        self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll { session in
             session.userData?.userID == memberData.memberId
         }
 
@@ -82,7 +85,7 @@ extension StreamViewController {
         if memberData.memberId == isometrik.getUserSession().getUserId() {
             endTimer()
             isometrik.getIsometrik().leaveChannel()
-            self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
+            self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
             
             
             visibleCell.streamEndView.isHidden = false
@@ -109,9 +112,10 @@ extension StreamViewController {
     
     @objc func mqttViewerJoined(notification: NSNotification){
         
+        let streamsData = viewModel.streamsData
+        
         guard let visibleCell = fullyVisibleCells(streamCollectionView),
               let viewerData = notification.userInfo?["data"] as? ViewerJoinEvent,
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
@@ -134,9 +138,10 @@ extension StreamViewController {
     
     @objc func mqttViewerRemoved(notification: NSNotification){
         
+        let streamsData = viewModel.streamsData
+        
         guard let visibleCell = fullyVisibleCells(streamCollectionView),
               let viewerData = notification.userInfo?["data"] as? ViewerRemoveEvent,
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
@@ -164,10 +169,11 @@ extension StreamViewController {
     
     @objc func mqttViewerRemovedByInitiator(notification: NSNotification){
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView),
+        let streamsData = viewModel.streamsData
+        let isometrik = viewModel.isometrik
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
               let viewerData = notification.userInfo?["data"] as? ViewerRemoveEvent,
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
@@ -211,9 +217,10 @@ extension StreamViewController {
     
     @objc func mqttSentMessage(notification: NSNotification){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              streamsData.count > 0,
+        let streamsData = viewModel.streamsData
+        let isometrik = viewModel.isometrik
+        
+        guard streamsData.count > 0,
               let streamInfo = streamsData[safe: viewModel.selectedStreamIndex.row],
               let messageData = notification.userInfo?["data"] as? MessageAddEvent
         else { return }
@@ -256,6 +263,10 @@ extension StreamViewController {
                     self.handleMessages(message: messageModel)
                 }
             }
+            
+            print("messageSent event called for messageType \(messageData.messageType.unwrap)")
+            
+            break
         }
         
     }
@@ -266,9 +277,10 @@ extension StreamViewController {
     
     @objc func mqttRemoveMessage(notification: NSNotification) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              streamsData.count > 0,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard streamsData.count > 0,
               let messageData = notification.userInfo?["data"] as? ISMComment,
               let streamInfo = streamsData[safe:viewModel.selectedStreamIndex.row]
         else { return }
@@ -289,8 +301,9 @@ extension StreamViewController {
     
     @objc func mqttStreamStopped(notification: NSNotification){
         
-        guard let streamsData = viewModel.streamsData,
-              let visibleCell = fullyVisibleCells(streamCollectionView),
+        let streamsData = viewModel.streamsData
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
               let visibleIndex = fullyVisibleIndex(streamCollectionView),
               let _streamData = notification.userInfo?["data"] as? ISMStream,
               let streamData = streamsData[safe: visibleIndex.row]
@@ -379,10 +392,10 @@ extension StreamViewController {
     @objc func mqttCopublishRequestAccepted(notification: NSNotification){
         
         guard let visibleCell = fullyVisibleCells(streamCollectionView),
-              let isometrik = viewModel.isometrik,
               let userRequest = notification.userInfo?["data"] as? ISMRequest
         else { return }
         
+        let isometrik = viewModel.isometrik
         let currentUserId = isometrik.getUserSession().getUserId()
         
         if userRequest.userId == currentUserId, viewModel.streamUserType == .viewer {
@@ -408,10 +421,10 @@ extension StreamViewController {
     @objc func mqttCopublishRequestDenied(notification: NSNotification){
         
         guard let visibleCell = fullyVisibleCells(streamCollectionView),
-              let isometrik = viewModel.isometrik,
               let userRequest = notification.userInfo?["data"] as? ISMRequest
         else { return }
         
+        let isometrik = viewModel.isometrik
         let currentUserId = isometrik.getUserSession().getUserId()
         
         if userRequest.userId == currentUserId, viewModel.streamUserType == .viewer {
@@ -478,12 +491,14 @@ extension StreamViewController {
     
     @objc func mqttModeratorAdded(notification: NSNotification){
         
-        guard let isometrik = viewModel.isometrik,
-              let userData = notification.userInfo?["data"] as? ModeratorEvent,
+        let streamsData = viewModel.streamsData
+        
+        guard let userData = notification.userInfo?["data"] as? ModeratorEvent,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
+        
+        let isometrik = viewModel.isometrik
         
         // matching stream id
         if streamData.streamId == userData.streamId {
@@ -501,7 +516,7 @@ extension StreamViewController {
                 self.handleModalActions(title, subtitle)
                 
                 // updating moderator flag
-                viewModel.streamsData?[viewModel.selectedStreamIndex.row].isModerator = true
+                viewModel.streamsData[viewModel.selectedStreamIndex.row].isModerator = true
                 
                 // updating viewModel after changes
                 visibleCell.viewModel = viewModel
@@ -524,12 +539,14 @@ extension StreamViewController {
     
     @objc func mqttModeratorRemoved(notification: NSNotification){
         
-        guard let isometrik = viewModel.isometrik,
-              let userData = notification.userInfo?["data"] as? ModeratorEvent,
+        let streamsData = viewModel.streamsData
+        
+        guard let userData = notification.userInfo?["data"] as? ModeratorEvent,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
+        
+        let isometrik = viewModel.isometrik
         
         // matching stream id
         if streamData.streamId == userData.streamId {
@@ -547,7 +564,7 @@ extension StreamViewController {
                 self.handleModalActions(title, subtitle)
                 
                 // updating moderator flag
-                viewModel.streamsData?[viewModel.selectedStreamIndex.row].isModerator = false
+                viewModel.streamsData[viewModel.selectedStreamIndex.row].isModerator = false
                 
                 // updating viewModel after changes
                 visibleCell.viewModel = viewModel
@@ -570,13 +587,14 @@ extension StreamViewController {
     
     @objc func mqttModeratorLeft(notification: Notification){
         
-        guard let isometrik = viewModel.isometrik,
-              let userData = notification.userInfo?["data"] as? ModeratorEvent,
+        let streamsData = viewModel.streamsData
+        
+        guard let userData = notification.userInfo?["data"] as? ModeratorEvent,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
+        let isometrik = viewModel.isometrik
         let streamerName = "\(streamData.userDetails?.firstName ?? "") \(streamData.userDetails?.lastName ?? "")"
         
         // matching stream id
@@ -590,7 +608,7 @@ extension StreamViewController {
                 viewModel.streamMessageViewModel?.streamUserType = .viewer
                 
                 // updating moderator flag
-                viewModel.streamsData?[viewModel.selectedStreamIndex.row].isModerator = false
+                viewModel.streamsData[viewModel.selectedStreamIndex.row].isModerator = false
                 
                 // updating viewModel after changes
                 visibleCell.viewModel = viewModel
@@ -617,8 +635,9 @@ extension StreamViewController {
     
     @objc func pubsubMessagePublished(notification: NSNotification){
         
+        let isometrik = viewModel.isometrik
+        
         guard let pubsubMessage = notification.userInfo?["data"] as? PubsubEvent,
-              let isometrik = viewModel.isometrik,
               isometrik.getUserSession().getUserType() != .viewer
         else { return }
         

@@ -21,6 +21,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     case updateScheduledStream
     case getPresignedUrl(streamTitle: String, mediaExtension: String)
     case getStreamAnalytics(streamId: String)
+    case buyPaidStream
     
     var description: String {
         switch self {
@@ -36,12 +37,13 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .updateScheduledStream: return "update scheduled stream"
         case .getPresignedUrl: return "For uploading stream image cover"
         case .getStreamAnalytics: return "Get stream analytics"
+        case .buyPaidStream: return "Buy paid stream"
         }
     }
     
     var baseURL: URL{
         switch self {
-        case .startStream, .fetchStreams, .stopStream, .getStreamAnalytics:
+        case .startStream, .fetchStreams, .stopStream, .getStreamAnalytics, .buyPaidStream:
             return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
         case .getRecordedStream, .getPresignedUrl:
             return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
@@ -52,7 +54,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
     var method: ISMLiveHTTPMethod {
         switch self {
-        case .startStream, .startScheduledStream :
+        case .startStream, .startScheduledStream, .buyPaidStream :
             return .post
         case .updateScheduledStream, .stopStream:
             return .patch
@@ -88,6 +90,8 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             path = "/streaming/v2/stream/presignedurl"
         case .getStreamAnalytics:
             path = "/live/v2/stream/analytics"
+        case .buyPaidStream:
+            path = "/live/v2/buy/stream"
         }
         return path
     }

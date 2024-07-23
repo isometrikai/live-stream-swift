@@ -100,16 +100,26 @@ public class UserDefaultsProvider: NSObject {
         return [[:]]
     }
     
-    public func setWalletBalance(data: Float64){
-        UserDefaults.standard.setValue(data, forKey: "walletBalance")
+    public func setWalletBalance(data: Float64, currencyType: String){
+        
+        if currencyType == "COIN" {
+            UserDefaults.standard.setValue(data, forKey: "walletCoinBalance")
+        } else {
+            UserDefaults.standard.setValue(data, forKey: "walletMoneyBalance")
+        }
+        
         UserDefaults.standard.synchronize()
     }
        
-    public func getWalletBalance() -> Float64 {
-        if let data = UserDefaults.standard.value(forKey: "walletBalance") as? Float64 {
-            return data
+    public func getWalletBalance(currencyType: String) -> Float64 {
+        
+        if currencyType == "COIN", let data = UserDefaults.standard.value(forKey: "walletCoinBalance") as? Float64 {
+                return data
+        } else if let data = UserDefaults.standard.value(forKey: "walletMoneyBalance") as? Float64 {
+                return data
         }
         return 0
+        
     }
     
 }

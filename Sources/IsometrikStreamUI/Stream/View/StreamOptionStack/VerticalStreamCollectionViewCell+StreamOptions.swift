@@ -13,12 +13,15 @@ extension VerticalStreamCollectionViewCell {
     
     func setupStreamOptions(){
         
-        guard let viewModel = viewModel,
-              let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        guard let viewModel
         else { return }
         
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
+        let isometrik = viewModel.isometrik
         let streamUserType = viewModel.streamUserType
         let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status)
         let streamMembers = viewModel.streamMembers

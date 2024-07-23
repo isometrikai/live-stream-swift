@@ -132,7 +132,7 @@ class StreamGiftPickerViewController: UIViewController, ISMStreamUIAppearancePro
         let headerView = contentView.headerView
         
         // get wallet balance from userdefaults first
-        let balance = UserDefaultsProvider.shared.getWalletBalance()
+        let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: WalletCurrencyType.coin.rawValue)
         headerView.coinAmount.text = "\(Int64(balance)) coins"
         
         // if any change happened fetch from server

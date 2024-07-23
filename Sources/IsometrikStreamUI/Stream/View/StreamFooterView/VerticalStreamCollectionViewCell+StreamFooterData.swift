@@ -13,10 +13,12 @@ extension VerticalStreamCollectionViewCell {
     
     func setStreamFooterView(){
         
-        guard let viewModel,
-              let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        guard let viewModel else { return }
+        
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProfileDelegateEnabled

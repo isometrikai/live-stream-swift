@@ -144,9 +144,10 @@ public struct ISMStream: Codable {
     public let coinsCount : Int?
     public let country : String?
     public var isPaid : Bool?
+    public var isBuy: Bool?
     public let scheduleStartTime: Double?
     public let isScheduledStream : Bool?
-    public var paymentAmount : Double?
+    public var amount : Double?
     public let paymentCurrencyCode : String?
     public let paymentType : Int?
     public let streamTags : [String]?
@@ -235,12 +236,13 @@ public struct ISMStream: Codable {
         
         case duration
         case alreadyPaid
+        case isBuy
         case coinsCount
         case country
         case isPaid
         case isScheduledStream
         case scheduleStartTime
-        case paymentAmount
+        case amount
         case paymentCurrencyCode
         case paymentType
         case streamTags
@@ -317,12 +319,13 @@ public struct ISMStream: Codable {
                 
                 duration: Int? = nil,
                 alreadyPaid: Bool? = nil,
+                isBuy: Bool? = nil,
                 coinsCount: Int? = nil,
                 country: String? = nil,
                 isPaid: Bool? = nil,
                 isScheduledStream: Bool? = nil,
                 scheduleStartTime: Double? = nil,
-                paymentAmount : Double? = nil,
+                amount : Double? = nil,
                 paymentCurrencyCode : String? = nil,
                 paymentType : Int? = nil,
                 streamTags : [String]? = nil,
@@ -387,12 +390,13 @@ public struct ISMStream: Codable {
         
         self.duration = duration
         self.alreadyPaid = alreadyPaid
+        self.isBuy = isBuy
         self.coinsCount = coinsCount
         self.country = country
         self.isPaid = isPaid
         self.isScheduledStream = isScheduledStream
         self.scheduleStartTime = scheduleStartTime
-        self.paymentAmount = paymentAmount
+        self.amount = amount
         self.paymentCurrencyCode = paymentCurrencyCode
         self.paymentType = paymentType
         self.streamTags  = streamTags
@@ -507,12 +511,13 @@ public struct ISMStream: Codable {
         
         duration = try? values.decodeIfPresent(Int.self, forKey: .duration)
         alreadyPaid = try? values.decodeIfPresent(Bool.self, forKey: .alreadyPaid)
+        isBuy = try? values.decodeIfPresent(Bool.self, forKey: .isBuy)
         coinsCount = try? values.decodeIfPresent(Int.self, forKey: .coinsCount)
         country = try? values.decodeIfPresent(String.self, forKey: .country)
         isPaid = try? values.decodeIfPresent(Bool.self, forKey: .isPaid)
         isScheduledStream = try? values.decodeIfPresent(Bool.self, forKey: .isScheduledStream)
         scheduleStartTime = try? values.decodeIfPresent(Double.self, forKey: .scheduleStartTime)
-        paymentAmount = try? values.decodeIfPresent(Double.self, forKey: .paymentAmount)
+        amount = try? values.decodeIfPresent(Double.self, forKey: .amount)
         paymentCurrencyCode = try? values.decodeIfPresent(String.self, forKey: .paymentCurrencyCode)
         paymentType = try? values.decodeIfPresent(Int.self, forKey: .paymentType)
         streamTags = try? values.decodeIfPresent([String].self, forKey: .streamTags)
@@ -751,4 +756,8 @@ public struct RelaxedString: Codable, Hashable {
         var container = encoder.singleValueContainer()
         try container.encode(value)
     }
+}
+
+public struct ISMPaidStreamResponseModel: Codable {
+    let message: String?
 }

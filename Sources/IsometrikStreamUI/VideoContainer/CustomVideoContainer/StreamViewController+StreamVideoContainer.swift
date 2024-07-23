@@ -37,21 +37,24 @@ extension StreamViewController: RtcWrapperProtocol {
     
     public func updateVideoSessions() {
         
-        guard let isometrik = viewModel.isometrik
-        else { return }
-        
+        let isometrik = viewModel.isometrik
         let streamMembers = viewModel.streamMembers
         
         // update stream members data respective to there video sessions
         streamMembers.forEach {
+            
+            // for checking whether user is local or remote
             let memberuid = $0.userID?.ism_userIdUInt() ?? 0
+            let localUserId = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
+            let isLocal = localUserId == memberuid
+            
             // check for existing session
             if let sessionIndex = isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == memberuid
             }){
                 isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions[sessionIndex].userData = $0
             }else{
                 // session not exist
-                isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSession(of:memberuid).userData = $0
+                isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSession(of:memberuid, isLocal ? .local : .remote).userData = $0
             }
         }
         updateVideoSessionLayout()
@@ -60,10 +63,10 @@ extension StreamViewController: RtcWrapperProtocol {
     
     public func updateVideoSessionLayout(){
         
-        // video views layout
-        guard let isometrik = viewModel.isometrik,
-              let videoContainer = viewModel.videoContainer,
-              let streamsData = viewModel.streamsData,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let videoContainer = viewModel.videoContainer,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
     
@@ -83,11 +86,11 @@ extension StreamViewController: RtcWrapperProtocol {
     
     func joinChannel(streamData: ISMStream?, cell: VerticalStreamCollectionViewCell?){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamData,
+        guard let streamData,
               let cell
         else { return }
         
+        let isometrik = viewModel.isometrik
         let userId = isometrik.getUserSession().getUserId()
         let streamId = streamData.streamId.unwrap
         
@@ -130,8 +133,9 @@ extension StreamViewController: VideoContainerActionDelegate {
     
     func didMoreOptionTapped(index: Int, videoSession: VideoSession?) {
         
-        guard let videoSession, let isometrik = viewModel.isometrik else { return }
+        guard let videoSession else { return }
         
+        let isometrik = viewModel.isometrik
         let userData = videoSession.userData
         let userType = isometrik.getUserSession().getUserType()
         
@@ -169,8 +173,7 @@ extension StreamViewController: VideoContainerActionDelegate {
     
     func didRTMPMemberViewTapped(index: Int) {
         
-        guard let isometrik = viewModel.isometrik else { return }
-        
+        let isometrik = viewModel.isometrik
         let userType = isometrik.getUserSession().getUserType()
         
         switch userType {

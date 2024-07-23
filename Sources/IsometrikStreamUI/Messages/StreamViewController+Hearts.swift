@@ -12,9 +12,10 @@ extension StreamViewController: ISMStreamUIAppearanceProvider {
     
     func sendHeart(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         

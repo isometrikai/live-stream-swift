@@ -166,21 +166,21 @@ enum AnyCodableValue: Codable {
 
 // MARK: - ROUNDED WITH ABBREVIATIONS
 
-protocol RoundedWithAbbreviations {
+public protocol RoundedWithAbbreviations {
     var ism_roundedWithAbbreviations: String { get }
 }
 
-extension RoundedWithAbbreviations {
+public extension RoundedWithAbbreviations {
     var ism_roundedWithAbbreviations: String {
-        let number = Double("\(self)") ?? 0.0
+        let number = Int("\(self)") ?? 0
         let thousand = number / 1000
         let million = number / 1000000
-        if million >= 1.0 {
-            return "\(round(million * 10) / 10)M"
-        } else if thousand >= 1.0 {
-            return "\(round(thousand * 10) / 10)K"
+        if million >= 1 {
+            return "\(million)M"
+        } else if thousand >= 1 {
+            return "\(thousand)K"
         } else {
-            return "\(self)"
+            return "\(number)"
         }
     }
 }

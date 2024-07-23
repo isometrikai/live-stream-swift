@@ -27,8 +27,8 @@ extension StreamViewController {
     
     /// Adds MQTT Observers
     func addMqttObservers(){
-        guard let isometrik = viewModel.isometrik else { return }
         
+        let isometrik = viewModel.isometrik
         /**
          MQTT observers for `Member`
          */
@@ -110,18 +110,9 @@ extension StreamViewController {
         
     }
     
-    func addChatObservers(){
-        
-//        guard let chatSDK = viewModel.chatSDK else { return }
-//        
-//        chatSDK.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttChatMessageRecieved), name: ISMChatMQTTNotificationType.mqttMessageNewReceived.name, object: nil)
-        
-    }
-    
     func addStreamObservers(){
         addAppLifeCycleObservers()
         addMqttObservers()
-        addChatObservers()
     }
     
     // MARK: - REMOVE OBSERVES FUNCTIONS
@@ -136,7 +127,8 @@ extension StreamViewController {
     
     func removeMQTTObservers(){
         /// Removing MQTT Observers
-        guard let isometrik = viewModel.isometrik else { return }
+
+        let isometrik = viewModel.isometrik
         
         /**
          Remove observers for `Member`

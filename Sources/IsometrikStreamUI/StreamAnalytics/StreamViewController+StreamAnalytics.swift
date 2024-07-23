@@ -12,8 +12,7 @@ extension StreamViewController {
     
     func openStreamAnalytics(inStream: Bool = true, streamId: String){
         
-        guard let isometrik = viewModel.isometrik else { return }
-        
+        let isometrik = viewModel.isometrik
         let analyticsViewModel = StreamAnalyticViewModel(isometrik: isometrik, streamId: streamId)
         let analyticsController = StreamAnalyticsController(viewModel: analyticsViewModel)
         

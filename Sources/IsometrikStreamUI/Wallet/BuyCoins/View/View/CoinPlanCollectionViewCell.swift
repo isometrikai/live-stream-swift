@@ -32,7 +32,6 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearancePro
     lazy var coinImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = appearance.images.coin
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -63,27 +62,27 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearancePro
     func setUpViews(){
         backgroundColor = .clear
         addSubview(coverView)
-        addSubview(coinLabel)
-        addSubview(coinImage)
-        addSubview(amountLabel)
+        coverView.addSubview(coinLabel)
+        coverView.addSubview(coinImage)
+        coverView.addSubview(amountLabel)
     }
     
     func setUpConstraints(){
         coverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
 
-            coinLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            coinLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            coinLabel.topAnchor.constraint(equalTo: topAnchor, constant: 12),
+            coinLabel.leadingAnchor.constraint(equalTo: coverView.leadingAnchor, constant: 8),
+            coinLabel.trailingAnchor.constraint(equalTo: coverView.trailingAnchor, constant: -8),
+            coinLabel.topAnchor.constraint(equalTo: coverView.topAnchor, constant: 12),
             
-            coinImage.centerXAnchor.constraint(equalTo: centerXAnchor),
-            coinImage.centerYAnchor.constraint(equalTo: centerYAnchor),
+            coinImage.centerXAnchor.constraint(equalTo: coverView.centerXAnchor),
+            coinImage.centerYAnchor.constraint(equalTo: coverView.centerYAnchor),
             coinImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5),
             coinImage.heightAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5),
             
-            amountLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            amountLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            amountLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
+            amountLabel.leadingAnchor.constraint(equalTo: coverView.leadingAnchor, constant: 8),
+            amountLabel.trailingAnchor.constraint(equalTo: coverView.trailingAnchor, constant: -8),
+            amountLabel.bottomAnchor.constraint(equalTo: coverView.bottomAnchor, constant: -12),
         ])
     }
     
@@ -96,6 +95,7 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMStreamUIAppearancePro
         let baseCurrencySymbol = data.baseCurrencySymbol ?? ""
         
         coinLabel.text = "\(numberOfUnits) Coins"
+        coinImage.image = appearance.images.goldPile2
         amountLabel.text = "\(baseCurrencySymbol)\(baseCurrencyValue)"
         
     }

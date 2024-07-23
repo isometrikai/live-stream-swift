@@ -39,8 +39,11 @@ public class RTCLiveKitManager: NSObject {
     
     var isCameraMute: Bool = false {
         didSet {
-            Task {
-                try await self.room.localParticipant.setCamera(enabled:!self.isCameraMute)
+            DispatchQueue.main.async {
+                LogManager.shared.logLiveKit("is camera enabled : \(!self.isCameraMute)", type: .debug)
+                Task {
+                    try await self.room.localParticipant.setCamera(enabled:!self.isCameraMute)
+                }
             }
         }
     }
@@ -49,7 +52,7 @@ public class RTCLiveKitManager: NSObject {
     var isMicrophoneMute: Bool = true {
         didSet {
             DispatchQueue.main.async {
-                print("LIVEKIT :: IS MICROPHONE ENABLE \(!self.isMicrophoneMute)")
+                LogManager.shared.logLiveKit("is mic enabled : \(!self.isMicrophoneMute)", type: .debug)
                 Task {
                     try await self.room.localParticipant.setMicrophone(enabled: !self.isMicrophoneMute)
                 }
@@ -85,8 +88,7 @@ public class RTCLiveKitManager: NSObject {
             let url = configuration.liveKitUrl
             let rtcToken = configuration.rtcToken
             
-            print("LIVEKIT :: URL => \(url)")
-            print("LIVEKIT :: RTCTOKEN => \(rtcToken)")
+            LogManager.shared.logLiveKit("serverUrl : \(url) \n rtcToken : \(rtcToken)", type: .debug)
             
             // Setting video presets based on the hdBroadcast param
             
@@ -213,7 +215,7 @@ public class RTCLiveKitManager: NSObject {
             let newSession = VideoSession(uid: uid, type: type, sessionFrom: .liveKit)
             videoSessions.append(newSession)
             
-            print("::::::: ==== >>>> VideoSession ( uid: \(newSession.uid) , type : \(newSession.type))")
+            LogManager.shared.logLiveKit("videoSession created : (uid: \(newSession.uid) , type : \(newSession.type))", type: .debug)
             
             return newSession
         }
@@ -226,21 +228,19 @@ extension RTCLiveKitManager: RoomDelegate {
     
     public func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldConnectionState: ConnectionState) {
         
+        LogManager.shared.logLiveKit("state : \(connectionState.description)", type: .debug)
+        
         switch connectionState {
         case .connected:
             if oldConnectionState == .reconnecting, !self.isCameraMute {
                 self.updateLiveKitCameraStatus = true
             }
-            print("CONNECTED ---->")
             break
         case .disconnected:
-            print("DISCONNECTED ---->")
             break
         case .connecting:
-            print("CONNECTING ---->")
             break
         case .reconnecting:
-            print("RECONNECTING ---->")
             break
         }
         
@@ -270,8 +270,6 @@ extension RTCLiveKitManager: RoomDelegate {
     }
     
     public func room(_ room: Room, participant: RemoteParticipant, didSubscribeTrack publication: RemoteTrackPublication) {
-  
-        print("Remote track publication method")
         
         let participantId = participant.identity?.stringValue.ism_userIdUInt() ?? 0
         

@@ -39,7 +39,7 @@ final public class GoLiveViewModel {
     //:
     
     var isometrik: IsometrikSDK
-    var actionDelegate: GoLiveActionDelegate?
+    var externalActionDelegate: ISMGoLiveActionDelegate?
     
     var currenStreamType: GoLiveStreamType = .guestLive
     let uploadingManager = UploadingManager()
@@ -88,9 +88,9 @@ final public class GoLiveViewModel {
     
     var update_callback: ((_ streamId: String)->())?
     
-    public init(isometrik: IsometrikSDK, delegate: GoLiveActionDelegate? = nil) {
+    public init(isometrik: IsometrikSDK, delegate: ISMGoLiveActionDelegate? = nil) {
         self.isometrik = isometrik
-        self.actionDelegate = delegate
+        self.externalActionDelegate = delegate
 //        self.productViewModel = ProductViewModel(isometrik: isometrik)
     }
     

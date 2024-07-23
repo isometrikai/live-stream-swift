@@ -200,12 +200,15 @@ extension StreamViewController: StreamCellActionDelegate {
     func didTapSellerProfileView() {
     
         debugPrint("Log:: Profile Button Tapped")
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView),
-              var streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        
+        var streamsData = viewModel.streamsData
+        
+        guard let _ = fullyVisibleCells(streamCollectionView),
+              let _ = streamsData[safe: viewModel.selectedStreamIndex.row],
               streamsData.count > 0
         else { return }
+        
+        let isometrik = viewModel.isometrik
         
 //        let index = viewModel.selectedStreamIndex.row
 //        let controller = StreamSellerProfileVC()
@@ -241,9 +244,10 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func didTapFollowButton() {
         debugPrint("Log:: Follow Button Tapped")
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView)
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
+        
+        let isometrik = viewModel.isometrik
         
         // no action if guest user
 //        let isGuestUser = (isometrik.getUserSession().getUserType() == .guest)
@@ -260,9 +264,10 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func didTapStreamClose(withIndex index: Int) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              streamsData.count > 0,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: index]
         else { return }
         
@@ -373,9 +378,10 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func didTapViewerCountView() {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
@@ -452,9 +458,10 @@ extension StreamViewController: StreamCellActionDelegate {
     func didTapAlternateActionButton(withIndex index: Int) {
         debugPrint("Log:: Alternate Action Button Tapped")
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
@@ -464,7 +471,6 @@ extension StreamViewController: StreamCellActionDelegate {
 //            _ = Helper.LoginPresenter()
 //            return
 //        }
-        
         
         let streamUserType = viewModel.streamUserType
         let streamFooterView = visibleCell.streamContainer.streamFooterView
@@ -497,6 +503,9 @@ extension StreamViewController: StreamCellActionDelegate {
             break
         case .host:
             
+            
+            guard let navigationController = self.navigationController else { return }
+            viewModel.externalActionDelegate?.didStreamStoreOptionTapped(forUserType: viewModel.streamUserType, root: navigationController)
             
 //            if streamStatus == .scheduled {
 //                
@@ -540,8 +549,9 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func scheduleAction(){
         
-        guard let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let scheduleStartTime = streamData.scheduleStartTime ?? 0
@@ -564,27 +574,18 @@ extension StreamViewController: StreamCellActionDelegate {
         
         let options = StreamOption(rawValue: option)
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleIndex = fullyVisibleIndex(streamCollectionView),
-              let streamsData = viewModel.streamsData
+        guard let visibleIndex = fullyVisibleIndex(streamCollectionView)
         else { return }
         
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
         let streamData = streamsData[visibleIndex.row]
         let streamId = streamData.streamId ?? ""
         let stream_Id = streamData._id ?? ""
-        let isGuestUser = (viewModel.isometrik?.getUserSession().getUserType() == .guest)
+        let isGuestUser = (viewModel.isometrik.getUserSession().getUserType() == .guest)
+        let userType = viewModel.streamUserType
         
         switch options {
-        case .highlight:
-            debugPrint("Log:: Highlight tapped")
-//            guard let pinnedProductDetail = viewModel.pinnedPoductDetail else {
-//                Helper.showAlert(head: "", message: "No pinned item available for highlight")
-//                return
-//            }
-            
-//
-//            callBack?(.highlight,streamId,pinnedProductDetail, viewModel.streamSaleType ?? .sell)
-            break
         case .share:
             debugPrint("Log:: Share tapped")
             
@@ -599,6 +600,8 @@ extension StreamViewController: StreamCellActionDelegate {
         case .bidder:
             break
         case .store: 
+            guard let navigationController = self.navigationController else { return }
+            viewModel.externalActionDelegate?.didStreamStoreOptionTapped(forUserType: userType, root: navigationController)
 //            openStreamTagProducts()
             break
         case .camera: isometrik.getIsometrik().switchCamera()
@@ -718,11 +721,11 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func startScheduledStream(){
         
-        guard let streamsData = viewModel.streamsData,
-              let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView)
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
+        let streamsData = viewModel.streamsData
+        let isometrik = viewModel.isometrik
         var streamData = streamsData[viewModel.selectedStreamIndex.row]
         let streamLoader = visibleCell.streamLoader
         
@@ -740,7 +743,7 @@ extension StreamViewController: StreamCellActionDelegate {
             productsLinked: streamData.productsLinked.unwrap,
             isPublicStream: true,
             isRecorded: streamData.isRecorded.unwrap,
-            paymentAmount: 0,
+            amount: 0,
             streamTitle: streamData.streamTitle.unwrap,
             userName: streamData.userDetails?.userName ?? "",
             rtmpIngest: streamData.rtmpIngest.unwrap,
@@ -824,8 +827,9 @@ extension StreamViewController: StreamCellActionDelegate {
     func StopPKBattleAsTimerFinishes() {
         DispatchQueue.main.async { [self] in
             
-            guard let streamsData = viewModel.streamsData,
-                  let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+            let streamsData = viewModel.streamsData
+            
+            guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
             else {
                 return
             }
@@ -853,9 +857,10 @@ extension StreamViewController {
     
     func sendRequest(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let viewerData = isometrik.getUserSession().getUserModel()
@@ -900,9 +905,10 @@ extension StreamViewController {
     
     func requestList(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let viewModel = PublisherViewModel(isometrik: isometrik, streamData: streamData)
@@ -929,9 +935,10 @@ extension StreamViewController {
     
     func openGoLiveWith(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let viewModel = GoLiveWithViewModel(isometrik: isometrik, streamData: streamData)
@@ -960,8 +967,9 @@ extension StreamViewController {
     
     func openRtmpIngestDetail(){
         
-        guard let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let controller = RTMPIngestViewController()

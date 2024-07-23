@@ -40,7 +40,6 @@ public class IsometrikSDK {
         userSecret: String,
         rtcAppId: String ,
         userInfo: ISMStreamUser,
-        authToken: String = "",
         banubaClientToken : String = "",
         userToken: String = "",
         userType: UserType = .none,
@@ -70,7 +69,6 @@ public class IsometrikSDK {
             userSecret: userSecret,
             rtcToken: "",
             userToken: userInfo.userToken.unwrap,
-            authToken: authToken,
             rtcAppId: rtcAppId
         )
         
@@ -137,7 +135,6 @@ public class IsometrikSDK {
     
     func onTerminate() {
         if mqttSession != nil {
-            self.mqttSession?.unsubscribeMessaging()
             self.mqttSession?.unsubscribePresenceEvents()
             self.mqttSession?.disconnectMQTT()
             self.mqttSession?.unsubscribeUserEvents()

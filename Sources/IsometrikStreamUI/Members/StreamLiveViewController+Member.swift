@@ -21,11 +21,12 @@ extension StreamViewController {
     ///   - streamInfo: Stream details, Type should be **StreamInfo**
     func joinStreamAsAMember(user: ISMStreamUser, streamInfo: ISMStream) {
         
-        guard let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let streamsData = viewModel.streamsData
+        let isometrik = viewModel.isometrik
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let streamId = streamData.streamId,
-              let memberId = user.userId,
-              let isometrik = viewModel.isometrik
+              let memberId = user.userId
         else { return }
         
         /// Start loading.
@@ -56,9 +57,10 @@ extension StreamViewController {
     
     func sendRequestToAddMember(memberData: ISMViewer) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let streamId = streamData.streamId,
               let memberId = memberData.viewerId
         else { return }
@@ -87,9 +89,10 @@ extension StreamViewController {
     
     func removeMemberByInitiator(initiatorId: String, streamId: String, memberId: String, session : VideoSession? = nil) {
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = self.fullyVisibleCells(self.streamCollectionView)
+        guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView)
         else { return }
+        
+        let isometrik = viewModel.isometrik
         
         isometrik.getIsometrik().removeMember(streamId: streamId, memberId: memberId) { result in
             
@@ -99,8 +102,8 @@ extension StreamViewController {
                 if let index = visibleCell.streamContainer.videoContainer.videoSessions.firstIndex(where: {  $0.uid == session?.uid
                 }){
                     visibleCell.streamContainer.videoContainer.videoSessions.remove(at: index)
-                    self.viewModel.isometrik?.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
-                    self.viewModel.isometrik?.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
                 }
                 
                 if let index =  self.viewModel.streamMembers.firstIndex(where: {
@@ -110,9 +113,9 @@ extension StreamViewController {
                     visibleCell.viewModel = self.viewModel
                 }
                 
-                if let index =      self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
+                if let index =      self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
                 }){
-                    self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
+                    self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
                 }
                 
             }
@@ -142,8 +145,8 @@ extension StreamViewController {
                 }){
                     visibleCell.streamContainer.videoContainer.videoSessions.remove(at: index)
                 
-                    self.viewModel.isometrik?.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
-                    self.viewModel.isometrik?.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
                 }
                 
                 if let index =  self.viewModel.streamMembers.firstIndex(where: {
@@ -152,9 +155,9 @@ extension StreamViewController {
                     self.viewModel.streamMembers.remove(at: index)
                     visibleCell.viewModel = self.viewModel
                 }
-                if let index = self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
+                if let index = self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
                 }){
-                    self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
+                    self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
                 }
             }
         }
@@ -166,9 +169,10 @@ extension StreamViewController {
     ///   - streamInfo: Stream details, Type should be **StreamInfo**
     func leaveStreamByMember() {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let streamId = streamData.streamId
         else { return }
         
@@ -179,7 +183,7 @@ extension StreamViewController {
             DispatchQueue.main.async {
                 /// leave channel.
                 isometrik.getIsometrik().leaveChannel()
-                self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
+                self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
                 self.dismissViewController()
             }
          
@@ -197,7 +201,7 @@ extension StreamViewController {
                     break
                 }
                 isometrik.getIsometrik().leaveChannel()
-                self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
+                self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
                 self.dismissViewController()
             }
         }

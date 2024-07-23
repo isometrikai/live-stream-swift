@@ -69,8 +69,9 @@ extension VerticalStreamCollectionViewCell {
     
     func hidePKTimerView(){
         
-        guard let viewModel, let isometrik = viewModel.isometrik else { return }
+        guard let viewModel else { return }
         
+        let isometrik = viewModel.isometrik
         let timerView = streamContainer.videoContainer.pkOverlayView.battleTimerView
         let timerLabel = streamContainer.videoContainer.pkOverlayView.battleTimerView.timerLabel
         timerView.isHidden = true

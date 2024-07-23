@@ -72,12 +72,10 @@ public class ISMConfiguration {
         userSecret: String,
         rtcToken: String,
         userToken: String,
-        authToken: String,
         rtcAppId: String
     ) {
         self.rtcToken = rtcToken
         self.userToken = userToken
-        self.authToken = authToken
         self.licenseKey = licenseKey
         self.accountId = accountId
         self.projectId = projectId

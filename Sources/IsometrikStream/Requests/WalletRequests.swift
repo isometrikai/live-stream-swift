@@ -34,9 +34,9 @@ extension IsometrikStream {
         
     }
     
-    public func getWalletBalance(completionHandler: @escaping (WalletBalanceResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
+    public func getWalletBalance(currencyType: String, completionHandler: @escaping (WalletBalanceResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
-        let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletBalance(currency: "COIN"), requestBody: nil)
+        let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletBalance(currency: currencyType), requestBody: nil)
         ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<WalletBalanceResponseModel, ISMLiveAPIError> ) in
             
             switch result {

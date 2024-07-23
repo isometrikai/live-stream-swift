@@ -13,9 +13,10 @@ extension StreamViewController: StreamSettingDelegate {
     
     func didTapSettingOptionFor(actionType: StreamSettingType) {
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView),
-              let streamsData = viewModel.streamsData,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
@@ -169,7 +170,7 @@ extension StreamViewController: StreamSettingDelegate {
                         isometrik.getIsometrik().fetchStreams(streamId: streamId) { data in
                             let streams = data.streams
                             if let streams, streams.count > 0, let stream = streams.first {
-                                self.viewModel.streamsData?[selectedStreamIndex] = stream
+                                self.viewModel.streamsData[selectedStreamIndex] = stream
                                 self.streamCollectionView.reloadData()
                             }
                         } failure: { error in
@@ -199,8 +200,10 @@ extension StreamViewController: StreamSettingDelegate {
     
     func openStreamSettingController(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData, streamsData.count > 0,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         

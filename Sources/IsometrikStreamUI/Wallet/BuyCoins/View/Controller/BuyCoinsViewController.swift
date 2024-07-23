@@ -17,7 +17,8 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
     lazy var headerView: CustomHeaderView = {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.headerTitle.text = "Buy Coins"
+        view.headerTitle.text = "Wallet"
+        view.headerTitle.textColor = .black
         view.headerTitle.textAlignment = .center
         
         view.leadingActionButton.isHidden = false
@@ -29,10 +30,10 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
         return view
     }()
     
-    lazy var walletBalanceHeaderView: CoinBalanceHeaderView = {
-        let view = CoinBalanceHeaderView()
+    lazy var walletBalanceHeaderView: WalletBalanceHeaderView = {
+        let view = WalletBalanceHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.transactionButton.addTarget(self, action: #selector(transactionButtonTapped), for: .touchUpInside)
+        view.coinFeatureView.featureActionButton.addTarget(self, action: #selector(transactionButtonTapped), for: .touchUpInside)
         return view
     }()
     
@@ -74,7 +75,8 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
         setUpViews()
         setUpConstraints()
         getPlans()
-        setupWalletBalance()
+        setupWalletBalance(currencyType: .coin)
+        setupWalletBalance(currencyType: .money)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -104,7 +106,7 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
             walletBalanceHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             walletBalanceHeaderView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             walletBalanceHeaderView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            walletBalanceHeaderView.heightAnchor.constraint(equalToConstant: 100),
+            walletBalanceHeaderView.heightAnchor.constraint(equalToConstant: 180),
             
             coinPlanCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             coinPlanCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -119,7 +121,8 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
             CustomLoader.shared.stopLoading()
             if success {
                 self.coinPlanCollectionView.reloadData()
-                self.setupWalletBalance()
+                self.setupWalletBalance(currencyType: .coin)
+                self.setupWalletBalance(currencyType: .money)
             } else {
                 guard let error else { return }
                 print(error)
@@ -127,16 +130,15 @@ public final class BuyCoinsViewController: UIViewController, ISMStreamUIAppearan
         }
     }
     
-    func setupWalletBalance(){
+    func setupWalletBalance(currencyType: WalletCurrencyType){
         
-        let walletBalance = UserDefaultsProvider.shared.getWalletBalance()
-        walletBalanceHeaderView.configureView(balance: walletBalance)
+        walletBalanceHeaderView.configureView(balanceData: nil, currencyType: currencyType)
         
         CustomLoader.shared.startLoading()
-        viewModel.getWalletBalance { success, error in
+        viewModel.getWalletBalance(currencyType: currencyType) { success, error in
             CustomLoader.shared.stopLoading()
             if success {
-                self.walletBalanceHeaderView.configureView(balance: self.viewModel.walletBalance?.balance ?? 0)
+                self.walletBalanceHeaderView.configureView(balanceData: self.viewModel.walletBalance, currencyType: currencyType)
             }
         }
         
