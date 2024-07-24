@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomSeperatorView : UIView, ISMStreamUIAppearanceProvider {
+class CustomSeperatorView : UIView, ISMAppearanceProvider {
     
     // MARK: - Properties
     

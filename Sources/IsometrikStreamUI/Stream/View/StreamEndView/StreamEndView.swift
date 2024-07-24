@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamEndView: UIView, ISMStreamUIAppearanceProvider {
+class StreamEndView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

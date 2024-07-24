@@ -6,7 +6,7 @@ protocol MoreSettingActionDelegate {
     func didOptionTapped(for type: StreamSettingType?, session: VideoSession?, index: Int)
 }
 
-class MoreSettingViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class MoreSettingViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

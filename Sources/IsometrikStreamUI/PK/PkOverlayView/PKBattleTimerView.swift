@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKBattleTimerView: UIView, ISMStreamUIAppearanceProvider {
+class PKBattleTimerView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

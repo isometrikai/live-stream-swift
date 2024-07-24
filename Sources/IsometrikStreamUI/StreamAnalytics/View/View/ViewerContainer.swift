@@ -13,7 +13,7 @@ protocol StreamAnalyticViewersActionDelegate {
     func didTapFollowButtonTapped(index: Int)
 }
 
-class ViewerContainer: UIView, ISMStreamUIAppearanceProvider {
+class ViewerContainer: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

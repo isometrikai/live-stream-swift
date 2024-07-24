@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomRadioOptionView: UIView, ISMStreamUIAppearanceProvider {
+class CustomRadioOptionView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

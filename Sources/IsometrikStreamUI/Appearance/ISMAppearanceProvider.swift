@@ -1,9 +1,9 @@
 
 import UIKit
 
-public protocol ISMStreamUIAppearanceProvider: AnyObject {
+public protocol ISMAppearanceProvider: AnyObject {
     /// Appearance object to change appearance of the existing views or to use default appearance of the SDK by custom components.
-    var appearance: ISMStreamUIAppearance { get set }
+    var appearance: ISMAppearance { get set }
 
     /// This function is called afther the appearance is registered.
     ///
@@ -14,10 +14,10 @@ public protocol ISMStreamUIAppearanceProvider: AnyObject {
 
 // MARK: - Protocol extensions for UIView
 
-public extension ISMStreamUIAppearanceProvider where Self: UIResponder {
+public extension ISMAppearanceProvider where Self: UIResponder {
     func appearanceDidRegister() {}
 
-    var appearance: ISMStreamUIAppearance {
+    var appearance: ISMAppearance {
         get {
             // If we have an appearance registered, return it
             if let appearance = associatedAppearance {
@@ -28,7 +28,7 @@ public extension ISMStreamUIAppearanceProvider where Self: UIResponder {
             // Skip non-providers
             var _next = next
             while _next != nil {
-                if let _next = _next as? ISMStreamUIAppearanceProvider {
+                if let _next = _next as? ISMAppearanceProvider {
                     return _next.appearance
                 } else {
                     _next = _next?.next
@@ -50,8 +50,8 @@ public extension ISMStreamUIAppearanceProvider where Self: UIResponder {
 private extension UIResponder {
     static var associatedAppearanceKey: UInt8 = 1
 
-    var associatedAppearance: ISMStreamUIAppearance? {
-        get { objc_getAssociatedObject(self, &Self.associatedAppearanceKey) as? ISMStreamUIAppearance }
+    var associatedAppearance: ISMAppearance? {
+        get { objc_getAssociatedObject(self, &Self.associatedAppearanceKey) as? ISMAppearance }
         set { objc_setAssociatedObject(self, &Self.associatedAppearanceKey, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
 }

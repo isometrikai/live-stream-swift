@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-class RequestListViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class RequestListViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

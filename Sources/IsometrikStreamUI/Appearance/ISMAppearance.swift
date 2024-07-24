@@ -1,7 +1,7 @@
 
 import UIKit
 
-public struct ISMStreamUIAppearance {
+public struct ISMAppearance {
     
     public var images = ISM_Image()
     public var colors = ISM_Color()
@@ -19,6 +19,6 @@ public struct ISMStreamUIAppearance {
 
 // MARK: - Appearance + Default
 
-public extension ISMStreamUIAppearance {
-    static var `default`: ISMStreamUIAppearance = .init()
+public extension ISMAppearance {
+    static var `default`: ISMAppearance = .init()
 }

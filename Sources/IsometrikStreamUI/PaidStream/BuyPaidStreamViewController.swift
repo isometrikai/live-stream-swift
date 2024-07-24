@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-final public class BuyPaidStreamViewController: UIViewController, ISMStreamUIAppearanceProvider {
+final public class BuyPaidStreamViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

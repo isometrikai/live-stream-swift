@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PkWithFriendsSearchView: UIView, ISMStreamUIAppearanceProvider {
+class PkWithFriendsSearchView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

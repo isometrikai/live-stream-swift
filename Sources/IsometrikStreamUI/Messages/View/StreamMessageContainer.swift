@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamMessageContainer: UIView, ISMStreamUIAppearanceProvider {
+class StreamMessageContainer: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

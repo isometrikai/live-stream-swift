@@ -45,13 +45,11 @@ public struct ISMLiveAPIRequest<R> {
 
 public struct ISMLiveAPIManager {
     
-    public static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, showLoader : Bool = true, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
+    public static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
         
-        if showLoader{
-            DispatchQueue.main.async {
-                CustomLoader.shared.startLoading()
-            }
-        }
+        let endpoint = "\(request.endPoint.baseURL)\(request.endPoint.path)"
+        let endpointMethod = "\(request.endPoint.method)".uppercased()
+        LogManager.shared.logNetwork("Endpoint: \(endpointMethod) \(endpoint)", type: .debug)
         
         var urlComponents = URLComponents(url: request.endPoint.baseURL.appendingPathComponent(request.endPoint.path), resolvingAgainstBaseURL: true)
         urlComponents?.queryItems = request.endPoint.queryParams?.map { URLQueryItem(name: $0.key, value: $0.value) }
@@ -82,7 +80,6 @@ public struct ISMLiveAPIManager {
                 urlRequest.httpBody = jsonBody
             } catch {
                 completion(.failure(.invalidResponse))
-                CustomLoader.shared.stopLoading()
                 return
             }
         }
@@ -90,13 +87,10 @@ public struct ISMLiveAPIManager {
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.invalidResponse))
-                CustomLoader.shared.stopLoading()
                 return
             }
             
-            let endpoint = "\(request.endPoint.baseURL)\(request.endPoint.path)"
-            let endpointMethod = "\(request.endPoint.method)".uppercased()
-            LogManager.shared.logNetwork("Endpoint: \(endpointMethod) \(endpoint), httpStatusCode: \(httpResponse.statusCode)", type: .debug)
+            LogManager.shared.logNetwork("HttpStatusCode: \(httpResponse.statusCode)", type: .debug)
             
             if let error = error {
                 completion(.failure(.decodingError(error)))
@@ -140,7 +134,6 @@ public struct ISMLiveAPIManager {
                 completion(.failure(.noResultsFound(httpResponse.statusCode)))
             case 406 :
                 break
-                
                 // update the headers
 //                APIManager.refreshTokenAPI() { (success,token) in
 //                    if success{
@@ -158,7 +151,6 @@ public struct ISMLiveAPIManager {
 //                        Utility.logOut()
 //                    }
 //                }
-                
             case 401 :
                 break
 //                Utility.logOut()
@@ -174,11 +166,6 @@ public struct ISMLiveAPIManager {
                     completion(.failure(.httpError(httpResponse.statusCode, nil)))
                 }
                 
-            }
-            
-            
-            if showLoader{
-                CustomLoader.shared.stopLoading()
             }
         }
         

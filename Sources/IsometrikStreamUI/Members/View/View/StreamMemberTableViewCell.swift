@@ -24,7 +24,7 @@ extension StreamMemberListActionDelegate {
     func didUpdateMembers(member: [ISMMember]){}
 }
 
-class StreamMemberTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
+class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

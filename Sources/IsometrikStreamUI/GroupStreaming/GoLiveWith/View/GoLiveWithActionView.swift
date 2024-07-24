@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveWithActionView: UIView, ISMStreamUIAppearanceProvider {
+class GoLiveWithActionView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

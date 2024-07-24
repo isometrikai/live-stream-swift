@@ -13,7 +13,7 @@ protocol GoLiveFooterActionDelegate {
     func didGoLiveStreamTypeActionTapped(with actionType: GoLiveStreamType)
 }
 
-class GoLiveFooterView: UIView, ISMStreamUIAppearanceProvider {
+class GoLiveFooterView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -203,7 +203,7 @@ class GoLiveFooterView: UIView, ISMStreamUIAppearanceProvider {
     }
 }
 
-class CustomToggleButton: UIView, ISMStreamUIAppearanceProvider {
+class CustomToggleButton: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

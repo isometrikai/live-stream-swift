@@ -17,7 +17,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getCurrencyPlans, requestBody: nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<CoinPlansResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<CoinPlansResponseModel, ISMLiveAPIError> ) in
             
             switch result {
 
@@ -37,7 +37,7 @@ extension IsometrikStream {
     public func getWalletBalance(currencyType: String, completionHandler: @escaping (WalletBalanceResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletBalance(currency: currencyType), requestBody: nil)
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<WalletBalanceResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<WalletBalanceResponseModel, ISMLiveAPIError> ) in
             
             switch result {
 
@@ -82,7 +82,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletTransaction(currency: "COIN", transactionType: txnType, transactionSpecific: transactionSpecific, skip: skip, limit: limit), requestBody: nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<WalletTransactionResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<WalletTransactionResponseModel, ISMLiveAPIError> ) in
             switch result {
             case .success(let planResponse, _) :
                 DispatchQueue.main.async {

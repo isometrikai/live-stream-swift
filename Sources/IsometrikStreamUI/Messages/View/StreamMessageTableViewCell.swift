@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamMessageTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
+class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

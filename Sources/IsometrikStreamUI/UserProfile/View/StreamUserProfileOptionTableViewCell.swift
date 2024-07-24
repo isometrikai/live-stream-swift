@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamUserProfileOptionTableViewCell: UITableViewCell, ISMStreamUIAppearanceProvider {
+class StreamUserProfileOptionTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

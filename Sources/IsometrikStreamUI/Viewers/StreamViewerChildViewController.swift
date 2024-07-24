@@ -9,7 +9,7 @@ import UIKit
 import IsometrikStream
 
 
-class StreamViewerChildViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -375,7 +375,7 @@ extension StreamViewerChildViewController: StreamViewerActionDelegate {
     
 }
 
-class StreamChildControllerHeaderView: UIView, ISMStreamUIAppearanceProvider{
+class StreamChildControllerHeaderView: UIView, ISMAppearanceProvider{
     
     // MARK: - PROPERTIES
     var infoCountStackViewTrailing: NSLayoutConstraint?

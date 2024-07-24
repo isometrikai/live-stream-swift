@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamEventUpdateInfoMessageView: UIView, ISMStreamUIAppearanceProvider {
+class StreamEventUpdateInfoMessageView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

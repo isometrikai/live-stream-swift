@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-extension VerticalStreamCollectionViewCell: ISMStreamUIAppearanceProvider {
+extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
     
     func setStreamHeaderView(){
         

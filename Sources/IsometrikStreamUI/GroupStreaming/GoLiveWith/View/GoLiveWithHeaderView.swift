@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveWithHeaderView: UIView, ISMStreamUIAppearanceProvider {
+class GoLiveWithHeaderView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

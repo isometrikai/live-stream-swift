@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CustomCropViewController: UIViewController, UIScrollViewDelegate, ISMStreamUIAppearanceProvider {
+class CustomCropViewController: UIViewController, UIScrollViewDelegate, ISMAppearanceProvider {
     
     var croppedImage: ((UIImage?) -> Void)?
     var aspectW: CGFloat!

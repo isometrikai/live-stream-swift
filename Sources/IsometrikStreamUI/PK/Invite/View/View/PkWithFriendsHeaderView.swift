@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PkWithFriendsHeaderView: UIView, ISMStreamUIAppearanceProvider {
+class PkWithFriendsHeaderView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

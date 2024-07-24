@@ -15,7 +15,7 @@ struct BattleProgressData {
     var withDuration: CGFloat
 }
 
-class CustomBattleProgressView: UIView, ISMStreamUIAppearanceProvider {
+class CustomBattleProgressView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

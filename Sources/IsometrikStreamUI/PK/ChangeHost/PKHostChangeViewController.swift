@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKHostChangeViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class PKHostChangeViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

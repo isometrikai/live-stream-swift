@@ -13,7 +13,7 @@ enum InputFieldType {
     case dropdown
 }
 
-class CustomInputFieldView: UIView, ISMStreamUIAppearanceProvider {
+class CustomInputFieldView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

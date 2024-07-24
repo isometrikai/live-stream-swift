@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKCustomLoaderView: UIView, ISMStreamUIAppearanceProvider {
+class PKCustomLoaderView: UIView, ISMAppearanceProvider {
 
     // MARK:- PROPERTIES
     

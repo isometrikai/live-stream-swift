@@ -8,7 +8,7 @@
 
 import UIKit
 
-final public class CustomDefaultProfileView: UIView, ISMStreamUIAppearanceProvider {
+final public class CustomDefaultProfileView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

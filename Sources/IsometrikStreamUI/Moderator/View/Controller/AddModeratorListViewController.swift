@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class AddModeratorListViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     var viewModel: ModeratorViewModel

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamPinnedItemPriceActionView: UIView, ISMStreamUIAppearanceProvider {
+class StreamPinnedItemPriceActionView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

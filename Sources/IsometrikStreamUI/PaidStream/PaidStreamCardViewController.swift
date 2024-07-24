@@ -1,7 +1,7 @@
 
 import UIKit
 
-class PaidStreamCardViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class PaidStreamCardViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

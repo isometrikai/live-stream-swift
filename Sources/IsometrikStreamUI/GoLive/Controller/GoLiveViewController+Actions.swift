@@ -13,7 +13,7 @@ import IsometrikStream
 
 // MARK: - HEADER ACTIONS
 
-extension GoLiveViewController: GoLiveHeaderActionDelegate, ISMStreamUIAppearanceProvider {
+extension GoLiveViewController: GoLiveHeaderActionDelegate, ISMAppearanceProvider {
     
     func didClearImageButtonTapped() {
         let profileView = contentView.goLiveContentContainerView.profileView

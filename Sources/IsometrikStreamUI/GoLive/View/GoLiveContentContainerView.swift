@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GoLiveContentContainerView: UIView, ISMStreamUIAppearanceProvider {
+class GoLiveContentContainerView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKRefuseInvitationView: UIView, ISMStreamUIAppearanceProvider {
+class PKRefuseInvitationView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

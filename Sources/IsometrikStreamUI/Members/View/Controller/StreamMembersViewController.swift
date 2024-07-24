@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamMembersViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -140,7 +140,7 @@ extension StreamMembersViewController: UITableViewDelegate, UITableViewDataSourc
     
 }
 
-class StreamMemberHeaderView: UIView, ISMStreamUIAppearanceProvider {
+class StreamMemberHeaderView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

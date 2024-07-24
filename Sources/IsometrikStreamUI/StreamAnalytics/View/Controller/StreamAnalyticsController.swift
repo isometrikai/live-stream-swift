@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamAnalyticsController: UIViewController, ISMStreamUIAppearanceProvider {
+class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -359,7 +359,7 @@ extension StreamAnalyticsController: StreamAnalyticViewersActionDelegate {
     
 }
 
-class AnalyticsInfoView: UIView, ISMStreamUIAppearanceProvider {
+class AnalyticsInfoView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StreamProfileBottomActionViewForViewers: UIView, ISMStreamUIAppearanceProvider {
+class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

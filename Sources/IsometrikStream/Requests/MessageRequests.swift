@@ -24,7 +24,7 @@ extension IsometrikStream {
         let request =  ISMLiveAPIRequest<Any>(endPoint: MessageRouter.fetchMessages(streamId:streamId , messageParam: MessageBody(limit: limit, skip: skip)), requestBody:nil)
         
        
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMCommentsData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMCommentsData, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -54,7 +54,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: MessageRouter.removeMessage(streamId:streamId , messageId: messageId), requestBody:nil)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMComment, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMComment, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -97,7 +97,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest(endPoint: MessageRouter.sendMessage, requestBody:messageParam)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMComment, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMComment, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -137,7 +137,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest(endPoint: MessageRouter.addMetadata, requestBody:messageParam)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMMetadataResponse, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMMetadataResponse, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -168,7 +168,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: MessageRouter.fetchMessageReplies(streamId:streamId , parentMessageId: messageId, messageParam: MessageBody(skip: skip)), requestBody:nil)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMMessageReplyData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMMessageReplyData, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -210,7 +210,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest(endPoint: MessageRouter.sendMessageReply(messageParam: messageBody), requestBody:messageBody)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMMetadataResponse, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMMetadataResponse, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -235,7 +235,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: MessageRouter.removeMessageReply(streamId:streamId , parentMessageId: parentMessageId, messageId: messageId, messageParam: nil), requestBody:nil)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMReplyDeleteResponse, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMReplyDeleteResponse, ISMLiveAPIError> ) in
             
             switch result{
                 
@@ -271,7 +271,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest(endPoint: MessageRouter.sendHeart, requestBody:messageParam)
         
-        ISMLiveAPIManager.sendRequest(request: request,showLoader: false) { (result :ISMLiveResult<ISMReplyDeleteResponse, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMReplyDeleteResponse, ISMLiveAPIError> ) in
             
             switch result{
                 

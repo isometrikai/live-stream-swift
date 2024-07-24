@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileFeatureView: UIView, ISMStreamUIAppearanceProvider {
+class ProfileFeatureView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

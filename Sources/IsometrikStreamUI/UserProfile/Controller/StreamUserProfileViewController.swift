@@ -28,7 +28,7 @@ protocol StreamUserProfileDelegate {
     func didUserProfileOptionTapped(actionType: UserProfileActionType, messageData: ISMComment?)
 }
 
-class StreamUserProfileViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class StreamUserProfileViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

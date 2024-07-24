@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKInviteListViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

@@ -1,6 +1,6 @@
 import UIKit
 
-class Toast: UIView, ISMStreamUIAppearanceProvider {
+class Toast: UIView, ISMAppearanceProvider {
     
     private lazy var messageLabel: UILabel = {
         let label = UILabel()

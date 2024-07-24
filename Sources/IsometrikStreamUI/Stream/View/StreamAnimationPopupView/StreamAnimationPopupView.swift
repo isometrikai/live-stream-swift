@@ -12,7 +12,7 @@ import AVFoundation
 import Kingfisher
 import IsometrikStream
 
-class StreamAnimationPopupView: UIView, ISMStreamUIAppearanceProvider {
+class StreamAnimationPopupView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

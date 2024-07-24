@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DisclaimerView: UIView, ISMStreamUIAppearanceProvider {
+class DisclaimerView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

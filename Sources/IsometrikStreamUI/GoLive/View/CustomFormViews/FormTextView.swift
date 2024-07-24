@@ -8,7 +8,7 @@
 
 import UIKit
 
-final public class FormTextView: UIView, ISMStreamUIAppearanceProvider {
+final public class FormTextView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class RTMPIngestViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class RTMPIngestViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

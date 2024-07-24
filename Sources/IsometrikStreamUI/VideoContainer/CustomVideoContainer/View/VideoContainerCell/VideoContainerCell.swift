@@ -16,7 +16,7 @@ protocol VideoContainerActionDelegate {
     func didRTMPMemberViewTapped(index: Int)
 }
 
-class VideoContainerCell: UICollectionViewCell, ISMStreamUIAppearanceProvider {
+class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

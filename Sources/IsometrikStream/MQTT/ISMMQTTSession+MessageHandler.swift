@@ -38,7 +38,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             isConnected = false
             // Try to reconnect manually when disconnected
             if self.mqtt != nil {
-                establishConnection(withUserId: self.clientId)
+                establishConnection(withUserId: self.isometrikId)
             }
             
             break
@@ -466,9 +466,17 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
         }
     }
 
-    public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {}
+    public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
+        let successMessage = "Successfully subscribed to topics: \(success)"
+        let failedMessage = failed.isEmpty ? "No failed subscriptions." : "Failed to subscribe to topics: \(failed.joined(separator: ", "))"
+        let logMessage = "\(successMessage)\n\(failedMessage)"
+        LogManager.shared.logMQTT(logMessage, type: .debug)
+    }
 
-    public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {}
+    public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
+        let unsubscribedMessage = "Successfully unsubscribed to topics: \(topics.joined(separator: ", "))"
+        LogManager.shared.logMQTT(unsubscribedMessage, type: .debug)
+    }
 
     public func mqttDidPing(_ mqtt: CocoaMQTT) {}
 

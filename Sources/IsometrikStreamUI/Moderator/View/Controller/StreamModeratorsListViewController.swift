@@ -13,7 +13,7 @@ protocol StreamModeratorsListActionDelegate {
     func openListForSelectingModerators()
 }
 
-class StreamModeratorsListViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class StreamModeratorsListViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     var viewModel: ModeratorViewModel

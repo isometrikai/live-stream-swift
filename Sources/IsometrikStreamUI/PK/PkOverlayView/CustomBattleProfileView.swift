@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CustomBattleProfileView: UIView, ISMStreamUIAppearanceProvider {
+class CustomBattleProfileView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

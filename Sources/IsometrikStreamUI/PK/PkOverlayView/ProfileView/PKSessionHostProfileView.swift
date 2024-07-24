@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKSessionHostProfileView: UIView, ISMStreamUIAppearanceProvider {
+class PKSessionHostProfileView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -183,7 +183,7 @@ class PKSessionHostProfileView: UIView, ISMStreamUIAppearanceProvider {
 
 }
 
-class PKHostProfileOverlayView: UIView, ISMStreamUIAppearanceProvider {
+class PKHostProfileOverlayView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

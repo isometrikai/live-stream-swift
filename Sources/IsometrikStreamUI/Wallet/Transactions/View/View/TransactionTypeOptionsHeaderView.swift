@@ -1,7 +1,7 @@
 import UIKit
 import IsometrikStream
 
-class TransactionTypeOptionsHeaderView: UIView, ISMStreamUIAppearanceProvider {
+class TransactionTypeOptionsHeaderView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class GoLiveWithViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class GoLiveWithViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

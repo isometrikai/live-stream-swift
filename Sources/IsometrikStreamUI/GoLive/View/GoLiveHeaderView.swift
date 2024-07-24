@@ -14,7 +14,7 @@ protocol GoLiveHeaderActionDelegate {
     func didClearImageButtonTapped()
 }
 
-class GoLiveHeaderView: UIView, ISMStreamUIAppearanceProvider {
+class GoLiveHeaderView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

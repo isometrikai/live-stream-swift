@@ -56,7 +56,7 @@ final public class CustomLoaderView: UIView {
     }
     
     public func setCreateAnimation() {
-        animationView = .init(filePath: ISMStreamAppearance.default.json.loaderAnimation)
+        animationView = .init(filePath: ISMAppearance.default.json.loaderAnimation)
         animationView?.frame = self.loaderView.bounds
         animationView?.contentMode = .scaleAspectFit
         animationView?.loopMode = .loop

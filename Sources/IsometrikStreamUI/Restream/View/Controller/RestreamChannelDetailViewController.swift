@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class RestreamChannelDetailViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class RestreamChannelDetailViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

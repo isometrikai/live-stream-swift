@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StreamStatusView: UIView, ISMStreamUIAppearanceProvider {
+class StreamStatusView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamingInfoMessageView: UIView, ISMStreamUIAppearanceProvider {
+class StreamingInfoMessageView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     var messageData: ISMComment? {

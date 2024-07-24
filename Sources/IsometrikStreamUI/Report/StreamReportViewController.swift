@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamReportViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class StreamReportViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

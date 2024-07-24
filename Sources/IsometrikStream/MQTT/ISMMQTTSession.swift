@@ -20,7 +20,6 @@ open class ISMMQTTSessionWrapper: NSObject {
     var configuration : ISMConfiguration
     
     /// User Id using for client Id.
-    var clientId: String = ""
     var isometrikId: String = ""
     
     public var isConnected = false
@@ -38,17 +37,16 @@ open class ISMMQTTSessionWrapper: NSObject {
         let deviceID = UIDevice.current.identifierForVendor?.uuidString ?? ""
         self.isometrikId = clientId
         
-        if self.clientId == "" {
-            self.clientId = clientId + "/STREAM/" + deviceID
-        }
-        
         let userName = "2" + configuration.accountId + configuration.projectId
         let password = configuration.licenseKey + configuration.keySetId
         
         let clientID = clientId + "/STREAM/" + deviceID
+        
         let port = UInt16(configuration.MQTTPort)
         
-        LogManager.shared.logMQTT("ClientId: \(clientID)", type: .info)
+        LogManager.shared.logMQTT("ClientId: \(clientID)", type: .debug)
+        LogManager.shared.logMQTT("Username: \(userName)", type: .debug)
+        LogManager.shared.logMQTT("Password: \(password)", type: .debug)
         
         mqtt = CocoaMQTT(clientID: clientID, host: configuration.MQTTHost, port: port)
         mqtt?.logLevel = .off
@@ -86,7 +84,7 @@ extension ISMMQTTSessionWrapper {
     public func subscribeStreamEvents(with streamId: String){
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/" + streamId
-            LogManager.shared.logMQTT("Subscribing to streaming events with topic: \(channel)", type: .info)
+            //LogManager.shared.logMQTT("Subscribing to streaming events with topic: \(channel)", type: .debug)
             mqtt.subscribe(channel, qos: .qos0)
         }
     }
@@ -94,7 +92,7 @@ extension ISMMQTTSessionWrapper {
     public func unsubscribeStreamEvents(with streamId: String){
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/" + streamId
-            LogManager.shared.logMQTT("Unsubscribing to streaming events with topic: \(channel)", type: .info)
+            //LogManager.shared.logMQTT("Unsubscribing to streaming events with topic: \(channel)", type: .debug)
             mqtt.unsubscribe(channel)
         }
     }
@@ -102,7 +100,7 @@ extension ISMMQTTSessionWrapper {
     public func subscribeUserEvents() {
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/User/" + isometrikId
-            LogManager.shared.logMQTT("Subscribing to user events with topic: \(channel)", type: .info)
+            //LogManager.shared.logMQTT("Subscribing to user events with topic: \(channel)", type: .info)
             mqtt.subscribe(channel, qos: .qos0)
         }
     }
@@ -110,7 +108,7 @@ extension ISMMQTTSessionWrapper {
     public func unsubscribeUserEvents(){
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/User/" + isometrikId
-            LogManager.shared.logMQTT("Unsubscribing to user events with topic: \(channel)", type: .info)
+            //LogManager.shared.logMQTT("Unsubscribing to user events with topic: \(channel)", type: .info)
             mqtt.unsubscribe(channel)
         }
     }

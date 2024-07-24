@@ -9,7 +9,7 @@
 import UIKit
 import Lottie
 
-class CustomConfirmationPopupViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

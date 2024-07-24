@@ -34,10 +34,6 @@ let package = Package(
             dependencies: [
                 .product(name: "LiveKit", package: "client-sdk-swift"),
                 .product(name: "CocoaMQTT", package: "cocoamqtt"),
-                .product(name: "Lottie", package: "lottie-ios")
-            ],
-            resources: [
-                .process("Resources")
             ]
         ),
         .target(

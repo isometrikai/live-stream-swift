@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKSendInvitationRequestViewController: UIViewController, ISMStreamUIAppearanceProvider {
+class PKSendInvitationRequestViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

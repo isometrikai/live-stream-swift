@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddModeratorHeader: UIView, ISMStreamUIAppearanceProvider {
+class AddModeratorHeader: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

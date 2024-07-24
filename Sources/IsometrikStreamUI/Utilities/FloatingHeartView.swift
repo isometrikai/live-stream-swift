@@ -17,7 +17,7 @@ enum RotationDirection: CGFloat {
 
 let PI = CGFloat(M_PI)
 
-public class FloatingHeartView: UIView, ISMStreamUIAppearanceProvider {
+public class FloatingHeartView: UIView, ISMAppearanceProvider {
 
     static let heartSize: CGFloat = 36
     static let burstDelay: TimeInterval = 0.1

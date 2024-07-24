@@ -12,7 +12,7 @@ protocol GlobalSearchBarActionDelegate {
     func didSearchTextFieldDidChange(withText: String)
 }
 
-class GlobalSearchBarView: UIView, ISMStreamUIAppearanceProvider {
+class GlobalSearchBarView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
