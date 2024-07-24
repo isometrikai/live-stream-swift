@@ -6,10 +6,9 @@
 //
 
 import UIKit
-import MBProgressHUD
 import IsometrikStream
 
-class RequestListViewController: UIViewController, AppearanceProvider {
+class RequestListViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -136,7 +135,7 @@ class RequestListViewController: UIViewController, AppearanceProvider {
  
             case let .failure(msg):
                 
-                self.view.showISMLiveErrorToast(message: msg)
+                self.view.showToast(message: msg)
             }
         }
         
@@ -255,14 +254,14 @@ extension RequestListViewController: StreamRequestListActionDelegate {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Accept CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Accept CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -291,14 +290,14 @@ extension RequestListViewController: StreamRequestListActionDelegate {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Deny Copublisher \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Deny Copublisher \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break

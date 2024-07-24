@@ -8,35 +8,18 @@
 
 import UIKit
 
-struct ism_windowConstant {
+public struct ism_windowConstant {
     
     private static let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
     
-    static var getTopPadding: CGFloat {
+    public static var getTopPadding: CGFloat {
         return window?.safeAreaInsets.top ?? 0
     }
     
-    static var getBottomPadding: CGFloat {
+    public static var getBottomPadding: CGFloat {
         return window?.safeAreaInsets.bottom ?? 0
     }
     
-}
-
-extension Int {
-    var ism_roundedWithAbbreviations: String {
-        let number = Double(self)
-        let thousand = number / 1000
-        let million = number / 1000000
-        if million >= 1.0 {
-            return "\(round(million*10)/10)M"
-        }
-        else if thousand >= 1.0 {
-            return "\(round(thousand*10)/10)K"
-        }
-        else {
-            return "\(self)"
-        }
-    }
 }
 
 enum AnyCodableValue: Codable {
@@ -180,4 +163,28 @@ enum AnyCodableValue: Codable {
         }
     }
 }
+
+// MARK: - ROUNDED WITH ABBREVIATIONS
+
+public protocol RoundedWithAbbreviations {
+    var ism_roundedWithAbbreviations: String { get }
+}
+
+public extension RoundedWithAbbreviations {
+    var ism_roundedWithAbbreviations: String {
+        let number = Int("\(self)") ?? 0
+        let thousand = number / 1000
+        let million = number / 1000000
+        if million >= 1 {
+            return "\(million)M"
+        } else if thousand >= 1 {
+            return "\(thousand)K"
+        } else {
+            return "\(number)"
+        }
+    }
+}
+
+extension Int: RoundedWithAbbreviations {}
+extension Int64: RoundedWithAbbreviations {}
 

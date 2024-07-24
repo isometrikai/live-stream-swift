@@ -8,9 +8,8 @@
 
 import UIKit
 import IsometrikStream
-import MBProgressHUD
 
-class GoLiveWithViewController: UIViewController, AppearanceProvider {
+class GoLiveWithViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

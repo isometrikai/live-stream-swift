@@ -8,7 +8,7 @@
 import UIKit
 import IsometrikStream
 
-extension CustomVideoContainer: AppearanceProvider {
+extension CustomVideoContainer: ISMAppearanceProvider {
     
     func refreshLayout(streamInfo: ISMStream?){
         //reorderSessions()
@@ -60,7 +60,7 @@ extension CustomVideoContainer: AppearanceProvider {
         else { return }
         
         if streamInfo.isPkChallenge.unwrap {
-            if !isometrik.isPKBattlesEnabled() {
+            if !isometrik.getStreamOptionsConfiguration().isPKStreamEnabled {
                 pkOverlayView.isHidden = true
             } else {
                 if videoSessions.count > 1 {

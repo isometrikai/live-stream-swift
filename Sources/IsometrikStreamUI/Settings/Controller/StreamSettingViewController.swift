@@ -30,7 +30,7 @@ protocol StreamSettingDelegate {
     func didTapSettingOptionFor(actionType: StreamSettingType)
 }
 
-class StreamSettingViewController: UIViewController, AppearanceProvider {
+class StreamSettingViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
 

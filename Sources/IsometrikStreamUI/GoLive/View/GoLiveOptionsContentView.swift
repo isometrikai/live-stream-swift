@@ -17,6 +17,7 @@ protocol LiveOptionsActionDelegate {
     func didTapAddProduct()
     func didRemoveProduct(index: Int)
     func didDateTimeSelectorTapped()
+    func didActionButtonTapped(with actionType: GoLivePremiumActionType)
 }
 
 extension LiveOptionsActionDelegate {
@@ -33,8 +34,8 @@ class GoLiveOptionsContentView: UIView {
     
     var delegate: LiveOptionsActionDelegate?
     
-    lazy var rtmpOptionsContainerView: RTMPOptionsContainerView = {
-        let view = RTMPOptionsContainerView()
+    lazy var goLiveContentContainerView: GoLiveContentContainerView = {
+        let view = GoLiveContentContainerView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         return view
@@ -56,26 +57,26 @@ class GoLiveOptionsContentView: UIView {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        addSubview(rtmpOptionsContainerView)
+        addSubview(goLiveContentContainerView)
     }
     
     func setupConstraints(){
-        rtmpOptionsContainerView.ism_pin(to: self)
+        goLiveContentContainerView.ism_pin(to: self)
     }
     
     func manageTargets(){
         
-        rtmpOptionsContainerView.rtmpURLView.formTextView.copyButton.addTarget(self, action: #selector(rtmpURlCopied), for: .touchUpInside)
+        goLiveContentContainerView.rtmpURLView.formTextView.copyButton.addTarget(self, action: #selector(rtmpURlCopied), for: .touchUpInside)
         
-        rtmpOptionsContainerView.streamKeyView.formTextView.copyButton.addTarget(self, action: #selector(streamKeyCopied), for: .touchUpInside)
+        goLiveContentContainerView.streamKeyView.formTextView.copyButton.addTarget(self, action: #selector(streamKeyCopied), for: .touchUpInside)
         
-        rtmpOptionsContainerView.helpLabelView.actionButton.addTarget(self, action: #selector(helpLabelViewTapped), for: .touchUpInside)
+        goLiveContentContainerView.helpLabelView.actionButton.addTarget(self, action: #selector(helpLabelViewTapped), for: .touchUpInside)
         
-        rtmpOptionsContainerView.restreamOption.actionButton.addTarget(self, action: #selector(restreamTapped), for: .touchUpInside)
+        goLiveContentContainerView.restreamOption.actionButton.addTarget(self, action: #selector(restreamTapped), for: .touchUpInside)
         
-        rtmpOptionsContainerView.addProductView.addButton.addTarget(self, action: #selector(addProductTapped), for: .touchUpInside)
+        goLiveContentContainerView.addProductView.addButton.addTarget(self, action: #selector(addProductTapped), for: .touchUpInside)
         
-        rtmpOptionsContainerView.addProductView.delegate = self
+        goLiveContentContainerView.addProductView.delegate = self
         
     }
     
@@ -104,6 +105,11 @@ class GoLiveOptionsContentView: UIView {
 }
 
 extension GoLiveOptionsContentView: LiveOptionsActionDelegate, GoLiveAddProductActionDelegate {
+    
+    func didActionButtonTapped(with actionType: GoLivePremiumActionType) {
+        delegate?.didActionButtonTapped(with: actionType)
+    }
+    
     
     func didDateTimeSelectorTapped() {
         delegate?.didDateTimeSelectorTapped()

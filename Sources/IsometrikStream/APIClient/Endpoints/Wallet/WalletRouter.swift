@@ -5,6 +5,8 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
     case getCurrencyPlans
     case purchaseToken
+    case getWalletBalance(currency: String)
+    case getWalletTransaction(currency: String, transactionType: String?, transactionSpecific: Bool, skip: Int, limit: Int)
     
     var description: String {
         switch self {
@@ -12,6 +14,10 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
             return "get Currency plans from admin"
         case .purchaseToken:
             return "purchange the tokens from given plans"
+        case .getWalletBalance:
+            return "get wallet balance"
+        case .getWalletTransaction:
+            return "get wallet transactions"
         }
     }
     
@@ -21,7 +27,7 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
     var method: ISMLiveHTTPMethod {
         switch self {
-        case .getCurrencyPlans:
+        case .getCurrencyPlans, .getWalletBalance, .getWalletTransaction:
             return .get
         case .purchaseToken:
             return .post
@@ -35,6 +41,10 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
             path = "/v1/currencyPlan/isometrikAuth"
         case .purchaseToken:
             path = "/v1/appWallet/tokenPurchase"
+        case .getWalletBalance:
+            path = "/v1/wallet/user"
+        case .getWalletTransaction:
+            path = "/v1/transaction/user"
         }
         return path
     }
@@ -44,7 +54,39 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var queryParams: [String : String]? {
-        return nil
+        
+        var param: [String: String] = [:]
+        
+        switch self {
+        case let .getWalletBalance(currency):
+            param += [
+                "currency": "\(currency)"
+            ]
+            break
+        case let .getWalletTransaction(currency, transactionType, transactionSpecific, skip, limit):
+            
+            param += [
+                "currency": "\(currency)",
+                "skip": "\(skip)",
+                "limit": "\(limit)"
+            ]
+            
+            if let transactionType {
+                param += [
+                    "txnType": "\(transactionType)",
+                    "txnSpecific": "\(transactionSpecific)"
+                ]
+            } else {
+                param += [
+                    "txnSpecific": "\(transactionSpecific)"
+                ]
+            }
+            break
+        default:
+            return [:]
+        }
+        
+        return param
     }
     
 }

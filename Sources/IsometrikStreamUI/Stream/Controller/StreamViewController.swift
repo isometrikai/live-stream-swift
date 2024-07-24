@@ -78,6 +78,7 @@ final public class StreamViewController: UIViewController {
         
         self.removePlayerObserver()
         self.removePlayer()
+        self.removeAllObservers()
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -103,9 +104,7 @@ final public class StreamViewController: UIViewController {
     
     func setupDefaults() {
         
-        guard let isometrik = viewModel.isometrik
-        else { return }
-        
+        let isometrik = viewModel.isometrik
         isometrik.getIsometrik().rtcWrapper.rtcWrapperDelegate = self
         
         // basic configurations

@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
 import IsometrikStream
 
-class RestreamChannelDetailViewController: UIViewController, AppearanceProvider {
+class RestreamChannelDetailViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -344,7 +343,9 @@ class RestreamChannelDetailViewController: UIViewController, AppearanceProvider 
         let channelType = RestreamChannelType(rawValue: restreamChannelData.channelType ?? 5) ?? .custom
         let channelName = restreamChannelData.channelName ?? ""
         
-        MBProgressHUD.showAdded(to: view, animated: true)
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         
         print("INGEST URL ::: \(ingestURL)")
         
@@ -352,24 +353,24 @@ class RestreamChannelDetailViewController: UIViewController, AppearanceProvider 
         if channelId == "" {
             restreamViewModel.addRestreamChannels(ingestUrl: ingestURL, enabled: toggleOption, channelType: channelType, channelName: channelName) { success, error in
                 
-                MBProgressHUD.hide(for: self.view, animated: true)
+                CustomLoader.shared.stopLoading()
                 
                 if error == nil {
                     self.navigationController?.popViewController(animated: true)
                 } else {
-                    self.view.makeToast("\(error ?? "")", position: .bottom)
+                    self.view.showToast(message: "\(error ?? "")")
                 }
             }
         } else {
             
             restreamViewModel.updateRestreamChannels(ingestUrl: ingestURL, enabled: toggleOption, channelName: channelName, channelId: channelId, channelType: channelType) { success, error in
                 
-                MBProgressHUD.hide(for: self.view, animated: true)
+                CustomLoader.shared.stopLoading()
                 
                 if error == nil {
                     self.navigationController?.popViewController(animated: true)
                 } else {
-                    self.view.makeToast("\(error ?? "")", position: .bottom)
+                    self.view.showToast(message: "\(error ?? "")")
                 }
             }
             

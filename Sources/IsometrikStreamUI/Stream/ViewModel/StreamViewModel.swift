@@ -43,52 +43,60 @@ typealias productResponse = ((Result<Any?, IsometrikError>) -> Void)
 
 final public class StreamViewModel: NSObject {
     
+    public var isometrik: IsometrikSDK
+    public var streamsData: [ISMStream]
+    public var externalActionDelegate: ISMStreamActionDelegate?
+    
     var hours = 0
     var minutes = 0
     var seconds = 0
     var totalSeconds = 0
-    
-    var streamStatusTimer: Timer?
-    var timerForCounter: Timer?
-    var disclaimerTimer: Timer?
-    var giftTimer: Timer?
-    
-    var streamAnimationPopupTimer: Timer?
-    
-    var pkBattleTimer: Timer?
     var pkBattleTimeInSec: Int = 0
+    var counter = 3
+    var streamViewerCount: Int = 0
     var isPKInvitationActive: Bool = false
     var copublisherViewer: Bool = false
     var ghostStreamUserId: String = ""
     var ghostStreamId: String = ""
     var ghostUserId: String = ""
-    var pkGiftData: ISM_PK_LocalGiftModel?
-    
-    var counter = 3
-    
-    public var isometrik: IsometrikSDK?
-    public var streamsData: [ISMStream]?
     var streamOptions: [StreamOption] = []
     public var streamUserType: StreamUserType = .viewer
-    var streamMessageViewModel: StreamMessageViewModel?
-    var streamProductViewModel: ProductViewModel?
-//    var profileViewModel = ProfileViewModel()
     var streamMembers: [ISMMember] = []
     var streamViewers: [ISMViewer] = []
-    var streamViewerCount: Int = 0
-    //var scheduleStreamMessageViewModel: ScheduleStreamMessageViewModel?
-    var publisher: ISMPublisher?
+    public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
     
+    var streamStatusTimer: Timer?
+    var timerForCounter: Timer?
+    var disclaimerTimer: Timer?
+    var giftTimer: Timer?
+    var animated3DGiftTimer: Timer?
+    var streamAnimationPopupTimer: Timer?
+    var pkBattleTimer: Timer?
+    
+    var pkGiftData: ISM_PK_LocalGiftModel?
+    var streamMessageViewModel: StreamMessageViewModel?
+    
+    var publisher: ISMPublisher?
     var videoPreviewPlayer: AVPlayer?
     
     var youAreLiveCallbackAfterCounter:(() -> Void)?
-    public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
     var videoContainer: CustomVideoContainer?
     
+    // MARK: - INITIALIZER
+    
+    public init(isometrik: IsometrikSDK, streamsData: [ISMStream], delegate: ISMStreamActionDelegate? = nil) {
+        self.isometrik = isometrik
+        self.streamsData = streamsData
+        self.externalActionDelegate = delegate
+    }
+    
+    
+    // MARK: - FUNCTIONS
     
     func setStreaming(){
         
-        guard let streamsData, streamsData.count > 0 else { return }
+        guard streamsData.count > 0 else { return }
+        
         let rtcToken = streamsData.first?.rtcToken.unwrap
         
         // Configure RTC token
@@ -101,7 +109,7 @@ final public class StreamViewModel: NSObject {
     
     func configureRTCToken(rtcToken: String?){
         
-        guard let isometrik, let rtcToken else { return }
+        guard let rtcToken else { return }
         
         let configuration = isometrik.getIsometrik().configuration
         configuration.rtcToken = rtcToken
@@ -118,8 +126,7 @@ final public class StreamViewModel: NSObject {
     
     func joinChannel(channelName: String, userId: UInt?){
         
-        guard let isometrik,
-              let userId
+        guard let userId
         else { return }
         
         switch streamUserType {
@@ -137,13 +144,9 @@ final public class StreamViewModel: NSObject {
         
     }
     
-    
-    
     func fetchStreamMembers(_ completionHandler: @escaping streamResponse){
         
-        guard let isometrik,
-              let streamsData,
-              streamsData.count > 0,
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: selectedStreamIndex.row]
         else { return }
         
@@ -160,9 +163,7 @@ final public class StreamViewModel: NSObject {
     
     func fetchStreamViewerCount(_ completionHandler: @escaping streamResponse) {
         
-        guard let isometrik,
-              let streamsData,
-              streamsData.count > 0,
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: selectedStreamIndex.row]
         else { return }
         
@@ -181,9 +182,7 @@ final public class StreamViewModel: NSObject {
     
     func fetchStreamViewers(_ completionHandler: @escaping streamResponse) {
         
-        guard let isometrik,
-              let streamsData,
-              streamsData.count > 0,
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: selectedStreamIndex.row]
         else { return }
         
@@ -202,9 +201,7 @@ final public class StreamViewModel: NSObject {
     
     func fetchStreamMessages(_ completionHandler: @escaping streamResponse){
         
-        guard let isometrik,
-              let streamsData,
-              streamsData.count > 0,
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: selectedStreamIndex.row]
         else { return }
         
@@ -242,8 +239,6 @@ final public class StreamViewModel: NSObject {
     func deleteStreamMessage(messageInfo: ISMComment?, completionHandler: @escaping streamResponse) {
         
         guard let messageInfo,
-              let isometrik,
-              let streamsData,
               streamsData.count > 0,
               let streamData = streamsData[safe: self.selectedStreamIndex.row]
         else { return }
@@ -262,7 +257,7 @@ final public class StreamViewModel: NSObject {
         
     }
     
-    func invalidateTimers(){
+    func invalidateAllTimers(){
         
         streamStatusTimer?.invalidate()
         streamStatusTimer = nil
@@ -272,6 +267,19 @@ final public class StreamViewModel: NSObject {
         
         disclaimerTimer?.invalidate()
         disclaimerTimer = nil
+        
+        
+        giftTimer?.invalidate()
+        giftTimer = nil
+        
+        animated3DGiftTimer?.invalidate()
+        animated3DGiftTimer = nil
+        
+        streamAnimationPopupTimer?.invalidate()
+        streamAnimationPopupTimer = nil
+        
+        pkBattleTimer?.invalidate()
+        pkBattleTimer = nil
         
     }
     
@@ -311,12 +319,11 @@ final public class StreamViewModel: NSObject {
         
     }
     
-    /// `USERS FUNCTIONS`
+    // MARK: - `USERS FUNCTIONS`
     
     func followUser(_ completion: @escaping () -> Void){
         
-        guard let streamsData,
-              let streamData = streamsData[safe: selectedStreamIndex.row],
+        guard let streamData = streamsData[safe: selectedStreamIndex.row],
               let userDetails = streamData.userDetails
         else {
             completion()
@@ -333,15 +340,15 @@ final public class StreamViewModel: NSObject {
         // updating models after change
         if privacy == 0 {
             if followStatus == 0 {
-                self.streamsData?[selectedStreamIndex.row].userDetails?.followStatus = 1
+                self.streamsData[selectedStreamIndex.row].userDetails?.followStatus = 1
             } else {
-                self.streamsData?[selectedStreamIndex.row].userDetails?.followStatus = 0
+                self.streamsData[selectedStreamIndex.row].userDetails?.followStatus = 0
             }
         } else {
             if followStatus == 0 {
-                self.streamsData?[selectedStreamIndex.row].userDetails?.followStatus = 2
+                self.streamsData[selectedStreamIndex.row].userDetails?.followStatus = 2
             } else {
-                self.streamsData?[selectedStreamIndex.row].userDetails?.followStatus = 0
+                self.streamsData[selectedStreamIndex.row].userDetails?.followStatus = 0
             }
         }
         

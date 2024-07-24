@@ -10,15 +10,6 @@
       }
     },
     {
-      "identity" : "cloudinary_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/cloudinary/cloudinary_ios",
-      "state" : {
-        "revision" : "b4daed17183f45a1ef3045983ee8255dc1979122",
-        "version" : "5.0.0"
-      }
-    },
-    {
       "identity" : "cocoamqtt",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/emqx/CocoaMQTT",
@@ -43,15 +34,6 @@
       "state" : {
         "revision" : "769b88d83a42ca8d5572b020c96f47e3690b3796",
         "version" : "4.4.3"
-      }
-    },
-    {
-      "identity" : "mbprogresshud",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jdg/MBProgressHUD",
-      "state" : {
-        "revision" : "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
-        "version" : "1.2.0"
       }
     },
     {
@@ -97,24 +79,6 @@
       "state" : {
         "revision" : "9f0c76544701845ad98716f3f6a774a892152bcb",
         "version" : "1.26.0"
-      }
-    },
-    {
-      "identity" : "swiftyjson",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyJSON/SwiftyJSON",
-      "state" : {
-        "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
-        "version" : "5.0.2"
-      }
-    },
-    {
-      "identity" : "toast-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/scalessec/Toast-Swift",
-      "state" : {
-        "revision" : "ddccd20d6fb718448d9b179c454c561653fda7d5",
-        "version" : "5.1.1"
       }
     },
     {

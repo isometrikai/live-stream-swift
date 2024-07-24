@@ -9,14 +9,16 @@
 import UIKit
 import IsometrikStream
 
-extension VerticalStreamCollectionViewCell: AppearanceProvider {
+extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
     
     func setStreamHeaderView(){
         
-        guard let viewModel,
-              let streamsData = viewModel.streamsData,
-              let isometrik = viewModel.isometrik,
-              let streamData = streamsData[safe: self.tag]
+        guard let viewModel else { return }
+        
+        let streamsData = viewModel.streamsData
+        let isometrik = viewModel.isometrik
+        
+        guard let streamData = streamsData[safe: self.tag]
         else { return }
         
         let streamViewersCount = viewModel.streamViewers.count
@@ -34,7 +36,11 @@ extension VerticalStreamCollectionViewCell: AppearanceProvider {
         let streamCartBadge = headerView.cartBadge
         let streamStatusView = headerView.streamStatusView
         let viewerCountView = headerView.viewerCountView
+        let paidStreamButton = streamStatusView.paidStreamButton
+        
         let isPKStream = streamData.isPkChallenge.unwrap
+        let isPaidStream = streamData.isPaid.unwrap
+        let paidAmount = streamData.amount.unwrap
         
         // if pk stream hide the title label otherwise not
         streamTitleLabel.isHidden = isPKStream
@@ -56,6 +62,14 @@ extension VerticalStreamCollectionViewCell: AppearanceProvider {
             streamStatusView.isHidden = false
             headerView.cartButton(canBeShown: false)
             viewerCountView.iconImageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
+        }
+        
+        if isPaidStream {
+            streamStatusView.stackView.addArrangedSubview(paidStreamButton)
+            let amountLabel = Int64(paidAmount).ism_roundedWithAbbreviations
+            paidStreamButton.setTitle("  \(amountLabel)", for: .normal)
+        } else {
+            streamStatusView.stackView.removeArrangedSubview(paidStreamButton)
         }
         
         switch streamUserType {
@@ -188,9 +202,11 @@ extension VerticalStreamCollectionViewCell: AppearanceProvider {
     
     func setFollowButtonStatus(){
         
-        guard let viewModel,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        guard let viewModel else { return }
+        
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let headerView = streamContainer.streamHeaderView

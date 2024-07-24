@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Toast
 
 public protocol IsometrikStreamDelegate {
     func didFail(error: IsometrikError?)
@@ -15,14 +14,9 @@ public protocol IsometrikStreamDelegate {
 /// An object that coordinates a group of related Isometrik network events
 public class IsometrikStream: NSObject {
     
-    /// Instance identifier
     public let instanceID: UUID
-    
-    /// A copy of the configuration object used for this session
     public var configuration: ISMConfiguration
-    
     public var rtcWrapper : RtcWrapper
-    
     public var delegate: IsometrikStreamDelegate?
     
     /// - Parameters:

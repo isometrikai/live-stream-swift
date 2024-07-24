@@ -120,15 +120,15 @@ class RestreamViewModel {
         case .facebook:
             return RestreamTypeData(staticDomainURL: "", image: UIImage())
         case .youtube:
-            return RestreamTypeData(staticDomainURL: "www.youtube.com/", image: Appearance.default.images.youtubeLogo)
+            return RestreamTypeData(staticDomainURL: "www.youtube.com/", image: ISMAppearance.default.images.youtubeLogo)
         case .twitch:
-            return RestreamTypeData(staticDomainURL: "www.twitch.com/", image: Appearance.default.images.twitchLogo)
+            return RestreamTypeData(staticDomainURL: "www.twitch.com/", image: ISMAppearance.default.images.twitchLogo)
         case .twitter:
             return RestreamTypeData(staticDomainURL: "", image: UIImage())
         case .linkedin:
             return RestreamTypeData(staticDomainURL: "", image: UIImage())
         case .custom:
-            return RestreamTypeData(staticDomainURL: "www.instagram.com/", image: Appearance.default.images.instagramLogo)
+            return RestreamTypeData(staticDomainURL: "www.instagram.com/", image: ISMAppearance.default.images.instagramLogo)
         }
         
     }

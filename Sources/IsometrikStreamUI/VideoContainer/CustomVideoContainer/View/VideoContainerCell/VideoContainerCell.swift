@@ -16,7 +16,7 @@ protocol VideoContainerActionDelegate {
     func didRTMPMemberViewTapped(index: Int)
 }
 
-class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
+class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -256,7 +256,7 @@ class VideoContainerCell: UICollectionViewCell, AppearanceProvider {
         
         guard let isometrik else { return }
         
-        if isometrik.isPKBattlesEnabled() && isPKStream {
+        if isometrik.getStreamOptionsConfiguration().isPKStreamEnabled && isPKStream {
             
             moreOptionView.isHidden = true
             

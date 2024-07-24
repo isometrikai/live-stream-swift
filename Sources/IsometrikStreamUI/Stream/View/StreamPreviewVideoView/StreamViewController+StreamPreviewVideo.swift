@@ -35,8 +35,9 @@ extension StreamViewController {
     
     func setupVideoPlayer(){
         
-        guard let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
     

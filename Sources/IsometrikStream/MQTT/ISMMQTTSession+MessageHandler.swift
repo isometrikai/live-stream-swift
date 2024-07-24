@@ -13,11 +13,11 @@ import CocoaMQTT
 extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
-        TRACE("ack: \(ack)")
 
+        LogManager.shared.logMQTT("Connection Acknowledgement: \(ack.description)")
+        
         if ack == .accept {
             subscribeUserEvents()
-            subscribeMessaging()
             subscribePresenceEvents()
             
             // re-subscribing to the stream events
@@ -30,14 +30,15 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
     }
     
     public func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
-        TRACE("new state: \(state)")
+        
+        LogManager.shared.logMQTT("State : \(state.description)", type: .info)
+        
         switch state {
         case .disconnected:
             isConnected = false
-            
             // Try to reconnect manually when disconnected
             if self.mqtt != nil {
-                establishConnection(withUserId: self.clientId)
+                establishConnection(withUserId: self.isometrikId)
             }
             
             break
@@ -51,17 +52,11 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
         
     }
 
-    public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {
-        TRACE("message: \(message.string?.description), id: \(id)")
-    }
+    public func mqtt(_ mqtt: CocoaMQTT, didPublishMessage message: CocoaMQTTMessage, id: UInt16) {}
 
-    public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {
-        TRACE("id: \(id)")
-    }
+    public func mqtt(_ mqtt: CocoaMQTT, didPublishAck id: UInt16) {}
 
     public func mqtt(_ mqtt: CocoaMQTT, didReceiveMessage message: CocoaMQTTMessage, id: UInt16 ) {
-        TRACE("message topic: \(message.topic)")
-        TRACE("message: \(message.string?.description), id: \(id)")
         
         let messageString = "\(message.string?.description ?? "")"
         let data = Data(messageString.utf8)
@@ -70,7 +65,9 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             return
         }
         
-        print("Event triggered with ACTION NAME :: \(actionName)")
+        let eventMessage = message.string?.description ?? ""
+        LogManager.shared.logMQTT("Event with action: \(actionName)", type: .info)
+        LogManager.shared.logMQTT("Event message: \(eventMessage)", type: .info)
         
         switch MQTTData.dataType(actionName) {
         case .mqttMessageSent:
@@ -88,7 +85,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttMessageReplySent:
-
             self.messageReplyAddEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -103,7 +99,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttMessageRemoved:
-
             self.messageRemoveEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -116,8 +111,8 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
                                                     userInfo: ["data": "", "error": error])
                 }
             }
+            
         case .mqttMessageReplyRemoved:
-
             self.messageReplyRemoveEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -130,9 +125,8 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
                                                     userInfo: ["data": "", "error": error])
                 }
             }
-
+            
         case .mqttStreamStarted:
-
             self.streamStartEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -147,7 +141,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttStreamStopped:
-
             self.streamStopEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -162,7 +155,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttMemberAdded:
-
             self.memberAddEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -177,7 +169,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttMemberLeft:
-
             self.memberLeaveEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -192,7 +183,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttMemberRemoved:
-
             self.memberRemoveEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -207,7 +197,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttViewerJoined:
-
             self.viewerJoinEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -222,7 +211,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttViewerRemoved:
-
             self.viewerRemoveEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -237,7 +225,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttViewerTimeout:
-
             self.viewerTimeoutEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -252,7 +239,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttPublishStarted:
-
             self.publishStartEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -267,7 +253,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttPublishStopped:
-
             self.publishStopEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -282,7 +267,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttPublisherTimeout:
-
             self.memberTimeoutEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -297,7 +281,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttviewerRemovedByInitiator:
-
             self.viewerRemoveEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -312,7 +295,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttRequestToBeCoPublisherAdded:
-
             self.copublishRequestAddEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -327,7 +309,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttCopublishRequestAccepted:
-
             self.copublishRequestAcceptEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -342,7 +323,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
             
         case .mqttRequestToBeCoPublisherRemoved:
-
             self.copublishRequestRemovedEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -357,7 +337,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
             
         case .mqttCopublishRequestDenied:
-            
             self.copublishRequestDeniedEventResponse(data) { result  in
                 switch result {
                 case .success(let data):
@@ -372,7 +351,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttProfileSwitched:
-
             self.copublishRequestSwitchProfileEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -387,7 +365,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
 
         case .mqttStreamStartedPresence:
-
             self.presenceStreamStartEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -402,7 +379,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
             
         case .mqttModeratorRemoved:
-            
             self.moderatorRemovedEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -417,7 +393,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
             
         case .mqttModeratorAdded:
-            
             self.moderatorAddedEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -432,7 +407,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
             
         case .mqttModeratorLeft:
-            
             self.moderatorLeftEventResponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -447,7 +421,6 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             }
             
         case .mqttPubsubDirectMessagePublished:
-            
             self.pubsubDirectMessagePublishedEventReponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -461,9 +434,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
                 }
             }
             
-            break
         case .mqttPubsubMessagePublished:
-            
             self.pubsubMessageEventReponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -477,9 +448,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
                 }
             }
             
-            break
         case .mqttPubsubMessageOnTopicPublished:
-            
             self.pubsubMessageOnTopicPublishedEventReponse(data) { result in
                 switch result {
                 case .success(let data):
@@ -492,99 +461,35 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
                                                     userInfo: ["data": "", "error": error])
                 }
             }
-            break
             
-
         default: break
         }
     }
 
     public func mqtt(_ mqtt: CocoaMQTT, didSubscribeTopics success: NSDictionary, failed: [String]) {
-        TRACE("subscribed: \(success), failed: \(failed)")
+        let successMessage = "Successfully subscribed to topics: \(success)"
+        let failedMessage = failed.isEmpty ? "No failed subscriptions." : "Failed to subscribe to topics: \(failed.joined(separator: ", "))"
+        let logMessage = "\(successMessage)\n\(failedMessage)"
+        LogManager.shared.logMQTT(logMessage, type: .debug)
     }
 
     public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
-        TRACE("topic: \(topics)")
+        let unsubscribedMessage = "Successfully unsubscribed to topics: \(topics.joined(separator: ", "))"
+        LogManager.shared.logMQTT(unsubscribedMessage, type: .debug)
     }
 
-    public func mqttDidPing(_ mqtt: CocoaMQTT) {
-        TRACE()
-    }
+    public func mqttDidPing(_ mqtt: CocoaMQTT) {}
 
-    public func mqttDidReceivePong(_ mqtt: CocoaMQTT) {
-        TRACE()
-    }
+    public func mqttDidReceivePong(_ mqtt: CocoaMQTT) {}
 
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
-        TRACE("\(err?.localizedDescription)")
-    }
-    
-    public func TRACE(_ message: String = "", fun: String = #function) {
-        let names = fun.components(separatedBy: ":")
-        var prettyName: String
-        if names.count == 2 {
-            prettyName = names[0]
+        if err == nil {
+            LogManager.shared.logMQTT(#function + "Mqtt disconnected", type: .info)
         } else {
-            prettyName = names[1]
+            let errorDescription = err?.localizedDescription ?? ""
+            LogManager.shared.logMQTT(#function + "Error while disconnecting: \(errorDescription)", type: .error)
         }
-        
-        if fun == "mqttDidDisconnect(_:withError:)" {
-            prettyName = "didDisconnect"
-        }
-
-        print("[TRACE] [\(prettyName)]: \(message)")
     }
     
 }
 
-
-
-//extension ISMMQTTSessionWrapper: MQTTSessionManagerDelegate {
-//
-//    public func handleMessage(_ data: Data!, onTopic topic: String!, retained: Bool) {
-//
-//        /// Convert data into json.
-//        print("MQTT_Topic ISM: %s", topic)
-//        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let actionName = json["action"] as? String else {
-//            return
-//        }
-//
-//        print("ACTION NAME ::: \(actionName)")
-//        print("JSON ::: \(json)")
-//
-//
-//    }
-//
-//    public func sessionManager(_ sessionManager: MQTTSessionManager!, didChange newState: MQTTSessionManagerState) {
-//        switch newState {
-//        case .starting:
-//            isConnected = false
-//            os_log("Invalid switch condition", type: .default)
-//        case .connecting:
-//            isConnected = false
-//            os_log("Session connecting", type: .default)
-//        case .error:
-//            isConnected = false
-//            print(sessionManager.lastErrorCode.localizedDescription)
-//            os_log("Session error!", type: .error)
-//        case .connected:
-//            isConnected = true
-//            os_log("Session connected", type: .default)
-//            subscribeMessaging { (_) in }
-//            subscribePresenceEvents { (_) in }
-//        case .closing:
-//            isConnected = false
-//            os_log("Session closing", type: .default)
-//        case .closed:
-//         //   self.disconnectISMMQTTConnection()
-//            isConnected = false
-//            print(sessionManager.lastErrorCode?.localizedDescription ?? "")
-//            os_log("Session closed", type: .default)
-//        @unknown default:
-//            fatalError()
-//        }
-//    }
-//
-//
-//
-//}

@@ -8,7 +8,6 @@
 
 import Foundation
 import IsometrikStream
-import MBProgressHUD
 
 /**
     Extension to manage the `Member` used in the `StreamLiveViewController` class
@@ -22,11 +21,12 @@ extension StreamViewController {
     ///   - streamInfo: Stream details, Type should be **StreamInfo**
     func joinStreamAsAMember(user: ISMStreamUser, streamInfo: ISMStream) {
         
-        guard let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let streamsData = viewModel.streamsData
+        let isometrik = viewModel.isometrik
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let streamId = streamData.streamId,
-              let memberId = user.userId,
-              let isometrik = viewModel.isometrik
+              let memberId = user.userId
         else { return }
         
         /// Start loading.
@@ -43,11 +43,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Join Stream Error : Invalid Response")
+                    self.view.showToast( message: "Join Stream Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Join Stream Error : \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Join Stream Error : \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -57,9 +57,10 @@ extension StreamViewController {
     
     func sendRequestToAddMember(memberData: ISMViewer) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let streamId = streamData.streamId,
               let memberId = memberData.viewerId
         else { return }
@@ -73,11 +74,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Add Memeber Error : Invalid Response")
+                    self.view.showToast( message: "Add Memeber Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Add Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Add Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -88,9 +89,10 @@ extension StreamViewController {
     
     func removeMemberByInitiator(initiatorId: String, streamId: String, memberId: String, session : VideoSession? = nil) {
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = self.fullyVisibleCells(self.streamCollectionView)
+        guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView)
         else { return }
+        
+        let isometrik = viewModel.isometrik
         
         isometrik.getIsometrik().removeMember(streamId: streamId, memberId: memberId) { result in
             
@@ -100,8 +102,8 @@ extension StreamViewController {
                 if let index = visibleCell.streamContainer.videoContainer.videoSessions.firstIndex(where: {  $0.uid == session?.uid
                 }){
                     visibleCell.streamContainer.videoContainer.videoSessions.remove(at: index)
-                    self.viewModel.isometrik?.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
-                    self.viewModel.isometrik?.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
                 }
                 
                 if let index =  self.viewModel.streamMembers.firstIndex(where: {
@@ -111,9 +113,9 @@ extension StreamViewController {
                     visibleCell.viewModel = self.viewModel
                 }
                 
-                if let index =      self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
+                if let index =      self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
                 }){
-                    self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
+                    self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
                 }
                 
             }
@@ -126,11 +128,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Remove Memeber Error : Invalid Response")
+                    self.view.showToast( message: "Remove Memeber Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Remove Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Remove Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -143,8 +145,8 @@ extension StreamViewController {
                 }){
                     visibleCell.streamContainer.videoContainer.videoSessions.remove(at: index)
                 
-                    self.viewModel.isometrik?.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
-                    self.viewModel.isometrik?.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setAudioStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
+                    self.viewModel.isometrik.getIsometrik().setVideoStatusForRemoteSession(uid: session?.uid ?? 0, status: true)
                 }
                 
                 if let index =  self.viewModel.streamMembers.firstIndex(where: {
@@ -153,9 +155,9 @@ extension StreamViewController {
                     self.viewModel.streamMembers.remove(at: index)
                     visibleCell.viewModel = self.viewModel
                 }
-                if let index = self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
+                if let index = self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.firstIndex(where: {  $0.uid == session?.uid
                 }){
-                    self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
+                    self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.remove(at: index)
                 }
             }
         }
@@ -167,9 +169,10 @@ extension StreamViewController {
     ///   - streamInfo: Stream details, Type should be **StreamInfo**
     func leaveStreamByMember() {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let streamId = streamData.streamId
         else { return }
         
@@ -180,7 +183,7 @@ extension StreamViewController {
             DispatchQueue.main.async {
                 /// leave channel.
                 isometrik.getIsometrik().leaveChannel()
-                self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
+                self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
                 self.dismissViewController()
             }
          
@@ -191,14 +194,14 @@ extension StreamViewController {
                     // handle noresults found here
                     break
                 case .invalidResponse:
-                        self.view.showISMLiveErrorToast( message: "Leave Memeber Error : Invalid Response")
+                        self.view.showToast( message: "Leave Memeber Error : Invalid Response")
                 case .httpError(let errorCode, let errorMessage):
-                        self.view.showISMLiveErrorToast( message: "Leave Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
+                        self.view.showToast( message: "Leave Memeber Error : \(errorCode) \(errorMessage?.error ?? "")")
                 default :
                     break
                 }
                 isometrik.getIsometrik().leaveChannel()
-                self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
+                self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll()
                 self.dismissViewController()
             }
         }

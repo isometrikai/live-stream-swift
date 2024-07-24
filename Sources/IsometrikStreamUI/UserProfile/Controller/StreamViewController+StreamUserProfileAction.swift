@@ -13,9 +13,10 @@ extension StreamViewController: StreamUserProfileDelegate {
     
     func didUserProfileOptionTapped(actionType: UserProfileActionType, messageData: ISMComment?) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let messageData
         else { return }
         
@@ -51,7 +52,7 @@ extension StreamViewController: StreamUserProfileDelegate {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 
                 let controller = StreamReportViewController()
-                controller.userViewModel.userId = appUserId
+                //controller.userViewModel.userId = appUserId
                 controller.modalPresentationStyle = .pageSheet
                 
                 if #available(iOS 15.0, *) {

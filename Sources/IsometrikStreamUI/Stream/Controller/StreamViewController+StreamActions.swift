@@ -13,9 +13,10 @@ extension StreamViewController {
     
     func didTapOnClosingAction(withOption option: StreamPopupAction, index: Int) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              streamsData.count > 0,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard streamsData.count > 0,
               let streamData = streamsData[safe: index]
         else { return }
         
@@ -71,8 +72,9 @@ extension StreamViewController {
     
     func stopLiveStream(streamId: String, userId: String, forceFully: Bool = false) {
         
-        guard let isometrik = viewModel.isometrik,
-              let visibleCell = fullyVisibleCells(streamCollectionView)
+        let isometrik = viewModel.isometrik
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
         /// Start loading.
@@ -142,7 +144,7 @@ extension StreamViewController {
         }
         
         // fetching pinned product data if any
-        self.fetchPinnedProductInStream()
+        //self.fetchPinnedProductInStream()
         
         // fetch copublish status
         self.fetchStatusOfCoPublishRequest { _ in }
@@ -150,11 +152,8 @@ extension StreamViewController {
     }
     
     func toggleMicrophone(){
-        
-        guard let isometrik = viewModel.isometrik else { return }
-        
+        let isometrik = viewModel.isometrik
         isometrik.getIsometrik().setMuteStatusForAudio()
-        
     }
     
     func initiateCountDown(){
@@ -189,12 +188,9 @@ extension StreamViewController {
     }
     
     @objc func scrollToNextAvailableStream(){
-        
-        guard let isometrik = viewModel.isometrik else { return }
-        
+        let isometrik = viewModel.isometrik
         self.dismiss(animated: true)
         isometrik.getIsometrik().leaveChannel()
-        
     }
     
     func updateCart(){
@@ -215,7 +211,7 @@ extension StreamViewController {
     
     func handleMemberChanges(){
         
-        guard let isometrik = viewModel.isometrik else { return }
+        let isometrik = viewModel.isometrik
         let streamMembers = viewModel.streamMembers
         DispatchQueue.main.async {
             
@@ -226,7 +222,7 @@ extension StreamViewController {
             
             if isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.count != streamMembers.count {
                 let userIds = streamMembers.map { $0.userID?.ism_userIdUInt() }
-                self.viewModel.isometrik?.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll(where: {
+                self.viewModel.isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSessions.removeAll(where: {
                     !userIds.contains( $0.uid)
                 })
             }
@@ -247,11 +243,7 @@ extension StreamViewController {
             switch action {
             case .ok:
                 
-                guard let streamsData = viewModel.streamsData,
-                      let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
-                else { return }
-                
-                let inviteId = self.viewModel.streamsData?[self.viewModel.selectedStreamIndex.row].pkInviteId ?? ""
+                let inviteId = self.viewModel.streamsData[self.viewModel.selectedStreamIndex.row].pkInviteId ?? ""
                 print("INVITE ID:: is ->\(inviteId)")
                 self.endPKInvite(inviteId: inviteId)
                 
@@ -279,11 +271,11 @@ extension StreamViewController {
             switch action {
             case .ok:
                 
-                guard let streamsData = viewModel.streamsData,
-                      let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
+                let streamsData = viewModel.streamsData
+                guard let _ = streamsData[safe: viewModel.selectedStreamIndex.row]
                 else { return }
                 
-                let pkId = self.viewModel.streamsData?[self.viewModel.selectedStreamIndex.row].pkId ?? ""
+                let pkId = self.viewModel.streamsData[self.viewModel.selectedStreamIndex.row].pkId ?? ""
                 self.stopPKBattle(pkId: pkId, action: .forceStop)
                 
                 break

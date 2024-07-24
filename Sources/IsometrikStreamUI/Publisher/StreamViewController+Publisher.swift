@@ -17,9 +17,10 @@ extension StreamViewController {
     
     func sendCopublishRequest(completionHandler: @escaping (ISMPublisher?) -> ()) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -33,11 +34,11 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -47,9 +48,10 @@ extension StreamViewController {
     
     func acceptCoPublishRequest(requestByUserId: String, completionHandler: @escaping (Bool) -> ()) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -63,14 +65,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Accept CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Accept CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -81,9 +83,10 @@ extension StreamViewController {
     
     func denyCoPublishRequest(userId: String) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -97,14 +100,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Deny CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Deny CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -114,9 +117,10 @@ extension StreamViewController {
     
     func fetchStatusOfCoPublishRequest(completion: @escaping(Bool)->Void){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -133,16 +137,16 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Get CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "Get CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "CoPublish Error: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -152,9 +156,10 @@ extension StreamViewController {
     
     func switchProfile() {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -186,7 +191,7 @@ extension StreamViewController {
             switch error{
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -196,9 +201,10 @@ extension StreamViewController {
     
     func fetchCopublishRequests(completionHandler: @escaping (ISMPublisher?) -> Void) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamId = streamData.streamId.unwrap
@@ -212,14 +218,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "CoPublish \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "CoPublish \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -230,9 +236,9 @@ extension StreamViewController {
     
     func deleteCopublishRequest(user: ISMStreamUser, streamInfo: ISMStream, completionHandler: @escaping (ISMPublisher?) -> Void) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamId = streamInfo.streamId
-        else { return }
+        guard let streamId = streamInfo.streamId else { return }
+        
+        let isometrik = viewModel.isometrik
         
         isometrik.getIsometrik().deleteCopublishRequest(streamId: streamId) { (result) in
             completionHandler(result)
@@ -243,14 +249,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Remove Copublish:\(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Remove Copublish:\(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -261,8 +267,9 @@ extension StreamViewController {
     
     func updatePublishStatus(streamInfo: ISMStream, memberId: String, publishStatus: Bool, completionHandler: @escaping(ISMPublisher?) -> ()) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamId = streamInfo.streamId
+        let isometrik = viewModel.isometrik
+        
+        guard let streamId = streamInfo.streamId
         else { return }
         
         isometrik.getIsometrik().updatePublishStatus(streamId: streamId, memberId: memberId, publishStatus: publishStatus) { (result) in
@@ -274,14 +281,14 @@ extension StreamViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "CoPublish Error : Invalid Response")
+                    self.view.showToast( message: "CoPublish Error : Invalid Response")
                 }
             case.networkError(let error):
-                self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                self.view.showToast( message: "Network Error \(error.localizedDescription)")
               
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
-                    self.view.showISMLiveErrorToast( message: "Update Copublishers: \(errorCode) \(errorMessage?.error ?? "")")
+                    self.view.showToast( message: "Update Copublishers: \(errorCode) \(errorMessage?.error ?? "")")
                 }
             default :
                 break
@@ -296,10 +303,11 @@ extension StreamViewController: MoreSettingActionDelegate {
     
     func didOptionTapped(for type: StreamSettingType?, session: VideoSession?, index: Int) {
         
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
         guard let session,
               let visibleCell = fullyVisibleCells(streamCollectionView),
-              let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         

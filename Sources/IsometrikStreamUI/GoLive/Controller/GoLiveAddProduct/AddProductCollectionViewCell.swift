@@ -13,17 +13,17 @@ protocol AddProductActionDelegate {
     func didClearTapped(index: Int)
 }
 
-class AddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
+class AddProductCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
     var delegate: AddProductActionDelegate?
     
-    var data: StreamProductModel? {
-        didSet {
-            manageData()
-        }
-    }
+//    var data: StreamProductModel? {
+//        didSet {
+//            manageData()
+//        }
+//    }
     
     let productCardView: UIView = {
         let view = UIView()
@@ -162,33 +162,33 @@ class AddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
     }
     
     func manageData(){
-        guard let productData = data else { return }
-        
-        let productStoreId = productData.supplier?.id ?? ""
-        let productCategory = productData.brandName ?? ""
-        let productName = productData.productName ?? ""
-        var originalPrice = productData.liveStreamfinalPriceList?.basePrice ?? 0
-        let imageStringUrl = productData.images?.first?.medium ?? ""
-        let currencySymbol = productData.currencySymbol ?? ""
-        let finalPrice = productData.liveStreamfinalPriceList?.finalPrice ?? 0
-        let discountType = StreamProductDiscountType(rawValue: productData.liveStreamfinalPriceList?.discountType ?? 0)
-        let msrpPrice = productData.liveStreamfinalPriceList?.msrpPrice ?? 0
-        let discountedPercentage = productData.liveStreamfinalPriceList?.discountPercentage ?? 0
-        let previousDiscount = productData.liveStreamfinalPriceList?.discount ?? 0
-//        let resellerCommissionType = CommissionType(rawValue: productData.resellerCommissionType ?? 0)
-        let resellerPercentageCommission = productData.resellerPercentageCommission ?? 0.0
-        let resellerFixedCommission = productData.resellerFixedCommission ?? 0.0
+//        guard let productData = data else { return }
+//        
+//        let productStoreId = productData.supplier?.id ?? ""
+//        let productCategory = productData.brandName ?? ""
+//        let productName = productData.productName ?? ""
+//        var originalPrice = productData.liveStreamfinalPriceList?.basePrice ?? 0
+//        let imageStringUrl = productData.images?.first?.medium ?? ""
+//        let currencySymbol = productData.currencySymbol ?? ""
+//        let finalPrice = productData.liveStreamfinalPriceList?.finalPrice ?? 0
+//        let discountType = StreamProductDiscountType(rawValue: productData.liveStreamfinalPriceList?.discountType ?? 0)
+//        let msrpPrice = productData.liveStreamfinalPriceList?.msrpPrice ?? 0
+//        let discountedPercentage = productData.liveStreamfinalPriceList?.discountPercentage ?? 0
+//        let previousDiscount = productData.liveStreamfinalPriceList?.discount ?? 0
+////        let resellerCommissionType = CommissionType(rawValue: productData.resellerCommissionType ?? 0)
+//        let resellerPercentageCommission = productData.resellerPercentageCommission ?? 0.0
+//        let resellerFixedCommission = productData.resellerFixedCommission ?? 0.0
         
         // -------
         
-        if let imageUrl = URL(string: imageStringUrl) {
-            productImage.kf.setImage(with: imageUrl)
-        } else {
-            productImage.image = UIImage()
-        }
-        
-        productCategoryLabel.text = productCategory.uppercased()
-        productLabel.text = productName
+//        if let imageUrl = URL(string: imageStringUrl) {
+//            productImage.kf.setImage(with: imageUrl)
+//        } else {
+//            productImage.image = UIImage()
+//        }
+//        
+//        productCategoryLabel.text = productCategory.uppercased()
+//        productLabel.text = productName
         
         // if product belong to streamer's store, myStore will become true
 //        let myStore = (productStoreId == Utility.getCurrentStoreId())
@@ -213,36 +213,36 @@ class AddProductCollectionViewCell: UICollectionViewCell, AppearanceProvider {
 //        }
         
         
-        normalPricingFlow()
-        
-        func normalPricingFlow(){
-            
-            if discountedPercentage == 0 {
-                
-                if previousDiscount != 0 && msrpPrice != 0 {
-                    let price = msrpPrice - (msrpPrice * (Double(previousDiscount) / 100.0))
-                    priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(price), orginalPrice: Double(msrpPrice), discount: previousDiscount)
-                    
-                } else if previousDiscount != 0 && msrpPrice == 0 {
-                    
-                    let price = originalPrice - (originalPrice * (Double(previousDiscount) / 100.0))
-                    priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(price), orginalPrice: Double(originalPrice), discount: previousDiscount)
-                    
-                } else {
-                    priceInfoLabel.text = String(format: "%.2f", finalPrice) + "\(currencySymbol)"
-                }
-                
-            } else {
-                
-                if originalPrice == 0 {
-                    originalPrice = msrpPrice
-                }
-                
-                let price = originalPrice - (originalPrice * (Double(discountedPercentage) / 100.0))
-                priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(price), orginalPrice: Double(originalPrice), discount: discountedPercentage)
-                
-            }
-        }
+//        normalPricingFlow()
+//        
+//        func normalPricingFlow(){
+//            
+//            if discountedPercentage == 0 {
+//                
+//                if previousDiscount != 0 && msrpPrice != 0 {
+//                    let price = msrpPrice - (msrpPrice * (Double(previousDiscount) / 100.0))
+//                    priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(price), orginalPrice: Double(msrpPrice), discount: previousDiscount)
+//                    
+//                } else if previousDiscount != 0 && msrpPrice == 0 {
+//                    
+//                    let price = originalPrice - (originalPrice * (Double(previousDiscount) / 100.0))
+//                    priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(price), orginalPrice: Double(originalPrice), discount: previousDiscount)
+//                    
+//                } else {
+//                    priceInfoLabel.text = String(format: "%.2f", finalPrice) + "\(currencySymbol)"
+//                }
+//                
+//            } else {
+//                
+//                if originalPrice == 0 {
+//                    originalPrice = msrpPrice
+//                }
+//                
+//                let price = originalPrice - (originalPrice * (Double(discountedPercentage) / 100.0))
+//                priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(price), orginalPrice: Double(originalPrice), discount: discountedPercentage)
+//                
+//            }
+//        }
         
     }
     

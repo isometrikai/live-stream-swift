@@ -52,7 +52,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: MemberRouter.fetchMembers(streamId:streamId, searchTag: nil, skip: skip, limit: limit), requestBody:nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMMembersData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMMembersData, ISMLiveAPIError> ) in
     
             switch result{
             case .success(let streamResponse, _) :
@@ -72,7 +72,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: MemberRouter.fetchEligibleMembers(streamId:streamId, searchTag: searchString, skip: skip, limit: limit), requestBody:nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMEligibleMemberData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMEligibleMemberData, ISMLiveAPIError> ) in
     
             switch result{
             case .success(let streamResponse, _) :

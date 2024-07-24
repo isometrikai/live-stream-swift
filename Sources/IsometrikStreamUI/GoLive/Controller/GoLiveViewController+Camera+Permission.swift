@@ -26,7 +26,7 @@ extension GoLiveViewController {
         requestCameraPermission { [weak self] granted in
             
             guard granted else {
-                self?.view.makeToast("Camera permission not granted")
+                self?.view.showToast(message: "Camera permission not granted")
                 return
             }
             
@@ -35,7 +35,7 @@ extension GoLiveViewController {
             self?.viewModel.captureSession?.sessionPreset = .medium
             
             guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) else {
-                self?.view.makeToast("No front camera.")
+                self?.view.showToast(message: "No front camera.")
                 return
             }
             

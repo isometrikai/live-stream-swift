@@ -6,11 +6,10 @@
 //
 
 import UIKit
-import MBProgressHUD
 import IsometrikStream
 
 
-class StreamViewerChildViewController: UIViewController, AppearanceProvider {
+class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -376,7 +375,7 @@ extension StreamViewerChildViewController: StreamViewerActionDelegate {
     
 }
 
-class StreamChildControllerHeaderView: UIView, AppearanceProvider{
+class StreamChildControllerHeaderView: UIView, ISMAppearanceProvider{
     
     // MARK: - PROPERTIES
     var infoCountStackViewTrailing: NSLayoutConstraint?

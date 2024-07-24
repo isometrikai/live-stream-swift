@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FormTextView: UIView, AppearanceProvider {
+final public class FormTextView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -29,7 +29,7 @@ class FormTextView: UIView, AppearanceProvider {
         return view
     }()
     
-    lazy var inputTextField: UITextField = {
+    public lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.attributedPlaceholder = NSAttributedString(
@@ -46,7 +46,7 @@ class FormTextView: UIView, AppearanceProvider {
         return textField
     }()
     
-    lazy var customTextLabel: UILabel = {
+    public lazy var customTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Dummy form text label"
@@ -62,7 +62,7 @@ class FormTextView: UIView, AppearanceProvider {
         return button
     }()
     
-    lazy var copyButton: UIButton = {
+    public lazy var copyButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.copyLink.withRenderingMode(.alwaysTemplate), for: .normal)

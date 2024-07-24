@@ -4,7 +4,7 @@ import Foundation
 private class BundleIdentifyingClass {}
 
 extension Bundle {
-    static var isometrikStreamBundle: Bundle {
+    static var isometrikStreamUIBundle: Bundle {
         // We're using `resource_bundles` to export our resources in the podspec file
         // (See https://guides.cocoapods.org/syntax/podspec.html#resource_bundles)
         // since we need to support building pod as a static library.

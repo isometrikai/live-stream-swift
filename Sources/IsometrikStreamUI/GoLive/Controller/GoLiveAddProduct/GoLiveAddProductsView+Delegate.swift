@@ -23,7 +23,7 @@ extension GoLiveAddProductsView: UICollectionViewDelegate, UICollectionViewDataS
             return cell
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddProductCollectionViewCell", for: indexPath) as! AddProductCollectionViewCell
-        cell.data = productData[indexPath.row]
+//        cell.data = productData[indexPath.row]
         cell.tag = indexPath.row
         cell.delegate = self
         return cell

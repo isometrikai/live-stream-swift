@@ -14,7 +14,7 @@ protocol StreamGiftItemActionProtocol {
     func didGiftItemSelected(giftData: ISMStreamGiftModel)
 }
 
-class StreamGiftContentItemsView: UIView, AppearanceProvider {
+class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

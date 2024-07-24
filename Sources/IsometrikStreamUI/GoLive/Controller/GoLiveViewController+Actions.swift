@@ -13,10 +13,10 @@ import IsometrikStream
 
 // MARK: - HEADER ACTIONS
 
-extension GoLiveViewController: GoLiveHeaderActionDelegate {
+extension GoLiveViewController: GoLiveHeaderActionDelegate, ISMAppearanceProvider {
     
     func didClearImageButtonTapped() {
-        let profileView = contentView.rtmpOptionsContainerView.profileView
+        let profileView = contentView.goLiveContentContainerView.profileView
         profileView.clearImageButton.isHidden = true
         profileView.profileCoverImageView.image = nil
         viewModel.videoPreviewUrl = nil
@@ -26,7 +26,7 @@ extension GoLiveViewController: GoLiveHeaderActionDelegate {
         self.dismiss(animated: true)
     }
     
-    func didActionButtonTapped(with actionType: GoLiveActionType) {
+    func didActionButtonTapped(with actionType: GoLivePremiumActionType) {
         
         switch actionType {
         case .paid:
@@ -54,19 +54,19 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         self.view.endEditing(true)
         
         let isometrik = viewModel.isometrik
-        let profileView = contentView.rtmpOptionsContainerView.profileView
+        let profileView = contentView.goLiveContentContainerView.profileView
         
         let streamTextView = profileView.streamTextView.text
         let profileImageView = profileView.profileCoverImageView
         
-//        if streamTextView == "Add description..." {
-//            self.ism_showAlert("Error", message: "Stream Title Required!")
-//            return
-//        }
+        if streamTextView == "Add description..." {
+            self.ism_showAlert("Error", message: "Stream Title Required!")
+            return
+        }
         
         // show user error if mqtt connection not connected
         if !(isometrik.getMqttSession().isConnected) {
-            self.view.makeToast("connection not established, Try Again".localized + "!",duration: 3.0, position: .bottom)
+            self.view.showToast(message: "connection not established, Try Again!")
             return
         }
         
@@ -82,37 +82,57 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
             }
         }
         
-//        if let image = profileImageView.image {
-//            ISMLiveShowLoader.shared.startLoading()
-//            
-//            let description = streamTextView.unwrap
-//            let userData = isometrik.getUserSession().getUserModel()
-//            
-//            viewModel.uploadImage(image: image) { imageUrl in
-//                let imageUrlString = String(imageUrl ?? "")
-//                self.startNewStream(userData: userData, description: description, imagePath: imageUrlString, videoPath: "")
-//            }
-//            
-//        } else {
-//            
-//            // Add condition for fromDevice case only
-//            if viewModel.currenStreamType == .fromDevice {
-//                self.ism_showAlert("Error", message: "Stream Cover Image required".localized + "!")
-//                return
-//            }
-//            
-//            ISMLiveShowLoader.shared.startLoading()
-//            let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
-//            viewModel.stillImageOutput.capturePhoto(with: settings, delegate: self)
-//            
-//        }
-        
-        
-        ISMLiveShowLoader.shared.startLoading()
-
-        let description = streamTextView.unwrap
-        let userData = isometrik.getUserSession().getUserModel()
-        self.startNewStream(userData: userData, description: description, imagePath: "https://picsum.photos", videoPath: "")
+        if let image = profileImageView.image {
+            
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
+            
+            let description = streamTextView.unwrap
+            let userData = isometrik.getUserSession().getUserModel()
+            
+            
+            viewModel.getPresignedUrl(streamTitle: description) { success, error in
+                if success {
+                    self.viewModel.uploadStreamCover(image: image) { status in
+                        
+                        switch status {
+                        case .progress(let progress):
+                            print("Upload progress: \(progress * 100)%")
+                            break
+                        case .success:
+                            let userData = isometrik.getUserSession().getUserModel()
+                            self.startNewStream(userData: userData, description: description, imagePath: self.viewModel.mediaUrlString ?? "", videoPath: "")
+                            break
+                        case .failure(let error):
+                            if let error = error {
+                                print("Upload error: \(error.localizedDescription)")
+                            } else {
+                                print("Upload failed with unknown error")
+                            }
+                        }
+                        
+                    }
+                } else {
+                    print(error)
+                }
+            }
+            
+        } else {
+            
+            // Add condition for fromDevice case only
+            if viewModel.currenStreamType == .fromDevice {
+                self.ism_showAlert("Error", message: "Stream Cover Image required".localized + "!")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                CustomLoader.shared.startLoading()
+            }
+            let settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+            viewModel.stillImageOutput.capturePhoto(with: settings, delegate: self)
+            
+        }
         
     }
     
@@ -124,69 +144,34 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         // animate to the required action
         footerView.animateStreamTypeActions(action: actionType)
         
-        let stackView = contentView.rtmpOptionsContainerView.toggleStackView
-        let persistentRTMPView = contentView.rtmpOptionsContainerView.rtmpStreamKeyToggle
-        let rtmpURLView = contentView.rtmpOptionsContainerView.rtmpURLView
-        let streamKeyView = contentView.rtmpOptionsContainerView.streamKeyView
-        let infoLabelView = contentView.rtmpOptionsContainerView.infoLabelView
-        let helpLabelView = contentView.rtmpOptionsContainerView.helpLabelView
-        let profileView = contentView.rtmpOptionsContainerView.profileView
+        let profileView = contentView.goLiveContentContainerView.profileView
         
         switch actionType {
         case .guestLive:
             
             viewModel.isHdBroadcast = false
-            contentView.rtmpOptionsContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
+            contentView.goLiveContentContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
             
             viewModel.isPersistentRTMPKey = false
-            
             viewModel.isRTMPStream = false
-            
-            persistentRTMPView.isHidden = true
-            stackView.removeArrangedSubview(persistentRTMPView)
-            
-            rtmpURLView.isHidden = true
-            stackView.removeArrangedSubview(rtmpURLView)
-            
-            streamKeyView.isHidden = true
-            stackView.removeArrangedSubview(streamKeyView)
-            
-            infoLabelView.isHidden = true
-            stackView.removeArrangedSubview(infoLabelView)
-            
-            helpLabelView.isHidden = true
-            stackView.removeArrangedSubview(helpLabelView)
+            setupConditionalContent()
             
             break
         case .fromDevice:
             
             // by default both hdBroadcast and persistent rtmp key will be on
             viewModel.isHdBroadcast = true
-            contentView.rtmpOptionsContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
+            contentView.goLiveContentContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
             
             viewModel.isPersistentRTMPKey = true
-            contentView.rtmpOptionsContainerView.animateToggles(withStreamOption: .persistentRTMPKey, isSelected: viewModel.isPersistentRTMPKey)
+            contentView.goLiveContentContainerView.animateToggles(withStreamOption: .persistentRTMPKey, isSelected: viewModel.isPersistentRTMPKey)
             
             // As camera is not available here so user has to select image from gallery
             profileView.profileCoverImageView.image = nil
             profileView.clearImageButton.isHidden = true
             
             viewModel.isRTMPStream = true
-            
-            persistentRTMPView.isHidden = false
-            stackView.addArrangedSubview(persistentRTMPView)
-            
-            rtmpURLView.isHidden = false
-            stackView.addArrangedSubview(rtmpURLView)
-            
-            streamKeyView.isHidden = false
-            stackView.addArrangedSubview(streamKeyView)
-            
-            infoLabelView.isHidden = false
-            stackView.addArrangedSubview(infoLabelView)
-            
-            helpLabelView.isHidden = false
-            stackView.addArrangedSubview(helpLabelView)
+            setupConditionalContent()
             
             break
         }
@@ -195,124 +180,179 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
     
 }
 
-// MARK: - CONTENT ACTIONS
+// MARK: - CONTENT SETUP ACTION
 
-extension GoLiveViewController: LiveOptionsActionDelegate {
+extension GoLiveViewController {
     
-    func didToggleOptionTapped(withStreamOption: StreamOptionToggle) {
+    func setupConditionalContent(){
         
-        let rtmpContainerView = contentView.rtmpOptionsContainerView
-        let stackview = rtmpContainerView.toggleStackView
-        let contentStackView = rtmpContainerView.contentStackView
-        let rtmpURLView = contentView.rtmpOptionsContainerView.rtmpURLView
-        let streamKeyView = contentView.rtmpOptionsContainerView.streamKeyView
-        let infoLabelView = contentView.rtmpOptionsContainerView.infoLabelView
-        let helpLabelView = contentView.rtmpOptionsContainerView.helpLabelView
-        let restreamDetailLink = contentView.rtmpOptionsContainerView.restreamOption
-        let addProductView = rtmpContainerView.addProductView
-        let restreamOption = rtmpContainerView.restreamOption
-        let scheduleToggle = rtmpContainerView.scheduleToggle
-        let dateSelectorView = rtmpContainerView.dateTimeSelectorView
+        let isometrik = viewModel.isometrik
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled
+        let isRestreamEnabled = isometrik.getStreamOptionsConfiguration().isRestreamEnabled
+        let isScheduleEnabled = isometrik.getStreamOptionsConfiguration().isScheduleStreamEnabled
+        let isRTMPEnabled = isometrik.getStreamOptionsConfiguration().isRTMPStreamEnabled
+        let isPaidStreamEnabled = isometrik.getStreamOptionsConfiguration().isPaidStreamEnabled
+        
+        let contentContainerView = contentView.goLiveContentContainerView
+        let restreamBroadCastToggle = contentContainerView.restreamBroadCastToggle
+        let rtmpStreamKeyToggle = contentContainerView.rtmpStreamKeyToggle
+        
+        let premiumOptionStackView = contentContainerView.premiumOptionStackView
+        let toggleStackview = contentContainerView.toggleStackView
+        let contentStackView = contentContainerView.contentStackView
+        
+        let restreamOption = contentContainerView.restreamOption
+        let addProductView = contentContainerView.addProductView
+        let scheduleToggle = contentContainerView.scheduleToggle
+        let dateTimeSelectorView = contentContainerView.dateTimeSelectorView
+        let infoLabelView = contentContainerView.infoLabelView
+        let rtmpURLView = contentContainerView.rtmpURLView
+        let streamKeyView = contentContainerView.streamKeyView
+        let helpLabelView = contentContainerView.helpLabelView
         let goLiveButton = footerView.goLiveButton
+        let premiumButton = contentContainerView.premiumButton
+        let freeButton = contentContainerView.freeButton
         
-        switch withStreamOption {
-        case .hdBroadCast:
+        
+        if !isPaidStreamEnabled || viewModel.currenStreamType == .fromDevice {
+            premiumButton.isHidden = true
+            freeButton.isHidden = true
             
-            viewModel.isHdBroadcast = !viewModel.isHdBroadcast
+            premiumOptionStackView.removeArrangedSubview(freeButton)
+            premiumOptionStackView.removeArrangedSubview(premiumButton)
+        } else {
+            premiumButton.isHidden = false
+            freeButton.isHidden = false
             
-            rtmpContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
-            
-        case .recordBroadCast:
-            
-            viewModel.recordBroadcast = !viewModel.recordBroadcast
-            
-            rtmpContainerView.animateToggles(withStreamOption: .recordBroadCast, isSelected: viewModel.recordBroadcast)
-            
-        case .restreamBroadcast:
-            
-            viewModel.restreamBroadcast = !viewModel.restreamBroadcast
-            
-            rtmpContainerView.animateToggles(withStreamOption: .restreamBroadcast, isSelected: viewModel.restreamBroadcast)
-            
+            premiumOptionStackView.addArrangedSubview(freeButton)
+            premiumOptionStackView.addArrangedSubview(premiumButton)
+        }
+        
+        if isRestreamEnabled {
+            toggleStackview.addArrangedSubview(restreamBroadCastToggle)
             if viewModel.restreamBroadcast {
-                
+                restreamOption.isHidden = false
                 contentStackView.addArrangedSubview(restreamOption)
-                contentStackView.addArrangedSubview(addProductView)
-                contentStackView.addArrangedSubview(scheduleToggle)
-                contentStackView.addArrangedSubview(dateSelectorView)
-                restreamDetailLink.isHidden = false
+            } else {
+                contentStackView.removeArrangedSubview(restreamOption)
+                restreamOption.isHidden = true
+            }
+        }
+        
+        if isRTMPEnabled {
+            if viewModel.currenStreamType == .fromDevice {
+                rtmpStreamKeyToggle.isHidden = false
+                toggleStackview.addArrangedSubview(rtmpStreamKeyToggle)
                 
+                if !viewModel.isPersistentRTMPKey {
+                    
+                    contentStackView.removeArrangedSubview(rtmpURLView)
+                    contentStackView.removeArrangedSubview(streamKeyView)
+                    contentStackView.removeArrangedSubview(helpLabelView)
+                    
+                    rtmpURLView.isHidden = true
+                    streamKeyView.isHidden = true
+                    helpLabelView.isHidden = true
+                    
+                    contentStackView.addArrangedSubview(infoLabelView)
+                    // change the text in info label
+                    infoLabelView.formLabel.text = "If you disable PERSISTENT RTMP URL you will get a new URL and a stream key every time you start a new stream"
+                    
+                } else {
+                    
+                    rtmpURLView.isHidden = false
+                    streamKeyView.isHidden = false
+                    infoLabelView.isHidden = false
+                    helpLabelView.isHidden = false
+                    
+                    contentStackView.addArrangedSubview(rtmpURLView)
+                    contentStackView.addArrangedSubview(streamKeyView)
+                    contentStackView.addArrangedSubview(infoLabelView)
+                    contentStackView.addArrangedSubview(helpLabelView)
+                    
+                    // change the text in info label
+                    infoLabelView.formLabel.text = "Please copy paste the STREAM KEY and the STREAM URL  into your RTMP streaming device."
+                }
             } else {
                 
-                contentStackView.removeArrangedSubview(restreamDetailLink)
-                restreamDetailLink.isHidden = true
+                toggleStackview.removeArrangedSubview(rtmpStreamKeyToggle)
                 
-            }
-            
-        case .persistentRTMPKey:
-            
-            viewModel.isPersistentRTMPKey = !viewModel.isPersistentRTMPKey
-            
-            rtmpContainerView.animateToggles(withStreamOption: .persistentRTMPKey, isSelected: viewModel.isPersistentRTMPKey)
-            
-            if !viewModel.isPersistentRTMPKey {
+                contentStackView.removeArrangedSubview(rtmpURLView)
+                contentStackView.removeArrangedSubview(streamKeyView)
+                contentStackView.removeArrangedSubview(infoLabelView)
+                contentStackView.removeArrangedSubview(helpLabelView)
                 
-                // if user disable the persistent
-                stackview.removeArrangedSubview(rtmpURLView)
-                stackview.removeArrangedSubview(streamKeyView)
-                stackview.removeArrangedSubview(helpLabelView)
-        
-                // hide views
+                rtmpStreamKeyToggle.isHidden = true
                 rtmpURLView.isHidden = true
                 streamKeyView.isHidden = true
+                infoLabelView.isHidden = true
                 helpLabelView.isHidden = true
-                
-                // change the text in info label
-                infoLabelView.formLabel.text = "If you disable PERSISTENT RTMP URL you will get a new URL and a stream key every time you start a new stream".localized
-                
-            } else {
-                
-                // removing it before to maintain order
-                stackview.removeArrangedSubview(infoLabelView)
-                
-                // unhide hidden views
-                rtmpURLView.isHidden = false
-                streamKeyView.isHidden = false
-                helpLabelView.isHidden = false
-                
-                // if user enable the persistent
-                stackview.addArrangedSubview(rtmpURLView)
-                stackview.addArrangedSubview(streamKeyView)
-                stackview.addArrangedSubview(infoLabelView)
-                stackview.addArrangedSubview(helpLabelView)
-                
-                // change the text in info label
-                infoLabelView.formLabel.text = "Please copy paste the STREAM KEY and the STREAM URL  into your RTMP streaming device".localized + "."
             }
-            
-        case .scheduleStream:
-            
-            viewModel.isScheduleStream = !viewModel.isScheduleStream
-            rtmpContainerView.animateToggles(withStreamOption: .scheduleStream, isSelected: viewModel.isScheduleStream)
+        }
+        
+        
+        if isProductEnabled {
+            contentStackView.addArrangedSubview(addProductView)
+        }
+        
+        if isScheduleEnabled {
+            contentStackView.addArrangedSubview(scheduleToggle)
             
             if viewModel.isScheduleStream {
                 
                 // change action button state
                 goLiveButton.setTitle("Schedule Stream".localized, for: .normal)
                 
-                contentStackView.addArrangedSubview(dateSelectorView)
-                dateSelectorView.isHidden = false
+                contentStackView.addArrangedSubview(dateTimeSelectorView)
                 
             } else {
-                contentStackView.removeArrangedSubview(dateSelectorView)
-                dateSelectorView.isHidden = true
+                contentStackView.removeArrangedSubview(dateTimeSelectorView)
                 
                 viewModel.scheduleFor = nil
-                self.contentView.rtmpOptionsContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = "Choose Date and Time".localized
+                contentContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = "Choose Date and Time".localized
                 
                 goLiveButton.setTitle("Go Live".localized, for: .normal)
-                
             }
+            
+        }
+        
+    }
+    
+}
+
+
+// MARK: - CONTENT DELEGATE ACTIONS
+
+extension GoLiveViewController: LiveOptionsActionDelegate {
+    
+    func didToggleOptionTapped(withStreamOption: StreamOptionToggle) {
+        
+        let contentContainerView = contentView.goLiveContentContainerView
+        
+        switch withStreamOption {
+        case .hdBroadCast:
+            viewModel.isHdBroadcast = !viewModel.isHdBroadcast
+            contentContainerView.animateToggles(withStreamOption: .hdBroadCast, isSelected: viewModel.isHdBroadcast)
+            
+        case .recordBroadCast:
+            viewModel.recordBroadcast = !viewModel.recordBroadcast
+            contentContainerView.animateToggles(withStreamOption: .recordBroadCast, isSelected: viewModel.recordBroadcast)
+            
+        case .restreamBroadcast:
+            viewModel.restreamBroadcast = !viewModel.restreamBroadcast
+            contentContainerView.animateToggles(withStreamOption: .restreamBroadcast, isSelected: viewModel.restreamBroadcast)
+            setupConditionalContent()
+            
+        case .persistentRTMPKey:
+            viewModel.isPersistentRTMPKey = !viewModel.isPersistentRTMPKey
+            contentContainerView.animateToggles(withStreamOption: .persistentRTMPKey, isSelected: viewModel.isPersistentRTMPKey)
+            setupConditionalContent()
+            
+        case .scheduleStream:
+            
+            viewModel.isScheduleStream = !viewModel.isScheduleStream
+            contentContainerView.animateToggles(withStreamOption: .scheduleStream, isSelected: viewModel.isScheduleStream)
+            setupConditionalContent()
             
             break
         }
@@ -331,7 +371,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
             controller.scheduleForCallback = { [weak self] date in
                 guard let self = self else { return }
                 self.viewModel.scheduleFor = date
-                self.contentView.rtmpOptionsContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = date.ism_toString(format: "d MMM YYYY, h:mm a")
+                self.contentView.goLiveContentContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = date.ism_toString(format: "d MMM YYYY, h:mm a")
             }
             
             self.present(controller, animated: true)
@@ -348,7 +388,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
         UIPasteboard.general.string = viewModel.rtmpURL
         
         // copied animation
-        self.view.makeToast("RTMP URL Copied".localized + "!", duration: 2.0, position: .bottom)
+        self.view.showToast(message: "RTMP URL Copied!")
         
     }
     
@@ -357,7 +397,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
         UIPasteboard.general.string = viewModel.streamKey
         
         // copied animation
-        self.view.makeToast("Stream Key Copied".localized + "!", duration: 2.0, position: .bottom)
+        self.view.showToast(message: "Stream Key Copied!")
     }
     
     func didHelpLabelViewTapped() {
@@ -389,77 +429,95 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
     
     func didTapAddProduct() {
         
-        let containerView = contentView.rtmpOptionsContainerView
-        let addProductView = containerView.addProductView
+        guard let navigationController = self.navigationController else { return }
         
-        let controller = AllProductsViewController()
-        
-        let viewModel = ProductViewModel(isometrik: viewModel.isometrik)
-        // changing the selected flag to true for selected products
-        self.viewModel.selectedProducts.indices.forEach { index in
-            self.viewModel.selectedProducts[index].isSelected = true
-        }
-        viewModel.selectedProductList = self.viewModel.selectedProducts
-        viewModel.productList = self.viewModel.allProducts
-        controller.productViewModel = viewModel
-        
-        controller.product_Callback = { [weak self] (selectedProducts, allProducts) in
-            
-            guard let selectedProducts, let self else {
-                // reset the product option height
-                containerView.addProductViewHeightConstraint?.constant = 170
-                addProductView.addButton.isHidden = true
-                return
-            }
-            
-            self.viewModel.selectedProducts = selectedProducts
-            self.viewModel.allProducts = allProducts
-            containerView.addProductViewHeightConstraint?.constant = 290
-            addProductView.addButton.isHidden = false
-            addProductView.productData = selectedProducts
-            
+        let isometrik = viewModel.isometrik
+        if isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled {
+            viewModel.externalActionDelegate?.didAddProductTapped(selectedProductsIds: [], productIds: { productIds in
+                // do something with productIds
+            }, root: navigationController)
         }
         
-        let navVC = UINavigationController(rootViewController: controller)
-        navVC.modalPresentationStyle = .pageSheet
-        navVC.isModalInPresentation = false
+//        let containerView = contentView.rtmpOptionsContainerView
+//        let addProductView = containerView.addProductView
+//        
+//        let controller = AllProductsViewController()
+//        
+//        let viewModel = ProductViewModel(isometrik: viewModel.isometrik)
+//        // changing the selected flag to true for selected products
+//        self.viewModel.selectedProducts.indices.forEach { index in
+//            self.viewModel.selectedProducts[index].isSelected = true
+//        }
+//        viewModel.selectedProductList = self.viewModel.selectedProducts
+//        viewModel.productList = self.viewModel.allProducts
+//        controller.productViewModel = viewModel
+//        
+//        controller.product_Callback = { [weak self] (selectedProducts, allProducts) in
+//            
+//            guard let selectedProducts, let self else {
+//                // reset the product option height
+//                containerView.addProductViewHeightConstraint?.constant = 170
+//                addProductView.addButton.isHidden = true
+//                return
+//            }
+//            
+//            self.viewModel.selectedProducts = selectedProducts
+//            self.viewModel.allProducts = allProducts
+//            containerView.addProductViewHeightConstraint?.constant = 290
+//            addProductView.addButton.isHidden = false
+//            addProductView.productData = selectedProducts
+//            
+//        }
+//        
+//        let navVC = UINavigationController(rootViewController: controller)
+//        navVC.modalPresentationStyle = .pageSheet
+//        navVC.isModalInPresentation = false
+//        
+//        self.present(navVC, animated: true)
         
-        self.present(navVC, animated: true)
     }
     
     func didRemoveProduct(index: Int) {
         // remove the selected product
-        var selectedProducts = viewModel.selectedProducts
-        let containerView = contentView.rtmpOptionsContainerView
-        let addProductView = containerView.addProductView
-        
-        let toBeRemovedProductId = viewModel.selectedProducts[index].childProductID ?? ""
-        
-        if !(selectedProducts.count > 0) {
-            return
-        }
-        
-        selectedProducts.remove(at: index)
-        if selectedProducts.count == 0 {
-            addProductView.addButton.isHidden = true
-            
-            // Change the height of addProductView to normal
-            containerView.addProductViewHeightConstraint?.constant = 170
-            
-            viewModel.allProducts.removeAll()
-        }
-        
-        // making change to all products too
-        if let indexToChange = viewModel.allProducts.firstIndex(where: {$0.childProductID == toBeRemovedProductId}) {
-            viewModel.allProducts[indexToChange].isSelected = false
-            viewModel.allProducts[indexToChange].liveStreamfinalPriceList?.discountPercentage = 0
-        }
-        
-        viewModel.selectedProducts = selectedProducts
-        addProductView.productData = selectedProducts
+//        var selectedProducts = viewModel.selectedProducts
+//        let containerView = contentView.rtmpOptionsContainerView
+//        let addProductView = containerView.addProductView
+//        
+//        let toBeRemovedProductId = viewModel.selectedProducts[index].childProductID ?? ""
+//        
+//        if !(selectedProducts.count > 0) {
+//            return
+//        }
+//        
+//        selectedProducts.remove(at: index)
+//        if selectedProducts.count == 0 {
+//            addProductView.addButton.isHidden = true
+//            
+//            // Change the height of addProductView to normal
+//            containerView.addProductViewHeightConstraint?.constant = 170
+//            
+//            viewModel.allProducts.removeAll()
+//        }
+//        
+//        // making change to all products too
+//        if let indexToChange = viewModel.allProducts.firstIndex(where: {$0.childProductID == toBeRemovedProductId}) {
+//            viewModel.allProducts[indexToChange].isSelected = false
+//            viewModel.allProducts[indexToChange].liveStreamfinalPriceList?.discountPercentage = 0
+//        }
+//        
+//        viewModel.selectedProducts = selectedProducts
+//        addProductView.productData = selectedProducts
     }
     
     @objc func respondToSwipeGesture(gesture: UIGestureRecognizer){
+        
+        let isometrik = viewModel.isometrik
+        let isRTMPEnabled = isometrik.getStreamOptionsConfiguration().isRTMPStreamEnabled
+        
+        // Disabling the gesture if rtmp is disabled
+        if !isRTMPEnabled {
+            return
+        }
         
         // Disabling gestures if editing
         if viewModel.isEditing { return }
@@ -514,14 +572,12 @@ extension GoLiveViewController {
         let isometrik = viewModel.isometrik
         let userName = isometrik.getUserSession().getUserName()
         
-        var paidAmount = 0
-        var isPaid = false
         if viewModel.selectedCoins > 0 {
-            paidAmount = viewModel.selectedCoins
-            isPaid = true
+            viewModel.paidAmount = viewModel.selectedCoins
+            viewModel.isPaid = true
         } else {
-            paidAmount = 0
-            isPaid = false
+            viewModel.paidAmount = 0
+            viewModel.isPaid = false
         }
         
 //        let streamBody = StartStreamBody(
@@ -559,7 +615,7 @@ extension GoLiveViewController {
             isPaid: viewModel.isPaid, 
             isPublicStream: true,
             isRecorded: viewModel.recordBroadcast,
-            paymentAmount: viewModel.paidAmount,
+            amount: viewModel.paidAmount,
             userName: userName,
             rtmpIngest: viewModel.isRTMPStream,
             persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey,
@@ -579,7 +635,7 @@ extension GoLiveViewController {
         isometrik.getIsometrik().startStream(streamBody: streamBody) { stream in
             
             /// Stop loading.
-            ISMLiveShowLoader.shared.stopLoading()
+            CustomLoader.shared.stopLoading()
             
             if self.viewModel.isScheduleStream {
                 
@@ -606,7 +662,7 @@ extension GoLiveViewController {
                     }
                 }
                 
-                //controller.playAnimation(for: "success-animation")
+                controller.playAnimation(for: self.appearance.json.successAnimation)
                 
                 self.present(controller, animated: true)
                 
@@ -614,8 +670,8 @@ extension GoLiveViewController {
                 self.viewModel.captureSession?.stopRunning()
                 
                 var streamData = stream
-                streamData.isPaid = isPaid
-                streamData.paymentAmount = Double(paidAmount)
+                streamData.isPaid = self.viewModel.isPaid
+                streamData.amount = Double(self.viewModel.paidAmount)
                 streamData.multiLive = self.viewModel.multiLive
                 streamData.selfHosted = self.viewModel.selfHosted
                 streamData.streamImage = imagePath
@@ -657,20 +713,20 @@ extension GoLiveViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "GoLive Error : Invalid Response")
+                    self.view.showToast( message: "GoLive Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
                 }
                 
             default :
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Stream Error: Failed to start a new stream")
+                    self.view.showToast( message: "Stream Error: Failed to start a new stream")
                 }
                 break
             }
@@ -709,18 +765,18 @@ extension GoLiveViewController {
             isPublicStream: true,
             isRecorded: viewModel.recordBroadcast,
             isScheduledStream: viewModel.isScheduleStream,
-            paymentAmount: Int(streamData.paymentAmount ?? 0),
+            amount: Int(streamData.amount ?? 0),
             streamTitle: userName, userName: userName,
             rtmpIngest: viewModel.isRTMPStream,
             persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey,
             isHighLighted: false,
             scheduleStartTime: Int64(streamData.scheduleStartTime ?? 0),
             isometrikUserId: isometrikUserId,
-            taggedProductIds: viewModel.selectedProducts.isEmpty ? streamData.taggedProductIds : viewModel.getProductIds(),
+            //taggedProductIds: viewModel.selectedProducts.isEmpty ? streamData.taggedProductIds : viewModel.getProductIds(),
             storeId: viewModel.getStoreId(),
             storeCategoryId: "",
-            products: viewModel.selectedProducts.isEmpty ? streamData.products : viewModel.getPayloadForMyProducts(),
-            otherProducts: viewModel.selectedProducts.isEmpty ? streamData.otherProducts : viewModel.getPayloadForOtherProducts(),
+            //products: viewModel.selectedProducts.isEmpty ? streamData.products : viewModel.getPayloadForMyProducts(),
+            //viewModel.getPayloadForOtherProducts(),
             eventId: streamData._id ?? ""
         )
         
@@ -736,7 +792,7 @@ extension GoLiveViewController {
             
             guard let self else { return }
             
-            ISMLiveShowLoader.shared.stopLoading()
+            CustomLoader.shared.stopLoading()
             
             let controller = CustomConfirmationPopupViewController()
             controller.infoLabel.text = "Stream Successfully updated" + "!"
@@ -762,14 +818,14 @@ extension GoLiveViewController {
                 }
             }
             
-            //controller.playAnimation(for: "success-animation")
+            controller.playAnimation(for: appearance.json.successAnimation)
             self.present(controller, animated: true)
             
         } failure: { [weak self] error in
             
             guard let self else { return }
             
-            ISMLiveShowLoader.shared.stopLoading()
+            CustomLoader.shared.stopLoading()
             
             switch error{
             case .noResultsFound(_):
@@ -777,20 +833,20 @@ extension GoLiveViewController {
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "GoLive Error : Invalid Response")
+                    self.view.showToast( message: "GoLive Error : Invalid Response")
                 }
             case.networkError(let error):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Network Error \(error.localizedDescription)")
+                    self.view.showToast( message: "Network Error \(error.localizedDescription)")
                 }
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
+                    self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "error")")
                 }
                 
             default :
                 DispatchQueue.main.async {
-                    self.view.showISMLiveErrorToast( message: "Stream Error: Failed to start a new stream")
+                    self.view.showToast( message: "Stream Error: Failed to start a new stream")
                 }
                 break
             }
@@ -807,10 +863,8 @@ extension GoLiveViewController {
         let isometrik = viewModel.isometrik
         isometrik.getUserSession().setUserType(userType: .host)
         
-        let viewModel = StreamViewModel()
+        let viewModel = StreamViewModel(isometrik: isometrik, streamsData: streamInfo, delegate: self)
         viewModel.streamUserType = .host
-        viewModel.streamsData = streamInfo
-        viewModel.isometrik = isometrik
         
         let streamController = StreamViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(streamController, animated: true)
@@ -822,4 +876,10 @@ extension GoLiveViewController {
         return fileURL?.pathExtension ?? ""
     }
     
+}
+
+extension GoLiveViewController: ISMStreamActionDelegate {
+    public func didStreamStoreOptionTapped(forUserType: StreamUserType, root: UINavigationController) {
+        viewModel.externalActionDelegate?.didStreamStoreOptionTapped(forUserType: forUserType ,root: root)
+    }
 }

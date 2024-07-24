@@ -63,6 +63,8 @@ class VerticalStreamCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
@@ -114,11 +116,16 @@ class VerticalStreamCollectionViewCell: UICollectionViewCell {
     }
     
     func setVideoContainer(){
-        guard let viewModel,
-              let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        
+        guard let viewModel
         else { return }
+        
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
         streamContainer.videoContainer.isometrik = isometrik
         streamContainer.videoContainer.streamInfo = streamData
     }

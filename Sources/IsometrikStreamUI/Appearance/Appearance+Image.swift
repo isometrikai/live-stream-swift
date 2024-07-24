@@ -10,7 +10,7 @@ import UIKit
 public struct ISM_Image {
     
     private static func loadImageSafely(with imageName: String) -> UIImage {
-        if let image = UIImage(named: imageName, in: .isometrikStreamBundle) {
+        if let image = UIImage(named: imageName, in: .isometrikStreamUIBundle) {
             return image
         } else {
             print(
@@ -159,7 +159,8 @@ public struct ISM_Image {
     public var speakerOff: UIImage = loadImageSafely(with: "ism_speaker_off")
     public var speakerOn: UIImage = loadImageSafely(with: "ism_speaker")
     public var user: UIImage = loadImageSafely(with: "ism_user")
-    
+    public var premiumBadge: UIImage = loadImageSafely(with: "ism_premium")
+    public var premiumBadgeBG: UIImage = loadImageSafely(with: "ism_premium_bg")
     
     // Message events
     public var deletedMsg: UIImage = loadImageSafely(with: "ism_del_msg")
@@ -167,6 +168,17 @@ public struct ISM_Image {
     public var userKickedOut: UIImage = loadImageSafely(with: "ism_user_kickedOut")
     public var kickout: UIImage = loadImageSafely(with: "ism_kickout")
     public var userJoined: UIImage = loadImageSafely(with: "ism_user_joined")
+    
+    // Wallet images
+    public var debitTransaction: UIImage = loadImageSafely(with: "ic_debit")
+    public var creditTransaction: UIImage = loadImageSafely(with: "ic_credit")
+    public var walletMoney: UIImage = loadImageSafely(with: "ic_money")
+    public var goldPile1: UIImage = loadImageSafely(with: "ic_gold_pile1")
+    public var goldPile2: UIImage = loadImageSafely(with: "ic_gold_pile2")
+    public var goldPile3: UIImage = loadImageSafely(with: "ic_gold_pile3")
+    public var goldChest: UIImage = loadImageSafely(with: "ic_gold_chest")
+    public var goldChestFull: UIImage = loadImageSafely(with: "ic_gold_chest_full")
+    
     
     public init() {}
     

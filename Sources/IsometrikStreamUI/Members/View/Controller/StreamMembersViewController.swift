@@ -7,9 +7,8 @@
 
 import UIKit
 import IsometrikStream
-import MBProgressHUD
 
-class StreamMembersViewController: UIViewController, AppearanceProvider {
+class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -112,7 +111,7 @@ class StreamMembersViewController: UIViewController, AppearanceProvider {
                
                 
             case let .failure(msg):
-                self.view.showISMLiveErrorToast(message: msg)
+                self.view.showToast(message: msg)
             }
         }
     }
@@ -141,7 +140,7 @@ extension StreamMembersViewController: UITableViewDelegate, UITableViewDataSourc
     
 }
 
-class StreamMemberHeaderView: UIView, AppearanceProvider {
+class StreamMemberHeaderView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

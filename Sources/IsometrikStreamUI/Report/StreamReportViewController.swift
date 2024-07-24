@@ -7,10 +7,9 @@
 //
 
 import UIKit
-import MBProgressHUD
-import Toast
+import IsometrikStream
 
-class StreamReportViewController: UIViewController, AppearanceProvider {
+class StreamReportViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -47,13 +46,15 @@ class StreamReportViewController: UIViewController, AppearanceProvider {
         setUpConstraints()
         
         // loading reasons
-        MBProgressHUD.showAdded(to: self.view, animated: true)
-        userViewModel.getReportReasons { success, error in
-            MBProgressHUD.hide(for: self.view, animated: true)
-            if success {
-                self.reasonsTableView.reloadData()
-            }
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
         }
+//        userViewModel.getReportReasons { success, error in
+//            CustomLoader.shared.stopLoading()
+//            if success {
+//                self.reasonsTableView.reloadData()
+//            }
+//        }
         
     }
     
@@ -85,31 +86,30 @@ class StreamReportViewController: UIViewController, AppearanceProvider {
 extension StreamReportViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userViewModel.reportReasons.count
+//        return userViewModel.reportReasons.count
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamReportTableViewCell", for: indexPath) as! StreamReportTableViewCell
-        cell.reasonLabel.text = userViewModel.reportReasons[indexPath.row]
+//        cell.reasonLabel.text = userViewModel.reportReasons[indexPath.row]
         cell.selectionStyle = .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard userViewModel.reportReasons.count > 0 else { return }
-        let reason = userViewModel.reportReasons[indexPath.row]
-        userViewModel.reportAUser(reason: reason) { success, error in
-            if success {
-                self.view.makeToast("Successfully Reported".localized + "!", position: .bottom)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.dismiss(animated: true)
-                }
-                
-            } else {
-                self.ism_showAlert("Error", message: "\(error ?? "")")
-            }
-        }
+//        guard userViewModel.reportReasons.count > 0 else { return }
+//        let reason = userViewModel.reportReasons[indexPath.row]
+//        userViewModel.reportAUser(reason: reason) { success, error in
+//            if success {
+//                self.view.showToast(message: "Successfully Reported!")
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                    self.dismiss(animated: true)
+//                }
+//            } else {
+//                self.ism_showAlert("Error", message: "\(error ?? "")")
+//            }
+//        }
     }
     
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {

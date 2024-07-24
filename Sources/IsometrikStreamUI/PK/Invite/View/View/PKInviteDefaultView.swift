@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKInviteDefaultView: UIView, AppearanceProvider {
+class PKInviteDefaultView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

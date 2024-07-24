@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class PKUserTableViewCell: UITableViewCell, AppearanceProvider {
+class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

@@ -100,9 +100,10 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
     
     func openModeratorsListInStream(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let viewModel = ModeratorViewModel(streamInfo: streamData, isometrik: isometrik)
@@ -125,9 +126,10 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
     
     func openListForSelectingModerators(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let viewModel = ModeratorViewModel(streamInfo: streamData, isometrik: isometrik)
@@ -154,9 +156,10 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
     
     func stopModerating(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let userId = isometrik.getUserSession().getUserId()

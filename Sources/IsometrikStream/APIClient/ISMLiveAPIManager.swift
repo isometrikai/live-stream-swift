@@ -8,10 +8,9 @@
 
 import Foundation
 import UIKit
-import SwiftyJSON
 
 
-protocol ISMLiveURLConvertible{
+public protocol ISMLiveURLConvertible{
     
     var baseURL : URL{
         get
@@ -32,18 +31,25 @@ protocol ISMLiveURLConvertible{
 }
 
 
-struct  ISMLiveAPIRequest<R> {
+public struct ISMLiveAPIRequest<R> {
+    
     let endPoint : ISMLiveURLConvertible
     let requestBody: R?
+    
+    public init(endPoint: ISMLiveURLConvertible, requestBody: R?) {
+        self.endPoint = endPoint
+        self.requestBody = requestBody
+    }
+    
 }
 
-struct ISMLiveAPIManager {
+public struct ISMLiveAPIManager {
     
-    static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, showLoader : Bool = true, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
+    public static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
         
-        if showLoader{
-            ISMLiveShowLoader.shared.startLoading()
-        }
+        let endpoint = "\(request.endPoint.baseURL)\(request.endPoint.path)"
+        let endpointMethod = "\(request.endPoint.method)".uppercased()
+        LogManager.shared.logNetwork("Endpoint: \(endpointMethod) \(endpoint)", type: .debug)
         
         var urlComponents = URLComponents(url: request.endPoint.baseURL.appendingPathComponent(request.endPoint.path), resolvingAgainstBaseURL: true)
         urlComponents?.queryItems = request.endPoint.queryParams?.map { URLQueryItem(name: $0.key, value: $0.value) }
@@ -60,7 +66,6 @@ struct ISMLiveAPIManager {
         urlRequest.setValue(ISMConfiguration.shared.userSecret, forHTTPHeaderField:"userSecret" )
         urlRequest.setValue(ISMConfiguration.shared.licenseKey, forHTTPHeaderField:"licenseKey")
         urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField:"userToken" )
-        urlRequest.setValue(ISMConfiguration.shared.authToken, forHTTPHeaderField: "authorization")
         urlRequest.setValue(ISMConfiguration.shared.appSecret, forHTTPHeaderField: "appSecret")
         urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField: "isometrikToken")
         
@@ -69,13 +74,12 @@ struct ISMLiveAPIManager {
             urlRequest.setValue(value, forHTTPHeaderField: key)
         }
         
-        if let requestBody = request.requestBody as? Codable {
+        if let requestBody = request.requestBody as? Encodable {
             do {
                 let jsonBody = try JSONEncoder().encode(requestBody)
                 urlRequest.httpBody = jsonBody
             } catch {
                 completion(.failure(.invalidResponse))
-                ISMLiveShowLoader.shared.stopLoading()
                 return
             }
         }
@@ -83,11 +87,10 @@ struct ISMLiveAPIManager {
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse else {
                 completion(.failure(.invalidResponse))
-                ISMLiveShowLoader.shared.stopLoading()
                 return
             }
             
-            print("*****STATUS \(httpResponse.statusCode) ")
+            LogManager.shared.logNetwork("HttpStatusCode: \(httpResponse.statusCode)", type: .debug)
             
             if let error = error {
                 completion(.failure(.decodingError(error)))
@@ -99,7 +102,6 @@ struct ISMLiveAPIManager {
                 completion(.failure(.invalidResponse))
                 return
             }
-            print(JSON(data))
             
             switch httpResponse.statusCode {
             case 200:
@@ -107,13 +109,31 @@ struct ISMLiveAPIManager {
                     let responseObject = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(responseObject, nil))
                 } catch {
+                    
+                    if let decodingError = error as? DecodingError {
+                        switch decodingError {
+                        case .typeMismatch(let key, let context):
+                            LogManager.shared.logNetwork("Type mismatch for key \(key), context: \(context.debugDescription)", type: .debug)
+                        case .valueNotFound(let type, let context):
+                            LogManager.shared.logNetwork("Value not found for type \(type), context: \(context.debugDescription)", type: .debug)
+                        case .keyNotFound(let key, let context):
+                            LogManager.shared.logNetwork("Key not found: \(key), context: \(context.debugDescription)", type: .debug)
+                        case .dataCorrupted(let context):
+                            LogManager.shared.logNetwork("Data corrupted, context: \(context.debugDescription)", type: .debug)
+                        @unknown default:
+                            print("")
+                            LogManager.shared.logNetwork("Unknown decoding error", type: .debug)
+                        }
+                    } else {
+                        LogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
+                    }
+                    
                     completion(.failure(.decodingError(error)))
                 }
             case 204, 404, 400:
                 completion(.failure(.noResultsFound(httpResponse.statusCode)))
             case 406 :
                 break
-                
                 // update the headers
 //                APIManager.refreshTokenAPI() { (success,token) in
 //                    if success{
@@ -131,7 +151,6 @@ struct ISMLiveAPIManager {
 //                        Utility.logOut()
 //                    }
 //                }
-                
             case 401 :
                 break
 //                Utility.logOut()
@@ -147,11 +166,6 @@ struct ISMLiveAPIManager {
                     completion(.failure(.httpError(httpResponse.statusCode, nil)))
                 }
                 
-            }
-            
-            
-            if showLoader{
-                ISMLiveShowLoader.shared.stopLoading()
             }
         }
         

@@ -8,11 +8,11 @@
 
 import UIKit
 
-class FormTextWithTitleView: UIView, AppearanceProvider {
+public class FormTextWithTitleView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    lazy var formTitleLabel: UILabel = {
+    public lazy var formTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Form Title Text".localized
@@ -21,7 +21,7 @@ class FormTextWithTitleView: UIView, AppearanceProvider {
         return label
     }()
     
-    let formTextView: FormTextView = {
+    public let formTextView: FormTextView = {
         let view = FormTextView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

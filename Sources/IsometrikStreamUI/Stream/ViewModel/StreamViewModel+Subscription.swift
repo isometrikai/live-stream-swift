@@ -12,11 +12,7 @@ extension StreamViewModel {
     
     /// subscribe MQTT events
     func subscribeToMqttEvents() {
-        
-        guard let isometrik else { return }
-        
         let clientId = isometrik.getUserSession().getUserId()
-        
         isometrik.getIsometrik().subsribeForMQTT(clientId: clientId, streamStartChannel: true) { result in
             print("Subscription Api Success")
         } failure: { error in
@@ -26,11 +22,7 @@ extension StreamViewModel {
     }
     
     func unsubscribeToMqttEvents() {
-        
-        guard let isometrik else { return }
-        
         let clientId = isometrik.getUserSession().getUserId()
-        
         isometrik.getIsometrik().unsubscribeForMQTT(clientId: clientId, startStreamChannel: false) { result in
             print("Unsubscription Api Success")
         } failure: { error in
@@ -40,12 +32,10 @@ extension StreamViewModel {
     }
     
     func subscribeToStreamEvents(streamId: String) {
-        guard let isometrik else { return }
         isometrik.getMqttSession().subscribeStreamEvents(with: streamId)
     }
     
     func unsubscribeToStreamEvents(streamId: String) {
-        guard let isometrik else { return }
         isometrik.getMqttSession().unsubscribeStreamEvents(with: streamId)
     }
     

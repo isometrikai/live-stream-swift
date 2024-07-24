@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeDurationCollectionViewCell: UICollectionViewCell, AppearanceProvider {
+class PKChallengeDurationCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

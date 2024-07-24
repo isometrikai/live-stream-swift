@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeHeaderView: UIView, AppearanceProvider {
+class PKChallengeHeaderView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

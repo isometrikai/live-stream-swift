@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PKChallengeDurationView: UIView, AppearanceProvider {
+class PKChallengeDurationView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

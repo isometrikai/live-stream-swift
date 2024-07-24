@@ -147,4 +147,23 @@ extension IsometrikStream {
        
     }
     
+    public func fetchViewersForAnalytics(streamId: String, skip: Int = 0, limit: Int = 20, completionHandler: @escaping (StreamAnalyticViewersResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        let request =  ISMLiveAPIRequest<Any>(endPoint: ViewerRouter.fetchViewersForAnalytics(streamId: streamId, skip: skip, limit: limit), requestBody:nil)
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<StreamAnalyticViewersResponseModel, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+
+            }
+        }
+    }
+    
 }

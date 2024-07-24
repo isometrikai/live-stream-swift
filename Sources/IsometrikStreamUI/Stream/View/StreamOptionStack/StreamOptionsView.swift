@@ -36,7 +36,7 @@ protocol StreamOptionActionDelegate {
     func didOptionsTapped(with option: StreamOption.RawValue)
 }
 
-class StreamOptionsView: UIView, AppearanceProvider {
+class StreamOptionsView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

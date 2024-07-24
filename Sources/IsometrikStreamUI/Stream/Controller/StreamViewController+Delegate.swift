@@ -12,7 +12,7 @@ import IsometrikStream
 extension StreamViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let streamsData = viewModel.streamsData else { return Int() }
+        let streamsData = viewModel.streamsData
         if streamsData.count > 0 {
             return streamsData.count
         } else {
@@ -44,10 +44,11 @@ extension StreamViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         print("~~NEXT INDEX: \(indexPath)")
         
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
         // for viewers only
         guard viewModel.selectedStreamIndex == indexPath,
-              let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
@@ -80,7 +81,7 @@ extension StreamViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         // invalidate all timers
         self.endTimer()
-        viewModel.invalidateTimers()
+        viewModel.invalidateAllTimers()
         
         // deinit the preiview video player
         if let player = viewModel.videoPreviewPlayer {
@@ -106,12 +107,12 @@ extension StreamViewController {
     
     func setStreamData(cell: VerticalStreamCollectionViewCell, index: IndexPath){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              streamsData.count > 0,
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard streamsData.count > 0,
               viewModel.selectedStreamIndex == index
         else {
-            
             // reseting thumbnails
             cell.streamThumbnailImage.image = UIImage()
             return

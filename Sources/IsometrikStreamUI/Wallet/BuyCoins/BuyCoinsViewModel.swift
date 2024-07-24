@@ -3,16 +3,37 @@ import Foundation
 import IsometrikStream
 import StoreKit
 
+public enum WalletCurrencyType: String {
+    case coin = "COIN"
+    case money = "USD"
+}
+
 final public class BuyCoinsViewModel {
     
     var coinPlansData: CoinPlansResponseModel?
+    var walletBalance: WalletBalance?
     var coinPlans: [CoinPlan] = []
     var skProducts: [SKProduct] = []
     
-    private var isometrik: IsometrikSDK
+    public var isometrik: IsometrikSDK
     
     public init(isometrik: IsometrikSDK) {
         self.isometrik = isometrik
+    }
+    
+    func getWalletBalance(currencyType: WalletCurrencyType, completion: @escaping(_ success: Bool, _ error: String?)->Void){
+        isometrik.getIsometrik().getWalletBalance(currencyType: currencyType.rawValue) { response in
+            self.walletBalance = response.data
+            let balance = response.data?.balance ?? 0
+            UserDefaultsProvider.shared.setWalletBalance(data: balance, currencyType: currencyType.rawValue)
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+        } failure: { error in
+            DispatchQueue.main.async {
+                completion(false, error.localizedDescription)
+            }
+        }
     }
     
     func getCoinPlans(completion: @escaping(_ success: Bool, _ error: String?) -> Void){
@@ -51,7 +72,7 @@ final public class BuyCoinsViewModel {
         
         var planId = ""
         
-        let data = IAPManager.getPurchasedPlan()
+        let data = UserDefaultsProvider.shared.getPurchaseDetails()
         if let productId = data["productId"] as? String {
             let planData = self.coinPlansData?.data?.filter({$0.appStoreProductIdentifier == productId})
             planId = planData?.first?.planId ?? ""

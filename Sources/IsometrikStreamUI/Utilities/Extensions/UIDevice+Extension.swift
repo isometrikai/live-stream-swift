@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 
 extension UIDevice {
-    static func vibrate() {
+    public static func vibrate() {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
 }

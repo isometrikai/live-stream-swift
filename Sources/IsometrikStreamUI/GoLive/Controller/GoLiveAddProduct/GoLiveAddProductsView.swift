@@ -14,16 +14,22 @@ protocol GoLiveAddProductActionDelegate {
     func didRemoveProductTapped(index: Int)
 }
 
-class GoLiveAddProductsView: UIView, AppearanceProvider {
+class GoLiveAddProductsView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
     var delegate: GoLiveAddProductActionDelegate?
-    var productData: [StreamProductModel] = [] {
+    var productData: [ISMProduct] = [] {
         didSet {
             self.productCollectionView.reloadData()
         }
     }
+    
+//    var productData: [StreamProductModel] = [] {
+//        didSet {
+//            self.productCollectionView.reloadData()
+//        }
+//    }
     
     let headerView: UIView = {
         let view = UIView()

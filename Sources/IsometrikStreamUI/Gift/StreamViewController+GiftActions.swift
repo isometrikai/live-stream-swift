@@ -6,15 +6,17 @@
 //
 
 import UIKit
+import Foundation
 import IsometrikStream
 
 extension StreamViewController {
     
     func giftTapped(){
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               let recieverData = getGiftRecieverData()
         else { return }
         
@@ -31,9 +33,10 @@ extension StreamViewController {
     
     func getGiftRecieverData() -> ISMCustomGiftRecieverData? {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return nil }
         
         var recieverStreamId = ""
@@ -187,6 +190,47 @@ extension StreamViewController {
             giftTableView.endUpdates()
             
         }
+    }
+    
+    func handle3DGiftMessages(messageData: ISMComment) {
+        
+        viewModel.animated3DGiftTimer?.invalidate()
+        viewModel.animated3DGiftTimer = nil
+        viewModel.animated3DGiftTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.resetGif), userInfo: nil, repeats: false)
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        
+        let message = messageData.message ?? ""
+        let gifCoverImageView = visibleCell.streamContainer.giftAnimationCoverView
+        
+        
+        if let data = message.data(using: .utf8) {
+            do {
+                // Remove the outer quotes and double-escaping
+                let trimmedString = String(data: data, encoding: .utf8)?
+                    .trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                    .replacingOccurrences(of: "\\\"", with: "\"")
+
+                if let jsonData = trimmedString?.data(using: .utf8) {
+                    let giftModel = try JSONDecoder().decode(StreamMessageGiftModel.self, from: jsonData)
+                    
+                    let giftURLString = giftModel.message ?? ""
+                    visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
+                    if let url = URL(string: giftURLString) {
+                        gifCoverImageView.kf.setImage(with: url)
+                    }
+                    
+                }
+            } catch {
+                print("Failed to decode JSON: \(error)")
+            }
+        }
+        
+    }
+    
+    @objc func resetGif(){
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        visibleCell.streamContainer.giftAnimationCoverView.image = UIImage()
     }
     
     func playAnimatedGift(messageInfo: ISMComment) {

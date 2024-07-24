@@ -8,7 +8,6 @@
 import UIKit
 import Foundation
 import CocoaMQTT
-import os.log
 
 /// `ISMMQTTSessionWrapperCompletionBlock` will used as a completion handler.
 public typealias ISMMQTTSessionWrapperCompletionBlock = (Result<String, Error>) -> Void
@@ -18,14 +17,12 @@ public typealias ISMMQTTSessionWrapperCompletionBlock = (Result<String, Error>) 
 open class ISMMQTTSessionWrapper: NSObject {
     
     var mqtt: CocoaMQTT?
+    var configuration : ISMConfiguration
     
     /// User Id using for client Id.
-    var clientId: String = ""
     var isometrikId: String = ""
     
     public var isConnected = false
-    
-    var configuration : ISMConfiguration
     
     /// Init funcs.
     init(configuration : ISMConfiguration = ISMConfiguration.shared) {
@@ -40,21 +37,19 @@ open class ISMMQTTSessionWrapper: NSObject {
         let deviceID = UIDevice.current.identifierForVendor?.uuidString ?? ""
         self.isometrikId = clientId
         
-        if self.clientId == "" {
-            self.clientId = clientId + deviceID
-        }
-        
-        print("DEVICE ID :: \(deviceID)")
-        print("CLIENT ID :: \(self.clientId)")
-        
         let userName = "2" + configuration.accountId + configuration.projectId
         let password = configuration.licenseKey + configuration.keySetId
         
-        let clientID = clientId + deviceID
+        let clientID = clientId + "/STREAM/" + deviceID
+        
         let port = UInt16(configuration.MQTTPort)
         
+        LogManager.shared.logMQTT("ClientId: \(clientID)", type: .debug)
+        LogManager.shared.logMQTT("Username: \(userName)", type: .debug)
+        LogManager.shared.logMQTT("Password: \(password)", type: .debug)
+        
         mqtt = CocoaMQTT(clientID: clientID, host: configuration.MQTTHost, port: port)
-        mqtt?.logLevel = .debug
+        mqtt?.logLevel = .off
         mqtt?.username = userName
         mqtt?.password = password
         mqtt?.willMessage = nil
@@ -89,7 +84,7 @@ extension ISMMQTTSessionWrapper {
     public func subscribeStreamEvents(with streamId: String){
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/" + streamId
-            print("SUBSCRIBING TO STREAMING EVENTS WITH TOPIC: \(channel)")
+            //LogManager.shared.logMQTT("Subscribing to streaming events with topic: \(channel)", type: .debug)
             mqtt.subscribe(channel, qos: .qos0)
         }
     }
@@ -97,7 +92,7 @@ extension ISMMQTTSessionWrapper {
     public func unsubscribeStreamEvents(with streamId: String){
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/" + streamId
-            print("UNSUBSCRIBING TO STREAMING EVENTS WITH TOPIC: \(channel)")
+            //LogManager.shared.logMQTT("Unsubscribing to streaming events with topic: \(channel)", type: .debug)
             mqtt.unsubscribe(channel)
         }
     }
@@ -105,7 +100,7 @@ extension ISMMQTTSessionWrapper {
     public func subscribeUserEvents() {
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/User/" + isometrikId
-            print("SUBSCRIBING TO USER EVENTS WITH TOPIC: \(channel)")
+            //LogManager.shared.logMQTT("Subscribing to user events with topic: \(channel)", type: .info)
             mqtt.subscribe(channel, qos: .qos0)
         }
     }
@@ -113,27 +108,9 @@ extension ISMMQTTSessionWrapper {
     public func unsubscribeUserEvents(){
         if let mqtt = mqtt {
             let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/User/" + isometrikId
+            //LogManager.shared.logMQTT("Unsubscribing to user events with topic: \(channel)", type: .info)
             mqtt.unsubscribe(channel)
         }
-    }
-    
-
-    /// Subscripbe messaging channel.
-    /// - Parameter completion:  completionHandler for response data.
-    public func subscribeMessaging() {
-//        if let mqtt = mqtt {
-//            let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/Message/" + clientId
-//            mqtt.subscribe(channel, qos: .qos0)
-//        }
-    }
-    
-    /// Subscribe messaging channel.
-    /// - Parameter completion:  completionHandler for response data.
-    public func unsubscribeMessaging() {
-//        if let mqtt = mqtt {
-//            let channel = "/" + configuration.accountId + "/" + configuration.projectId + "/Message/" + clientId
-//            mqtt.unsubscribe(channel)
-//        }
     }
 
     /// subscribe presence events channel.

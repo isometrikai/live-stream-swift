@@ -13,7 +13,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest(endPoint: GiftRouter.sendGiftToStreamer , requestBody: giftBody)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMGiftResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMGiftResponseModel, ISMLiveAPIError> ) in
             
             switch result {
             case .success(let giftResponse, _) :
@@ -33,7 +33,7 @@ extension IsometrikStream {
         
         let request = ISMLiveAPIRequest<Any>(endPoint: GiftRouter.getGiftCategories(skip: skip, limit: limit) , requestBody: nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMStreamGiftModelData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamGiftModelData, ISMLiveAPIError> ) in
             
             switch result {
             case .success(let giftResponse, _) :
@@ -53,7 +53,7 @@ extension IsometrikStream {
         
         let request = ISMLiveAPIRequest<Any>(endPoint: GiftRouter.getGiftForACategory(giftGroupId: giftGroupId, skip: skip, limit: limit) , requestBody: nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: false) { (result :ISMLiveResult<ISMStreamGiftModelData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamGiftModelData, ISMLiveAPIError> ) in
             
             switch result {
             case .success(let giftResponse, _) :

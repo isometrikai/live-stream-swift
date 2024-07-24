@@ -9,7 +9,7 @@
 import UIKit
 
 @available(iOS 15, *)
-class ScheduleStreamPopupViewController: UIViewController, AppearanceProvider {
+class ScheduleStreamPopupViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

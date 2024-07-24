@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamPinnedItemView: UIView, AppearanceProvider {
+class StreamPinnedItemView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -188,79 +188,79 @@ class StreamPinnedItemView: UIView, AppearanceProvider {
         ])
     }
     
-    func configureView(productData: StreamProductModel?, userType: StreamUserType = .viewer) {
-        
-        guard let productData else { return }
-        
-        let productName = productData.productName.unwrap
-        let productBrandName = productData.brandName.unwrap
-        let productImage = productData.images?.first?.medium ?? ""
-        let currencySymbol = productData.currencySymbol.unwrap
-        let productStoreId = productData.supplier?.id ?? ""
-        let basePrice = productData.liveStreamfinalPriceList?.basePrice ?? 0
-        let finalPrice = productData.liveStreamfinalPriceList?.finalPrice ?? 0
-        let discountedPercentage = productData.liveStreamfinalPriceList?.discountPercentage ?? 0
-        let isOutOfStock = productData.outOfStock ?? false
-        
-//        let resellerCommissionType = CommissionType(rawValue: productData.resellerCommissionType ?? 0)
-        let resellerPercentageCommission = productData.resellerPercentageCommission ?? 0.0
-        let resellerFixedCommission = productData.resellerFixedCommission ?? 0.0
-        
-        if let productImgURL = URL(string: productImage) {
-            productImageView.kf.setImage(with: productImgURL)
-        } else {
-            productImageView.image = UIImage()
-        }
-        
-        productLabel.text = productName
-        productCategoryLabel.text = productBrandName.uppercased()
-        
-        if isOutOfStock {
-            updateFlagView.isHidden = false
-            updateFlagView.setTitle("out of stock".uppercased(), for: .normal)
-            updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
-        } else {
-            if discountedPercentage == 0 {
-                updateFlagView.isHidden = true
-                updateFlagView.setTitle("", for: .normal)
-                updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
-                priceInfoLabel.text = "\(basePrice) \(currencySymbol)"
-            } else {
-                updateFlagView.isHidden = false
-                updateFlagView.setTitle("\(discountedPercentage)% OFF", for: .normal)
-                updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
-                priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(finalPrice), orginalPrice: basePrice, discount: discountedPercentage)
-            }
-        }
-        
-        // Managing commision flag
-        switch userType {
-        case .host:
-            
-            // if product do not belong to streamer's store, no need to show commission, return
-//            if productStoreId == Utility.getCurrentStoreId() {
-//                return
-//            }
-            
-//            commissionFlag.isHidden = false
-//            var earnings = 0.0
-//            if resellerCommissionType == .percentage {
-//                earnings = (finalPrice * (Double(resellerPercentageCommission) / 100.0))
+//    func configureView(productData: StreamProductModel?, userType: StreamUserType = .viewer) {
+//        
+//        guard let productData else { return }
+//        
+//        let productName = productData.productName.unwrap
+//        let productBrandName = productData.brandName.unwrap
+//        let productImage = productData.images?.first?.medium ?? ""
+//        let currencySymbol = productData.currencySymbol.unwrap
+//        let productStoreId = productData.supplier?.id ?? ""
+//        let basePrice = productData.liveStreamfinalPriceList?.basePrice ?? 0
+//        let finalPrice = productData.liveStreamfinalPriceList?.finalPrice ?? 0
+//        let discountedPercentage = productData.liveStreamfinalPriceList?.discountPercentage ?? 0
+//        let isOutOfStock = productData.outOfStock ?? false
+//        
+////        let resellerCommissionType = CommissionType(rawValue: productData.resellerCommissionType ?? 0)
+//        let resellerPercentageCommission = productData.resellerPercentageCommission ?? 0.0
+//        let resellerFixedCommission = productData.resellerFixedCommission ?? 0.0
+//        
+//        if let productImgURL = URL(string: productImage) {
+//            productImageView.kf.setImage(with: productImgURL)
+//        } else {
+//            productImageView.image = UIImage()
+//        }
+//        
+//        productLabel.text = productName
+//        productCategoryLabel.text = productBrandName.uppercased()
+//        
+//        if isOutOfStock {
+//            updateFlagView.isHidden = false
+//            updateFlagView.setTitle("out of stock".uppercased(), for: .normal)
+//            updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
+//        } else {
+//            if discountedPercentage == 0 {
+//                updateFlagView.isHidden = true
+//                updateFlagView.setTitle("", for: .normal)
+//                updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
+//                priceInfoLabel.text = "\(basePrice) \(currencySymbol)"
 //            } else {
-//                earnings = resellerFixedCommission
+//                updateFlagView.isHidden = false
+//                updateFlagView.setTitle("\(discountedPercentage)% OFF", for: .normal)
+//                updateFlagView.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
+//                priceInfoLabel.attributedText = priceAttributedTitle(symbol: currencySymbol, price: Double(finalPrice), orginalPrice: basePrice, discount: discountedPercentage)
 //            }
+//        }
+//        
+//        // Managing commision flag
+//        switch userType {
+//        case .host:
 //            
-//            if earnings != 0 {
-//                commissionFlag.setAttributedTitle(earningAttributedText(earning: earnings, currencySymbol: currencySymbol), for: .normal)
-//            } else {
-//                commissionFlag.isHidden = true
-//            }
-            break
-        default:
-            commissionFlag.isHidden = true
-        }
-        
-    }
+//            // if product do not belong to streamer's store, no need to show commission, return
+////            if productStoreId == Utility.getCurrentStoreId() {
+////                return
+////            }
+//            
+////            commissionFlag.isHidden = false
+////            var earnings = 0.0
+////            if resellerCommissionType == .percentage {
+////                earnings = (finalPrice * (Double(resellerPercentageCommission) / 100.0))
+////            } else {
+////                earnings = resellerFixedCommission
+////            }
+////            
+////            if earnings != 0 {
+////                commissionFlag.setAttributedTitle(earningAttributedText(earning: earnings, currencySymbol: currencySymbol), for: .normal)
+////            } else {
+////                commissionFlag.isHidden = true
+////            }
+//            break
+//        default:
+//            commissionFlag.isHidden = true
+//        }
+//        
+//    }
     
     func priceAttributedTitle(symbol: String, price: Double , orginalPrice: Double, discount: Double) -> NSAttributedString {
         

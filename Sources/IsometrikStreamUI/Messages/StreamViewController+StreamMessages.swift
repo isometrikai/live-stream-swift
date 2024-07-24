@@ -17,15 +17,8 @@ extension StreamViewController {
     
     func sendMessage(messageText: String, messageOfType: ISMStreamMessageType = .text) {
         
-        guard let isometrik = viewModel.isometrik,
-              let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
-              !messageText.isEmpty
+        guard !messageText.isEmpty
         else { return }
-        
-        // no action if guest user
-        let isGuestUser = (isometrik.getUserSession().getUserType() == .guest)
-        if isGuestUser { return }
         
         let messageType = Int64(messageOfType.rawValue)
         
@@ -91,12 +84,12 @@ extension StreamViewController {
             
             // refresh the pinned item details for updates like, stock count
             
-            guard let productViewModel = viewModel.streamProductViewModel,
-                  let pinnedProductData = productViewModel.pinnedProductData
-            else { return }
-            
-            let pinnedProductId = pinnedProductData.childProductID ?? ""
-            self.fetchPinnedProductDetails(pinnedProductId: pinnedProductId)
+//            guard let productViewModel = viewModel.streamProductViewModel,
+//                  let pinnedProductData = productViewModel.pinnedProductData
+//            else { return }
+//            
+//            let pinnedProductId = pinnedProductData.childProductID ?? ""
+            //self.fetchPinnedProductDetails(pinnedProductId: pinnedProductId)
             
             //:
             
@@ -146,13 +139,14 @@ extension StreamViewController {
             print("Pinned Product Message \(message)")
             // fetch the product data and set the pinned product
             let pinnedProductId = message.metaData?.pinProductId ?? ""
-            self.fetchPinnedProductDetails(pinnedProductId: pinnedProductId)
+            //self.fetchPinnedProductDetails(pinnedProductId: pinnedProductId)
             
             break
         case .giftMessage:
             self.handleGiftMessages(messageData: message)
             break
         case .giftMessage_3D:
+            self.handle3DGiftMessages(messageData: message)
             break
         default:
             break

@@ -12,7 +12,7 @@ import AVFoundation
 import Kingfisher
 import IsometrikStream
 
-class StreamAnimationPopupView: UIView, AppearanceProvider {
+class StreamAnimationPopupView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -128,7 +128,7 @@ class StreamAnimationPopupView: UIView, AppearanceProvider {
         
         // play confetti animation
         var animationView: LottieAnimationView?
-        animationView = .init(name: "confetti-animation")
+        animationView = .init(filePath: appearance.json.successAnimation)
         animationView?.frame = confettiAnimationView.bounds
         animationView?.contentMode = .scaleAspectFit
         animationView?.loopMode = .loop
@@ -141,7 +141,9 @@ class StreamAnimationPopupView: UIView, AppearanceProvider {
     }
     
     func playSound() {
-        guard let url = Bundle.main.url(forResource: "success-chime", withExtension: "mp3") else { return }
+        
+        let successChimePath = appearance.sounds.successChime
+        guard let url = URL(string: successChimePath) else { return }
 
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)

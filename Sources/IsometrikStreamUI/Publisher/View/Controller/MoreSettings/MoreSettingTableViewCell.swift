@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoreSettingTableViewCell: UITableViewCell, AppearanceProvider {
+class MoreSettingTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

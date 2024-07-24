@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import IsometrikStream
 
-class StreamGiftGroupCell: UICollectionViewCell, AppearanceProvider {
+class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

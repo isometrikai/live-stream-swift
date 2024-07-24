@@ -45,8 +45,9 @@ extension StreamViewController {
     
     func startTimer() {
         
-        guard let streamsData = viewModel.streamsData,
-              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
+        let streamsData = viewModel.streamsData
+        
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         viewModel.hours = 0
@@ -76,8 +77,7 @@ extension StreamViewController {
     
     func showJobTimerValues() -> String {
         
-        guard let isometrik = viewModel.isometrik
-        else { return "" }
+        let isometrik = viewModel.isometrik
         
         var hoursValue          = ""
         var minutesValue        = ""
@@ -115,8 +115,7 @@ extension StreamViewController {
     
     @objc func showTimer() {
         
-        guard let isometrik = viewModel.isometrik
-        else { return }
+        let isometrik = viewModel.isometrik
         
         viewModel.seconds += 1
         viewModel.totalSeconds += 1

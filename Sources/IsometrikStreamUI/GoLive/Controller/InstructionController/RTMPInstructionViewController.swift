@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RTMPInstructionViewController: UIViewController, AppearanceProvider {
+class RTMPInstructionViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     

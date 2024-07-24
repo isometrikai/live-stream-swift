@@ -141,7 +141,7 @@ extension IsometrikStream {
     
     /// Live streams
     /// - Parameter completionHandler: completionHandler: completionHandler for response data.
-    public func fetchStreams(limit: Int = 10 , skip: Int = 0, streamType: String = "1", streamStatus: StreamStatus = .considerAll, streamId: String? = nil, showLoader: Bool = true, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+    public func fetchStreams(limit: Int = 10 , skip: Int = 0, streamType: String = "1", streamStatus: StreamStatus = .considerAll, streamId: String? = nil, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
         
         let streamQueryParam = StreamQuery(
             limit: limit,
@@ -153,7 +153,7 @@ extension IsometrikStream {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.fetchStreams(streamQuery: streamQueryParam) , requestBody:nil)
         
-        ISMLiveAPIManager.sendRequest(request: request, showLoader: showLoader) { (result :ISMLiveResult<ISMStreamsData, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamsData, ISMLiveAPIError> ) in
             switch result {
             case .success(let streamResponse, _) :
                 DispatchQueue.main.async {
@@ -260,5 +260,70 @@ extension IsometrikStream {
         }
 
    }
+    
+    public func getPresignedUrl(streamTitle: String, mediaExtension: String, completionHandler: @escaping (ISMPresignedUrlResponse)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.getPresignedUrl(streamTitle: streamTitle, mediaExtension: mediaExtension) , requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMPresignedUrlResponse, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
+    public func getStreamAnalytics(streamId: String, completionHandler: @escaping (StreamAnalyticsResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.getStreamAnalytics(streamId: streamId), requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<StreamAnalyticsResponseModel, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
+    
+    
+    public func buyPaidStream(streamId: String, completionHandler: @escaping (ISMPaidStreamResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let bodyData = PaidStreamBody(streamId: streamId)
+        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.buyPaidStream, requestBody: bodyData)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMPaidStreamResponseModel, ISMLiveAPIError> ) in
+            
+            switch result{
+            case .success(let response, _) :
+                DispatchQueue.main.async {
+                    completionHandler(response)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+            }
+        }
+        
+    }
     
 }

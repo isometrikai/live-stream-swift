@@ -13,7 +13,7 @@ protocol GoLiveFooterActionDelegate {
     func didGoLiveStreamTypeActionTapped(with actionType: GoLiveStreamType)
 }
 
-class NewGoLiveFooterView: UIView, AppearanceProvider {
+class GoLiveFooterView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -117,9 +117,6 @@ class NewGoLiveFooterView: UIView, AppearanceProvider {
         addSubview(bottomActionView)
         
         bottomActionView.addSubview(bottomActionStack)
-        bottomActionStack.addArrangedSubview(guestLiveButton)
-        bottomActionStack.addArrangedSubview(liveFromDeviceButton)
-        
         bottomActionView.addSubview(dividerView)
     }
     
@@ -206,7 +203,7 @@ class NewGoLiveFooterView: UIView, AppearanceProvider {
     }
 }
 
-class CustomToggleButton: UIView, AppearanceProvider {
+class CustomToggleButton: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     

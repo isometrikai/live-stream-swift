@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StreamStatusView: UIView, AppearanceProvider {
+class StreamStatusView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -160,7 +160,7 @@ class StreamStatusView: UIView, AppearanceProvider {
     lazy var paidStreamButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "profile_coin"), for: .normal)
+        button.setImage(appearance.images.coin, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h7)
         button.ismTapFeedBack()

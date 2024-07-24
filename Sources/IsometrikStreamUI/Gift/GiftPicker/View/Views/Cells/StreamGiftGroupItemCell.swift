@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamGiftGroupItemCell: UICollectionViewCell, AppearanceProvider {
+class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
