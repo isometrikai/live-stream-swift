@@ -11,7 +11,8 @@ extension BuyCoinsViewController: UICollectionViewDelegate, UICollectionViewData
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CoinPlanCollectionViewCell", for: indexPath) as! CoinPlanCollectionViewCell
         let coinPlan = viewModel.coinPlans[indexPath.row]
-        cell.configureCell(data: coinPlan)
+        let skProduct = viewModel.skProducts[indexPath.row]
+        cell.configureCell(data: coinPlan, skProduct: skProduct)
         cell.backgroundColor = .clear
         return cell
     }
@@ -45,15 +46,15 @@ extension BuyCoinsViewController {
         
         let skProduct = viewModel.skProducts[indexPath.row]
         
-        // show loader
         IAPManager.shared.buy(product: skProduct, withHandler: { (result) in
-            // hide loader
             switch result {
             case .success:
                 DispatchQueue.main.async {
                     self.viewModel.purchasePlan { success, error in
                         if success {
-                            
+                            // refresh to get coin wallet data
+                            self.setupWalletBalance(currencyType: .coin)
+                            self.setupWalletBalance(currencyType: .money)
                         } else {
                             // show error
                             guard let error else { return }

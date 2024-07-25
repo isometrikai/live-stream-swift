@@ -7,6 +7,7 @@
 
 import UIKit
 import IsometrikStream
+import StoreKit
 
 class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
     
@@ -86,13 +87,13 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
         ])
     }
     
-    func configureCell(data: CoinPlan?){
+    func configureCell(data: CoinPlan?, skProduct: SKProduct?){
         
-        guard let data else { return }
+        guard let data, let skProduct else { return }
         
         let numberOfUnits = data.numberOfUnits ?? 0
         let baseCurrencyValue = data.baseCurrencyValue ?? 0
-        let baseCurrencySymbol = data.baseCurrencySymbol ?? ""
+        let baseCurrencySymbol = skProduct.priceLocale.currencySymbol ?? "$"
         
         coinLabel.text = "\(numberOfUnits) Coins"
         coinImage.image = appearance.images.goldPile2

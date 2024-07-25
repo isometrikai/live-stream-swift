@@ -45,7 +45,7 @@ public struct ISMLiveAPIRequest<R> {
 
 public struct ISMLiveAPIManager {
     
-    public static func sendRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
+    public static func sendRequest<T: Decodable, R:Any>(request: ISMLiveAPIRequest<R>, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
         
         let endpoint = "\(request.endPoint.baseURL)\(request.endPoint.path)"
         let endpointMethod = "\(request.endPoint.method)".uppercased()

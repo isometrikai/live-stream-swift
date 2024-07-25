@@ -113,7 +113,7 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let obscureTransactionId = obscureString(data.transactionId.unwrap)
         transactionId.text = "TransactionId: \(obscureTransactionId)"
         
-        let abbreviatedAmount = Int64(data.amount.unwrap).ism_roundedWithAbbreviations
+        let abbreviatedAmount = Double(data.amount.unwrap).formattedWithSuffix(fractionDigits: 2)
         coinAmount.setTitle("  \(abbreviatedAmount)", for: .normal)
         
         let timeStampInSec = TimeInterval(Double(data.txnTimeStamp.unwrap) / 1000)

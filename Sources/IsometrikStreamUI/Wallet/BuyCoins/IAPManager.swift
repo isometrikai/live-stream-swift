@@ -1,5 +1,6 @@
 import Foundation
 import StoreKit
+import IsometrikStream
 
 final public class IAPManager: NSObject {
     
@@ -111,7 +112,6 @@ extension IAPManager: SKPaymentTransactionObserver {
                 break
             case .failed:
                 if let error = transaction.error as? SKError {
-                    
                     if error.code != .paymentCancelled {
                         onBuyProductHandler?(.failure(error))
                     } else {
@@ -120,7 +120,10 @@ extension IAPManager: SKPaymentTransactionObserver {
                 }
                 SKPaymentQueue.default().finishTransaction(transaction)
                 break
-            case .deferred, .purchasing: break
+            case .purchasing:
+                print("PURCHASING........")
+                break
+            case .deferred: break
             @unknown default: break
             }
         }

@@ -188,3 +188,28 @@ public extension RoundedWithAbbreviations {
 extension Int: RoundedWithAbbreviations {}
 extension Int64: RoundedWithAbbreviations {}
 
+
+extension Double {
+    
+    public func formattedWithSuffix(fractionDigits: Int = 3) -> String {
+        let thousand = 1000.0
+        let million = thousand * thousand
+        let billion = million * thousand
+        
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = fractionDigits
+        formatter.minimumFractionDigits = fractionDigits
+        
+        if self >= billion {
+            return formatter.string(from: NSNumber(value: self / billion))! + "B"
+        } else if self >= million {
+            return formatter.string(from: NSNumber(value: self / million))! + "M"
+        } else if self >= thousand {
+            return formatter.string(from: NSNumber(value: self / thousand))! + "K"
+        } else {
+            formatter.maximumFractionDigits = 0
+            return formatter.string(from: NSNumber(value: self))!
+        }
+    }
+    
+}

@@ -37,7 +37,9 @@ final public class BuyCoinsViewModel {
     }
     
     func getCoinPlans(completion: @escaping(_ success: Bool, _ error: String?) -> Void){
-        
+        DispatchQueue.main.async {
+            CustomLoader.shared.startLoading()
+        }
         isometrik.getIsometrik().getCurrencyPlans { response in
             
             self.coinPlansData = response
@@ -47,9 +49,10 @@ final public class BuyCoinsViewModel {
             }
             
             IAPManager.shared.getPlansFromApple(productIds: productIdsString ?? [String]()) { result, success, errorString in
+                CustomLoader.shared.stopLoading()
                 if success {
                     DispatchQueue.main.async {
-                        self.skProducts = result
+                        //self.skProducts = result
                         self.setCoinPlansPerProduct(products: result)
                         completion(true, nil)
                     }
@@ -62,6 +65,7 @@ final public class BuyCoinsViewModel {
             }
             
         } failure: { error in
+            CustomLoader.shared.stopLoading()
             DispatchQueue.main.async {
                 completion(false, error.localizedDescription)
             }
@@ -95,7 +99,6 @@ final public class BuyCoinsViewModel {
                 completion(false, error.localizedDescription)
             }
         }
-
         
         
     }
@@ -104,12 +107,30 @@ final public class BuyCoinsViewModel {
         
         guard let products else { return }
         
-        products.forEach { product in
-            if let coinPlan = self.coinPlansData?.data?.filter({ $0.appStoreProductIdentifier == product.productIdentifier}) {
-                self.coinPlans.append(contentsOf: coinPlan)
+        // Sort products by price from lowest to highest
+        var seenIdentifiers = Set<String>()
+        var seenCoinPlanIdentifiers = Set<String>()
+        
+        let sortedUniqueProducts = products
+            .filter { seenIdentifiers.insert($0.productIdentifier).inserted }
+            .sorted { $0.price.compare($1.price) == .orderedAscending }
+        
+        sortedUniqueProducts.forEach { product in
+            
+            if let coinPlans = self.coinPlansData?.data?.filter({
+                $0.appStoreProductIdentifier == product.productIdentifier
+            }) {
+                // Append unique coin plans
+                coinPlans.forEach { coinPlan in
+                    let coinPlanIdentifier = coinPlan.appStoreProductIdentifier ?? ""
+                    if seenCoinPlanIdentifiers.insert(coinPlanIdentifier).inserted {
+                        self.coinPlans.append(coinPlan)
+                    }
+                }
                 self.skProducts.append(product)
             }
         }
+        
     }
     
 }

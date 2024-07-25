@@ -116,16 +116,14 @@ public final class BuyCoinsViewController: UIViewController, ISMAppearanceProvid
     }
     
     func getPlans(){
-        CustomLoader.shared.startLoading()
         viewModel.getCoinPlans { success, error in
-            CustomLoader.shared.stopLoading()
             if success {
                 self.coinPlanCollectionView.reloadData()
                 self.setupWalletBalance(currencyType: .coin)
                 self.setupWalletBalance(currencyType: .money)
             } else {
                 guard let error else { return }
-                print(error)
+                self.ism_showAlert("Error", message: error)
             }
         }
     }
