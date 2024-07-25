@@ -197,19 +197,29 @@ extension Double {
         let billion = million * thousand
         
         let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = fractionDigits
-        formatter.minimumFractionDigits = fractionDigits
+        
+        var value: Double
+        var suffix: String
         
         if self >= billion {
-            return formatter.string(from: NSNumber(value: self / billion))! + "B"
+            value = self / billion
+            suffix = "B"
         } else if self >= million {
-            return formatter.string(from: NSNumber(value: self / million))! + "M"
-        } else if self >= thousand {
-            return formatter.string(from: NSNumber(value: self / thousand))! + "K"
+            value = self / million
+            suffix = "M"
+        } else if self >= 10 * thousand {
+            value = self / thousand
+            suffix = "K"
         } else {
-            formatter.maximumFractionDigits = 0
-            return formatter.string(from: NSNumber(value: self))!
+            value = self
+            suffix = ""
         }
+        
+        // Format the value with the appropriate number of fraction digits
+        let formattedValue = formatter.string(from: NSNumber(value: value)) ?? String(value)
+        return formattedValue + suffix
     }
     
 }

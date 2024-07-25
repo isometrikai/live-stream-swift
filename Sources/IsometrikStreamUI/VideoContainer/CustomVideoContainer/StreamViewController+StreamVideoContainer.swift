@@ -56,6 +56,7 @@ extension StreamViewController: RtcWrapperProtocol {
                 // session not exist
                 isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSession(of:memberuid, isLocal ? .local : .remote).userData = $0
             }
+            
         }
         updateVideoSessionLayout()
         
@@ -81,6 +82,16 @@ extension StreamViewController: RtcWrapperProtocol {
         visibleCell.streamContainer.videoContainer.refreshPKView()
         
         //visibleCell.mainDataContainerView.animatedGiftView.videoDidEnd()
+        
+        // remove the thumbnail if more that one member or sessions
+        if videoContainer.videoSessions.count > 1 {
+            visibleCell.streamThumbnailImage.image = UIImage()
+        } else {
+            if let streamImageUrl = URL(string: streamData.streamImage.unwrap) {
+                visibleCell.streamThumbnailImage.kf.setImage(with: streamImageUrl)
+            }
+        }
+        
         
     }
     

@@ -21,8 +21,8 @@ class ProfileFeatureView: UIView, ISMAppearanceProvider {
         return stackView
     }()
     
-    lazy var followersView: customFeatureView = {
-        let view = customFeatureView()
+    lazy var followersView: CustomFeatureView = {
+        let view = CustomFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.iconImageView.image = appearance.images.user
         view.featureLabel.text = "--"
@@ -32,8 +32,8 @@ class ProfileFeatureView: UIView, ISMAppearanceProvider {
         return view
     }()
     
-    lazy var coinView: customFeatureView = {
-        let view = customFeatureView()
+    lazy var coinView: CustomFeatureView = {
+        let view = CustomFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.iconImageView.image = UIImage(named: "starYello")?.withRenderingMode(.alwaysTemplate)
         view.iconImageView.tintColor = UIColor.colorWithHex(color: "#FAB417")

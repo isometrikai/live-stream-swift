@@ -21,6 +21,9 @@ class StreamMemberViewModel {
     var skip: Int = 0
     var limit: Int = 20
     
+    var updateMemebrsCallBack : (([ISMMember])->())?
+    var delegate: StreamMemberListActionDelegate?
+    
     init(isometrik: IsometrikSDK, streamData: ISMStream) {
         self.isometrik = isometrik
         self.streamData = streamData

@@ -36,6 +36,10 @@ extension VerticalStreamCollectionViewCell {
         delegate?.didTapProductDetails()
     }
     
+    @objc func streamMembersTapped(){
+        delegate?.didTapStreamMembersView()
+    }
+    
     // MARK: - Stream Container Footer Actions
     
     @objc func messageTextViewEmojiButtonTapped(){

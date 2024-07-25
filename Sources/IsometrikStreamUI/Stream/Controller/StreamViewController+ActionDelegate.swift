@@ -385,19 +385,12 @@ extension StreamViewController: StreamCellActionDelegate {
               let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
-        // no action if guest user
-        let isGuestUser = (isometrik.getUserSession().getUserType() == .guest)
-//        if isGuestUser {
-//            _ = Helper.LoginPresenter()
+        let userType = viewModel.streamUserType
+//        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
+//        
+//        if streamStatus == .scheduled {
 //            return
 //        }
-        
-        let userType = viewModel.streamUserType
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
-        
-        if streamStatus == .scheduled {
-            return
-        }
         
         let controller = StreamViewerChildViewController()
         
@@ -428,6 +421,40 @@ extension StreamViewController: StreamCellActionDelegate {
         }
         
         present(controller, animated: true, completion: nil)
+    }
+    
+    func didTapStreamMembersView() {
+        
+        guard let streamData = viewModel.streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
+        let isometrik = viewModel.isometrik
+        
+        let streamMemberViewModel = StreamMemberViewModel(isometrik: isometrik, streamData: streamData)
+//        streamMemberViewModel.updateMemebrsCallBack = { [weak self] members in
+//            
+//        }
+        
+        let controller = StreamMembersViewController(viewModel: streamMemberViewModel)
+        
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.6  // 60% of the screen height
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
+        
+        present(controller, animated: true, completion: nil)
+        
     }
     
     func didTapLiveStatusView() {

@@ -170,6 +170,9 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         let initialText = "\(firstName?.prefix(1) ?? "U")\(lastName?.prefix(1) ?? "n")".uppercased()
         headerView.profileView.defaultProfileView.initialsText.text = initialText
         
+        // set stream members count view
+        streamStatusView.memberFeatureView.featureLabel.text = "\(viewModel.streamMembers.count)"
+        
     }
     
     func updateLiveConnectionStatus(connectionStatus: Bool){

@@ -1,17 +1,10 @@
-//
-//  CustomFeatureView.swift
-//  Shopr
-//
-//  Created by Dheeraj Kumar Sharma on 03/11/23.
-//  Copyright © 2023 Rahul Sharma. All rights reserved.
-//
 
 import UIKit
 
-class customFeatureView: UIView, ISMAppearanceProvider {
+class CustomFeatureView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
-    
+        
     let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +16,7 @@ class customFeatureView: UIView, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "--"
         label.textColor = .black
-        label.font = appearance.font.getFont(forTypo: .h5)
+        label.font = appearance.font.getFont(forTypo: .h8)
         return label
     }()
     
@@ -54,7 +47,7 @@ class customFeatureView: UIView, ISMAppearanceProvider {
     }
     
     func setupConstraints(){
-        actionButton.ism_pin(to: self)
+        actionButton.pin(to: self)
         NSLayoutConstraint.activate([
             iconImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),

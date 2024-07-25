@@ -13,6 +13,7 @@ protocol StreamCellActionDelegate {
     
     func didTapStreamClose(withIndex index: Int)
     func didTapViewerCountView()
+    func didTapStreamMembersView()
     func didTapLiveStatusView()
     func didTapSellerProfileView()
     func didTapFollowButton()
@@ -48,6 +49,7 @@ extension StreamCellActionDelegate {
     
     func didTapStreamClose(withIndex index: Int) {}
     func didTapViewerCountView() {}
+    func didTapStreamMembersView() {}
     func didTapLiveStatusView() {}
     func didTapSellerProfileView() {}
     func didTapFollowButton() {}

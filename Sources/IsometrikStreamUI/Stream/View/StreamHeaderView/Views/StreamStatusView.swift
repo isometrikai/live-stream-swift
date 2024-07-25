@@ -41,35 +41,15 @@ class StreamStatusView: UIView, ISMAppearanceProvider {
         return label
     }()
     
-    let memberCountView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.isHidden = true
-        return view
-    }()
-    
-    lazy var memberIconImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = appearance.images.user.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = .white
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
-    lazy var memberCountLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        label.font = appearance.font.getFont(forTypo: .h8)
-        return label
-    }()
-    
-    let memberCountButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    lazy var memberFeatureView: CustomFeatureView = {
+        let featureView = CustomFeatureView()
+        featureView.translatesAutoresizingMaskIntoConstraints = false
+        featureView.iconImageView.image = appearance.images.user.withRenderingMode(.alwaysTemplate)
+        featureView.iconImageView.tintColor = .white
+        featureView.featureLabel.textColor = .white
+        featureView.backgroundColor = .black.withAlphaComponent(0.4)
+        featureView.layer.cornerRadius = 12.5
+        return featureView
     }()
     
     // MARK: - Linked product view
@@ -89,7 +69,7 @@ class StreamStatusView: UIView, ISMAppearanceProvider {
     let shoppingBagIconImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "ism_ic_shopping_bag")?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage()
         imageView.tintColor = .white
         return imageView
     }()
@@ -204,11 +184,7 @@ class StreamStatusView: UIView, ISMAppearanceProvider {
         
         stackView.addArrangedSubview(liveButton)
         stackView.addArrangedSubview(timeLabel)
-        
-//        stackView.addArrangedSubview(memberCountView)
-//        memberCountView.addSubview(memberIconImage)
-//        memberCountView.addSubview(memberCountLabel)
-//        memberCountView.addSubview(memberCountButton)
+        stackView.addArrangedSubview(memberFeatureView)
         
         //stackView.addArrangedSubview(hourlyRankingButton)
         
@@ -225,7 +201,6 @@ class StreamStatusView: UIView, ISMAppearanceProvider {
     }
     
     func setupConstraints(){
-        //memberCountButton.ism_pin(to: memberCountView)
         //linkedProductButton.ism_pin(to: linkedProductsView)
         
         NSLayoutConstraint.activate([
@@ -235,15 +210,6 @@ class StreamStatusView: UIView, ISMAppearanceProvider {
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             liveButton.heightAnchor.constraint(equalToConstant: 18),
-            
-//            memberIconImage.leadingAnchor.constraint(equalTo: memberCountView.leadingAnchor, constant: 5),
-//            memberIconImage.widthAnchor.constraint(equalToConstant: 15),
-//            memberIconImage.heightAnchor.constraint(equalToConstant: 15),
-//            memberIconImage.centerYAnchor.constraint(equalTo: memberCountView.centerYAnchor),
-//
-//            memberCountLabel.leadingAnchor.constraint(equalTo: memberIconImage.trailingAnchor, constant: 5),
-//            memberCountLabel.trailingAnchor.constraint(equalTo: memberCountView.trailingAnchor, constant: -5),
-//            memberCountLabel.centerYAnchor.constraint(equalTo: memberCountView.centerYAnchor),
             
 //            hourlyRankingButton.leadingAnchor.constraint(equalTo: memberCountLabel.trailingAnchor, constant: 8),
 //            hourlyRankingButton.heightAnchor.constraint(equalToConstant: 25),
@@ -267,7 +233,8 @@ class StreamStatusView: UIView, ISMAppearanceProvider {
 //            paidStreamButton.heightAnchor.constraint(equalToConstant: 30),
             
             moderatorButton.heightAnchor.constraint(equalToConstant: 25),
-            moderatorButton.widthAnchor.constraint(equalToConstant: 35)
+            moderatorButton.widthAnchor.constraint(equalToConstant: 35),
+            memberFeatureView.heightAnchor.constraint(equalToConstant: 25)
             
         ])
     }
