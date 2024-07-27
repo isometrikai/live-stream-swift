@@ -208,6 +208,24 @@ extension StreamViewController {
         
     }
     
+    func reloadDataWithoutChangingScrollPosition(){
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
+        else { return }
+        
+        let messageTableView = visibleCell.streamContainer.streamMessageView.messageTableView
+        let distanceFromOffset = messageTableView.contentSize.height - messageTableView.contentOffset.y
+        
+        messageTableView.reloadData() // reload tableView
+        
+        // Calculate new content offset after reload tableView
+        let offset = messageTableView.contentSize.height - distanceFromOffset
+        
+        messageTableView.layoutIfNeeded()
+        
+        // set new content offset for the tableview without animation
+        messageTableView.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
+    }
+    
     func addStreamInfoMessage(message: ISMComment) {
         
         guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }

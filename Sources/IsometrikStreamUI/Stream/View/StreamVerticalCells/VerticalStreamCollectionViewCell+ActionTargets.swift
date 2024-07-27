@@ -92,4 +92,8 @@ extension VerticalStreamCollectionViewCell: StreamCellActionDelegate {
         delegate?.StopPKBattleAsTimerFinishes()
     }
     
+    func loadMoreMessages() {
+        delegate?.loadMoreMessages()
+    }
+    
 }

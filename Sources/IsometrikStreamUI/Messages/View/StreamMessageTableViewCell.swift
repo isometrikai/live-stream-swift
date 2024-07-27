@@ -216,7 +216,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         //:
         
         if messageType == .productBought {
-            backgroundMessageView.backgroundColor = UIColor.colorWithHex(color: "#5FCF4C").withAlphaComponent(0.5)
+            backgroundMessageView.backgroundColor = appearance.colors.appColor.withAlphaComponent(0.5)
         } else {
             backgroundMessageView.backgroundColor = .black.withAlphaComponent(0.2)
         }
@@ -239,7 +239,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
             NSAttributedString(
                 string: message,
                 attributes: [
-                    NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7)!,
+                    NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)!,
                     NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.8)
                 ]
             )

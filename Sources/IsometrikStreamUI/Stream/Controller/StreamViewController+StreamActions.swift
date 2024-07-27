@@ -136,7 +136,6 @@ extension StreamViewController {
         // fetching stream messages
         viewModel.fetchStreamMessages() { error in
             if error == nil {
-                print("MESSAGE COUNT \(self.viewModel.streamMessageViewModel?.messages.count)")
                 streamMessageView.viewModel = self.viewModel.streamMessageViewModel
                 streamMessageView.messageTableView.reloadData()
                 self.setHeightForMessages()

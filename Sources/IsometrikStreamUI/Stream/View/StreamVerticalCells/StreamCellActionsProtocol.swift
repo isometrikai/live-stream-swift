@@ -39,6 +39,8 @@ protocol StreamCellActionDelegate {
     
     func startPKBattle()
     func toggleHostInPKBattle()
+    
+    func loadMoreMessages()
 }
 
 /**
@@ -61,11 +63,14 @@ extension StreamCellActionDelegate {
 
     
     func didTapStreamOptions(with option: StreamOption.RawValue) {}
+    
     func didMessageScrolled(withStatus: ScrollStatus) {}
+    func loadMoreMessages(){}
     
     func didKeyboardDismissed(){}
     func didModeratorTapped(){}
     func didCartButtonTapped(){}
     func didStartScheduledStream(){}
+    
     
 }

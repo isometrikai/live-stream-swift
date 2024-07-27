@@ -25,12 +25,10 @@ enum ISMStreamMessageType: Int {
 
 class StreamMessageViewModel: NSObject {
     
-    var messagePageToken: String = ""
     var streamInfo: ISMStream?
     var isometrik: IsometrikSDK?
     var messages: [ISMComment] = []
     var giftMessages: [ISMComment] = []
-    var wasLastMessagePage: Bool = false
     var streamUserType: StreamUserType = .viewer
     var skip = 0
     var limit = 10
@@ -47,40 +45,31 @@ class StreamMessageViewModel: NSObject {
             return
         }
         
-        //let userId = isometrik.getUserSession().getUserId()
-        
-        if !wasLastMessagePage {
+        isometrik.getIsometrik().fetchMessages(streamId: streamInfo.streamId.unwrap, skip: skip, limit: limit) { messagesData in
             
-            isometrik.getIsometrik().fetchMessages(streamId: streamInfo.streamId.unwrap, skip: skip, limit: limit) { messagesData in
-                
-                debugPrint("MESSAGE LOG :: MessageToken: \(messagesData.pageToken ?? "")\n MessagesCount \(messagesData.message?.count ?? 0)")
-                
-                // get messages and reverse it
-                let reversedMessages = messagesData.messageInfo.reversed()
-                
-                // append messages
-                if self.messages.isEmpty {
-                    // append them directly
-                    self.messages.append(contentsOf: reversedMessages)
-                } else {
-                    // insert them to top of an array
-                    self.messages.insert(contentsOf: reversedMessages, at: 0)
-                }
-                
-                if self.messages.count.isMultiple(of: self.limit) {
-                    self.skip += self.limit
-                    self.wasLastMessagePage = false
-                } else {
-                    self.wasLastMessagePage = true
-                }
-                
-                completionHandler(nil)
-                
-            } failure: { error in
-                let isometrikError = IsometrikError(errorMessage: "not able to fetch messages!")
-                completionHandler(isometrikError)
+            debugPrint("MESSAGE LOG :: MessageToken: \(messagesData.pageToken ?? "")\n MessagesCount \(messagesData.message?.count ?? 0)")
+            
+            // get messages and reverse it
+            let reversedMessages = messagesData.messageInfo.reversed()
+            
+            // append messages
+            if self.messages.isEmpty {
+                // append them directly
+                self.messages.append(contentsOf: reversedMessages)
+            } else {
+                // insert them to top of an array
+                self.messages.insert(contentsOf: reversedMessages, at: 0)
             }
             
+            if self.messages.count.isMultiple(of: self.limit) {
+                self.skip += self.limit
+            }
+            
+            completionHandler(nil)
+            
+        } failure: { error in
+            let isometrikError = IsometrikError(errorMessage: "not able to fetch messages!")
+            completionHandler(isometrikError)
         }
         
     }
@@ -124,9 +113,8 @@ class StreamMessageViewModel: NSObject {
     }
     
     func resetToDefault(){
-        messagePageToken = ""
-        wasLastMessagePage = false
         messages = []
+        skip = 0
     }
     
 }

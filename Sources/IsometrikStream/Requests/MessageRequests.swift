@@ -21,7 +21,7 @@ extension IsometrikStream {
     public func fetchMessages(streamId: String, skip: Int = 0, limit: Int = 10,  completionHandler: @escaping (ISMCommentsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
         
      
-        let request =  ISMLiveAPIRequest<Any>(endPoint: MessageRouter.fetchMessages(streamId:streamId , messageParam: MessageBody(limit: limit, skip: skip)), requestBody:nil)
+        let request =  ISMLiveAPIRequest<Any>(endPoint: MessageRouter.fetchMessages(streamId:streamId , messageParam: MessageBody(messageTypes: "0", limit: limit, skip: skip)), requestBody:nil)
         
        
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMCommentsData, ISMLiveAPIError> ) in

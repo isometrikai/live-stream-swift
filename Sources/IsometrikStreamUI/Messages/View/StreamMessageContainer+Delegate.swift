@@ -72,6 +72,10 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
         
         guard let viewModel else { return }
         
+        if indexPath.row == 0 {
+            delegate?.loadMoreMessages()
+        }
+        
         if indexPath.row + 1 == viewModel.messages.count {
             // sends delegate to inform reached to bottom of tableView
             delegate?.didMessageScrolled(withStatus: .reachedBottom)

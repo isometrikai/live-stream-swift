@@ -1,91 +1,130 @@
+//import UIKit
 //
-//  CustomDefaultView.swift
-//  Yelo
+//class CustomDefaultView: UIView {
 //
-//  Created by Dheeraj Kumar Sharma on 15/09/23.
-//  Copyright © 2023 rahulSharma. All rights reserved.
+//    // MARK: - PROPERTIES
+//    
+//    let stackView: UIStackView = {
+//        let stackView = UIStackView()
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        stackView.distribution = .fillProportionally
+//        stackView.axis = .vertical
+//        return stackView
+//    }()
+//    
+//    let defaultImageView: UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        return imageView
+//    }()
+//    
+//    lazy var defaultTitleLabel: UILabel = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.text = ""
+//        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+//        label.textColor = .black
+//        label.textAlignment = .center
+//        label.numberOfLines = 0
+//        return label
+//    }()
+//    
+//    // MARK: - MAIN
+//    
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        setupViews()
+//        setupConstraints()
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    
+//    // MARK: - FUNCTIONS
+//    
+//    func setupViews(){
+//        addSubview(stackView)
+//        stackView.addArrangedSubview(defaultImageView)
+//        stackView.addArrangedSubview(defaultTitleLabel)
+//    }
+//    
+//    func setupConstraints(){
+//        NSLayoutConstraint.activate([
+//            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+//            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+//            
+//            defaultImageView.widthAnchor.constraint(equalToConstant: 70),
+//            defaultImageView.heightAnchor.constraint(equalToConstant: 70),
+//            
+//            defaultTitleLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.8),
+//            defaultTitleLabel.leadingAnchor.constraint(greaterThanOrEqualTo: stackView.leadingAnchor),
+//            defaultTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: stackView.trailingAnchor)
+//        ])
+//    }
 //
+//}
+
 
 import UIKit
 
-class CustomDefaultView: UIView, ISMAppearanceProvider {
+class CustomPlaceholderView: UIView {
 
-    // MARK: - PROPERTIES
-    
-    let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        return stackView
-    }()
-    
-    let defaultImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 50
-        imageView.backgroundColor = .lightGray.withAlphaComponent(0.7)
-        return imageView
-    }()
-    
-    lazy var defaultTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = ""
-        label.font = appearance.font.getFont(forTypo: .h3)
-        label.textColor = .white
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    lazy var defaultActionButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 20
-        button.backgroundColor = appearance.colors.appColor
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        button.ismTapFeedBack()
-        return button
-    }()
-    
-    // MARK: - MAIN
-    
+    // MARK: - Properties
+    private let imageView: UIImageView
+    private let label: UILabel
+
+    // MARK: - Initializer
     override init(frame: CGRect) {
+        imageView = UIImageView()
+        label = UILabel()
+
         super.init(frame: frame)
-        setupViews()
+
+        setupView()
         setupConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        imageView = UIImageView()
+        label = UILabel()
+
+        super.init(coder: coder)
+
+        setupView()
+        setupConstraints()
     }
-    
-    // MARK: - FUNCTIONS
-    
-    func setupViews(){
-        addSubview(stackView)
-        //stackView.addArrangedSubview(defaultImageView)
-        stackView.addArrangedSubview(defaultTitleLabel)
-        stackView.addArrangedSubview(defaultActionButton)
+
+    // MARK: - Setup Methods
+    private func setupView() {
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(imageView)
+
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(label)
     }
-    
-    func setupConstraints(){
-        
+
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
-            
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            
-            //defaultImageView.widthAnchor.constraint(equalToConstant: 100),
-            //defaultImageView.heightAnchor.constraint(equalToConstant: 100),
-            
-            defaultActionButton.heightAnchor.constraint(equalToConstant: 45)
-            
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -20),
+            imageView.widthAnchor.constraint(equalToConstant: 60),
+            imageView.heightAnchor.constraint(equalToConstant: 60),
+
+            label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
     }
 
+    // MARK: - Public Methods
+    func configure(image: UIImage?, text: String?, font: UIFont?, color: UIColor?) {
+        imageView.image = image
+        label.text = text
+        label.font = font
+        label.textColor = color
+    }
 }

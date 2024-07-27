@@ -1,10 +1,3 @@
-//
-//  StreamViewController+ActionDelegate.swift
-//  Yelo
-//
-//  Created by Dheeraj Kumar Sharma on 08/08/23.
-//  Copyright © 2023 rahulSharma. All rights reserved.
-//
 
 import UIKit
 import IsometrikStream
@@ -698,6 +691,28 @@ extension StreamViewController: StreamCellActionDelegate {
         case .reachedBottom:
             break
         }
+    }
+    
+    func loadMoreMessages() {
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+              let messageViewModel = viewModel.streamMessageViewModel else { return }
+        
+        let streamMessageView = visibleCell.streamContainer.streamMessageView
+        
+        messageViewModel.fetchMessages { error in
+            if error == nil {
+                streamMessageView.viewModel = self.viewModel.streamMessageViewModel
+                let streamMessageCount = streamMessageView.viewModel?.messages.count ?? 0
+                
+                if streamMessageCount > 10 {
+                    self.reloadDataWithoutChangingScrollPosition()
+                } else {
+                    self.setHeightForMessages()
+                }
+            }
+        }
+        
     }
     
     func didKeyboardDismissed() {
