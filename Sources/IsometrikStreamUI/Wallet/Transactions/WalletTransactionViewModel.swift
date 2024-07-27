@@ -14,14 +14,16 @@ class WalletTransactionViewModel {
     var totalTransactions: Int64 = 0
     var transactions: [WalletTransactionData] = []
     var selectedTransactionType: TransactionType = .all
+    var walletCurrencyType: WalletCurrencyType
     
     let refreshControl = UIRefreshControl()
     
     var skip = 0
     var limit = 20
     
-    init(isometrik: IsometrikSDK) {
+    init(isometrik: IsometrikSDK, walletCurrencyType: WalletCurrencyType) {
         self.isometrik = isometrik
+        self.walletCurrencyType = walletCurrencyType
     }
     
     func getTransactions(_ completion: @escaping(Bool, String?) -> Void){
@@ -39,7 +41,7 @@ class WalletTransactionViewModel {
             break
         }
         
-        isometrik.getIsometrik().getWalletTransactions(transactionType: transactionType, skip: skip, limit: limit) { response in
+        isometrik.getIsometrik().getWalletTransactions(transactionType: transactionType, currencyType: self.walletCurrencyType , skip: skip, limit: limit) { response in
             
             self.totalTransactions = response.totalCount ?? 0
             

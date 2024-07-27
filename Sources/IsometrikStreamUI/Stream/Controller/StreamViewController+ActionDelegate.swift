@@ -307,10 +307,9 @@ extension StreamViewController: StreamCellActionDelegate {
                 cancelButton.setTitle("Cancel", for: .normal)
                 yesButton.setTitle("End Broadcasting", for: .normal)
                 break
-            case .viewer:
+            case .viewer, .moderator:
                 self.leaveStreamByViewer(userId: userId, streamId: streamId)
                 return
-            default: break
             }
             
             

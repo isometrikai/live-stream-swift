@@ -53,7 +53,7 @@ extension StreamViewController: ISMAppearanceProvider {
                 
                 heart.center = CGPoint(x: fountainX, y: fountainY)
                 let imageToSend =  UIImage(named: imageToUse)?.withRenderingMode(.alwaysTemplate)
-                heart.animateInView(view: self.view, imageToUse: (imageToSend ?? self.appearance.images.reaction))
+                heart.animateInView(view: self.view, imageToUse: (imageToSend ?? self.appearance.images.heart))
                 
             }
         }

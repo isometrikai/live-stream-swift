@@ -149,6 +149,24 @@ extension StreamViewController {
         // fetch copublish status
         self.fetchStatusOfCoPublishRequest { _ in }
         
+        // fetch PK status if PK Challange
+        guard let streamData = viewModel.streamsData[safe: viewModel.selectedStreamIndex.row] else { return }
+        let isPK = streamData.isPkChallenge.unwrap
+        if isPK {
+            viewModel.fetchPKStreamStats { error in
+                if error == nil {
+                    guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView) else { return }
+                    
+                    visibleCell.updatePKBattleTimer()
+                    visibleCell.streamContainer.videoContainer.battleOn = true
+                    
+                    // set winner progress battle UI
+                    self.setWinnerBattleProgress(stats: self.viewModel.pkStreamStats)
+                    
+                }
+            }
+        }
+        
     }
     
     func toggleMicrophone(){

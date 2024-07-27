@@ -338,9 +338,12 @@ class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
         sessionProfileView.profilePicture.image = UIImage()
         sessionProfileView.usernameLabel.text = ""
         
+        battleProfileView.defaultProfilePicture.initialsText.text = ""
+        
         if userData.userProfileImageURL != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let imageURL = URL(string: userData.userProfileImageURL ?? "") {
                 sessionProfileView.profilePicture.kf.setImage(with: imageURL)
+                battleProfileView.coverImageView.kf.setImage(with: imageURL)
             }
         }
         
@@ -349,11 +352,12 @@ class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
         }
         
         let userName = userData.userName ?? ""
-        
         let initialText = "\(userName.prefix(2))"
-        print("USER INITIALS ::: \(initialText)")
+        
         sessionProfileView.defaultProfilePicture.initialsText.text = "\(initialText)".uppercased()
         sessionProfileView.usernameLabel.text = userName
+        
+        battleProfileView.defaultProfilePicture.initialsText.text = "\(initialText)".uppercased()
         
         if videoSession.isVideoMute {
             sessionProfileView.isHidden = false

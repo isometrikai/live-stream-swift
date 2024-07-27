@@ -191,7 +191,7 @@ extension Int64: RoundedWithAbbreviations {}
 
 extension Double {
     
-    public func formattedWithSuffix(fractionDigits: Int = 3) -> String {
+    public func formattedWithSuffix(fractionDigits: Int = 1) -> String {
         let thousand = 1000.0
         let million = thousand * thousand
         let billion = million * thousand

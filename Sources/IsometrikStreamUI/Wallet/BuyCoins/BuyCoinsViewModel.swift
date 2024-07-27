@@ -3,11 +3,6 @@ import Foundation
 import IsometrikStream
 import StoreKit
 
-public enum WalletCurrencyType: String {
-    case coin = "COIN"
-    case money = "USD"
-}
-
 final public class BuyCoinsViewModel {
     
     var coinPlansData: CoinPlansResponseModel?
@@ -22,10 +17,10 @@ final public class BuyCoinsViewModel {
     }
     
     func getWalletBalance(currencyType: WalletCurrencyType, completion: @escaping(_ success: Bool, _ error: String?)->Void){
-        isometrik.getIsometrik().getWalletBalance(currencyType: currencyType.rawValue) { response in
+        isometrik.getIsometrik().getWalletBalance(currencyType: currencyType.getValue) { response in
             self.walletBalance = response.data
             let balance = response.data?.balance ?? 0
-            UserDefaultsProvider.shared.setWalletBalance(data: balance, currencyType: currencyType.rawValue)
+            UserDefaultsProvider.shared.setWalletBalance(data: balance, currencyType: currencyType.getValue)
             DispatchQueue.main.async {
                 completion(true, nil)
             }

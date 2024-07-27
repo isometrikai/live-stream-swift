@@ -74,6 +74,7 @@ final public class StreamViewModel: NSObject {
     var pkBattleTimer: Timer?
     
     var pkGiftData: ISM_PK_LocalGiftModel?
+    var pkStreamStats: ISM_PK_StreamStats?
     var streamMessageViewModel: StreamMessageViewModel?
     
     var publisher: ISMPublisher?
@@ -236,6 +237,43 @@ final public class StreamViewModel: NSObject {
         
     }
     
+    func fetchPKStreamStats(_ completionHandler: @escaping streamResponse){
+        
+        guard streamsData.count > 0,
+              let streamData = streamsData[safe: selectedStreamIndex.row]
+        else { return }
+        
+        let streamId = streamData.streamId.unwrap
+        
+        isometrik.getIsometrik().getStreamStats(streamId: streamId) { response in
+            
+            DispatchQueue.main.async {
+                
+                self.pkStreamStats = response.data
+                let timeRemain = Int(response.data?.timeRemain ?? 0) // timer remain in seconds
+                if timeRemain.signum() != -1 {
+                    self.pkBattleTimeInSec = timeRemain
+                    
+                    // this means battle on
+                    self.isometrik.getUserSession().setPKStatus(pkBattleStatus: .on)
+                    
+                }
+                
+                self.streamsData[self.selectedStreamIndex.row].firstUserDetails = response.data?.firstUserDetails
+                self.streamsData[self.selectedStreamIndex.row].secondUserDetails = response.data?.secondUserDetails
+                
+                completionHandler(nil)
+            }
+        } failure: { error in
+            DispatchQueue.main.async {
+                let errorMessage = "\(error.localizedDescription)"
+                completionHandler(errorMessage)
+            }
+        }
+
+        
+    }
+    
     func deleteStreamMessage(messageInfo: ISMComment?, completionHandler: @escaping streamResponse) {
         
         guard let messageInfo,
@@ -245,7 +283,6 @@ final public class StreamViewModel: NSObject {
         
         let streamId = streamData.streamId ?? ""
         let messageId = messageInfo.messageId ?? ""
-
         
         isometrik.getIsometrik().removeMessage(streamId: streamId, messageId: messageId) { message in
             completionHandler(nil)

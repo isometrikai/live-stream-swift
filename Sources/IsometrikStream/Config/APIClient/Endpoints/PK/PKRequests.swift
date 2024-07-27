@@ -129,7 +129,6 @@ extension IsometrikStream {
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISM_PK_StreamStatsData, ISMLiveAPIError> ) in
             
             switch result{
-
             case .success(let streamResponse, _) :
                 completionHandler(streamResponse)
             case .failure(let error):

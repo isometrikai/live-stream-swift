@@ -91,6 +91,14 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
         viewModel.refreshControl.tintColor = appearance.colors.appSecondary
         transactionTableView.refreshControl = viewModel.refreshControl
         viewModel.refreshControl.addTarget(self, action: #selector(refreshControl), for: .valueChanged)
+        
+        switch viewModel.walletCurrencyType {
+        case .coin:
+            headerView.headerTitle.text = "Coin Transactions"
+        case .money:
+            headerView.headerTitle.text = "Money Transactions"
+        }
+        
     }
     
     func setUpConstraints(){

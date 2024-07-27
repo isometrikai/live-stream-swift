@@ -46,7 +46,7 @@ public struct ISM_PK_Stream: Codable, Hashable {
     public var isStar: Bool?
     public var alreadyPaid: Bool?
     public var isScheduledStream: Bool?
-    public var paymentCurrencyCode: String
+    public var paymentCurrencyCode: String?
     public var country: String?
     public var duration: Double?
     public var paymentAmount: Double?
@@ -63,15 +63,15 @@ public struct ISM_PK_Stream: Codable, Hashable {
     public var secondUserDetails: ISM_PK_User?
     
     enum CodingKeys: String, CodingKey {
-        case firstName = "firstName"
-        case lastName = "lastName"
-        case profilePic = "profilePic"
-        case streamId = "streamId"
-        case streamPic = "streamPic"
-        case streamUserId = "streamUserId"
-        case userId = "userId"
-        case userName = "userName"
-        case viewerCount = "viewerCount"
+        case firstName
+        case lastName
+        case profilePic
+        case streamId
+        case streamPic
+        case streamUserId
+        case userId
+        case userName
+        case viewerCount
         
         case streamTitle
         case streamImage

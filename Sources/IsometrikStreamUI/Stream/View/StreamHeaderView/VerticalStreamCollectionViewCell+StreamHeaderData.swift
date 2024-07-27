@@ -21,6 +21,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         guard let streamData = streamsData[safe: self.tag]
         else { return }
         
+        let streamUserId = streamData.userDetails?.id ?? ""
         let streamViewersCount = viewModel.streamViewers.count
         let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "STARTED")
         let currentUserId = isometrik.getUserSession().getUserId()
@@ -29,7 +30,8 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         let headerView = streamContainer.streamHeaderView
         let streamTitleLabel = headerView.streamTitleLabel
         
-        let followButton = headerView.profileView.followButton
+        let headerProfileView = headerView.profileView
+        let followButton = headerProfileView.followButton
         let moderatorButton = headerView.streamStatusView.moderatorButton
 //        let streamCartView = headerView.cartView
 //        let streamCartButton = headerView.cartButton
@@ -76,7 +78,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         case .viewer:
 
             let filteredMember = viewModel.streamMembers.filter { member in
-                member.userID == streamData.isometrikUserID
+                member.isAdmin == true
             }
             hostMember = filteredMember.first
             
@@ -86,10 +88,10 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             
             moderatorButton.isHidden = true
             
-            userName = streamData.userDetails?.userName ?? hostMember?.userName ?? streamData.initiatorIdentifier ?? ""
-            firstName = streamData.userDetails?.firstName ?? hostMember?.userName ?? streamData.initiatorName ?? ""
-            lastName = streamData.userDetails?.lastName ?? hostMember?.userName ?? ""
-            profileImage = streamData.userDetails?.profilePic ?? hostMember?.userProfileImageURL ?? streamData.initiatorimage ?? ""
+            userName = hostMember?.userName
+            firstName = hostMember?.metaData?.firstName
+            lastName = hostMember?.metaData?.lastName
+            profileImage = hostMember?.userProfileImageURL
 
             self.setHeaderCartBadgeUpdates()
             
@@ -100,14 +102,14 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             }
             
             let filteredMember = viewModel.streamMembers.filter { member in
-                member.userID == streamData.isometrikUserID
+                member.isAdmin == true
             }
             hostMember = filteredMember.first
             
-            userName = streamData.userDetails?.userName ?? hostMember?.userName ?? streamData.initiatorIdentifier ?? ""
-            firstName = streamData.userDetails?.firstName ?? hostMember?.metaData?.firstName ?? streamData.initiatorName ?? ""
-            lastName = streamData.userDetails?.lastName ?? hostMember?.metaData?.lastName ?? ""
-            profileImage = streamData.userDetails?.profilePic ?? hostMember?.userProfileImageURL ?? streamData.initiatorimage ?? ""
+            userName = hostMember?.userName
+            firstName = hostMember?.metaData?.firstName
+            lastName = hostMember?.metaData?.lastName
+            profileImage = hostMember?.userProfileImageURL
             
             break
         case .host:
@@ -122,20 +124,15 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             moderatorButton.isHidden = false
             
             userName = isometrik.getUserSession().getUserIdentifier()
-            firstName = isometrik.getUserSession().getFirstName()
-            lastName = isometrik.getUserSession().getLastName()
-            
-            if isometrik.getUserSession().getFirstName().isEmpty && isometrik.getUserSession().getLastName().isEmpty {
-                userName = isometrik.getUserSession().getUserName()
-            }
-            
-            profileImage = hostMember?.userProfileImageURL ?? ""
+            firstName = isometrik.getUserSession().getUserName()
+            lastName = " "
+            profileImage = isometrik.getUserSession().getUserImage()
 
             break
         case .moderator:
             
             let filteredMember = viewModel.streamMembers.filter { member in
-                member.userID == streamData.isometrikUserID
+                member.isAdmin == true
             }
             
             hostMember = filteredMember.first
@@ -146,29 +143,45 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             
             moderatorButton.isHidden = false
             
-            userName = streamData.userDetails?.userName ?? (hostMember?.userName ?? "")
-            firstName = streamData.userDetails?.firstName ?? (hostMember?.userName ?? "")
-            lastName = streamData.userDetails?.lastName ?? (hostMember?.userName ?? "")
-            profileImage = streamData.userDetails?.profilePic ?? (hostMember?.userProfileImageURL ?? "")
+            userName = hostMember?.userName
+            firstName = hostMember?.metaData?.firstName
+            lastName = hostMember?.metaData?.lastName
+            profileImage = hostMember?.userProfileImageURL
             
             break
         }
         
         self.setFollowButtonStatus()
         
-        headerView.profileView.profileName.text = "\(firstName ?? "") \(lastName ?? "")"
-        headerView.profileView.userIdentifierLabel.text = "\(userName ?? "")"
-
+        if let firstName, let lastName, !firstName.isEmpty, !lastName.isEmpty {
+            headerProfileView.userIdentifierLabel.isHidden = false
+            headerProfileView.userIdentifierLabel.text = "\(firstName) \(lastName)"
+        } else {
+            headerProfileView.userIdentifierLabel.isHidden = true
+        }
+        
+        if let userName {
+            headerProfileView.profileName.isHidden = false
+            headerProfileView.profileName.text = "\(userName)"
+        } else {
+            headerProfileView.profileName.isHidden = true
+        }
+        
         if profileImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let profileImageURl = URL(string: profileImage ?? "") {
-                headerView.profileView.profileImage.kf.setImage(with: profileImageURl)
+                headerProfileView.profileImage.kf.setImage(with: profileImageURl)
             } else {
-                headerView.profileView.profileImage.image = UIImage()
+                headerProfileView.profileImage.image = UIImage()
             }
         }
         
-        let initialText = "\(firstName?.prefix(1) ?? "U")\(lastName?.prefix(1) ?? "n")".uppercased()
-        headerView.profileView.defaultProfileView.initialsText.text = initialText
+        if let firstName, let lastName {
+            let initialText = "\(firstName.prefix(1))\(lastName.prefix(1))".uppercased()
+            headerProfileView.defaultProfileView.initialsText.text = initialText
+        } else {
+            let initialText = "\(userName?.prefix(2) ?? "Un")".uppercased()
+            headerProfileView.defaultProfileView.initialsText.text = initialText
+        }
         
         // set stream members count view
         streamStatusView.memberFeatureView.featureLabel.text = "\(viewModel.streamMembers.count)"

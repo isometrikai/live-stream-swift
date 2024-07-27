@@ -33,7 +33,8 @@ public final class BuyCoinsViewController: UIViewController, ISMAppearanceProvid
     lazy var walletBalanceHeaderView: WalletBalanceHeaderView = {
         let view = WalletBalanceHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.coinFeatureView.featureActionButton.addTarget(self, action: #selector(transactionButtonTapped), for: .touchUpInside)
+        view.coinFeatureView.featureActionButton.addTarget(self, action: #selector(transactionButtonTapped(_:)), for: .touchUpInside)
+        view.moneyFeatureView.featureActionButton.addTarget(self, action: #selector(transactionButtonTapped(_:)), for: .touchUpInside)
         return view
     }()
     
@@ -148,8 +149,9 @@ public final class BuyCoinsViewController: UIViewController, ISMAppearanceProvid
         self.dismiss(animated: true)
     }
     
-    @objc func transactionButtonTapped(){
-        let viewModel = WalletTransactionViewModel(isometrik: viewModel.isometrik)
+    @objc func transactionButtonTapped(_ sender: UIButton){
+        let currencyType = WalletCurrencyType(rawValue: sender.tag) ?? .coin
+        let viewModel = WalletTransactionViewModel(isometrik: viewModel.isometrik, walletCurrencyType: currencyType)
         let controller = WalletTransactionViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(controller, animated: true)
     }

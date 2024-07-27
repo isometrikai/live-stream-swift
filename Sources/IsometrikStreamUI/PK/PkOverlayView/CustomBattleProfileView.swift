@@ -37,11 +37,13 @@ class CustomBattleProfileView: UIView, ISMAppearanceProvider {
         return imageView
     }()
     
-    let defaultProfilePicture: CustomDefaultProfileView = {
+    lazy var defaultProfilePicture: CustomDefaultProfileView = {
         let imageView = CustomDefaultProfileView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = appearance.colors.appColor.cgColor
         return imageView
     }()
     

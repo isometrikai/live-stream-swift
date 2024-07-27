@@ -75,7 +75,6 @@ extension StreamViewController: RtcWrapperProtocol {
         videoContainer.refreshLayout(streamInfo: streamData)
         
         /// refreshing UI elements when videos session updates
-        
         guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView) else { return }
         ///refresh PK Views
         visibleCell.streamContainer.videoContainer.streamInfo = streamData
@@ -91,7 +90,6 @@ extension StreamViewController: RtcWrapperProtocol {
                 visibleCell.streamThumbnailImage.kf.setImage(with: streamImageUrl)
             }
         }
-        
         
     }
     

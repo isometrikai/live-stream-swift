@@ -139,9 +139,9 @@ class StreamGiftViewModel {
     }
     
     func getWalletBalance(completion: @escaping(_ success: Bool, _ error: String?)->Void){
-        isometrik.getIsometrik().getWalletBalance(currencyType: WalletCurrencyType.coin.rawValue){ response in
+        isometrik.getIsometrik().getWalletBalance(currencyType: WalletCurrencyType.coin.getValue){ response in
             self.walletBalance = response.data?.balance ?? 0
-            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance, currencyType: WalletCurrencyType.coin.rawValue)
+            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance, currencyType: WalletCurrencyType.coin.getValue)
             DispatchQueue.main.async {
                 completion(true, nil)
             }
@@ -236,7 +236,7 @@ class StreamGiftViewModel {
             isPk: (isometrik.getUserSession().getPKStatus() == .on),
             receiverName: recieverGiftData.recieverName,
             messageStreamId: streamInfo.streamId ?? "NA",
-            deviceId: ""
+            deviceId: UIDevice.current.identifierForVendor?.uuidString ?? ""
         )
         
         transferGifts(paramBody) { result, error in

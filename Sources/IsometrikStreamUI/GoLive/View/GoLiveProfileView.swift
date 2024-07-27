@@ -64,7 +64,7 @@ class GoLiveProfileView: UIView, ISMAppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.close, for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = .black.withAlphaComponent(0.8)
         button.layer.cornerRadius = 10
         button.ismTapFeedBack()
         button.isHidden = true

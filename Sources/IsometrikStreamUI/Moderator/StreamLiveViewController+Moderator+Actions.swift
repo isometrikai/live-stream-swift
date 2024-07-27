@@ -118,6 +118,7 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
             }
             sheet.detents = [customDetent]
             sheet.selectedDetentIdentifier = customDetent.identifier
+            sheet.preferredCornerRadius = 0
         }
         
         present(controller, animated: true, completion: nil)
@@ -148,6 +149,7 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
             }
             sheet.detents = [customDetent]
             sheet.selectedDetentIdentifier = customDetent.identifier
+            sheet.preferredCornerRadius = 0
         }
         
         present(controller, animated: true, completion: nil)

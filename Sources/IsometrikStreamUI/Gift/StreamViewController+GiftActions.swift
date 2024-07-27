@@ -54,7 +54,7 @@ extension StreamViewController {
         
         if currentHost.count > 0 {
             memberId = currentHost[0].userID ?? ""
-            recieverUserType = memberId == hostUserId ? "publisher" : "co-publisher"
+            recieverUserType = (memberId == hostUserId) ? "publisher" : "co-publisher"
         }
         
         if viewModel.copublisherViewer {
@@ -72,8 +72,8 @@ extension StreamViewController {
         if let firstUserDetails = streamData.firstUserDetails,
            let secondUserDetails = streamData.secondUserDetails
         {
-            print("First User Detail :::-- \(firstUserDetails)")
-            print("Second User Detail :::-- \(secondUserDetails)")
+            
+            LogManager.shared.logGeneral("First user details: \(firstUserDetails) \n Second user details: \(secondUserDetails)", type: .debug)
             
             if currentHost.count > 0 {
                 
@@ -107,7 +107,7 @@ extension StreamViewController {
             recieverName: recieverName
         )
         
-        print("Custom gift data ::::-- \(giftData)")
+        LogManager.shared.logGeneral("Gift reciever data: \(giftData)", type: .debug)
         
         return giftData
         
@@ -122,7 +122,6 @@ extension StreamViewController {
         if giftData.giftCategoryName.unwrap == "3D" {
             sendMessage(messageText: giftJsonString, messageOfType: .giftMessage_3D)
         }
-        sendMessage(messageText: giftJsonString, messageOfType: .giftMessage)
         
     }
     

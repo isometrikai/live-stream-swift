@@ -153,8 +153,6 @@ extension StreamViewController {
         
         viewModel.removeViewer(withId: viewerId)
         
-        print("mqttViewerRemoved .... viewer removed with name \(viewerData.viewerName ?? "")")
-        
         visibleCell.viewModel = viewModel
         
         let senderName = viewerData.viewerName.unwrap
@@ -192,7 +190,7 @@ extension StreamViewController {
             }
             
             visibleCell.streamEndView.isHidden = false
-            visibleCell.streamEndView.streamEndMessageLabel.text = "The host has removed you from the stream, you can watch other live videos".localized + "."
+            visibleCell.streamEndView.streamEndMessageLabel.text = "The host has removed you from the stream, you can watch other live videos" + "."
             visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
         }
         
@@ -201,9 +199,9 @@ extension StreamViewController {
         visibleCell.viewModel = viewModel
         
         let senderName = viewerData.viewerName.unwrap
-        let removedBy = streamData.userDetails?.userName ?? ""
+        let removedBy = viewerData.initiatorName.unwrap
         let timeStamp = viewerData.timestamp ?? 0
-        let message = "\(senderName) " + " " + "has been kicked out of the audience by".localized + " \(removedBy)"
+        let message = "\(senderName) " + " " + "has been kicked out of the audience by" + " \(removedBy)"
         
         let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.kickout.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
         
@@ -509,6 +507,7 @@ extension StreamViewController {
                 // Changing the stream user type
                 viewModel.streamUserType = .moderator
                 viewModel.streamMessageViewModel?.streamUserType = .moderator
+                isometrik.getUserSession().setUserType(userType: .moderator)
                 
                 let title = "Added to moderator's group of broadcast".localized
                 let subtitle = "\(userData.moderatorName ?? "") " + "has been added to the moderator's group of broadcast by".localized  + " \(userData.initiatorName ?? "")" + ".\n" + "Being a moderator one can kick out members and viewers, reply-to and delete messages".localized
@@ -559,7 +558,7 @@ extension StreamViewController {
                 viewModel.streamMessageViewModel?.streamUserType = .viewer
                 
                 let title = "Removed from moderator's group of broadcast".localized
-                let subtitle = "\(userData.moderatorName ?? "") " + "has been removed from moderator's group of broadcast by".localized + " \(userData.initiatorName ?? "").\n " + "without being a moderator one can no longer kick out members and viewers, reply-to and delete messages".localized
+                let subtitle = "\(userData.moderatorName ?? "") " + "has been removed from moderator's group of broadcast by" + " \(userData.initiatorName ?? "").\n " + "without being a moderator one can no longer kick out members and viewers, reply-to and delete messages"
                 
                 self.handleModalActions(title, subtitle)
                 
@@ -575,7 +574,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by".localized + "\(userData.initiatorName ?? "")."
+            let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by" + "\(userData.initiatorName ?? "")."
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.removedAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             

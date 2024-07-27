@@ -94,7 +94,7 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Host", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 15

@@ -118,7 +118,7 @@ final public class BuyPaidStreamViewController: UIViewController, ISMAppearanceP
         if sender.tag == 1 {
             
             // check for balance
-            let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: WalletCurrencyType.coin.rawValue)
+            let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: WalletCurrencyType.coin.getValue)
             if !(Int64(balance) > viewModel.amountToPay) {
                 self.viewModel.response?(.failed(errorString: "Insufficient Balance!"))
                 self.dismiss(animated: true)

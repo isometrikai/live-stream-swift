@@ -54,7 +54,7 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.textColor = .black
         label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()
@@ -141,10 +141,8 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         guard let userData = userData else { return }
         
         let imagePath = userData.imagePath.unwrap
-        let userName = userData.identifier ?? "Un"
+        let userName = userData.identifier.unwrap
         let name = userData.name.unwrap
-        
-        userProfilePicture.image = UIImage()
         
         if imagePath != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let imageUrl = URL(string: imagePath) {
@@ -160,7 +158,7 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         defaultUserProfilePicture.initialsText.text = "\(initialText)".uppercased()
         
         titleLabel.text = name
-        subtitleLabel.text = name
+        subtitleLabel.text = userName
         
     }
     

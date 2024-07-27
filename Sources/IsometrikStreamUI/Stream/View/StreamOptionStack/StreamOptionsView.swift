@@ -123,7 +123,7 @@ class StreamOptionsView: UIView, ISMAppearanceProvider {
     lazy var lovedView: CustomStreamOptionView = {
         let view = CustomStreamOptionView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.optionImageView.image = appearance.images.reaction.withRenderingMode(.alwaysTemplate)
+        view.optionImageView.image = appearance.images.heart.withRenderingMode(.alwaysTemplate)
         view.optionImageView.tintColor = .white
         view.optionButton.addTarget(self, action: #selector(optionTappedWithTag(_:)), for: .touchUpInside)
         view.layer.cornerRadius = 22.5

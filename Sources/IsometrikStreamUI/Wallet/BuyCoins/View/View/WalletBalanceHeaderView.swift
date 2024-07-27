@@ -31,6 +31,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureTitleLabel.text = "Total Coins"
         view.featureSubtitleImageView.image = appearance.images.coin
+        view.featureActionButton.tag = WalletCurrencyType.coin.rawValue
         view.backgroundColor = .white
         return view
     }()
@@ -40,7 +41,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureTitleLabel.text = "Total Money"
         view.featureSubtitleImageView.image = appearance.images.walletMoney
-        view.featureActionButton.isHidden = true
+        view.featureActionButton.tag = WalletCurrencyType.money.rawValue
         view.backgroundColor = .white
         return view
     }()
@@ -97,11 +98,11 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         // if balanceData is nil
         guard let balanceData else {
             
-            let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: currencyType.rawValue)
+            let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: currencyType.getValue)
             
             switch currencyType {
             case .coin:
-                coinFeatureView.featureSubtitle.text = Double(balance).formattedWithSuffix()
+                coinFeatureView.featureSubtitle.text = "\(Int64(balance))"
                 break
             case .money:
                 moneyFeatureView.featureSubtitle.text = "$" + Double(balance).formattedWithSuffix(fractionDigits: 1)
@@ -117,7 +118,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         
         switch currencyType {
         case .coin:
-            coinFeatureView.featureSubtitle.text = Double(balance).formattedWithSuffix()
+            coinFeatureView.featureSubtitle.text = "\(Int64(balance))"
             break
         case .money:
             moneyFeatureView.featureSubtitle.text = "\(currencySymbol)" + Double(balance).formattedWithSuffix(fractionDigits: 1)

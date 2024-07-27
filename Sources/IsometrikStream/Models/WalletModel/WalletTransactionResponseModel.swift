@@ -1,6 +1,20 @@
 
 import Foundation
 
+public enum WalletCurrencyType: Int {
+    case coin = 0
+    case money
+    
+    public var getValue: String {
+        switch self {
+        case .coin:
+            return "COIN"
+        case .money:
+            return "USD"
+        }
+    }
+}
+
 public enum WalletTransactionType: String {
     case debit = "DEBIT"
     case credit = "CREDIT"

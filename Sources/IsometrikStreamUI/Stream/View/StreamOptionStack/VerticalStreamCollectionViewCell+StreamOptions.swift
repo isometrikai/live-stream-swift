@@ -136,7 +136,7 @@ extension VerticalStreamCollectionViewCell {
                 
                 break
             case .moderator:
-                viewModel.streamOptions = [.loved, .share, .settings]
+                viewModel.streamOptions = [.loved, .share, .gift]
                 break
             }
             

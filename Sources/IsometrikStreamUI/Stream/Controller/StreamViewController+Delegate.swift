@@ -118,6 +118,14 @@ extension StreamViewController {
             return
         }
         
+        // This is need for gift transfer while in PK stream
+        let hostId = isometrik.getHostUserId()
+        if hostId == "" {
+            if let streamData = streamsData[safe: index.row] {
+                isometrik.setHostUserId(userId: streamData.userDetails?.id ?? "")
+            }
+        }
+        
         cell.tag = index.row
         let streamData = streamsData[index.row]
         
@@ -134,7 +142,7 @@ extension StreamViewController {
         
         // set stream loader data
         
-        streamLoader.streamData = streamData
+        streamLoader.manageData(streamData: streamData)
         if viewModel.streamUserType == .host {
             streamLoader.isHidden = true
             if streamData.rtmpIngest.unwrap {

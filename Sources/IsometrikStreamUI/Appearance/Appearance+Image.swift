@@ -115,8 +115,6 @@ public struct ISM_Image {
     public var micUnmuted_op: UIImage = loadImageSafely(with: "ic_mic_unmuted_op")
     public var micUnmuted: UIImage = loadImageSafely(with: "ic_mic_unmuted")
     public var more1: UIImage = loadImageSafely(with: "ic_more")
-    public var reaction: UIImage = loadImageSafely(with: "ic_reaction")
-    public var requestList: UIImage = loadImageSafely(with: "ic_request_list")
     public var request: UIImage = loadImageSafely(with: "ic_request")
     public var setting: UIImage = loadImageSafely(with: "ic_setting")
     public var share1: UIImage = loadImageSafely(with: "ic_share")
@@ -127,7 +125,8 @@ public struct ISM_Image {
     public var more2: UIImage = loadImageSafely(with: "ism_more")
     public var product: UIImage = loadImageSafely(with: "ism_product")
     public var share2: UIImage = loadImageSafely(with: "ism_share")
-    public var groupInvite: UIImage = loadImageSafely(with: "ism_group_invite")
+    public var groupInvite: UIImage = loadImageSafely(with: "ic_group_invite")
+    public var requestList: UIImage = loadImageSafely(with: "ic_request_list")
     
     // general icons
     public var back: UIImage = loadImageSafely(with: "ic_back")
@@ -161,6 +160,7 @@ public struct ISM_Image {
     public var user: UIImage = loadImageSafely(with: "ism_user")
     public var premiumBadge: UIImage = loadImageSafely(with: "ism_premium")
     public var premiumBadgeBG: UIImage = loadImageSafely(with: "ism_premium_bg")
+    public var noLiveStream: UIImage = loadImageSafely(with: "ic_nolivestream")
     
     // Message events
     public var deletedMsg: UIImage = loadImageSafely(with: "ism_del_msg")

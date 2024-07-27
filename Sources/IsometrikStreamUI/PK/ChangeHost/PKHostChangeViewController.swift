@@ -39,7 +39,7 @@ class PKHostChangeViewController: UIViewController, ISMAppearanceProvider {
         button.setTitle("No", for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.lightGray, for: .normal)
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = 10
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.addTarget(self, action: #selector(noButtonTapped), for: .touchUpInside)
@@ -51,8 +51,8 @@ class PKHostChangeViewController: UIViewController, ISMAppearanceProvider {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Yes", for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 25
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
+        button.layer.cornerRadius = 10
         button.backgroundColor = appearance.colors.appColor
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(yesButtonTapped), for: .touchUpInside)
