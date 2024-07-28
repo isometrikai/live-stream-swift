@@ -54,7 +54,7 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h5)
         return label
     }()

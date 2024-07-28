@@ -14,24 +14,9 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     // MARK: - PROPERTIES
     var viewModel: StreamGiftViewModel
     
-    lazy var coverView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = appearance.colors.appDarkGray.withAlphaComponent(0.4)
-        view.alpha = 0
-        view.isHidden = true
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissTapped))
-        view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(tapGesture)
-        
-        return view
-    }()
-    
     lazy var contentView: StreamGiftContentView = {
         let view = StreamGiftContentView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black.withAlphaComponent(0.7)
         
         view.headerView.closeButton.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
         view.headerView.getMoreButton.addTarget(self, action: #selector(getMoreTapped), for: .touchUpInside)
@@ -44,16 +29,8 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: MAIN -
     
-    init(isometrik: IsometrikSDK, streamInfo: ISMStream, recieverGiftData: ISMCustomGiftRecieverData){
-        
-        let viewModel = StreamGiftViewModel(
-            isometrik: isometrik,
-            streamInfo: streamInfo,
-            recieverGiftData: recieverGiftData
-        )
-        
+    init(viewModel: StreamGiftViewModel){
         self.viewModel = viewModel
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,11 +38,6 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
         super.viewDidLoad()
         setUpViews()
         setUpConstraints()
-        
-        DispatchQueue.main.async {
-            self.animateIn()
-        }
-        
         loadDataInitially()
     }
     
@@ -80,52 +52,13 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     // MARK: FUNCTIONS -
     
     func setUpViews(){
-        view.backgroundColor = .clear
-        view.addSubview(coverView)
+        view.backgroundColor = .black.withAlphaComponent(0.7)
         view.addSubview(contentView)
     }
     
     func setUpConstraints(){
-        coverView.ism_pin(to: view)
-        NSLayoutConstraint.activate([
-            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            contentView.heightAnchor.constraint(equalToConstant: viewModel.contentViewHeight + ism_windowConstant.getBottomPadding)
-        ])
-        
-        viewModel.contentBottomConstraint = contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: UIScreen.main.bounds.height + viewModel.contentViewHeight + ism_windowConstant.getBottomPadding)
-        viewModel.contentBottomConstraint?.isActive = true
-        
+        contentView.ism_pin(to: view)
     }
-    
-    func animateIn() {
-        coverView.isHidden = false
-        
-        let animator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.8) {
-            self.coverView.alpha = 1
-            self.viewModel.contentBottomConstraint?.constant = 0
-            self.view.layoutIfNeeded()
-        }
-        animator.startAnimation()
-    }
-    
-    func animateOut() {
-        
-        let animator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 0.8) {
-            self.coverView.alpha = 0
-            self.viewModel.contentBottomConstraint?.constant = self.viewModel.contentViewHeight + ism_windowConstant.getBottomPadding
-            self.view.layoutIfNeeded()
-        }
-        
-        animator.addCompletion { position in
-            if position == .end {
-                self.coverView.isHidden = true
-                self.dismiss(animated: true)
-            }
-        }
-        animator.startAnimation()
-    }
-
     
     func loadWalletBalance(){
         
@@ -154,7 +87,7 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     // MARK: - ACTIONS
     
     @objc func dismissTapped(){
-        animateOut()
+        self.dismiss(animated: true)
     }
     
     @objc func getMoreTapped(){

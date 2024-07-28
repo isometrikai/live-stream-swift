@@ -117,6 +117,8 @@ extension ViewerContainer: UITableViewDelegate, UITableViewDataSource {
         let privacy = viewerData.privacy.unwrap
         let userName = viewerData.userName.unwrap
         
+        cell.titleLabel.textColor = .black
+        
         cell.userData = ISMStreamUser(
             userId: userId,
             identifier: userName,

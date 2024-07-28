@@ -66,6 +66,7 @@ public enum ISM_FontTypography {
     case h6
     case h7
     case h8
+    case h9
     
     public var uiFont: UIFont? {
         switch self {
@@ -77,6 +78,7 @@ public enum ISM_FontTypography {
         case .h6: return scaled(font: UIFont(name: Rubik.Medium, size: 14), textStyle: .body)
         case .h7: return scaled(font: UIFont(name: Rubik.Bold, size: 12), textStyle: .callout)
         case .h8: return scaled(font: UIFont(name: Rubik.Medium, size: 12), textStyle: .footnote)
+        case .h9: return scaled(font: UIFont(name: Rubik.Medium, size: 10), textStyle: .footnote)
        }
     }
 
@@ -98,6 +100,7 @@ public enum ISM_FontTypography {
         case .h6: return (14, .medium)
         case .h7: return (12, .bold)
         case .h8: return (12, .medium)
+        case .h9: return (10, .regular)
         }
     }
     

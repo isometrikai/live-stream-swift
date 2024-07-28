@@ -27,6 +27,14 @@ public class FormTextWithTitleView: UIView, ISMAppearanceProvider {
         return view
     }()
     
+    public lazy var infoTextLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = appearance.font.getFont(forTypo: .h9)
+        label.isHidden = true
+        return label
+    }()
+    
     // MARK: - MAIN
     
     override init(frame: CGRect) {
@@ -44,6 +52,7 @@ public class FormTextWithTitleView: UIView, ISMAppearanceProvider {
     func setupViews(){
         addSubview(formTitleLabel)
         addSubview(formTextView)
+        addSubview(infoTextLabel)
     }
     
     func setupConstraints(){
@@ -55,7 +64,11 @@ public class FormTextWithTitleView: UIView, ISMAppearanceProvider {
             formTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             formTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             formTextView.heightAnchor.constraint(equalToConstant: 45),
-            formTextView.topAnchor.constraint(equalTo: formTitleLabel.bottomAnchor, constant: 5)
+            formTextView.topAnchor.constraint(equalTo: formTitleLabel.bottomAnchor, constant: 5),
+            
+            infoTextLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            infoTextLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            infoTextLabel.topAnchor.constraint(equalTo: formTextView.bottomAnchor, constant: 4)
         ])
     }
 

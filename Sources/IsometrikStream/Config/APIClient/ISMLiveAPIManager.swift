@@ -63,11 +63,10 @@ public struct ISMLiveAPIManager {
         urlRequest.httpMethod = request.endPoint.method.rawValue
         
         urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-        urlRequest.setValue(ISMConfiguration.shared.userSecret, forHTTPHeaderField:"userSecret" )
+        urlRequest.setValue(ISMConfiguration.shared.userSecret, forHTTPHeaderField:"userSecret")
         urlRequest.setValue(ISMConfiguration.shared.licenseKey, forHTTPHeaderField:"licenseKey")
         urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField:"userToken" )
         urlRequest.setValue(ISMConfiguration.shared.appSecret, forHTTPHeaderField: "appSecret")
-        urlRequest.setValue(ISMConfiguration.shared.userToken, forHTTPHeaderField: "isometrikToken")
         
         // Set headers if provided
         request.endPoint.headers?.forEach { key, value in
@@ -104,7 +103,7 @@ public struct ISMLiveAPIManager {
             }
             
             switch httpResponse.statusCode {
-            case 200:
+            case 200, 201:
                 do {
                     let responseObject = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(responseObject, nil))

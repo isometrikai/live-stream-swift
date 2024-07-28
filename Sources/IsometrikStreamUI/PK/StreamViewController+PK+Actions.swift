@@ -367,7 +367,7 @@ extension StreamViewController {
         let streamMembers = viewModel.streamMembers
         
         if streamMembers.count > 1 {
-            isometrik.getUserSession().setCurrentStreamData(streamData: streamData)
+            isometrik.getUserSession().setStreamData(streamData: streamData)
         } else {
             
             // setting pkId if present
@@ -745,7 +745,8 @@ extension StreamViewController {
         viewModel.streamUserType = .viewer
         
         // remove current stream from array
-        if self.viewModel.streamsData.count ?? 0 >= visibleIndex.row + 1 {
+        let streamCount = self.viewModel.streamsData.count
+        if streamCount >= visibleIndex.row + 1 {
             self.viewModel.streamsData.remove(at: visibleIndex.row)
         }
         

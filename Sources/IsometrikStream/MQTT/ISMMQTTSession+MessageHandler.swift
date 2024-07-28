@@ -22,7 +22,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             
             // re-subscribing to the stream events
             let isometrik = IsometrikSDK.getInstance()
-            if let streamData = isometrik.getUserSession().getCurrentStreamData() {
+            if let streamData = isometrik.getUserSession().getStreamData() {
                 subscribeStreamEvents(with: streamData.streamId ?? "")
             }
         }

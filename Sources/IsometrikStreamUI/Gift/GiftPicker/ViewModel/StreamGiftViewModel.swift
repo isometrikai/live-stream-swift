@@ -45,7 +45,6 @@ class StreamGiftViewModel {
     var sendGift: ((_ giftData: StreamMessageGiftModel) -> Void)?
     var buyCoins: (() -> Void)?
     
-    var contentBottomConstraint: NSLayoutConstraint?
     var audioPlayer: AVAudioPlayer?
     
     init(isometrik: IsometrikSDK, streamInfo: ISMStream, recieverGiftData: ISMCustomGiftRecieverData) {

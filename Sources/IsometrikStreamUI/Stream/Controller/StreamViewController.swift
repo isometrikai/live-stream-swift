@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IsometrikStream
 
 final public class StreamViewController: UIViewController {
 
@@ -63,7 +64,6 @@ final public class StreamViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        setupDefaults()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -79,6 +79,7 @@ final public class StreamViewController: UIViewController {
         self.removePlayerObserver()
         self.removePlayer()
         self.removeAllObservers()
+        UserDefaultsProvider.shared.removeStreamData()
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -109,6 +110,9 @@ final public class StreamViewController: UIViewController {
         
         // basic configurations
         viewModel.setStreaming()
+        
+        // remove observes
+        removeAllObservers()
         
         // Add Stream Observers
         addStreamObservers()

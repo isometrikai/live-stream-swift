@@ -133,9 +133,7 @@ final public class StreamViewModel: NSObject {
         switch streamUserType {
         case .viewer:
             isometrik.getIsometrik().setUserRoleInStream(.Audience)
-        case .member:
-            isometrik.getIsometrik().setUserRoleInStream(.Broadcaster)
-        case .host:
+        case .host, .member:
             isometrik.getIsometrik().setUserRoleInStream(.Broadcaster)
         case .moderator:
             break

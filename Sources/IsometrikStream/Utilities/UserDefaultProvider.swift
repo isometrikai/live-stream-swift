@@ -72,6 +72,7 @@ public class UserDefaultsProvider: NSObject {
     
     public func removeStreamData() {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.ghostStreamData)
+        UserDefaults.standard.synchronize()
     }
     
     public func getIsometrikDefaultProfile() -> String {

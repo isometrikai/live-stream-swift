@@ -211,7 +211,7 @@ extension StreamViewController: StreamSettingDelegate {
         let streamStatus = LiveStreamStatus(rawValue: streamData.status)
         let userType = viewModel.streamUserType
         
-        let reportAction = StreamSettingData(settingLabel: "Report".localized, settingImage: appearance.images.report, streamSettingType: .report)
+        let reportAction = StreamSettingData(settingLabel: "Report", settingImage: appearance.images.report, streamSettingType: .report)
         
         switch streamStatus {
         case .started:
@@ -223,21 +223,21 @@ extension StreamViewController: StreamSettingDelegate {
                 let audioStatus = !currentSession.isAudioMute
                 let videoStatus = !currentSession.isVideoMute
                 
-                let audioImage = audioStatus ? self.appearance.images.speakerOn : self.appearance.images.speakerOff
+                let audioImage = audioStatus ? self.appearance.images.speakerOn.withRenderingMode(.alwaysTemplate) : self.appearance.images.speakerOff.withRenderingMode(.alwaysTemplate)
                 
-                let audioLabel = audioStatus ? "Mute Audio".localized : "Unmute Audio".localized
+                let audioLabel = audioStatus ? "Mute Audio" : "Unmute Audio"
                 
                 let audioAction = StreamSettingData(settingLabel: audioLabel, settingImage: audioImage, streamSettingType: .audio)
                 
-                let videoImage = videoStatus ? self.appearance.images.videoCamera : self.appearance.images.videoCameraOff
+                let videoImage = videoStatus ? self.appearance.images.videoCamera.withRenderingMode(.alwaysTemplate) : self.appearance.images.videoCameraOff.withRenderingMode(.alwaysTemplate)
                 
-                let videoLabel = videoStatus ? "Disable Camera".localized : "Enable Camera".localized
+                let videoLabel = videoStatus ? "Disable Camera" : "Enable Camera"
                 
                 let cameraAction = StreamSettingData(settingLabel: videoLabel, settingImage: videoImage, streamSettingType: .camera)
                 
-                let speakerImage = audioStatus ? self.appearance.images.speakerOn : self.appearance.images.speakerOff
+                let speakerImage = audioStatus ? self.appearance.images.speakerOn.withRenderingMode(.alwaysTemplate) : self.appearance.images.speakerOff.withRenderingMode(.alwaysTemplate)
                 
-                let speakerLabel = audioStatus ? "Mute Volume".localized : "Unmute Volume".localized
+                let speakerLabel = audioStatus ? "Mute Volume" : "Unmute Volume"
                 
                 let speakerAction = StreamSettingData(settingLabel: speakerLabel, settingImage: speakerImage, streamSettingType: .speaker)
                 
@@ -292,6 +292,7 @@ extension StreamViewController: StreamSettingDelegate {
             }
             
             sheet.detents = [fixedHeightDetent]
+            sheet.preferredCornerRadius = 0
         }
         
         present(settingController, animated: true, completion: nil)

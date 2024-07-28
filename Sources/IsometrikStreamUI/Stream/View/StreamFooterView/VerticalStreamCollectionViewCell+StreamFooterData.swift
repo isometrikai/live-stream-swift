@@ -21,7 +21,7 @@ extension VerticalStreamCollectionViewCell {
         guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProfileDelegateEnabled
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled
         
         let streamUserType = viewModel.streamUserType
         let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")

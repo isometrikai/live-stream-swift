@@ -21,7 +21,7 @@ public class IsometrikUserSession: NSObject {
     private var pkBattleStatus: PkBattleStatus = .off
     private var pkBattleId: String = ""
     private var isRTMPStream: Bool = false
-    private var currentStreamData: ISMStream?
+    private var streamData: ISMStream?
     
     public static var shared = IsometrikUserSession()
     
@@ -63,8 +63,8 @@ public class IsometrikUserSession: NSObject {
         self.pkBattleId = pkId
     }
     
-    public func setCurrentStreamData(streamData: ISMStream?) {
-        self.currentStreamData = streamData
+    public func setStreamData(streamData: ISMStream?) {
+        self.streamData = streamData
     }
     
     public func setUserToken(userToken: String) {
@@ -128,8 +128,8 @@ public class IsometrikUserSession: NSObject {
         self.pkBattleId
     }
     
-    public func getCurrentStreamData() -> ISMStream? {
-        return currentStreamData
+    public func getStreamData() -> ISMStream? {
+        return streamData
     }
     
     public func getMemberForPKStatus() -> Bool {

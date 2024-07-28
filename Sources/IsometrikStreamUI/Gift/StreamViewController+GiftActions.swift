@@ -20,15 +20,39 @@ extension StreamViewController {
               let recieverData = getGiftRecieverData()
         else { return }
         
-        let controller = StreamGiftPickerViewController(isometrik: isometrik, streamInfo: streamData, recieverGiftData: recieverData)
+        let viewModel = StreamGiftViewModel(
+            isometrik: isometrik,
+            streamInfo: streamData,
+            recieverGiftData: recieverData
+        )
         
-        controller.viewModel.sendGift = { [weak self] data in
+        viewModel.sendGift = { [weak self] data in
             self?.sendGift(giftData: data, forInsert: true)
         }
         
-        controller.modalPresentationStyle = .overCurrentContext
-        controller.modalTransitionStyle = .crossDissolve
-        navigationController?.present(controller, animated: true, completion: nil)
+        let controller = StreamGiftPickerViewController(viewModel: viewModel)
+        
+//        controller.modalPresentationStyle = .overCurrentContext
+//        controller.modalTransitionStyle = .crossDissolve
+//        navigationController?.present(controller, animated: true, completion: nil)
+        
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.7  // 60% of the screen height
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
+        
+        present(controller, animated: true, completion: nil)
     }
     
     func getGiftRecieverData() -> ISMCustomGiftRecieverData? {

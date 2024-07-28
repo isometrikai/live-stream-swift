@@ -191,8 +191,6 @@ extension StreamViewController: StreamCellActionDelegate {
     }
     
     func didTapSellerProfileView() {
-    
-        debugPrint("Log:: Profile Button Tapped")
         
         var streamsData = viewModel.streamsData
         
@@ -236,7 +234,6 @@ extension StreamViewController: StreamCellActionDelegate {
     }
     
     func didTapFollowButton() {
-        debugPrint("Log:: Follow Button Tapped")
         guard let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
@@ -314,7 +311,6 @@ extension StreamViewController: StreamCellActionDelegate {
             
             self.present(popupController, animated: true)
         } else {
-            
 //            let controller = StreamSellerProfileVC()
 //            controller.userId = streamData.userDetails?.id ?? ""
 //            controller.isSelf = (viewModel.streamUserType == .host)
@@ -363,9 +359,6 @@ extension StreamViewController: StreamCellActionDelegate {
 //            
 //            self.present(controller, animated: true)
         }
-        
-        
-        
     }
     
     func didTapViewerCountView() {
@@ -642,14 +635,23 @@ extension StreamViewController: StreamCellActionDelegate {
         case .wallet:
             debugPrint("Log:: Wallet tapped")
             break
-        case .analytics: openStreamAnalytics(streamId: streamId)
+        case .analytics: 
+            
+            
+            
+            if userType == .member {
+                // analytics for cohost, while in PK
+                if let ghostStreamData = UserDefaultsProvider.shared.getStreamData() {
+                    let ghostStreamId = ghostStreamData.streamId.unwrap
+                    openStreamAnalytics(streamId: ghostStreamId)
+                }
+            } else {
+                openStreamAnalytics(streamId: streamId)
+            }
+            
             break
         case .settings:
-            if !isGuestUser {
-                self.openStreamSettingController()
-            } else {
-//                _ = Helper.LoginPresenter()
-            }
+            openStreamSettingController()
             break
         case .request: sendRequest() 
             break
