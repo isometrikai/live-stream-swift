@@ -89,7 +89,7 @@ class GoLiveProfileView: UIView, ISMAppearanceProvider {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.delegate = self
-        textView.text = "My Stream description...".localized
+        textView.text = "My stream description...".localized
         textView.textColor = .lightGray
         textView.backgroundColor = .clear
         textView.tintColor = .white
@@ -188,7 +188,7 @@ extension GoLiveProfileView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "My Stream description...".localized
+            textView.text = "My stream description...".localized
             textView.textColor = UIColor.lightGray
         }
     }

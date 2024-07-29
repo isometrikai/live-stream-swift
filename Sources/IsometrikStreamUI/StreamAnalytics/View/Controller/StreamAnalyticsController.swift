@@ -353,8 +353,6 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         viewModel.fetchStreamAnalyticsViewers { success, error in
             if success {
                 self.viewerContainer.viewers = self.viewModel.viewers
-            } else {
-                LogManager.shared.logGeneral("\(#line)" + #function + "\(error ?? "")", type: .error)
             }
         }
         

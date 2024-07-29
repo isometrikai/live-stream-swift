@@ -154,17 +154,17 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         self.setFollowButtonStatus()
         
         if let firstName, let lastName, !firstName.isEmpty, !lastName.isEmpty {
-            headerProfileView.userIdentifierLabel.isHidden = false
-            headerProfileView.userIdentifierLabel.text = "\(firstName) \(lastName)"
+            headerProfileView.profileName.isHidden = false
+            headerProfileView.profileName.text = "\(firstName) \(lastName)"
         } else {
-            headerProfileView.userIdentifierLabel.isHidden = true
+            headerProfileView.profileName.isHidden = true
         }
         
         if let userName {
-            headerProfileView.profileName.isHidden = false
-            headerProfileView.profileName.text = "\(userName)"
+            headerProfileView.userIdentifierLabel.isHidden = false
+            headerProfileView.userIdentifierLabel.text = "\(userName)"
         } else {
-            headerProfileView.profileName.isHidden = true
+            headerProfileView.userIdentifierLabel.isHidden = true
         }
         
         if profileImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {

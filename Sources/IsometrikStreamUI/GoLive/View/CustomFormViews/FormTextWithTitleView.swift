@@ -31,6 +31,7 @@ public class FormTextWithTitleView: UIView, ISMAppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = appearance.font.getFont(forTypo: .h9)
+        label.textColor = .black
         label.isHidden = true
         return label
     }()

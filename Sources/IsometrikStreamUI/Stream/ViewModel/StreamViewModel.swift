@@ -45,6 +45,8 @@ final public class StreamViewModel: NSObject {
     
     public var isometrik: IsometrikSDK
     public var streamsData: [ISMStream]
+    var streamMessageViewModel: StreamMessageViewModel?
+    
     public var externalActionDelegate: ISMStreamActionDelegate?
     
     var hours = 0
@@ -75,7 +77,7 @@ final public class StreamViewModel: NSObject {
     
     var pkGiftData: ISM_PK_LocalGiftModel?
     var pkStreamStats: ISM_PK_StreamStats?
-    var streamMessageViewModel: StreamMessageViewModel?
+    
     
     var publisher: ISMPublisher?
     var videoPreviewPlayer: AVPlayer?
@@ -205,10 +207,7 @@ final public class StreamViewModel: NSObject {
         else { return }
         
         // setting stream message view model
-        let messageViewModel = StreamMessageViewModel()
-        
-        messageViewModel.isometrik = isometrik
-        messageViewModel.streamInfo = streamData
+        let messageViewModel = StreamMessageViewModel(streamInfo: streamData, isometrik: isometrik)
         messageViewModel.streamUserType = streamUserType
         messageViewModel.resetToDefault()
         

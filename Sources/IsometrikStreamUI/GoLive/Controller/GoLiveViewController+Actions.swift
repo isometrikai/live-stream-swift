@@ -59,7 +59,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         let streamTextView = profileView.streamTextView.text
         let profileImageView = profileView.profileCoverImageView
         
-        if streamTextView == "Add description..." {
+        if streamTextView == "My stream description..." {
             self.ism_showAlert("Error", message: "Stream Title Required!")
             return
         }

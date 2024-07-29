@@ -53,7 +53,6 @@ final public class StreamViewController: UIViewController {
     public init(viewModel: StreamViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.setupDefaults()
     }
     
     required init?(coder: NSCoder) {
@@ -64,6 +63,7 @@ final public class StreamViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        self.setupDefaults()
     }
     
     public override func viewWillAppear(_ animated: Bool) {

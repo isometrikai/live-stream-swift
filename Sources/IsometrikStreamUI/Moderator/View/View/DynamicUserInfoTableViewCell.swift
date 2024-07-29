@@ -154,8 +154,14 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
             userProfilePicture.image = UIImage()
         }
         
-        let initialText = name.prefix(2)
-        defaultUserProfilePicture.initialsText.text = "\(initialText)".uppercased()
+        if !name.isEmpty {
+            let initialText = name.prefix(2)
+            defaultUserProfilePicture.initialsText.text = "\(initialText)".uppercased()
+        } else {
+            let initialText = userName.prefix(2)
+            defaultUserProfilePicture.initialsText.text = "\(initialText)".uppercased()
+        }
+        
         
         titleLabel.text = name
         subtitleLabel.text = userName

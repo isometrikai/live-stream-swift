@@ -28,13 +28,9 @@ extension VerticalStreamCollectionViewCell: StreamCellActionDelegate {
         // stream container footer targets
         
         let messageTextInputView = streamContainer.streamFooterView.messageTextInputView
-        
-        messageTextInputView.emojiButton.addTarget(self, action: #selector(messageTextViewEmojiButtonTapped), for: .touchUpInside)
         messageTextInputView.sendButton.addTarget(self, action: #selector(messageTextViewSendButtonTapped), for: .touchUpInside)
         
         let streamFooterView = streamContainer.streamFooterView
-    
-        streamFooterView.messageTextInputView.emojiButton.addTarget(self, action: #selector(messageTextViewEmojiButtonTapped), for: .touchUpInside)
         streamFooterView.messageTextInputView.sendButton.addTarget(self, action: #selector(messageTextViewSendButtonTapped), for: .touchUpInside)
         streamFooterView.actionButton.addTarget(self, action: #selector(alternateActionButtonTapped), for: .touchUpInside)
         

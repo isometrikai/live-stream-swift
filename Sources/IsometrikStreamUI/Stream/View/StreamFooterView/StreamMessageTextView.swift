@@ -20,18 +20,6 @@ class StreamMessageTextView: UIView, ISMAppearanceProvider {
         return view
     }()
     
-    lazy var emojiButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(appearance.images.emoji.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = .white
-        button.backgroundColor = UIColor.colorWithHex(color: "#676767")
-        button.layer.cornerRadius = 17.5
-        button.ismTapFeedBack()
-        button.addTarget(self, action: #selector(emojiTapped), for: .touchUpInside)
-        return button
-    }()
-    
     lazy var messageTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +60,6 @@ class StreamMessageTextView: UIView, ISMAppearanceProvider {
     
     func setupViews(){
         addSubview(coverView)
-        coverView.addSubview(emojiButton)
         coverView.addSubview(messageTextField)
         coverView.addSubview(sendButton)
     }
@@ -80,13 +67,8 @@ class StreamMessageTextView: UIView, ISMAppearanceProvider {
     func setupConstraints(){
         coverView.ism_pin(to: self)
         NSLayoutConstraint.activate([
-            emojiButton.leadingAnchor.constraint(equalTo: coverView.leadingAnchor, constant: 7.5),
-            emojiButton.widthAnchor.constraint(equalToConstant: 35),
-            emojiButton.heightAnchor.constraint(equalToConstant: 35),
-            emojiButton.centerYAnchor.constraint(equalTo: coverView.centerYAnchor),
-            
             messageTextField.centerYAnchor.constraint(equalTo: coverView.centerYAnchor),
-            messageTextField.leadingAnchor.constraint(equalTo: emojiButton.trailingAnchor, constant: 3),
+            messageTextField.leadingAnchor.constraint(equalTo: coverView.leadingAnchor, constant: 16),
             messageTextField.trailingAnchor.constraint(equalTo: sendButton.leadingAnchor, constant: -3),
             
             sendButton.trailingAnchor.constraint(equalTo: coverView.trailingAnchor, constant: -7.5),

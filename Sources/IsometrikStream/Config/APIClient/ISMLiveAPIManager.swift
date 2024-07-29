@@ -108,25 +108,11 @@ public struct ISMLiveAPIManager {
                     let responseObject = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(responseObject, nil))
                 } catch {
-                    
                     if let decodingError = error as? DecodingError {
-                        switch decodingError {
-                        case .typeMismatch(let key, let context):
-                            LogManager.shared.logNetwork("Type mismatch for key \(key), context: \(context.debugDescription)", type: .debug)
-                        case .valueNotFound(let type, let context):
-                            LogManager.shared.logNetwork("Value not found for type \(type), context: \(context.debugDescription)", type: .debug)
-                        case .keyNotFound(let key, let context):
-                            LogManager.shared.logNetwork("Key not found: \(key), context: \(context.debugDescription)", type: .debug)
-                        case .dataCorrupted(let context):
-                            LogManager.shared.logNetwork("Data corrupted, context: \(context.debugDescription)", type: .debug)
-                        @unknown default:
-                            print("")
-                            LogManager.shared.logNetwork("Unknown decoding error", type: .debug)
-                        }
+                        self.handleDecodingError(error: decodingError)
                     } else {
                         LogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
                     }
-                    
                     completion(.failure(.decodingError(error)))
                 }
             case 204, 404, 400:
@@ -153,6 +139,18 @@ public struct ISMLiveAPIManager {
             case 401 :
                 break
 //                Utility.logOut()
+            case 409, 422:
+                do {
+                    let responseObject = try JSONDecoder().decode(T.self, from: data)
+                    completion(.success(responseObject, nil))
+                } catch {
+                    if let decodingError = error as? DecodingError {
+                        self.handleDecodingError(error: decodingError)
+                    } else {
+                        LogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
+                    }
+                    completion(.failure(.decodingError(error)))
+                }
             default:
                 // Handle the error messages and statuscode
                 do {
@@ -174,11 +172,29 @@ public struct ISMLiveAPIManager {
   
     
     static func retryRequest<T: Codable, R:Any>(request: ISMLiveAPIRequest<R>, completion: @escaping (_ result : ISMLiveResult<T, ISMLiveAPIError>) -> Void) {
-          // Add your retry logic here, such as waiting for a few seconds and then retrying
-          DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-              ISMLiveAPIManager.sendRequest(request: request, completion: completion)
-          }
-      }
+        // Add your retry logic here, such as waiting for a few seconds and then retrying
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            ISMLiveAPIManager.sendRequest(request: request, completion: completion)
+        }
+    }
+    
+    
+    static func handleDecodingError(error: DecodingError){
+        switch error {
+        case .typeMismatch(let key, let context):
+            LogManager.shared.logNetwork("Type mismatch for key \(key), context: \(context.debugDescription)", type: .debug)
+        case .valueNotFound(let type, let context):
+            LogManager.shared.logNetwork("Value not found for type \(type), context: \(context.debugDescription)", type: .debug)
+        case .keyNotFound(let key, let context):
+            LogManager.shared.logNetwork("Key not found: \(key), context: \(context.debugDescription)", type: .debug)
+        case .dataCorrupted(let context):
+            LogManager.shared.logNetwork("Data corrupted, context: \(context.debugDescription)", type: .debug)
+        @unknown default:
+            print("")
+            LogManager.shared.logNetwork("Unknown decoding error", type: .debug)
+        }
+    }
+    
 }
 
 
