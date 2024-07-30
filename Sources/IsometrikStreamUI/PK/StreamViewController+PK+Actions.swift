@@ -442,21 +442,10 @@ extension StreamViewController {
             }
             
         } failure: { error in
-            switch error{
-            case .noResultsFound(_):
-                // handle noresults found here
-                break
-            case .invalidResponse:
-                DispatchQueue.main.async {
-                    self.view.showToast( message: "PK Stop Error: Invalid Response")
-                }
-            case .httpError(let errorCode, let errorMessage):
-                DispatchQueue.main.async{
-                    self.view.showToast( message: "PK Stop Error: \(errorCode) \(errorMessage?.error ?? "")")
-                }
-            default :
-                break
-            }
+            isometrik.getIsometrik().leaveChannel()
+            let errorMessage = CustomErrorHandler.getErrorMessage(error)
+            ToastManager.shared.showToast(message: "\(errorMessage)", in: self.view)
+            self.dismissViewController()
         }
 
         
@@ -569,7 +558,7 @@ extension StreamViewController {
                 
                 switch userType {
                 case .member :
-                    // Note : change back to ghost(which is basically the member's original stream) stream if you are a member.
+                    // Note : change back to ghost stream if you are a member (which is basically the member's original stream).
                     self.updateBroadCastingStatusAfterPKEnds(intentToStop: false)
                 case .host :
                     break
@@ -584,7 +573,6 @@ extension StreamViewController {
                     viewModel.unsubscribeToStreamEvents(streamId: streamId)
                     
                     self.leaveStreamByViewer(userId: userInfo.userId ?? "", streamId:streamId)
-                    
                     
                     viewModel.streamsData[viewModel.selectedStreamIndex.row].pkInviteId = ""
                     
@@ -771,24 +759,9 @@ extension StreamViewController {
     func stopPKBattle(pkId: String, action: PKStopAction){
         
         let isometrik = viewModel.isometrik
-        isometrik.getIsometrik().stopPKChallenge(pkId: pkId, action: action.rawValue) { result in
-                print(result)
-        }failure:  { error in
-            switch error{
-            case .noResultsFound(_):
-                // handle noresults found here
-                break
-            case .invalidResponse:
-                DispatchQueue.main.async {
-                    self.view.showToast( message: "PK Stop Battle Error: Invalid Response")
-                }
-            case .httpError(let errorCode, let errorMessage):
-                DispatchQueue.main.async{
-                    self.view.showToast( message: "PK Stop Battle Error: \(errorCode) \(errorMessage?.error ?? "")")
-                }
-            default :
-                break
-            }
+        isometrik.getIsometrik().stopPKChallenge(pkId: pkId, action: action.rawValue) { result in }failure:  { error in
+            let errorMessage = CustomErrorHandler.getErrorMessage(error)
+            ToastManager.shared.showToast(message: "\(errorMessage)", in: self.view)
         }
         
     }
@@ -910,7 +883,10 @@ extension StreamViewController {
                         let streamer1 = self.viewModel.pkGiftData?.streamer1
                         let streamer2 = self.viewModel.pkGiftData?.streamer2
                         
-                        if streamer1Id == self.viewModel.streamMembers.first?.userID {
+                        let firstStreamMemberId = self.viewModel.streamMembers.first?.userID ?? ""
+                        let firstStreamMemberIsAdmin = self.viewModel.streamMembers.first?.isAdmin ?? false
+                        
+                        if streamer1Id == firstStreamMemberId && firstStreamMemberIsAdmin {
                             self.viewModel.pkGiftData?.streamer1 = streamer1
                             self.viewModel.pkGiftData?.streamer2 = streamer2
                         } else {
@@ -919,8 +895,19 @@ extension StreamViewController {
                         }
                         
                         visibleCell.streamContainer.videoContainer.giftData = self.viewModel.pkGiftData
-                    }
                         
+                        let streamer1Coin = self.viewModel.pkGiftData?.streamer1?.coins ?? 0
+                        let streamer1Name = self.viewModel.pkGiftData?.streamer1?.userName ?? ""
+                        
+                        let streamer2Coin = self.viewModel.pkGiftData?.streamer2?.coins ?? 0
+                        let streamer2Name = self.viewModel.pkGiftData?.streamer2?.userName ?? ""
+                        
+                        LogManager.shared.logCustom(category: "gift", message: "Streamer1(\(streamer1Name)) Coin: \(streamer1Coin)")
+                        
+                        LogManager.shared.logCustom(category: "gift", message: "Streamer2(\(streamer2Name)) Coin: \(streamer2Coin)")
+                        
+                    }
+                      
                     
                     // reload the header views
                     visibleCell.viewModel = self.viewModel

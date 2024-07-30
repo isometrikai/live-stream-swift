@@ -84,6 +84,7 @@ final public class StreamViewModel: NSObject {
     
     var youAreLiveCallbackAfterCounter:(() -> Void)?
     var videoContainer: CustomVideoContainer?
+    var ignoreMqttEventForStopStream: Bool?
     
     // MARK: - INITIALIZER
     

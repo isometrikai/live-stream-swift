@@ -97,7 +97,7 @@ extension StreamViewController {
            let secondUserDetails = streamData.secondUserDetails
         {
             
-            LogManager.shared.logGeneral("First user details: \(firstUserDetails) \n Second user details: \(secondUserDetails)", type: .debug)
+            LogManager.shared.logCustom(category: "gift", message: "First user details: \(firstUserDetails) \n Second user details: \(secondUserDetails)")
             
             if currentHost.count > 0 {
                 
@@ -131,7 +131,7 @@ extension StreamViewController {
             recieverName: recieverName
         )
         
-        LogManager.shared.logGeneral("Gift reciever data: \(giftData)", type: .debug)
+        LogManager.shared.logCustom(category: "gift", message: "Gift reciever data: \(giftData)")
         
         return giftData
         

@@ -268,17 +268,12 @@ extension StreamViewController: StreamCellActionDelegate {
         let userId = isometrik.getUserSession().getUserId()
         let userType = viewModel.streamUserType
         
-        if isGuestUser {
-            self.leaveStreamByViewer(userId: userId, streamId: streamId)
-            return 
-        }
-        
         if streamStatus == .started {
             let popupController = StreamPopupViewController()
             
             let titleLabel = popupController.titleLabel
             let cancelButton = popupController.cancelButton
-            let yesButton = popupController.yesButton
+            let yesButton = popupController.actionButton
             
             titleLabel.text = "Are you sure that you want to end your live video ?"
             
@@ -287,15 +282,15 @@ extension StreamViewController: StreamCellActionDelegate {
                 let isPKMember = isometrik.getUserSession().getMemberForPKStatus()
                 if isPKMember {
                     cancelButton.setTitle("Cancel", for: .normal)
-                    yesButton.setTitle("Stop Publishing", for: .normal)
+                    yesButton.setTitle("End broadcasting", for: .normal)
                 } else {
-                    cancelButton.setTitle("Leave Broadcasting", for: .normal)
-                    yesButton.setTitle("Stop Publishing", for: .normal)
+                    cancelButton.setTitle("Leave broadcasting", for: .normal)
+                    yesButton.setTitle("Stop publishing", for: .normal)
                 }
                 break
             case .host:
                 cancelButton.setTitle("Cancel", for: .normal)
-                yesButton.setTitle("End Broadcasting", for: .normal)
+                yesButton.setTitle("End broadcasting", for: .normal)
                 break
             case .viewer, .moderator:
                 self.leaveStreamByViewer(userId: userId, streamId: streamId)
@@ -859,12 +854,19 @@ extension StreamViewController: StreamCellActionDelegate {
         
     }
     
-    func hostNotOnline(streamId : String?) {
-//        if self.streamInfo?.streamId == streamId {
-//            endTimer()
-//            isometrik?.getIsometrik().leaveChannel()
-//            streamingVideoAlerttMessage(alertMessage: "The host is not online now. You can watch other live videos.", streamId: streamId ?? "")
-//        }
+    func hostNotOnline() {
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        
+        endTimer()
+        viewModel.isometrik.getIsometrik().leaveChannel()
+        streamCollectionView.isScrollEnabled = false
+        
+        // show the popup saying stream off
+        visibleCell.streamEndView.isHidden = false
+        visibleCell.streamEndView.streamEndMessageLabel.text = "The host is not online now. You can watch other live videos".localized + "."
+        visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
+        
     }
     
     func StopPKBattleAsTimerFinishes() {

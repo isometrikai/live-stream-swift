@@ -253,7 +253,7 @@ extension StreamViewController {
         let controller = StreamPopupViewController()
         controller.titleLabel.text = "Are you sure want to Stop Streaming Together?"
         controller.cancelButton.setTitle("No", for: .normal)
-        controller.yesButton.setTitle("Yes", for: .normal)
+        controller.actionButton.setTitle("Yes", for: .normal)
         
         controller.actionCallback = { [weak self] action in
             guard let self else { return }
@@ -281,7 +281,7 @@ extension StreamViewController {
         let controller = StreamPopupViewController()
         controller.titleLabel.text = "Are you sure want to Stop PK?"
         controller.cancelButton.setTitle("No", for: .normal)
-        controller.yesButton.setTitle("Yes", for: .normal)
+        controller.actionButton.setTitle("Yes", for: .normal)
         
         controller.actionCallback = { [weak self] action in
             guard let self else { return }

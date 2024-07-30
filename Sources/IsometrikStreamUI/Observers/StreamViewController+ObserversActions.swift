@@ -300,27 +300,51 @@ extension StreamViewController {
     @objc func mqttStreamStopped(notification: NSNotification){
         
         let streamsData = viewModel.streamsData
+        let ignoreMqttEventsForStopStream = !(viewModel.ignoreMqttEventForStopStream.unwrap)
         
-        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+        guard ignoreMqttEventsForStopStream,
               let visibleIndex = fullyVisibleIndex(streamCollectionView),
               let _streamData = notification.userInfo?["data"] as? ISMStream,
-              let streamData = streamsData[safe: visibleIndex.row]
+              let streamData = streamsData[safe: visibleIndex.row],
+              streamData.streamId.unwrap == _streamData.streamId
         else { return }
         
         let streamUserType = viewModel.streamUserType
-        
-        if streamUserType == .host {
-            return
-        }
-        
+        let isometrik = viewModel.isometrik
+        let currentUserId = isometrik.getUserSession().getUserId()
         let streamId = streamData.streamId.unwrap
-        streamCollectionView.isScrollEnabled = false
         
-        // show the popup saying stream off
-        if streamId == _streamData.streamId {
-            visibleCell.streamEndView.isHidden = false
-            visibleCell.streamEndView.streamEndMessageLabel.text = "The host is not online now. You can watch other live videos".localized + "."
-            visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
+        switch streamUserType {
+        case .viewer, .moderator:
+            hostNotOnline()
+            break
+        case .member:
+            let wasPKMember = isometrik.getUserSession().getMemberForPKStatus()
+            if wasPKMember {
+                self.updateBroadCastingStatusAfterPKEnds(intentToStop: false)
+            } else {
+                hostNotOnline()
+            }
+            break
+        case .host:
+            
+            if ignoreMqttEventsForStopStream, currentUserId == _streamData.createdBy {
+                
+                let controller = StreamPopupViewController()
+                controller.titleLabel.text = "It looks like you have an active session on another device. You can't stream to multiple devices simultaneously."
+                controller.cancelButton.isHidden = true
+                controller.actionButton.setTitle("Cancel", for: .normal)
+                
+                controller.actionCallback = {[weak self] _ in
+                    controller.dismiss(animated: true)
+                    self?.stopLiveStream(streamId: streamId, userId: currentUserId)
+                }
+                
+                controller.modalPresentationStyle = .overCurrentContext
+                self.present(controller, animated: true)
+                
+            }
+            break
         }
         
     }

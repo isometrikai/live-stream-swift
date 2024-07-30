@@ -68,7 +68,7 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
         let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: WalletCurrencyType.coin.getValue)
         
         if balance == 0 {
-            headerView.getMoreButton.setTitle("Buy", for: .normal)
+            headerView.getMoreButton.setTitle("Buy coins", for: .normal)
         } else {
             headerView.getMoreButton.setTitle("Get more", for: .normal)
         }

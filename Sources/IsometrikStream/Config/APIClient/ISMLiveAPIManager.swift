@@ -139,10 +139,12 @@ public struct ISMLiveAPIManager {
             case 401 :
                 break
 //                Utility.logOut()
-            case 409, 422:
+            default:
+                // Handle the error messages and statuscode
                 do {
-                    let responseObject = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(responseObject, nil))
+                    var errorObject = try JSONDecoder().decode(ISMLiveErrorMessage.self, from: data)
+                    completion(.failure(.httpError(httpResponse.statusCode, errorObject)))
+                    LogManager.shared.logNetwork("Error: \(errorObject.readableErrorMessage.unwrap)", type: .debug)
                 } catch {
                     if let decodingError = error as? DecodingError {
                         self.handleDecodingError(error: decodingError)
@@ -151,18 +153,6 @@ public struct ISMLiveAPIManager {
                     }
                     completion(.failure(.decodingError(error)))
                 }
-            default:
-                // Handle the error messages and statuscode
-                do {
-                    var errorObject = try JSONDecoder().decode(ISMLiveErrorMessage.self, from: data)
-                    if let message = errorObject.message{
-                        errorObject.error = message
-                    }
-                    completion(.failure(.httpError(httpResponse.statusCode, errorObject)))
-                } catch {
-                    completion(.failure(.httpError(httpResponse.statusCode, nil)))
-                }
-                
             }
         }
         
@@ -209,8 +199,24 @@ public enum ISMLiveAPIError: Error {
 
 public struct ISMLiveErrorMessage : Codable{
     public var error : String?
+    public var errors: [String : [String]]?
     public let errorCode : Int?
     public let message : String?
+    
+    
+    public var readableErrorMessage: String? {
+        guard let errors else {
+            return error
+        }
+        
+        var errorMessage = ""
+        for (key, errorMessages) in errors {
+            let combinedMessages = errorMessages.joined(separator: ", ")
+            errorMessage += "\(key): \(combinedMessages)\n"
+        }
+        return errorMessage.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
 }
 
 public enum ISMLiveResult<T,ErrorData>{

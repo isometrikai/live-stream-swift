@@ -147,7 +147,7 @@ extension UIStackView {
         view.removeFromSuperview()
     }
     
-    func ism_removeFullyAllArrangedSubviews() {
+    public func ism_removeFullyAllArrangedSubviews() {
         arrangedSubviews.forEach { (view) in
             ism_removeFully(view: view)
         }
