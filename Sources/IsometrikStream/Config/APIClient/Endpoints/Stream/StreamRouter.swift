@@ -131,17 +131,49 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
                     param += ["type":"\(streamType)"]
                 }
                 
-                if let fetchLive = streamQuery.fetchLive {
-                    param += ["fetchLive":"\(fetchLive)"]
-                }
-                
                 if let sortOrder = streamQuery.sortOrder {
                     param += ["sortOrder":"\(sortOrder)"]
+                }
+                
+                // filters
+                
+                if let isLive = streamQuery.isLive {
+                    param += ["fetchLive":"\(isLive)"]
                 }
 
                 if let isRecorded = streamQuery.isRecorded {
                     param += ["isRecorded":"\(isRecorded)"]
                 }
+                
+                if let isPK = streamQuery.isPK {
+                    param += ["pk":"\(isPK)"]
+                }
+                
+                if let isPrivate = streamQuery.isPrivate {
+                    param += ["private":"\(isPrivate)"]
+                }
+                
+                if let audioOnly = streamQuery.audioOnly {
+                    param += ["audioOnly":"\(audioOnly)"]
+                }
+                
+                if let audioOnly = streamQuery.audioOnly {
+                    param += ["audioOnly":"\(audioOnly)"]
+                }
+                
+                if let isRestream = streamQuery.isRestream {
+                    param += ["restream":"\(isRestream)"]
+                }
+                
+                if let isHDbroadcast = streamQuery.isHDbroadcast {
+                    param += ["hdbroadcast":"\(isHDbroadcast)"]
+                }
+                
+                if let isPaid = streamQuery.isPaid {
+                    param += ["isPaid":"\(isPaid)"]
+                }
+                
+                //:
             }
             break
         case let .checkStreamExistence(streamId):

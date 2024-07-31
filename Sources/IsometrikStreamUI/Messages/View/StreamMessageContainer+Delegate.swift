@@ -69,8 +69,11 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            delegate?.loadMoreMessages()
+        guard let viewModel else { return }
+        if viewModel.messages.count > 20 {
+            if indexPath.row == 0 {
+                delegate?.loadMoreMessages()
+            }
         }
     }
     

@@ -148,6 +148,18 @@ extension StreamViewController {
         // fetch copublish status
         self.fetchStatusOfCoPublishRequest { _ in }
         
+        // check whether viewer is in moderator's group of a stream
+        if viewModel.streamUserType != .host {
+            viewModel.isUserModerator { success, error in
+                if error == nil {
+                    cell.viewModel = self.viewModel
+                    cell.streamContainer.streamMessageView.messageTableView.reloadData()
+                } else {
+                    ToastManager.shared.showToast(message: error.unwrap, in: self.view)
+                }
+            }
+        }
+        
         // fetch PK status if PK Challange
         guard let streamData = viewModel.streamsData[safe: viewModel.selectedStreamIndex.row] else { return }
         let isPK = streamData.isPkChallenge.unwrap

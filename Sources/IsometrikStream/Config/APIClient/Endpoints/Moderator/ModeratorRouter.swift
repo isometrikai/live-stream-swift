@@ -10,7 +10,7 @@ import Foundation
 
 enum ModeratorRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
-    case fetchModerators(streamId: String, searchTags: String?, limit: Int, skip: Int)
+    case fetchModerators(streamId: String, searchTag: String?, limit: Int, skip: Int)
     case stopModerating(streamId: String)
     case addModerator
     case removeModerator(streamId: String, moderatorId: String)

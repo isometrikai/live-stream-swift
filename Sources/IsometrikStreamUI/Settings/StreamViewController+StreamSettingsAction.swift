@@ -167,7 +167,8 @@ extension StreamViewController: StreamSettingDelegate {
                         // get stream data
                         visibleCell.streamLoader.isHidden = false
                         
-                        isometrik.getIsometrik().fetchStreams(streamId: streamId) { data in
+                        let streamParam = StreamQuery(streamId: streamId)
+                        isometrik.getIsometrik().fetchStreams(streamParam: streamParam) { data in
                             let streams = data.streams
                             if let streams, streams.count > 0, let stream = streams.first {
                                 self.viewModel.streamsData[selectedStreamIndex] = stream

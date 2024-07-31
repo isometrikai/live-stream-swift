@@ -272,6 +272,32 @@ final public class StreamViewModel: NSObject {
         
     }
     
+    func isUserModerator(completion: @escaping(Bool, String?)->Void){
+        
+        guard streamsData.count > 0,
+              let streamData = streamsData[safe: selectedStreamIndex.row]
+        else { return }
+        
+        let currentUsersUserName = isometrik.getUserSession().getUserIdentifier()
+        
+        let streamModeratorViewModel = ModeratorViewModel(streamInfo: streamData, isometrik: isometrik)
+        streamModeratorViewModel.userInModeratorGroup(withUserName: currentUsersUserName) { success, error in
+            
+            DispatchQueue.main.async {
+                if success {
+                    self.streamUserType = .moderator
+                    self.streamMessageViewModel?.streamUserType = .moderator
+                    self.isometrik.getUserSession().setUserType(userType: .moderator)
+                    self.streamsData[self.selectedStreamIndex.row].isModerator = true
+                }
+                completion(success, error)
+            }
+            
+            
+        }
+        
+    }
+    
     func deleteStreamMessage(messageInfo: ISMComment?, completionHandler: @escaping streamResponse) {
         
         guard let messageInfo,
