@@ -13,18 +13,35 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
     
     func handleModalActions(_ title: String? = nil , _ subtitle: String? = nil, joinAsCopublisher: Bool = false){
         
-        // get user type
         let userType = viewModel.streamUserType
-        
+        let userAccess = viewModel.streamUserAccess
         let controller = StreamDynamicPopupViewController()
         
-        // configurations
-        switch userType {
-        case .member:
-            // not require
-            break
-        case .viewer:
+        if userAccess == .moderator {
             
+            switch userType {
+            case .host:
+                controller.titleLabel.text = "You're currently moderating the broadcast".localized
+                controller.infoLabel.text = "Being a moderator you can kickout members and viewers, reply to and delete messages".localized + "."
+                controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
+                controller.infoLabel.textColor = .lightGray
+                
+                controller.cancelButton.setTitle("Got It".localized, for: .normal)
+                controller.actionButton.setTitle("Manage Moderators".localized, for: .normal)
+                break
+            default:
+                controller.titleLabel.text = title ?? "You're currently moderating the broadcast".localized
+                controller.infoLabel.text = subtitle ?? "Being a moderator you can kickout members and viewers, reply to and delete messages".localized + "."
+                controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
+                controller.infoLabel.textColor = .lightGray
+                
+                controller.cancelButton.setTitle("Got It".localized, for: .normal)
+                controller.actionButton.setTitle("Stop Moderating".localized, for: .normal)
+                break
+            }
+            
+        } else {
+            // acknowledge before changing user access
             if joinAsCopublisher {
                 
                 controller.titleLabel.text = title ?? ""
@@ -45,30 +62,6 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
                 controller.actionStackView.ism_removeFully(view: controller.actionButton)
                 controller.actionButton.isHidden = true
             }
-            
-            break
-        case .host:
-            
-            controller.titleLabel.text = "You're currently moderating the broadcast".localized
-            controller.infoLabel.text = "Being a moderator you can kickout members and viewers, reply to and delete messages".localized + "."
-            controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
-            controller.infoLabel.textColor = .lightGray
-            
-            controller.cancelButton.setTitle("Got It".localized, for: .normal)
-            controller.actionButton.setTitle("Manage Moderators".localized, for: .normal)
-            
-            break
-        case .moderator:
-            
-            controller.titleLabel.text = title ?? "You're currently moderating the broadcast".localized
-            controller.infoLabel.text = subtitle ?? "Being a moderator you can kickout members and viewers, reply to and delete messages".localized + "."
-            controller.infoLabel.font = appearance.font.getFont(forTypo: .h8)
-            controller.infoLabel.textColor = .lightGray
-            
-            controller.cancelButton.setTitle("Got It".localized, for: .normal)
-            controller.actionButton.setTitle("Stop Moderating".localized, for: .normal)
-            
-            break
         }
         
         controller.action_callback = { [weak self] data in
@@ -78,18 +71,12 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
             controller.dismiss(animated: true)
             if data == .cancel { return }
             
-            switch userType {
-            case .member:
-                // not require
-                break
-            case .viewer:
-                break
-            case .host:
-                self.openModeratorsListInStream()
-                break
-            case .moderator:
+            let userAccess = viewModel.streamUserAccess
+                
+            if userAccess == .moderator && userType != .host {
                 self.stopModerating()
-                break
+            } else {
+                self.openModeratorsListInStream()
             }
             
         }

@@ -31,6 +31,7 @@ class StreamMessageViewModel: NSObject {
     var messages: [ISMComment] = []
     var giftMessages: [ISMComment] = []
     var streamUserType: StreamUserType = .viewer
+    var streamUserAccess: StreamUserAccess = .user
     var skip = 0
     var limit = 10
     

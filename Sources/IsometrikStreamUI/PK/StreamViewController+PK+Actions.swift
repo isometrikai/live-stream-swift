@@ -437,8 +437,6 @@ extension StreamViewController {
                 }
                 
                 break
-            case .moderator:
-                break
             }
             
         } failure: { error in

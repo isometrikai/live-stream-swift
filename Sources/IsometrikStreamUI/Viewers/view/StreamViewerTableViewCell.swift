@@ -188,6 +188,7 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let customDate = Date(timeIntervalSince1970: timeInterval / 1000)
         let time = customDate.ism_getCustomMessageTime()
         let userType = isometrik.getUserSession().getUserType()
+        let userAccess = isometrik.getUserSession().getUserAccess()
         
         if data.imagePath != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let imageUrl = URL(string: data.imagePath ?? "") {
@@ -207,10 +208,7 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         subtitleLabel.text = ""
         joiningLabel.text = "\(time)"
         
-        switch userType {
-        case .viewer:
-            actionButton.isHidden = true
-        case .host, .moderator:
+        if userAccess == .moderator {
             actionButton.isHidden = false
             
             switch actionType {
@@ -229,7 +227,7 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
                 
             }
             
-        default:
+        } else {
             actionButton.isHidden = true
         }
         

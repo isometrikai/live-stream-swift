@@ -129,8 +129,6 @@ extension StreamViewController: RtcWrapperProtocol {
                 self.fetchStreamData(cell: cell)
             }
             break
-        case .moderator:
-            break
         }
         
     }

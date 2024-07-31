@@ -56,7 +56,7 @@ extension StreamViewController: StreamSettingDelegate {
         case .speaker:
             
             switch userType {
-            case .viewer, .moderator:
+            case .viewer:
                 
                 let uid = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
                 self.getVideoSessionAndIndexWithId(uId: uid) { session, index in
@@ -251,9 +251,6 @@ extension StreamViewController: StreamSettingDelegate {
                     break
                 case .host:
                     settingController.settingData = [audioAction, cameraAction]
-                    break
-                case .moderator:
-                    settingController.settingData = [speakerAction]
                     break
                 }
                 

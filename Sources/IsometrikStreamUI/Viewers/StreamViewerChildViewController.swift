@@ -340,37 +340,35 @@ extension StreamViewerChildViewController: StreamViewerActionDelegate {
     func didViewerTapped(with user: ISMViewer?, navigationController: UINavigationController?) {}
     
     func didActionButtonTapped(with index: Int, with data: ISMViewer, actionType: ActionType) {
-        switch userType {
-        case .host , .moderator:
-            guard let streamId = streamData?.streamId,
-                  let viewerId = viewers[index].viewerId  else { return }
-            
-            let firstName = isometrik?.getUserSession().getFirstName()
-            let lastName = isometrik?.getUserSession().getLastName()
-            let fullName = "\(firstName ?? "") \(lastName ?? "")"
-            
-            self.removeViewerByInitiator(initiatorId: isometrik?.getUserSession().getUserId() ?? "", initiatorName: fullName,streamId: streamId, viewerId: viewerId)
-            
-            self.tableView.beginUpdates()
-            
-            // removing the data from viewers array
-            viewers.remove(at: index)
-            
-            // show default view if no viewers
-            if viewers.count == 0 {
-                self.defaultView.isHidden = false
-            }
-            
-            let indexPath = IndexPath(row: index, section: 0)
-            self.tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            self.tableView.endUpdates()
-            
-            break
-            
-        case .viewer , .member:
-            break
+        
+        let userAccess = isometrik?.getUserSession().getUserAccess()
+        if userAccess != .moderator {
+            return
         }
+        
+        guard let streamId = streamData?.streamId,
+              let viewerId = viewers[index].viewerId  else { return }
+        
+        let firstName = isometrik?.getUserSession().getFirstName()
+        let lastName = isometrik?.getUserSession().getLastName()
+        let fullName = "\(firstName ?? "") \(lastName ?? "")"
+        
+        self.removeViewerByInitiator(initiatorId: isometrik?.getUserSession().getUserId() ?? "", initiatorName: fullName,streamId: streamId, viewerId: viewerId)
+        
+        self.tableView.beginUpdates()
+        
+        // removing the data from viewers array
+        viewers.remove(at: index)
+        
+        // show default view if no viewers
+        if viewers.count == 0 {
+            self.defaultView.isHidden = false
+        }
+        
+        let indexPath = IndexPath(row: index, section: 0)
+        self.tableView.deleteRows(at: [indexPath], with: .fade)
+        
+        self.tableView.endUpdates()
     }
     
 }

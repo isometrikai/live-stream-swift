@@ -14,7 +14,12 @@ public enum StreamUserType {
     case viewer
     case member
     case host
+    //case moderator
+}
+
+public enum StreamUserAccess {
     case moderator
+    case user
 }
 
 enum ScrollStatus {
@@ -63,6 +68,7 @@ final public class StreamViewModel: NSObject {
     var ghostUserId: String = ""
     var streamOptions: [StreamOption] = []
     public var streamUserType: StreamUserType = .viewer
+    public var streamUserAccess: StreamUserAccess = .user
     var streamMembers: [ISMMember] = []
     var streamViewers: [ISMViewer] = []
     public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
@@ -138,8 +144,6 @@ final public class StreamViewModel: NSObject {
             isometrik.getIsometrik().setUserRoleInStream(.Audience)
         case .host, .member:
             isometrik.getIsometrik().setUserRoleInStream(.Broadcaster)
-        case .moderator:
-            break
         }
         
         isometrik.getIsometrik().joinChannel(userId: userId)
@@ -285,9 +289,9 @@ final public class StreamViewModel: NSObject {
             
             DispatchQueue.main.async {
                 if success {
-                    self.streamUserType = .moderator
-                    self.streamMessageViewModel?.streamUserType = .moderator
-                    self.isometrik.getUserSession().setUserType(userType: .moderator)
+                    self.streamUserAccess = .moderator
+                    self.streamMessageViewModel?.streamUserAccess = .moderator
+                    self.isometrik.getUserSession().setUserAccess(userAccess: .moderator)
                     self.streamsData[self.selectedStreamIndex.row].isModerator = true
                 }
                 completion(success, error)

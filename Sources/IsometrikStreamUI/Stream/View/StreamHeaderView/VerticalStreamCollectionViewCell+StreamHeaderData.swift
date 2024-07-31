@@ -43,6 +43,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         let isPKStream = streamData.isPkChallenge.unwrap
         let isPaidStream = streamData.isPaid.unwrap
         let paidAmount = streamData.amount.unwrap
+        let userAccess = viewModel.streamUserAccess
         
         // if pk stream hide the title label otherwise not
         streamTitleLabel.isHidden = isPKStream
@@ -56,6 +57,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         var lastName: String?
         var profileImage: String?
         
+        // updating schedule stream changes
         if streamStatus == .scheduled {
             streamStatusView.isHidden = true
             headerView.cartButton(canBeShown: true)
@@ -66,6 +68,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             viewerCountView.iconImageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
         }
         
+        // updating paid stream changes
         if isPaidStream {
             streamStatusView.stackView.addArrangedSubview(paidStreamButton)
             let amountLabel = Int64(paidAmount).ism_roundedWithAbbreviations
@@ -74,6 +77,14 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             streamStatusView.stackView.removeArrangedSubview(paidStreamButton)
         }
         
+        // updating moderator changes
+        if userAccess == .moderator {
+            moderatorButton.isHidden = false
+        } else {
+            moderatorButton.isHidden = true
+        }
+        
+        // updating stream profile changes
         switch streamUserType {
         case .viewer:
 
@@ -86,7 +97,6 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
                 followButton.isHidden = false
             }
             
-            moderatorButton.isHidden = true
             
             userName = hostMember?.userName
             firstName = hostMember?.metaData?.firstName
@@ -121,33 +131,12 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             hostMember = filteredMember.first
             
             followButton.isHidden = true
-            moderatorButton.isHidden = false
             
             userName = isometrik.getUserSession().getUserIdentifier()
             firstName = isometrik.getUserSession().getUserName()
             lastName = " "
             profileImage = isometrik.getUserSession().getUserImage()
 
-            break
-        case .moderator:
-            
-            let filteredMember = viewModel.streamMembers.filter { member in
-                member.isAdmin == true
-            }
-            
-            hostMember = filteredMember.first
-            
-            if currentUserId != hostMember?.userID ?? "" {
-                followButton.isHidden = false
-            }
-            
-            moderatorButton.isHidden = false
-            
-            userName = hostMember?.userName
-            firstName = hostMember?.metaData?.firstName
-            lastName = hostMember?.metaData?.lastName
-            profileImage = hostMember?.userProfileImageURL
-            
             break
         }
         

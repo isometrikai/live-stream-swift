@@ -9,7 +9,8 @@
 import UIKit
 import IsometrikStream
 
-final public class StreamViewController: UIViewController {
+final public class 
+StreamViewController: UIViewController {
 
     // MARK: - PROPERTIES
     

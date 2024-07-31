@@ -4,9 +4,13 @@ public enum UserType {
     case viewer
     case host
     case member
-    case moderator
     case guest
     case none
+}
+
+public enum UserAccess {
+    case user
+    case moderator
 }
 
 public enum PkBattleStatus {
@@ -17,6 +21,7 @@ public enum PkBattleStatus {
 public class IsometrikUserSession: NSObject {
     
     private var userType: UserType = .none
+    private var userAccess: UserAccess = .user
     private var memberForPK: Bool = false
     private var pkBattleStatus: PkBattleStatus = .off
     private var pkBattleId: String = ""
@@ -53,6 +58,10 @@ public class IsometrikUserSession: NSObject {
     
     public func setUserType(userType: UserType) {
         self.userType = userType
+    }
+    
+    public func setUserAccess(userAccess: UserAccess) {
+        self.userAccess = userAccess
     }
     
     public func setPKStatus(pkBattleStatus: PkBattleStatus) {
@@ -140,6 +149,10 @@ public class IsometrikUserSession: NSObject {
         return isRTMPStream
     }
     
+    public func getUserAccess() -> UserAccess {
+        return userAccess
+    }
+    
     // MARK: - DEFAULTS
     
     public func clearUserSession(){
@@ -160,6 +173,14 @@ public class IsometrikUserSession: NSObject {
     
     public func getUserModel() -> ISMStreamUser {
         return ISMStreamUser(userId: getUserId(), identifier: getUserIdentifier(), name: getUserName(), imagePath: getUserImage(), userToken: getUserToken())
+    }
+    
+    public func resetValues(){
+        userAccess = .user
+        pkBattleId = ""
+        isRTMPStream = false
+        memberForPK = false
+        pkBattleStatus = .off
     }
     
     

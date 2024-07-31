@@ -23,9 +23,9 @@ struct GiftsForGroupData {
 class StreamGiftViewModel {
     
     var isometrik: IsometrikSDK
-    
     var streamInfo: ISMStream
     var recieverGiftData: ISMCustomGiftRecieverData
+    private var dataPersistenceService: DataPersistenceService?
     
     var giftModelData: ISMStreamGiftModelData?
     var giftGroup: [ISMStreamGiftModel] = []
@@ -51,6 +51,18 @@ class StreamGiftViewModel {
         self.isometrik = isometrik
         self.streamInfo = streamInfo
         self.recieverGiftData = recieverGiftData
+        createDataPersistenceServiceContainer()
+    }
+    
+    // MARK: - DataPersistence service
+    
+    func createDataPersistenceServiceContainer() {
+        
+        let dataPersistenceService = DataPersistenceService.getInstance()
+        dataPersistenceService.createContainer(persistentModel: PersistenceGiftModel.self)
+        dataPersistenceService.createContainer(persistentModel: PersistenceGiftCategoryModel.self)
+        self.dataPersistenceService = dataPersistenceService
+        
     }
     
     // MARK: - Service funtions

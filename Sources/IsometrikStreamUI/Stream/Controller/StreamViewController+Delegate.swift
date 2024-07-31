@@ -79,6 +79,9 @@ extension StreamViewController: UICollectionViewDelegate, UICollectionViewDataSo
         // unsubscribing to the stream events
         viewModel.unsubscribeToStreamEvents(streamId: currentStreamId)
         
+        // reseting the moderator access
+        isometrik.getUserSession().resetValues()
+        
         // invalidate all timers
         self.endTimer()
         viewModel.invalidateAllTimers()

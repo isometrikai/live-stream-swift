@@ -315,7 +315,7 @@ extension StreamViewController {
         let streamId = streamData.streamId.unwrap
         
         switch streamUserType {
-        case .viewer, .moderator:
+        case .viewer:
             hostNotOnline()
             break
         case .member:
@@ -529,9 +529,9 @@ extension StreamViewController {
             if userData.moderatorId == currentUserId {
                 
                 // Changing the stream user type
-                viewModel.streamUserType = .moderator
-                viewModel.streamMessageViewModel?.streamUserType = .moderator
-                isometrik.getUserSession().setUserType(userType: .moderator)
+                viewModel.streamUserAccess = .moderator
+                viewModel.streamMessageViewModel?.streamUserAccess = .moderator
+                isometrik.getUserSession().setUserAccess(userAccess: .moderator)
                 
                 let title = "Added to moderator's group of broadcast".localized
                 let subtitle = "\(userData.moderatorName ?? "") " + "has been added to the moderator's group of broadcast by".localized  + " \(userData.initiatorName ?? "")" + ".\n" + "Being a moderator one can kick out members and viewers, reply-to and delete messages".localized
@@ -577,9 +577,11 @@ extension StreamViewController {
             
             if userData.moderatorId == currentUserId {
                 
-                // Changing the stream user type
-                viewModel.streamUserType = .viewer
-                viewModel.streamMessageViewModel?.streamUserType = .viewer
+                // Changing the stream user access
+                viewModel.streamUserAccess = .user
+                viewModel.streamMessageViewModel?.streamUserAccess = .user
+                isometrik.getUserSession().setUserAccess(userAccess: .user)
+                
                 
                 let title = "Removed from moderator's group of broadcast".localized
                 let subtitle = "\(userData.moderatorName ?? "") " + "has been removed from moderator's group of broadcast by" + " \(userData.initiatorName ?? "").\n " + "without being a moderator one can no longer kick out members and viewers, reply-to and delete messages"
@@ -627,8 +629,10 @@ extension StreamViewController {
             if userData.moderatorId == currentUserId {
                 
                 // Changing the stream user type
-                viewModel.streamUserType = .viewer
-                viewModel.streamMessageViewModel?.streamUserType = .viewer
+
+                viewModel.streamUserAccess = .user
+                viewModel.streamMessageViewModel?.streamUserAccess = .user
+                isometrik.getUserSession().setUserAccess(userAccess: .user)
                 
                 // updating moderator flag
                 viewModel.streamsData[viewModel.selectedStreamIndex.row].isModerator = false

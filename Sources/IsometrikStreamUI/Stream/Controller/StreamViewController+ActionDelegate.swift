@@ -292,7 +292,7 @@ extension StreamViewController: StreamCellActionDelegate {
                 cancelButton.setTitle("Cancel", for: .normal)
                 yesButton.setTitle("End broadcasting", for: .normal)
                 break
-            case .viewer, .moderator:
+            case .viewer:
                 self.leaveStreamByViewer(userId: userId, streamId: streamId)
                 return
             }
@@ -547,8 +547,6 @@ extension StreamViewController: StreamCellActionDelegate {
 //                openStreamTagProducts()
 //            }
             
-            break
-        case .moderator:
             break
         }
         
@@ -888,8 +886,6 @@ extension StreamViewController: StreamCellActionDelegate {
                 break
             case .member, .host:
                 stopPKBattleForBroadcaster(withPkId: pkId)
-                break
-            case .moderator:
                 break
             }
             

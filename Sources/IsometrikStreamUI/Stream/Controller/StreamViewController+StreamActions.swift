@@ -149,14 +149,12 @@ extension StreamViewController {
         self.fetchStatusOfCoPublishRequest { _ in }
         
         // check whether viewer is in moderator's group of a stream
-        if viewModel.streamUserType != .host {
-            viewModel.isUserModerator { success, error in
-                if error == nil {
-                    cell.viewModel = self.viewModel
-                    cell.streamContainer.streamMessageView.messageTableView.reloadData()
-                } else {
-                    ToastManager.shared.showToast(message: error.unwrap, in: self.view)
-                }
+        viewModel.isUserModerator { success, error in
+            if error == nil {
+                cell.viewModel = self.viewModel
+                cell.streamContainer.streamMessageView.messageTableView.reloadData()
+            } else {
+                ToastManager.shared.showToast(message: error.unwrap, in: self.view)
             }
         }
         

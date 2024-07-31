@@ -165,9 +165,9 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         messageTrailingConstraint?.isActive = true
     }
     
-    func configureData(message: ISMComment?, userType: StreamUserType?) {
+    func configureData(message: ISMComment?, userAccess: StreamUserAccess?) {
         
-        guard let message, let userType else { return }
+        guard let message, let userAccess else { return }
         
         let userName = message.senderName ?? "Unknown".localized
         let userImage = message.senderImage.unwrap
@@ -204,13 +204,13 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         
         // DELETE ACTIONS
         
-        viewTrailingConstraint?.constant = (userType == .host || userType == .moderator) ? 40 : 10
-        messageTrailingConstraint?.constant = (userType == .host || userType == .moderator) ? -40: -10
+        viewTrailingConstraint?.constant = (userAccess == .moderator) ? 40 : 10
+        messageTrailingConstraint?.constant = (userAccess == .moderator) ? -40: -10
         
         if messageType == .productBought {
             deleteView.isHidden = true
         } else {
-            deleteView.isHidden = (userType == .host || userType == .moderator) ? false : true
+            deleteView.isHidden = (userAccess == .moderator) ? false : true
         }
         
         //:

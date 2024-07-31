@@ -505,12 +505,6 @@ class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
             rtmpDefaultView.defaultLabel.text = "Waiting.."
             
             break
-        case .moderator:
-            
-            rtmpDefaultView.defaultImageView.image = appearance.images.joinStream
-            rtmpDefaultView.defaultLabel.text = "Join"
-            
-            break
         case .none:
             break
         case .guest:
