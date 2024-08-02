@@ -11,7 +11,7 @@ import IsometrikStream
 
 protocol StreamCellActionDelegate {
     
-    func didTapStreamClose(withIndex index: Int)
+    func didTapStreamClose()
     func didTapViewerCountView()
     func didTapStreamMembersView()
     func didTapLiveStatusView()
@@ -49,7 +49,7 @@ protocol StreamCellActionDelegate {
 
 extension StreamCellActionDelegate {
     
-    func didTapStreamClose(withIndex index: Int) {}
+    func didTapStreamClose() {}
     func didTapViewerCountView() {}
     func didTapStreamMembersView() {}
     func didTapLiveStatusView() {}

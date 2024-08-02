@@ -142,7 +142,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.earningStat
-        view.featureLabel.text = "Sales Value"
+        view.featureLabel.text = "Earnings"
         view.valueLabel.text = "--"
         return view
     }()

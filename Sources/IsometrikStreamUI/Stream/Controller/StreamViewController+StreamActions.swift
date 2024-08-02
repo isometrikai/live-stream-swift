@@ -7,17 +7,18 @@
 //
 
 import UIKit
+import IsometrikStream
 
 
 extension StreamViewController {
     
-    func didTapOnClosingAction(withOption option: StreamPopupAction, index: Int) {
+    func didTapOnClosingAction(withOption option: StreamPopupAction) {
         
         let isometrik = viewModel.isometrik
         let streamsData = viewModel.streamsData
         
         guard streamsData.count > 0,
-              let streamData = streamsData[safe: index]
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let userType = viewModel.streamUserType
@@ -59,6 +60,7 @@ extension StreamViewController {
                 }
                 break
             case .host:
+                viewModel.ignoreMqttEventForStopStream = true
                 stopLiveStream(streamId: streamId, userId: userId)
                 self.endTimer()
                 break
@@ -154,7 +156,7 @@ extension StreamViewController {
                 cell.viewModel = self.viewModel
                 cell.streamContainer.streamMessageView.messageTableView.reloadData()
             } else {
-                ToastManager.shared.showToast(message: error.unwrap, in: self.view)
+                LogManager.shared.logGeneral("\(error.unwrap)", type: .debug)
             }
         }
         

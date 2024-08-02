@@ -534,7 +534,7 @@ extension StreamViewController {
                 isometrik.getUserSession().setUserAccess(userAccess: .moderator)
                 
                 let title = "Added to moderator's group of broadcast".localized
-                let subtitle = "\(userData.moderatorName ?? "") " + "has been added to the moderator's group of broadcast by".localized  + " \(userData.initiatorName ?? "")" + ".\n" + "Being a moderator one can kick out members and viewers, reply-to and delete messages".localized
+                let subtitle = "\(userData.moderatorName ?? "") " + "has been added to the moderator's group of broadcast by"  + " \(userData.initiatorName ?? "")" + ".\n" + "Being a moderator one can kick out members and viewers, reply-to and delete messages".localized
                 
                 self.handleModalActions(title, subtitle)
                 
@@ -550,7 +550,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "has been added to the moderator's group of broadcast by".localized + " \(userData.initiatorName ?? "")"
+            let message = "\(senderName) " + "has been added to the moderator's group of broadcast by" + " \(userData.initiatorName ?? "")"
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.addAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
@@ -600,7 +600,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by" + "\(userData.initiatorName ?? "")."
+            let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by" + " " + "\(userData.initiatorName ?? "")."
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.removedAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
@@ -646,7 +646,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "left from the moderator's group of broadcast by".localized + " \(streamerName)"
+            let message = "\(senderName) " + "left from the moderator's group of broadcast."
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.leftAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             

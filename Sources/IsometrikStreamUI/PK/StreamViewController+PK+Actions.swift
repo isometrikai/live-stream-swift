@@ -442,7 +442,7 @@ extension StreamViewController {
         } failure: { error in
             isometrik.getIsometrik().leaveChannel()
             let errorMessage = CustomErrorHandler.getErrorMessage(error)
-            ToastManager.shared.showToast(message: "\(errorMessage)", in: self.view)
+            self.view.showToast(message: "\(errorMessage)")
             self.dismissViewController()
         }
 
@@ -759,7 +759,7 @@ extension StreamViewController {
         let isometrik = viewModel.isometrik
         isometrik.getIsometrik().stopPKChallenge(pkId: pkId, action: action.rawValue) { result in }failure:  { error in
             let errorMessage = CustomErrorHandler.getErrorMessage(error)
-            ToastManager.shared.showToast(message: "\(errorMessage)", in: self.view)
+            self.view.showToast(message: "\(errorMessage)")
         }
         
     }

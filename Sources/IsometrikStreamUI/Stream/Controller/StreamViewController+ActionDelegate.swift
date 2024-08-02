@@ -252,13 +252,13 @@ extension StreamViewController: StreamCellActionDelegate {
         }
     }
     
-    func didTapStreamClose(withIndex index: Int) {
+    func didTapStreamClose() {
         
         let isometrik = viewModel.isometrik
         let streamsData = viewModel.streamsData
         
         guard streamsData.count > 0,
-              let streamData = streamsData[safe: index]
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamStatus = LiveStreamStatus(rawValue: streamData.status)
@@ -301,7 +301,7 @@ extension StreamViewController: StreamCellActionDelegate {
             popupController.modalPresentationStyle = .overCurrentContext
             popupController.modalTransitionStyle = .crossDissolve
             popupController.actionCallback = { [weak self] streamAction in
-                self?.didTapOnClosingAction(withOption: streamAction, index: index)
+                self?.didTapOnClosingAction(withOption: streamAction)
             }
             
             self.present(popupController, animated: true)
@@ -894,7 +894,11 @@ extension StreamViewController: StreamCellActionDelegate {
     
 }
 
-extension StreamViewController {
+extension StreamViewController: StreamRequestsActionDelegate {
+    
+    func didLeaveStream() {
+        didTapStreamClose()
+    }
     
     func sendRequest(){
         
@@ -915,7 +919,7 @@ extension StreamViewController {
         viewModel.user = viewerData
         viewModel.imagesArr = images
         viewModel.publisherStatus = self.viewModel.publisher
-        //viewModel.delegate = self
+        viewModel.delegate = self
         
         viewModel.success_callback = { [weak self] publisherStatus in
             guard let self else { return }
