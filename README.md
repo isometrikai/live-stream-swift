@@ -1,4 +1,4 @@
-# Isometrik LiveStream SDK (ISMLiveStreamSDK)
+# Isometrik LiveStream SDK
 
 This is the official Livestream SDK for integrating advanced streaming capabilities into your application. It includes a comprehensive set of features for live video broadcasting, stream chat interactions, and real-time viewer analytics, along with reusable UI components for seamless integration and more.
 
