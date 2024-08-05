@@ -17,6 +17,49 @@ This is the official Livestream SDK for integrating advanced streaming capabilit
 - **Paid Stream**: Monetize your live streams by offering premium content access through paid subscriptions or one-time payments.
 
 
+## Usage
+
+1. Get your Ids and keys ready
+   
+For SDK to work you need to make sure you have these configurations ready before you move to initialize your SDK, ``accountId`` , ``projectId`` , ``keySetId`` , ``licensekey`` , ``appSecret`` , ``userSecret``, ``rtcAppId``
+
+2. Initialize your SDK
+
+call ``createConfiguration`` method for initialization
+
+```swift
+IsometrikSDK.getInstance().createConfiguration(
+    accountId: accountId,
+    projectId: projectId,
+    keysetId: keySetId,
+    licenseKey: licensekey,
+    appSecret: appSecret,
+    userSecret: userSecret,
+    rtcAppId: rtcAppId,
+    userInfo: streamUser
+)
+```
+
+here streamUser is of ``ISMStreamUser`` type which is a custom type and takes these properties
+
+``` swift
+let userData = ISMStreamUser(
+    userId: userId,
+    name: name,
+    identifier: identifier,
+    imagePath: imagePath,
+    userToken: userToken
+)
+```
+3. Enable required features for liveStream
+
+while creating configuration you can also provide stream option configurations in order to ``enable`` required feature, by default all features will be ``disabled``
+
+
+
+
+
+
 
 
 
