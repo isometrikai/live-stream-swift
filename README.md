@@ -17,7 +17,7 @@ This is the official Livestream SDK for integrating advanced streaming capabilit
 - **Paid Stream**: Monetize your live streams by offering premium content access through paid subscriptions or one-time payments.
 
 
-## Usage
+## Setup
 
 1. Get your Ids and keys ready
    
@@ -28,32 +28,57 @@ For SDK to work you need to make sure you have these configurations ready before
 call ``createConfiguration`` method for initialization
 
 ```swift
-IsometrikSDK.getInstance().createConfiguration(
-    accountId: accountId,
-    projectId: projectId,
-    keysetId: keySetId,
-    licenseKey: licensekey,
-    appSecret: appSecret,
-    userSecret: userSecret,
-    rtcAppId: rtcAppId,
-    userInfo: streamUser
-)
-```
 
-here streamUser is of ``ISMStreamUser`` type which is a custom type and takes these properties
-
-``` swift
-let userData = ISMStreamUser(
+let streamUser = ISMStreamUser(
     userId: userId,
     name: name,
     identifier: identifier,
     imagePath: imagePath,
     userToken: userToken
 )
+
+IsometrikSDK.getInstance().createConfiguration(
+    accountId: "YOUR ACCOUNT ID",
+    projectId: "YOUR PROJECT ID",
+    keysetId: "YOUR KEYSET ID",
+    licenseKey: "YOUR LICENSE KEY",
+    appSecret: "YOUR APP SECRET",
+    userSecret: "YOUR USER SECRET",
+    rtcAppId: "YOUR RTCAPP ID",
+    userInfo: streamUser
+)
 ```
+
+here streamUser is of ``ISMStreamUser`` type which is a custom type and takes these properties mentioned above.
+
 3. Enable required features for liveStream
 
-while creating configuration you can also provide stream option configurations in order to ``enable`` required feature, by default all features will be ``disabled``
+while creating configuration you can also provide stream option configuration in order to ``enable`` required feature, by default all features will be ``disabled``
+
+```swift
+let streamOptionsConfig = ISMOptionsConfiguration(
+   enableGroupStream: true, // This will enable group streaming 
+   enablePKStream: true, // This will enable PK stream feature
+   enableProductInStream: true, // This will enable Ecommerce/product for a stream
+   enableRTMPStream: true, // This will enable RTMP stream
+   enablePaidStream: true, // This will enable Paid/Promotional stream feature
+   enableRestream: true, // This will enable restream feature for a stream
+   enableScheduleStream: true // This will enable schedule stream feature
+)
+
+IsometrikSDK.getInstance().createConfiguration(
+    ....,
+   streamOptionsConfiguration: streamOptionsConfig
+)
+```
+
+## On Termination or Logout
+
+While loggingOut the app remember to call this ``onTerminate`` method to prevent shared instances issues
+
+```swift
+IsometrikSDK.getInstance().onTerminate()
+```
 
 
 
