@@ -247,11 +247,13 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
         cell.contentView.isUserInteractionEnabled = false
         
         // if last item fetch more
-        if indexPath.row == self.viewers.count - 1 {
-            if totalViewerCount > self.viewers.count {
-                // call for more
-                if let streamData = streamData {
-                    fetchStreamViewers(streamInfo: streamData) {}
+        if self.viewers.count > 10 {
+            if indexPath.row == self.viewers.count - 1 {
+                if totalViewerCount > self.viewers.count {
+                    // call for more
+                    if let streamData = streamData {
+                        fetchStreamViewers(streamInfo: streamData) {}
+                    }
                 }
             }
         }
@@ -325,8 +327,7 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
     
     func removeViewerByInitiator(initiatorId: String, initiatorName: String, streamId: String, viewerId: String) {
         
-        isometrik?.getIsometrik().removeViewer(streamId: streamId, viewerId: viewerId, initiatorId: initiatorId, completionHandler: { viewer in
-            print(viewer)
+        isometrik?.getIsometrik().removeViewer(streamId: streamId, viewerId: viewerId, initiatorId: initiatorId, completionHandler: { _ in
         }, failure: { error in
             print(error)
         })

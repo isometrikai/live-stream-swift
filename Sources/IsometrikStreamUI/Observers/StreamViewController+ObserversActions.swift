@@ -328,22 +328,23 @@ extension StreamViewController {
             break
         case .host:
             
-            if ignoreMqttEventsForStopStream, currentUserId == _streamData.createdBy {
-                
-                let controller = StreamPopupViewController()
-                controller.titleLabel.text = "It looks like you have an active session on another device. You can't stream to multiple devices simultaneously."
-                controller.cancelButton.isHidden = true
-                controller.actionButton.setTitle("Cancel", for: .normal)
-                
-                controller.actionCallback = {[weak self] _ in
-                    controller.dismiss(animated: true)
-                    self?.stopLiveStream(streamId: streamId, userId: currentUserId)
-                }
-                
-                controller.modalPresentationStyle = .overCurrentContext
-                self.present(controller, animated: true)
-                
-            }
+//            if ignoreMqttEventsForStopStream, currentUserId == _streamData.createdBy {
+//                
+//                let controller = StreamPopupViewController()
+//                controller.titleLabel.text = "It looks like you have an active session on another device. You can't stream to multiple devices simultaneously."
+//                controller.cancelButton.isHidden = true
+//                controller.actionButton.setTitle("Cancel", for: .normal)
+//                
+//                controller.actionCallback = {[weak self] _ in
+//                    controller.dismiss(animated: true)
+//                    self?.stopLiveStream(streamId: streamId, userId: currentUserId)
+//                }
+//                
+//                controller.modalPresentationStyle = .overCurrentContext
+//                self.present(controller, animated: true)
+//                
+//            }
+            
             break
         }
         
@@ -716,8 +717,14 @@ extension StreamViewController {
     
     @objc func applicationWillEnterForeground(){
         
+        let isometrik = viewModel.isometrik
+        
         guard let player = viewModel.videoPreviewPlayer else { return }
         player.play()
+        
+        if let liveKitManager =  isometrik.getIsometrik().rtcWrapper.getLiveKitManager(), !liveKitManager.isCameraMute {
+            liveKitManager.updateLiveKitCameraStatus = true
+        }
         
     }
     

@@ -58,10 +58,10 @@ class StreamGiftViewModel {
     
     func createDataPersistenceServiceContainer() {
         
-        let dataPersistenceService = DataPersistenceService.getInstance()
-        dataPersistenceService.createContainer(persistentModel: PersistenceGiftModel.self)
-        dataPersistenceService.createContainer(persistentModel: PersistenceGiftCategoryModel.self)
-        self.dataPersistenceService = dataPersistenceService
+//        let dataPersistenceService = DataPersistenceService.getInstance()
+//        dataPersistenceService.createContainer(persistentModel: PersistenceGiftModel.self)
+//        dataPersistenceService.createContainer(persistentModel: PersistenceGiftCategoryModel.self)
+//        self.dataPersistenceService = dataPersistenceService
         
     }
     

@@ -56,6 +56,14 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         return button
     }()
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.style = .medium
+        indicator.color = appearance.colors.appSecondary
+        return indicator
+    }()
+    
     ///:
     
     lazy var messageLabel: UILabel = {
@@ -100,6 +108,13 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        backgroundMessageView.backgroundColor = .clear
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+        userProfileImage.backgroundColor = .clear
+    }
+    
     // MARK: - FUNCTIONS
     
     func setupViews(){
@@ -109,6 +124,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         profileCoverView.addSubview(userDefaultProfileImageView)
         profileCoverView.addSubview(userProfileImage)
         addSubview(profileButton)
+        profileCoverView.addSubview(activityIndicator)
         
         //addSubview(userNameLabel)
         addSubview(messageLabel)
@@ -122,6 +138,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         userProfileImage.ism_pin(to: profileCoverView)
         userDefaultProfileImageView.ism_pin(to: profileCoverView)
         deleteButton.ism_pin(to: deleteView)
+        activityIndicator.ism_pin(to: profileCoverView)
         
         NSLayoutConstraint.activate([
             backgroundMessageView.leadingAnchor.constraint(equalTo: leadingAnchor),

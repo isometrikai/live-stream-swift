@@ -72,6 +72,19 @@ class StreamMessageContainer: UIView, ISMAppearanceProvider {
         ])
     }
     
+    func fullyVisibleCells(_ inTableView: UITableView) ->  StreamMessageTableViewCell? {
+        
+        let visibleCells = inTableView.visibleCells
+        if visibleCells.count > 1 {
+            let  visibleIndexPath = visibleCells[1]
+            return visibleIndexPath as? StreamMessageTableViewCell
+        } else if visibleCells.count > 0 {
+            return visibleCells[0] as? StreamMessageTableViewCell
+        }
+        return nil
+        
+    }
+    
     // MARK: - ACTIONS
     
     @objc func scrollToBottom(){
@@ -90,7 +103,20 @@ class StreamMessageContainer: UIView, ISMAppearanceProvider {
         
         guard let viewModel else { return }
         let messages = viewModel.messages
+        
         if messages.count > 0 {
+            
+            messageTableView.beginUpdates()
+        
+            if let messageCell = messageTableView.cellForRow(at: IndexPath(row: button.tag, section: 0)) as? StreamMessageTableViewCell {
+                messageCell.backgroundMessageView.backgroundColor = appearance.colors.appRed
+                messageCell.userProfileImage.backgroundColor = appearance.colors.appColor
+                messageCell.activityIndicator.isHidden = false
+                messageCell.activityIndicator.startAnimating()
+            }
+            
+            messageTableView.endUpdates()
+            
             delegate?.didDeleteButtonTapped(messageInfo: messages[button.tag])
         }
         

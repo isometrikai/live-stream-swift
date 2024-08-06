@@ -22,7 +22,6 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         else { return }
         
         let streamUserId = streamData.userDetails?.id ?? ""
-        let streamViewersCount = viewModel.streamViewers.count
         let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "STARTED")
         let currentUserId = isometrik.getUserSession().getUserId()
         
@@ -33,8 +32,6 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         let headerProfileView = headerView.profileView
         let followButton = headerProfileView.followButton
         let moderatorButton = headerView.streamStatusView.moderatorButton
-//        let streamCartView = headerView.cartView
-//        let streamCartButton = headerView.cartButton
         let streamCartBadge = headerView.cartBadge
         let streamStatusView = headerView.streamStatusView
         let viewerCountView = headerView.viewerCountView
@@ -49,7 +46,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         streamTitleLabel.isHidden = isPKStream
 
         streamTitleLabel.text = streamData.streamDescription.unwrap
-        headerView.animateViewersCount(withText: streamViewersCount)
+        headerView.animateViewersCount(withText: viewModel.streamViewerCount)
         
         var hostMember: ISMMember?
         var userName: String?

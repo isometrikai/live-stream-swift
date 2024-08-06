@@ -66,11 +66,15 @@ final public class StreamViewModel: NSObject {
     var ghostStreamUserId: String = ""
     var ghostStreamId: String = ""
     var ghostUserId: String = ""
+    var scrollToBottomForMessage = true
+    var autoScrollMessageAfter = 3 // sec
+    
     var streamOptions: [StreamOption] = []
     public var streamUserType: StreamUserType = .viewer
     public var streamUserAccess: StreamUserAccess = .user
     var streamMembers: [ISMMember] = []
     var streamViewers: [ISMViewer] = []
+    
     public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
     
     var streamStatusTimer: Timer?
@@ -80,6 +84,7 @@ final public class StreamViewModel: NSObject {
     var animated3DGiftTimer: Timer?
     var streamAnimationPopupTimer: Timer?
     var pkBattleTimer: Timer?
+    var autoScrollMessageTimer: Timer?
     
     var pkGiftData: ISM_PK_LocalGiftModel?
     var pkStreamStats: ISM_PK_StreamStats?

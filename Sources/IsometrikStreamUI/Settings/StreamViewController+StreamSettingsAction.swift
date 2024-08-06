@@ -285,11 +285,16 @@ extension StreamViewController: StreamSettingDelegate {
         if let sheet = settingController.sheetPresentationController {
             
             // Fixed height detent of 200 points
-            let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
-                return 200
+            if #available(iOS 16.0, *) {
+                let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
+                    return 200
+                }
+                sheet.detents = [fixedHeightDetent]
+            } else {
+                // Fallback on earlier versions
             }
             
-            sheet.detents = [fixedHeightDetent]
+            
             sheet.preferredCornerRadius = 0
         }
         

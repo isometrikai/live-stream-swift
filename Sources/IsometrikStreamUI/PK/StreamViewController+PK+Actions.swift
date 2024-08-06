@@ -30,11 +30,16 @@ extension StreamViewController {
             
             controller.sheetPresentationController?.prefersGrabberVisible = false
             controller.sheetPresentationController?.preferredCornerRadius = 0
-            controller.sheetPresentationController?.detents = [
-                .custom(resolver: { context in
-                    return 250 + ism_windowConstant.getBottomPadding
-                })
-            ]
+            if #available(iOS 16.0, *) {
+                controller.sheetPresentationController?.detents = [
+                    .custom(resolver: { context in
+                        return 250 + ism_windowConstant.getBottomPadding
+                    })
+                ]
+            } else {
+                // Fallback on earlier versions
+                controller.sheetPresentationController?.detents = [.medium()]
+            }
             
             self.present(controller, animated: true)
             

@@ -78,6 +78,7 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.follow.withRenderingMode(.alwaysTemplate), for: .normal)
         button.imageView?.tintColor = appearance.colors.appColor
+        button.isHidden = true
         return button
     }()
     

@@ -32,11 +32,16 @@ extension GoLiveViewController {
 
         if let sheet = viewController.sheetPresentationController {
             
-            let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
-                return 350 + ism_windowConstant.getBottomPadding
+            if #available(iOS 16.0, *) {
+                let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
+                    return 350 + ism_windowConstant.getBottomPadding
+                }
+                sheet.detents = [fixedHeightDetent]
+            } else {
+                // Fallback on earlier versions
+                sheet.detents = [.medium(), .large()]
             }
             
-            sheet.detents = [fixedHeightDetent]
         }
         
         present(viewController, animated: true, completion: nil)

@@ -651,6 +651,7 @@ extension GoLiveViewController {
                     }
                 } else {
                     // Fallback on earlier versions
+                    controller.sheetPresentationController?.detents = [.medium()]
                 }
                 
                 // callback
@@ -806,6 +807,7 @@ extension GoLiveViewController {
                 }
             } else {
                 // Fallback on earlier versions
+                controller.sheetPresentationController?.detents = [.medium()]
             }
             
             // callback

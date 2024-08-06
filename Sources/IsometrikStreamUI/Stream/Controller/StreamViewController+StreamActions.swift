@@ -173,7 +173,6 @@ extension StreamViewController {
                     
                     // set winner progress battle UI
                     self.setWinnerBattleProgress(stats: self.viewModel.pkStreamStats)
-                    
                 }
             }
         }

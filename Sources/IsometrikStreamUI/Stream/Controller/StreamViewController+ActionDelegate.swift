@@ -133,11 +133,7 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func didDeleteButtonTapped(messageInfo: ISMComment?) {
         // delete the message
-        viewModel.deleteStreamMessage(messageInfo: messageInfo) { error in
-            if error == nil {
-                //
-            }
-        }
+        viewModel.deleteStreamMessage(messageInfo: messageInfo) { _ in }
     }
    
     func didTapProductDetails() {
@@ -678,12 +674,20 @@ extension StreamViewController: StreamCellActionDelegate {
         case .started:
             self.view.endEditing(true)
             visibleCell.setStreamFooterView()
+            streamCollectionView.isScrollEnabled = false
+            self.addAutoScrollTimer()
             break
         case .ended:
+            if viewModel.streamMembers.count > 1 {
+                self.streamCollectionView.isScrollEnabled = false
+            } else {
+                self.streamCollectionView.isScrollEnabled = true
+            }
             break
         case .notReachedBottom:
             break
         case .reachedBottom:
+            print("REACHED TO BOTTOM ::::::>>")
             break
         }
     }

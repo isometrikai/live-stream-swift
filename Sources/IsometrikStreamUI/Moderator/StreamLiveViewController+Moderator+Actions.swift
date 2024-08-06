@@ -100,11 +100,17 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
         controller.modalPresentationStyle = .pageSheet
         
         if let sheet = controller.sheetPresentationController {
-            let customDetent = UISheetPresentationController.Detent.custom { context in
-                return context.maximumDetentValue * 0.6
+            if #available(iOS 16.0, *) {
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.6
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+            } else {
+                // Fallback on earlier versions
+                sheet.detents = [.medium(), .large()]
             }
-            sheet.detents = [customDetent]
-            sheet.selectedDetentIdentifier = customDetent.identifier
+            
             sheet.preferredCornerRadius = 0
         }
         
@@ -131,11 +137,17 @@ extension StreamViewController: StreamModeratorsListActionDelegate {
         controller.modalPresentationStyle = .pageSheet
         
         if let sheet = controller.sheetPresentationController {
-            let customDetent = UISheetPresentationController.Detent.custom { context in
-                return context.maximumDetentValue * 0.7
+            if #available(iOS 16.0, *) {
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.7
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+            } else {
+                // Fallback on earlier versions
+                sheet.detents = [.medium(), .large()]
             }
-            sheet.detents = [customDetent]
-            sheet.selectedDetentIdentifier = customDetent.identifier
+            
             sheet.preferredCornerRadius = 0
         }
         

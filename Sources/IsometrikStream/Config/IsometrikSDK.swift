@@ -43,7 +43,7 @@ public class IsometrikSDK {
         banubaClientToken : String = "",
         userToken: String = "",
         userType: UserType = .none,
-        streamOptionsConfiguration: ISMOptionsConfiguration
+        streamOptionsConfiguration: ISMOptionsConfiguration =  ISMOptionsConfiguration( enableProfileDelegate: false, enableGroupStream: false, enablePKStream: false, enableProductInStream: false, enableRTMPStream: false, enablePaidStream: false, enableRestream: false, enableScheduleStream: false)
     ) {
         
         if accountId.isEmpty {
@@ -133,12 +133,23 @@ public class IsometrikSDK {
         self.willBeHostUserId = userId
     }
     
-    func onTerminate() {
+    public func onTerminate() {
+        
         if mqttSession != nil {
             self.mqttSession?.unsubscribePresenceEvents()
             self.mqttSession?.disconnectMQTT()
             self.mqttSession?.unsubscribeUserEvents()
         }
+        
+        // remove user defaults
+        UserDefaultsProvider.shared.removeUserDefaults()
+        
+        userSession = nil
+        mqttSession = nil
+        streamOptionsConfiguration = nil
+        streams = nil
+        willBeHostUserId = nil
+        
     }
     
 }
