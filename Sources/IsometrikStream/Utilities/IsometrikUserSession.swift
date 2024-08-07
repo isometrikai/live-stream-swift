@@ -4,9 +4,13 @@ public enum UserType {
     case viewer
     case host
     case member
-    case moderator
     case guest
     case none
+}
+
+public enum UserAccess {
+    case user
+    case moderator
 }
 
 public enum PkBattleStatus {
@@ -17,11 +21,12 @@ public enum PkBattleStatus {
 public class IsometrikUserSession: NSObject {
     
     private var userType: UserType = .none
+    private var userAccess: UserAccess = .user
     private var memberForPK: Bool = false
     private var pkBattleStatus: PkBattleStatus = .off
     private var pkBattleId: String = ""
     private var isRTMPStream: Bool = false
-    private var currentStreamData: ISMStream?
+    private var streamData: ISMStream?
     
     public static var shared = IsometrikUserSession()
     
@@ -55,6 +60,10 @@ public class IsometrikUserSession: NSObject {
         self.userType = userType
     }
     
+    public func setUserAccess(userAccess: UserAccess) {
+        self.userAccess = userAccess
+    }
+    
     public func setPKStatus(pkBattleStatus: PkBattleStatus) {
         self.pkBattleStatus = pkBattleStatus
     }
@@ -63,8 +72,8 @@ public class IsometrikUserSession: NSObject {
         self.pkBattleId = pkId
     }
     
-    public func setCurrentStreamData(streamData: ISMStream?) {
-        self.currentStreamData = streamData
+    public func setStreamData(streamData: ISMStream?) {
+        self.streamData = streamData
     }
     
     public func setUserToken(userToken: String) {
@@ -128,8 +137,8 @@ public class IsometrikUserSession: NSObject {
         self.pkBattleId
     }
     
-    public func getCurrentStreamData() -> ISMStream? {
-        return currentStreamData
+    public func getStreamData() -> ISMStream? {
+        return streamData
     }
     
     public func getMemberForPKStatus() -> Bool {
@@ -138,6 +147,10 @@ public class IsometrikUserSession: NSObject {
     
     public func getRTMPStatus() -> Bool {
         return isRTMPStream
+    }
+    
+    public func getUserAccess() -> UserAccess {
+        return userAccess
     }
     
     // MARK: - DEFAULTS
@@ -160,6 +173,14 @@ public class IsometrikUserSession: NSObject {
     
     public func getUserModel() -> ISMStreamUser {
         return ISMStreamUser(userId: getUserId(), identifier: getUserIdentifier(), name: getUserName(), imagePath: getUserImage(), userToken: getUserToken())
+    }
+    
+    public func resetValues(){
+        userAccess = .user
+        pkBattleId = ""
+        isRTMPStream = false
+        memberForPK = false
+        pkBattleStatus = .off
     }
     
     

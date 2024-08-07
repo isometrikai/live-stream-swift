@@ -22,7 +22,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
             
             // re-subscribing to the stream events
             let isometrik = IsometrikSDK.getInstance()
-            if let streamData = isometrik.getUserSession().getCurrentStreamData() {
+            if let streamData = isometrik.getUserSession().getStreamData() {
                 subscribeStreamEvents(with: streamData.streamId ?? "")
             }
         }
@@ -64,7 +64,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
         guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let actionName = json["action"] as? String else {
             return
         }
-        
+
         let eventMessage = message.string?.description ?? ""
         LogManager.shared.logMQTT("Event with action: \(actionName)", type: .info)
         LogManager.shared.logMQTT("Event message: \(eventMessage)", type: .info)

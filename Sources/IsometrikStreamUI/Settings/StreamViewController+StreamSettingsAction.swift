@@ -56,7 +56,7 @@ extension StreamViewController: StreamSettingDelegate {
         case .speaker:
             
             switch userType {
-            case .viewer, .moderator:
+            case .viewer:
                 
                 let uid = isometrik.getUserSession().getUserId().ism_userIdUInt() ?? 0
                 self.getVideoSessionAndIndexWithId(uId: uid) { session, index in
@@ -167,7 +167,8 @@ extension StreamViewController: StreamSettingDelegate {
                         // get stream data
                         visibleCell.streamLoader.isHidden = false
                         
-                        isometrik.getIsometrik().fetchStreams(streamId: streamId) { data in
+                        let streamParam = StreamQuery(streamId: streamId)
+                        isometrik.getIsometrik().fetchStreams(streamParam: streamParam) { data in
                             let streams = data.streams
                             if let streams, streams.count > 0, let stream = streams.first {
                                 self.viewModel.streamsData[selectedStreamIndex] = stream
@@ -211,7 +212,7 @@ extension StreamViewController: StreamSettingDelegate {
         let streamStatus = LiveStreamStatus(rawValue: streamData.status)
         let userType = viewModel.streamUserType
         
-        let reportAction = StreamSettingData(settingLabel: "Report".localized, settingImage: appearance.images.report, streamSettingType: .report)
+        let reportAction = StreamSettingData(settingLabel: "Report", settingImage: appearance.images.report, streamSettingType: .report)
         
         switch streamStatus {
         case .started:
@@ -223,21 +224,21 @@ extension StreamViewController: StreamSettingDelegate {
                 let audioStatus = !currentSession.isAudioMute
                 let videoStatus = !currentSession.isVideoMute
                 
-                let audioImage = audioStatus ? self.appearance.images.speakerOn : self.appearance.images.speakerOff
+                let audioImage = audioStatus ? self.appearance.images.speakerOn.withRenderingMode(.alwaysTemplate) : self.appearance.images.speakerOff.withRenderingMode(.alwaysTemplate)
                 
-                let audioLabel = audioStatus ? "Mute Audio".localized : "Unmute Audio".localized
+                let audioLabel = audioStatus ? "Mute Audio" : "Unmute Audio"
                 
                 let audioAction = StreamSettingData(settingLabel: audioLabel, settingImage: audioImage, streamSettingType: .audio)
                 
-                let videoImage = videoStatus ? self.appearance.images.videoCamera : self.appearance.images.videoCameraOff
+                let videoImage = videoStatus ? self.appearance.images.videoCamera.withRenderingMode(.alwaysTemplate) : self.appearance.images.videoCameraOff.withRenderingMode(.alwaysTemplate)
                 
-                let videoLabel = videoStatus ? "Disable Camera".localized : "Enable Camera".localized
+                let videoLabel = videoStatus ? "Disable Camera" : "Enable Camera"
                 
                 let cameraAction = StreamSettingData(settingLabel: videoLabel, settingImage: videoImage, streamSettingType: .camera)
                 
-                let speakerImage = audioStatus ? self.appearance.images.speakerOn : self.appearance.images.speakerOff
+                let speakerImage = audioStatus ? self.appearance.images.speakerOn.withRenderingMode(.alwaysTemplate) : self.appearance.images.speakerOff.withRenderingMode(.alwaysTemplate)
                 
-                let speakerLabel = audioStatus ? "Mute Volume".localized : "Unmute Volume".localized
+                let speakerLabel = audioStatus ? "Mute Volume" : "Unmute Volume"
                 
                 let speakerAction = StreamSettingData(settingLabel: speakerLabel, settingImage: speakerImage, streamSettingType: .speaker)
                 
@@ -250,9 +251,6 @@ extension StreamViewController: StreamSettingDelegate {
                     break
                 case .host:
                     settingController.settingData = [audioAction, cameraAction]
-                    break
-                case .moderator:
-                    settingController.settingData = [speakerAction]
                     break
                 }
                 
@@ -287,11 +285,17 @@ extension StreamViewController: StreamSettingDelegate {
         if let sheet = settingController.sheetPresentationController {
             
             // Fixed height detent of 200 points
-            let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
-                return 200
+            if #available(iOS 16.0, *) {
+                let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
+                    return 200
+                }
+                sheet.detents = [fixedHeightDetent]
+            } else {
+                // Fallback on earlier versions
             }
             
-            sheet.detents = [fixedHeightDetent]
+            
+            sheet.preferredCornerRadius = 0
         }
         
         present(settingController, animated: true, completion: nil)

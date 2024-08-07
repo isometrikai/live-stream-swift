@@ -20,15 +20,39 @@ extension StreamViewController {
               let recieverData = getGiftRecieverData()
         else { return }
         
-        let controller = StreamGiftPickerViewController(isometrik: isometrik, streamInfo: streamData, recieverGiftData: recieverData)
+        let viewModel = StreamGiftViewModel(
+            isometrik: isometrik,
+            streamInfo: streamData,
+            recieverGiftData: recieverData
+        )
         
-        controller.viewModel.sendGift = { [weak self] data in
+        viewModel.sendGift = { [weak self] data in
             self?.sendGift(giftData: data, forInsert: true)
         }
         
-        controller.modalPresentationStyle = .overCurrentContext
-        controller.modalTransitionStyle = .crossDissolve
-        navigationController?.present(controller, animated: true, completion: nil)
+        let controller = StreamGiftPickerViewController(viewModel: viewModel)
+        
+//        controller.modalPresentationStyle = .overCurrentContext
+//        controller.modalTransitionStyle = .crossDissolve
+//        navigationController?.present(controller, animated: true, completion: nil)
+        
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.7  // 60% of the screen height
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
+        
+        present(controller, animated: true, completion: nil)
     }
     
     func getGiftRecieverData() -> ISMCustomGiftRecieverData? {
@@ -54,7 +78,7 @@ extension StreamViewController {
         
         if currentHost.count > 0 {
             memberId = currentHost[0].userID ?? ""
-            recieverUserType = memberId == hostUserId ? "publisher" : "co-publisher"
+            recieverUserType = (memberId == hostUserId) ? "publisher" : "co-publisher"
         }
         
         if viewModel.copublisherViewer {
@@ -72,8 +96,8 @@ extension StreamViewController {
         if let firstUserDetails = streamData.firstUserDetails,
            let secondUserDetails = streamData.secondUserDetails
         {
-            print("First User Detail :::-- \(firstUserDetails)")
-            print("Second User Detail :::-- \(secondUserDetails)")
+            
+            LogManager.shared.logCustom(category: "gift", message: "First user details: \(firstUserDetails) \n Second user details: \(secondUserDetails)")
             
             if currentHost.count > 0 {
                 
@@ -107,7 +131,7 @@ extension StreamViewController {
             recieverName: recieverName
         )
         
-        print("Custom gift data ::::-- \(giftData)")
+        LogManager.shared.logCustom(category: "gift", message: "Gift reciever data: \(giftData)")
         
         return giftData
         
@@ -122,7 +146,6 @@ extension StreamViewController {
         if giftData.giftCategoryName.unwrap == "3D" {
             sendMessage(messageText: giftJsonString, messageOfType: .giftMessage_3D)
         }
-        sendMessage(messageText: giftJsonString, messageOfType: .giftMessage)
         
     }
     

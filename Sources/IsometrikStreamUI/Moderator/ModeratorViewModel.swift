@@ -37,6 +37,34 @@ class ModeratorViewModel: NSObject {
         self.isometrik = isometrik
     }
     
+    func userInModeratorGroup(withUserName userName: String, completion: @escaping(Bool, String?) -> Void){
+        
+        let streamId = streamInfo.streamId.unwrap
+        isometrik.getIsometrik().fetchModerators(streamId: streamId, skip: 0, searchTag: userName) { response in
+            
+            let currentUserId = self.isometrik.getUserSession().getUserId()
+            let result = response.moderators?.filter{ moderator in
+                moderator.moderatorID == currentUserId
+            }
+            
+            DispatchQueue.main.async {
+                if let result, result.count > 0 {
+                    completion(true, nil)
+                } else {
+                    completion(false, "current user not in moderator group")
+                }
+            }
+            
+        } failure: { error in
+            DispatchQueue.main.async {
+                let errorMessage = CustomErrorHandler.getErrorMessage(error)
+                completion(false, errorMessage)
+            }
+        }
+
+        
+    }
+    
     func getModerators(completion: @escaping() -> Void){
     
         isometrik.getIsometrik().fetchModerators(streamId: streamInfo.streamId ?? "", skip: skip, limit: limit) { response in

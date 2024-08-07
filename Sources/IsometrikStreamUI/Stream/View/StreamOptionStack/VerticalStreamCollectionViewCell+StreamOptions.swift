@@ -135,9 +135,6 @@ extension VerticalStreamCollectionViewCell {
                 }
                 
                 break
-            case .moderator:
-                viewModel.streamOptions = [.loved, .share, .settings]
-                break
             }
             
             // TODO: if ecommerce enabled then 250 px on the {spacing}

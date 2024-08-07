@@ -11,7 +11,7 @@ import IsometrikStream
 extension CustomVideoContainer: ISMAppearanceProvider {
     
     func refreshLayout(streamInfo: ISMStream?){
-        //reorderSessions()
+        reorderSessions()
         guard let streamInfo else { return }
         
         if streamInfo.rtmpIngest.unwrap {

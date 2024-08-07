@@ -34,7 +34,7 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
             if success {
                 let data = self.viewModel.getGiftItemsForGroup(groupId: groupId)
                 if data.0.isEmpty {
-                    self.contentView.giftContentItemView.defaultLabel.isHidden = false
+                    self.contentView.giftContentItemView.defaultView.isHidden = false
                 }
                 self.contentView.giftContentItemView.totalCount = data.1
                 self.contentView.giftContentItemView.data = data.0
@@ -96,7 +96,7 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
         
         self.contentView.giftContentItemView.totalCount = giftData.1
         self.contentView.giftContentItemView.data = giftData.0
-        self.contentView.giftContentItemView.defaultLabel.isHidden = true
+        self.contentView.giftContentItemView.defaultView.isHidden = true
         
         if giftData.0.isEmpty {
             
@@ -108,7 +108,7 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
                 if success {
                     let data = self.viewModel.getGiftItemsForGroup(groupId: id)
                     if data.0.isEmpty {
-                        self.contentView.giftContentItemView.defaultLabel.isHidden = false
+                        self.contentView.giftContentItemView.defaultView.isHidden = false
                     }
                     self.contentView.giftContentItemView.totalCount = data.1
                     self.contentView.giftContentItemView.data = data.0

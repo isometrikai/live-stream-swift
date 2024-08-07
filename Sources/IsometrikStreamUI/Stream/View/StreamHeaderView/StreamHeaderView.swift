@@ -43,7 +43,6 @@ class StreamHeaderView: UIView, ISMAppearanceProvider {
     let cartImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = UIImage(named: "cart_tab_white_2")
         image.isHidden = true
         return image
     }()
@@ -66,8 +65,8 @@ class StreamHeaderView: UIView, ISMAppearanceProvider {
         return button
     }()
     
-    lazy var viewerCountView: customFeatureView = {
-        let view = customFeatureView()
+    lazy var viewerCountView: CustomFeatureView = {
+        let view = CustomFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.iconImageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
         view.iconImageView.tintColor = .white

@@ -14,7 +14,12 @@ public enum StreamUserType {
     case viewer
     case member
     case host
+    //case moderator
+}
+
+public enum StreamUserAccess {
     case moderator
+    case user
 }
 
 enum ScrollStatus {
@@ -45,6 +50,8 @@ final public class StreamViewModel: NSObject {
     
     public var isometrik: IsometrikSDK
     public var streamsData: [ISMStream]
+    var streamMessageViewModel: StreamMessageViewModel?
+    
     public var externalActionDelegate: ISMStreamActionDelegate?
     
     var hours = 0
@@ -59,10 +66,15 @@ final public class StreamViewModel: NSObject {
     var ghostStreamUserId: String = ""
     var ghostStreamId: String = ""
     var ghostUserId: String = ""
+    var scrollToBottomForMessage = true
+    var autoScrollMessageAfter = 3 // sec
+    
     var streamOptions: [StreamOption] = []
     public var streamUserType: StreamUserType = .viewer
+    public var streamUserAccess: StreamUserAccess = .user
     var streamMembers: [ISMMember] = []
     var streamViewers: [ISMViewer] = []
+    
     public var selectedStreamIndex: IndexPath = IndexPath(row: 0, section: 0)
     
     var streamStatusTimer: Timer?
@@ -72,15 +84,18 @@ final public class StreamViewModel: NSObject {
     var animated3DGiftTimer: Timer?
     var streamAnimationPopupTimer: Timer?
     var pkBattleTimer: Timer?
+    var autoScrollMessageTimer: Timer?
     
     var pkGiftData: ISM_PK_LocalGiftModel?
-    var streamMessageViewModel: StreamMessageViewModel?
+    var pkStreamStats: ISM_PK_StreamStats?
+    
     
     var publisher: ISMPublisher?
     var videoPreviewPlayer: AVPlayer?
     
     var youAreLiveCallbackAfterCounter:(() -> Void)?
     var videoContainer: CustomVideoContainer?
+    var ignoreMqttEventForStopStream: Bool?
     
     // MARK: - INITIALIZER
     
@@ -132,12 +147,8 @@ final public class StreamViewModel: NSObject {
         switch streamUserType {
         case .viewer:
             isometrik.getIsometrik().setUserRoleInStream(.Audience)
-        case .member:
+        case .host, .member:
             isometrik.getIsometrik().setUserRoleInStream(.Broadcaster)
-        case .host:
-            isometrik.getIsometrik().setUserRoleInStream(.Broadcaster)
-        case .moderator:
-            break
         }
         
         isometrik.getIsometrik().joinChannel(userId: userId)
@@ -206,10 +217,7 @@ final public class StreamViewModel: NSObject {
         else { return }
         
         // setting stream message view model
-        let messageViewModel = StreamMessageViewModel()
-        
-        messageViewModel.isometrik = isometrik
-        messageViewModel.streamInfo = streamData
+        let messageViewModel = StreamMessageViewModel(streamInfo: streamData, isometrik: isometrik)
         messageViewModel.streamUserType = streamUserType
         messageViewModel.resetToDefault()
         
@@ -236,6 +244,69 @@ final public class StreamViewModel: NSObject {
         
     }
     
+    func fetchPKStreamStats(_ completionHandler: @escaping streamResponse){
+        
+        guard streamsData.count > 0,
+              let streamData = streamsData[safe: selectedStreamIndex.row]
+        else { return }
+        
+        let streamId = streamData.streamId.unwrap
+        
+        isometrik.getIsometrik().getStreamStats(streamId: streamId) { response in
+            
+            DispatchQueue.main.async {
+                
+                self.pkStreamStats = response.data
+                let timeRemain = Int(response.data?.timeRemain ?? 0) // timer remain in seconds
+                if timeRemain.signum() != -1 {
+                    self.pkBattleTimeInSec = timeRemain
+                    
+                    // this means battle on
+                    self.isometrik.getUserSession().setPKStatus(pkBattleStatus: .on)
+                    
+                }
+                
+                self.streamsData[self.selectedStreamIndex.row].firstUserDetails = response.data?.firstUserDetails
+                self.streamsData[self.selectedStreamIndex.row].secondUserDetails = response.data?.secondUserDetails
+                
+                completionHandler(nil)
+            }
+        } failure: { error in
+            DispatchQueue.main.async {
+                let errorMessage = "\(error.localizedDescription)"
+                completionHandler(errorMessage)
+            }
+        }
+
+        
+    }
+    
+    func isUserModerator(completion: @escaping(Bool, String?)->Void){
+        
+        guard streamsData.count > 0,
+              let streamData = streamsData[safe: selectedStreamIndex.row]
+        else { return }
+        
+        let currentUsersUserName = isometrik.getUserSession().getUserIdentifier()
+        
+        let streamModeratorViewModel = ModeratorViewModel(streamInfo: streamData, isometrik: isometrik)
+        streamModeratorViewModel.userInModeratorGroup(withUserName: currentUsersUserName) { success, error in
+            
+            DispatchQueue.main.async {
+                if success {
+                    self.streamUserAccess = .moderator
+                    self.streamMessageViewModel?.streamUserAccess = .moderator
+                    self.isometrik.getUserSession().setUserAccess(userAccess: .moderator)
+                    self.streamsData[self.selectedStreamIndex.row].isModerator = true
+                }
+                completion(success, error)
+            }
+            
+            
+        }
+        
+    }
+    
     func deleteStreamMessage(messageInfo: ISMComment?, completionHandler: @escaping streamResponse) {
         
         guard let messageInfo,
@@ -245,7 +316,6 @@ final public class StreamViewModel: NSObject {
         
         let streamId = streamData.streamId ?? ""
         let messageId = messageInfo.messageId ?? ""
-
         
         isometrik.getIsometrik().removeMessage(streamId: streamId, messageId: messageId) { message in
             completionHandler(nil)

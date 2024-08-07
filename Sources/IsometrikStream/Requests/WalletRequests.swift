@@ -75,12 +75,12 @@ extension IsometrikStream {
         
     }
     
-    public func getWalletTransactions(transactionType: WalletTransactionType?, skip: Int = 0, limit: Int = 10, completionHandler: @escaping (WalletTransactionResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
+    public func getWalletTransactions(transactionType: WalletTransactionType?, currencyType: WalletCurrencyType, skip: Int = 0, limit: Int = 10, completionHandler: @escaping (WalletTransactionResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
         let transactionSpecific = !(transactionType == nil)
         let txnType = transactionType?.rawValue ?? nil
         
-        let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletTransaction(currency: "COIN", transactionType: txnType, transactionSpecific: transactionSpecific, skip: skip, limit: limit), requestBody: nil)
+        let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletTransaction(currency: currencyType.getValue, transactionType: txnType, transactionSpecific: transactionSpecific, skip: skip, limit: limit), requestBody: nil)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<WalletTransactionResponseModel, ISMLiveAPIError> ) in
             switch result {

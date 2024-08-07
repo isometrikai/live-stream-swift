@@ -13,7 +13,7 @@ extension VerticalStreamCollectionViewCell {
     // MARK: - Stream Container Header Actions
     
     @objc func closeStreamButtonTapped(){
-        delegate?.didTapStreamClose(withIndex: self.tag)
+        delegate?.didTapStreamClose()
     }
     
     @objc func liveStatusViewTapped(){
@@ -34,6 +34,10 @@ extension VerticalStreamCollectionViewCell {
     
     @objc func productDetailsTapped(){
         delegate?.didTapProductDetails()
+    }
+    
+    @objc func streamMembersTapped(){
+        delegate?.didTapStreamMembersView()
     }
     
     // MARK: - Stream Container Footer Actions

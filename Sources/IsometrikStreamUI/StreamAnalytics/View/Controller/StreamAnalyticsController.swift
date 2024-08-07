@@ -85,7 +85,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
     lazy var totalHearts: AnalyticsInfoView = {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.featureImage.image = appearance.images.reaction.withRenderingMode(.alwaysTemplate)
+        view.featureImage.image = appearance.images.heartStat.withRenderingMode(.alwaysTemplate)
         view.featureImage.tintColor = .black
         view.featureLabel.text = "Reactions"
         view.valueLabel.text = "--"
@@ -96,7 +96,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.vendor
-        view.featureLabel.text = "Orders".localized
+        view.featureLabel.text = "Orders"
         view.valueLabel.text = "--"
         return view
     }()
@@ -105,7 +105,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.viewerStat
-        view.featureLabel.text = "Viewers".localized
+        view.featureLabel.text = "Viewers"
         view.valueLabel.text = "--"
         return view
     }()
@@ -114,7 +114,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.followersStat
-        view.featureLabel.text = "Followers".localized
+        view.featureLabel.text = "Followers"
         view.valueLabel.text = "--"
         view.isHidden = true
         return view
@@ -133,7 +133,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.sellingQtyStat
-        view.featureLabel.text = "Selling Quantity".localized
+        view.featureLabel.text = "Selling Quantity"
         view.valueLabel.text = "--"
         return view
     }()
@@ -142,7 +142,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.earningStat
-        view.featureLabel.text = "Sales Value".localized
+        view.featureLabel.text = "Earnings"
         view.valueLabel.text = "--"
         return view
     }()
@@ -151,8 +151,18 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let view = AnalyticsInfoView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureImage.image = appearance.images.durationStat
-        view.featureLabel.text = "Duration".localized
+        view.featureLabel.text = "Duration"
         view.valueLabel.text = "--:--"
+        return view
+    }()
+    
+    lazy var gifts: AnalyticsInfoView = {
+        let view = AnalyticsInfoView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.featureImage.image = appearance.images.gift.withRenderingMode(.alwaysTemplate)
+        view.featureImage.tintColor = .black
+        view.featureLabel.text = "Gifts"
+        view.valueLabel.text = "--"
         return view
     }()
     
@@ -225,10 +235,9 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         view.addSubview(bottomHorizontalStackView)
         
         topHorizontalStackView.addArrangedSubview(totalHearts)
-        topHorizontalStackView.addArrangedSubview(totalOrders)
         topHorizontalStackView.addArrangedSubview(totalViewers)
+        topHorizontalStackView.addArrangedSubview(gifts)
         
-        //bottomHorizontalStackView.addArrangedSubview(sellingQuantity)
         //bottomHorizontalStackView.addArrangedSubview(totalFollowers)
         bottomHorizontalStackView.addArrangedSubview(earning)
         bottomHorizontalStackView.addArrangedSubview(duration)
@@ -294,7 +303,9 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         let isometrik = viewModel.isometrik
         let firstName = isometrik.getUserSession().getFirstName()
         let lastName = isometrik.getUserSession().getLastName()
+        let userName = isometrik.getUserSession().getUserIdentifier()
         let userImage = isometrik.getUserSession().getUserImage()
+        let isProductEnabled = isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled
         
         if userImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let imageUrl = URL(string: userImage) {
@@ -304,7 +315,15 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
             logoImage.image = UIImage()
         }
         
-        let initialText = "\(firstName.prefix(1))\(lastName.prefix(1))"
+        if isProductEnabled {
+            topHorizontalStackView.addArrangedSubview(totalOrders)
+            bottomHorizontalStackView.addArrangedSubview(sellingQuantity)
+        } else {
+            topHorizontalStackView.removeArrangedSubview(totalOrders)
+            bottomHorizontalStackView.removeArrangedSubview(sellingQuantity)
+        }
+        
+        let initialText = "\(userName.prefix(2))".uppercased()
         defaultImageView.initialsText.text = initialText
         defaultImageView.initialsText.font = appearance.font.getFont(forTypo: .h3)
         
@@ -318,8 +337,9 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
                 self.totalHearts.valueLabel.text = "\(analyticData.hearts ?? 0)"
                 self.totalViewers.valueLabel.text = "\(analyticData.totalViewersCount ?? 0)"
                 self.totalFollowers.valueLabel.text = "\(analyticData.followers ?? 0)"
-                //self.sellingQuantity.valueLabel.text = "\(analyticData.soldCount ?? 0)"
+                self.sellingQuantity.valueLabel.text = "\(analyticData.soldCount ?? 0)"
                 self.earning.valueLabel.text = "\(analyticData.totalEarning ?? 0)"
+                self.gifts.valueLabel.text = "\(analyticData.giftsCount ?? 0)"
                 
                 if let durationValue = self.viewModel.durationValue {
                     self.duration.valueLabel.text = Double(durationValue / 1000).asString(style: .positional)
@@ -333,8 +353,6 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         viewModel.fetchStreamAnalyticsViewers { success, error in
             if success {
                 self.viewerContainer.viewers = self.viewModel.viewers
-            } else {
-                print(error)
             }
         }
         

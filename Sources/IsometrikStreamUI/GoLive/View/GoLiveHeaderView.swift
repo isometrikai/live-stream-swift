@@ -110,7 +110,7 @@ extension GoLiveHeaderView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "My Stream description...".localized
+            textView.text = "My stream description...".localized
             textView.textColor = UIColor.lightGray
         }
     }

@@ -64,7 +64,7 @@ class GoLiveProfileView: UIView, ISMAppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.close, for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = .black.withAlphaComponent(0.8)
         button.layer.cornerRadius = 10
         button.ismTapFeedBack()
         button.isHidden = true
@@ -89,7 +89,7 @@ class GoLiveProfileView: UIView, ISMAppearanceProvider {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.delegate = self
-        textView.text = "My Stream description...".localized
+        textView.text = "My stream description...".localized
         textView.textColor = .lightGray
         textView.backgroundColor = .clear
         textView.tintColor = .white
@@ -188,7 +188,7 @@ extension GoLiveProfileView: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "My Stream description...".localized
+            textView.text = "My stream description...".localized
             textView.textColor = UIColor.lightGray
         }
     }

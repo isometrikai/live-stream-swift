@@ -16,7 +16,6 @@ class CustomVideoSessionProfileView: UIView, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "ism_UserDefault")
         imageView.clipsToBounds = true
         return imageView
     }()

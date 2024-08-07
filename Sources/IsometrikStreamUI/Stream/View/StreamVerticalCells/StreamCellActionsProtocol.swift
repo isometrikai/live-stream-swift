@@ -11,8 +11,9 @@ import IsometrikStream
 
 protocol StreamCellActionDelegate {
     
-    func didTapStreamClose(withIndex index: Int)
+    func didTapStreamClose()
     func didTapViewerCountView()
+    func didTapStreamMembersView()
     func didTapLiveStatusView()
     func didTapSellerProfileView()
     func didTapFollowButton()
@@ -38,6 +39,8 @@ protocol StreamCellActionDelegate {
     
     func startPKBattle()
     func toggleHostInPKBattle()
+    
+    func loadMoreMessages()
 }
 
 /**
@@ -46,8 +49,9 @@ protocol StreamCellActionDelegate {
 
 extension StreamCellActionDelegate {
     
-    func didTapStreamClose(withIndex index: Int) {}
+    func didTapStreamClose() {}
     func didTapViewerCountView() {}
+    func didTapStreamMembersView() {}
     func didTapLiveStatusView() {}
     func didTapSellerProfileView() {}
     func didTapFollowButton() {}
@@ -59,11 +63,14 @@ extension StreamCellActionDelegate {
 
     
     func didTapStreamOptions(with option: StreamOption.RawValue) {}
+    
     func didMessageScrolled(withStatus: ScrollStatus) {}
+    func loadMoreMessages(){}
     
     func didKeyboardDismissed(){}
     func didModeratorTapped(){}
     func didCartButtonTapped(){}
     func didStartScheduledStream(){}
+    
     
 }

@@ -121,10 +121,10 @@ public class CustomHeaderView: UIView, ISMAppearanceProvider {
             
             leadingActionStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             leadingActionStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            leadingActionStackView.heightAnchor.constraint(equalToConstant: 40),
+            leadingActionStackView.heightAnchor.constraint(equalToConstant: 35),
             
-            leadingActionButton.heightAnchor.constraint(equalToConstant: 40),
-            leadingActionButton.widthAnchor.constraint(equalToConstant: 40),
+            leadingActionButton.heightAnchor.constraint(equalToConstant: 35),
+            leadingActionButton.widthAnchor.constraint(equalToConstant: 35),
             
             trailingActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             trailingActionStackView.centerYAnchor.constraint(equalTo: centerYAnchor),

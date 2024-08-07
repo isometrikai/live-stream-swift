@@ -39,7 +39,7 @@ extension StreamViewController {
                 
                 // handle if stream is not live
                 if errorCode == 403 {
-                    self.hostNotOnline(streamId: streamId)
+                    self.hostNotOnline()
                     return
                 }
                 

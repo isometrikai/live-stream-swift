@@ -11,6 +11,10 @@ import Foundation
 
 public struct UserDefaultsKey {
     static let ghostStreamData = "GHOST_STREAM_DATA"
+    static let purchaseDetails = "PURCHASE_DETAILS"
+    static let receiptData = "RECEIPT_DATA"
+    static let walletCoinBalance = "WALLET_COIN_BALANCE"
+    static let walletMoneyBalance = "WALLET_MONEY_BALANCE"
 }
 
 public class UserDefaultsProvider: NSObject {
@@ -19,7 +23,7 @@ public class UserDefaultsProvider: NSObject {
     public static var shared: UserDefaultsProvider = UserDefaultsProvider()
     private let defaults = UserDefaults.standard
     
-    public func resetUserDefaults(){
+    public func resetStreamUserDefaults(){
         setStreamData(model: nil)
     }
     
@@ -68,6 +72,7 @@ public class UserDefaultsProvider: NSObject {
     
     public func removeStreamData() {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKey.ghostStreamData)
+        UserDefaults.standard.synchronize()
     }
     
     public func getIsometrikDefaultProfile() -> String {
@@ -77,24 +82,24 @@ public class UserDefaultsProvider: NSObject {
     // MARK: - Wallet details
     
     public func setPurchaseDetails(data: [String:Any]){
-        UserDefaults.standard.setValue(data, forKey: "purchaseDetails")
+        UserDefaults.standard.setValue(data, forKey: UserDefaultsKey.purchaseDetails)
         UserDefaults.standard.synchronize()
     }
     
     public func getPurchaseDetails() -> [String:Any] {
-        if let details = UserDefaults.standard.object(forKey: "purchaseDetails") as? [String : Any] {
+        if let details = UserDefaults.standard.object(forKey: UserDefaultsKey.purchaseDetails) as? [String : Any] {
             return details
         }
         return [:]
     }
     
     public func setReceiptData(data: [[String: Any]]){
-        UserDefaults.standard.setValue(data, forKey: "receiptData")
+        UserDefaults.standard.setValue(data, forKey: UserDefaultsKey.receiptData)
         UserDefaults.standard.synchronize()
     }
     
     public class func getReceiptData() -> [[String:Any]]{
-        if let data = UserDefaults.standard.value(forKey: "receiptData") as? [[String:Any]] {
+        if let data = UserDefaults.standard.value(forKey: UserDefaultsKey.receiptData) as? [[String:Any]] {
             return data
         }
         return [[:]]
@@ -103,9 +108,9 @@ public class UserDefaultsProvider: NSObject {
     public func setWalletBalance(data: Float64, currencyType: String){
         
         if currencyType == "COIN" {
-            UserDefaults.standard.setValue(data, forKey: "walletCoinBalance")
+            UserDefaults.standard.setValue(data, forKey: UserDefaultsKey.walletCoinBalance)
         } else {
-            UserDefaults.standard.setValue(data, forKey: "walletMoneyBalance")
+            UserDefaults.standard.setValue(data, forKey: UserDefaultsKey.walletMoneyBalance)
         }
         
         UserDefaults.standard.synchronize()
@@ -113,13 +118,36 @@ public class UserDefaultsProvider: NSObject {
        
     public func getWalletBalance(currencyType: String) -> Float64 {
         
-        if currencyType == "COIN", let data = UserDefaults.standard.value(forKey: "walletCoinBalance") as? Float64 {
+        if currencyType == "COIN", let data = UserDefaults.standard.value(forKey: UserDefaultsKey.walletCoinBalance) as? Float64 {
                 return data
-        } else if let data = UserDefaults.standard.value(forKey: "walletMoneyBalance") as? Float64 {
+        } else if let data = UserDefaults.standard.value(forKey: UserDefaultsKey.walletMoneyBalance) as? Float64 {
                 return data
         }
         return 0
         
+    }
+    
+    // MARK: - Terminate
+    
+    public func removeUserDefaults(){
+        let defaults = UserDefaults.standard
+        
+        // List of all keys to remove
+        let keys = [
+            UserDefaultsKey.ghostStreamData,
+            UserDefaultsKey.purchaseDetails,
+            UserDefaultsKey.receiptData,
+            UserDefaultsKey.walletCoinBalance,
+            UserDefaultsKey.walletMoneyBalance
+        ]
+        
+        // Remove each key
+        keys.forEach { key in
+            defaults.removeObject(forKey: key)
+        }
+        
+        // Optionally synchronize
+        defaults.synchronize()
     }
     
 }

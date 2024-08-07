@@ -110,20 +110,28 @@ extension ViewerContainer: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DynamicUserInfoTableViewCell", for: indexPath) as! DynamicUserInfoTableViewCell
         
         let viewerData = viewers[indexPath.row]
-        let userId = viewerData.appUserID ?? ""
-        let name = (viewerData.firstName ?? "") + " " + (viewerData.lastName ?? "")
-        let image = viewerData.profilePic ?? ""
-        let followStatus = viewerData.followStatus ?? 0
-        let privacy = viewerData.privacy ?? 0
+        let userId = viewerData.appUserID.unwrap
+        
+        let name = (viewerData.userMetaData?.firstName ?? "-") + " " + (viewerData.userMetaData?.lastName ?? "-")
+        let image = viewerData.profilePic.unwrap
+        let userName = viewerData.userName.unwrap
+        
+        let followStatus = viewerData.followStatus.unwrap
+        let privacy = viewerData.privacy.unwrap
+        
+        
+        cell.titleLabel.textColor = .black
         
         cell.userData = ISMStreamUser(
             userId: userId,
-            identifier: name,
+            identifier: userName,
             name: name,
             imagePath: image,
             followStatus: followStatus,
             privacy: privacy
         )
+        
+        cell.actionButton.setTitle("Follow", for: .normal)
         
 //        let status = FollowStatusCode(rawValue: followStatus)
 //        switch status {

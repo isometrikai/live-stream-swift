@@ -20,9 +20,9 @@ enum RequestingType {
 }
 
 protocol StreamRequestsActionDelegate {
-    func didRequestToCoPublisher(user: ISMStreamUser , streamInfo: ISMStream)
+//    func didRequestToCoPublisher(user: ISMStreamUser , streamInfo: ISMStream)
     func didStartPublishingVideo()
-    func didDeleteRequestTapped(user: ISMStreamUser , streamInfo: ISMStream)
+//    func didDeleteRequestTapped(user: ISMStreamUser , streamInfo: ISMStream)
     func didLeaveStream()
 }
 

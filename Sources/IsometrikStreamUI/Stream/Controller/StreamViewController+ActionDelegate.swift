@@ -1,10 +1,3 @@
-//
-//  StreamViewController+ActionDelegate.swift
-//  Yelo
-//
-//  Created by Dheeraj Kumar Sharma on 08/08/23.
-//  Copyright © 2023 rahulSharma. All rights reserved.
-//
 
 import UIKit
 import IsometrikStream
@@ -140,11 +133,7 @@ extension StreamViewController: StreamCellActionDelegate {
     
     func didDeleteButtonTapped(messageInfo: ISMComment?) {
         // delete the message
-        viewModel.deleteStreamMessage(messageInfo: messageInfo) { error in
-            if error == nil {
-                //
-            }
-        }
+        viewModel.deleteStreamMessage(messageInfo: messageInfo) { _ in }
     }
    
     func didTapProductDetails() {
@@ -198,8 +187,6 @@ extension StreamViewController: StreamCellActionDelegate {
     }
     
     func didTapSellerProfileView() {
-    
-        debugPrint("Log:: Profile Button Tapped")
         
         var streamsData = viewModel.streamsData
         
@@ -243,7 +230,6 @@ extension StreamViewController: StreamCellActionDelegate {
     }
     
     func didTapFollowButton() {
-        debugPrint("Log:: Follow Button Tapped")
         guard let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
@@ -262,13 +248,13 @@ extension StreamViewController: StreamCellActionDelegate {
         }
     }
     
-    func didTapStreamClose(withIndex index: Int) {
+    func didTapStreamClose() {
         
         let isometrik = viewModel.isometrik
         let streamsData = viewModel.streamsData
         
         guard streamsData.count > 0,
-              let streamData = streamsData[safe: index]
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let streamStatus = LiveStreamStatus(rawValue: streamData.status)
@@ -278,17 +264,12 @@ extension StreamViewController: StreamCellActionDelegate {
         let userId = isometrik.getUserSession().getUserId()
         let userType = viewModel.streamUserType
         
-        if isGuestUser {
-            self.leaveStreamByViewer(userId: userId, streamId: streamId)
-            return 
-        }
-        
         if streamStatus == .started {
             let popupController = StreamPopupViewController()
             
             let titleLabel = popupController.titleLabel
             let cancelButton = popupController.cancelButton
-            let yesButton = popupController.yesButton
+            let yesButton = popupController.actionButton
             
             titleLabel.text = "Are you sure that you want to end your live video ?"
             
@@ -297,32 +278,30 @@ extension StreamViewController: StreamCellActionDelegate {
                 let isPKMember = isometrik.getUserSession().getMemberForPKStatus()
                 if isPKMember {
                     cancelButton.setTitle("Cancel", for: .normal)
-                    yesButton.setTitle("Stop Publishing", for: .normal)
+                    yesButton.setTitle("End broadcasting", for: .normal)
                 } else {
-                    cancelButton.setTitle("Leave Broadcasting", for: .normal)
-                    yesButton.setTitle("Stop Publishing", for: .normal)
+                    cancelButton.setTitle("Leave broadcasting", for: .normal)
+                    yesButton.setTitle("Stop publishing", for: .normal)
                 }
                 break
             case .host:
                 cancelButton.setTitle("Cancel", for: .normal)
-                yesButton.setTitle("End Broadcasting", for: .normal)
+                yesButton.setTitle("End broadcasting", for: .normal)
                 break
             case .viewer:
                 self.leaveStreamByViewer(userId: userId, streamId: streamId)
                 return
-            default: break
             }
             
             
             popupController.modalPresentationStyle = .overCurrentContext
             popupController.modalTransitionStyle = .crossDissolve
             popupController.actionCallback = { [weak self] streamAction in
-                self?.didTapOnClosingAction(withOption: streamAction, index: index)
+                self?.didTapOnClosingAction(withOption: streamAction)
             }
             
             self.present(popupController, animated: true)
         } else {
-            
 //            let controller = StreamSellerProfileVC()
 //            controller.userId = streamData.userDetails?.id ?? ""
 //            controller.isSelf = (viewModel.streamUserType == .host)
@@ -371,9 +350,6 @@ extension StreamViewController: StreamCellActionDelegate {
 //            
 //            self.present(controller, animated: true)
         }
-        
-        
-        
     }
     
     func didTapViewerCountView() {
@@ -385,19 +361,12 @@ extension StreamViewController: StreamCellActionDelegate {
               let visibleCell = fullyVisibleCells(streamCollectionView)
         else { return }
         
-        // no action if guest user
-        let isGuestUser = (isometrik.getUserSession().getUserType() == .guest)
-//        if isGuestUser {
-//            _ = Helper.LoginPresenter()
+        let userType = viewModel.streamUserType
+//        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
+//        
+//        if streamStatus == .scheduled {
 //            return
 //        }
-        
-        let userType = viewModel.streamUserType
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
-        
-        if streamStatus == .scheduled {
-            return
-        }
         
         let controller = StreamViewerChildViewController()
         
@@ -428,6 +397,40 @@ extension StreamViewController: StreamCellActionDelegate {
         }
         
         present(controller, animated: true, completion: nil)
+    }
+    
+    func didTapStreamMembersView() {
+        
+        guard let streamData = viewModel.streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
+        let isometrik = viewModel.isometrik
+        
+        let streamMemberViewModel = StreamMemberViewModel(isometrik: isometrik, streamData: streamData)
+//        streamMemberViewModel.updateMemebrsCallBack = { [weak self] members in
+//            
+//        }
+        
+        let controller = StreamMembersViewController(viewModel: streamMemberViewModel)
+        
+        if let sheet = controller.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                // Configure the custom detent
+                let customDetent = UISheetPresentationController.Detent.custom { context in
+                    return context.maximumDetentValue * 0.6  // 60% of the screen height
+                }
+                sheet.detents = [customDetent]
+                sheet.selectedDetentIdentifier = customDetent.identifier
+                sheet.preferredCornerRadius = 0
+            } else {
+                // Fallback on earlier versions
+                sheet.preferredCornerRadius = 0
+                sheet.detents = [.medium()]
+            }
+        }
+        
+        present(controller, animated: true, completion: nil)
+        
     }
     
     func didTapLiveStatusView() {
@@ -541,8 +544,6 @@ extension StreamViewController: StreamCellActionDelegate {
 //            }
             
             break
-        case .moderator:
-            break
         }
         
     }
@@ -623,14 +624,23 @@ extension StreamViewController: StreamCellActionDelegate {
         case .wallet:
             debugPrint("Log:: Wallet tapped")
             break
-        case .analytics: openStreamAnalytics(streamId: streamId)
+        case .analytics: 
+            
+            
+            
+            if userType == .member {
+                // analytics for cohost, while in PK
+                if let ghostStreamData = UserDefaultsProvider.shared.getStreamData() {
+                    let ghostStreamId = ghostStreamData.streamId.unwrap
+                    openStreamAnalytics(streamId: ghostStreamId)
+                }
+            } else {
+                openStreamAnalytics(streamId: streamId)
+            }
+            
             break
         case .settings:
-            if !isGuestUser {
-                self.openStreamSettingController()
-            } else {
-//                _ = Helper.LoginPresenter()
-            }
+            openStreamSettingController()
             break
         case .request: sendRequest() 
             break
@@ -664,14 +674,44 @@ extension StreamViewController: StreamCellActionDelegate {
         case .started:
             self.view.endEditing(true)
             visibleCell.setStreamFooterView()
+            streamCollectionView.isScrollEnabled = false
+            self.addAutoScrollTimer()
             break
         case .ended:
+            if viewModel.streamMembers.count > 1 {
+                self.streamCollectionView.isScrollEnabled = false
+            } else {
+                self.streamCollectionView.isScrollEnabled = true
+            }
             break
         case .notReachedBottom:
             break
         case .reachedBottom:
+            print("REACHED TO BOTTOM ::::::>>")
             break
         }
+    }
+    
+    func loadMoreMessages() {
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+              let messageViewModel = viewModel.streamMessageViewModel else { return }
+        
+        let streamMessageView = visibleCell.streamContainer.streamMessageView
+        
+        messageViewModel.fetchMessages { error in
+            if error == nil {
+                streamMessageView.viewModel = self.viewModel.streamMessageViewModel
+                let streamMessageCount = streamMessageView.viewModel?.messages.count ?? 0
+                
+                if streamMessageCount > 10 {
+                    self.reloadDataWithoutChangingScrollPosition()
+                } else {
+                    self.setHeightForMessages()
+                }
+            }
+        }
+        
     }
     
     func didKeyboardDismissed() {
@@ -816,12 +856,19 @@ extension StreamViewController: StreamCellActionDelegate {
         
     }
     
-    func hostNotOnline(streamId : String?) {
-//        if self.streamInfo?.streamId == streamId {
-//            endTimer()
-//            isometrik?.getIsometrik().leaveChannel()
-//            streamingVideoAlerttMessage(alertMessage: "The host is not online now. You can watch other live videos.", streamId: streamId ?? "")
-//        }
+    func hostNotOnline() {
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView) else { return }
+        
+        endTimer()
+        viewModel.isometrik.getIsometrik().leaveChannel()
+        streamCollectionView.isScrollEnabled = false
+        
+        // show the popup saying stream off
+        visibleCell.streamEndView.isHidden = false
+        visibleCell.streamEndView.streamEndMessageLabel.text = "The host is not online now. You can watch other live videos".localized + "."
+        visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
+        
     }
     
     func StopPKBattleAsTimerFinishes() {
@@ -844,8 +891,6 @@ extension StreamViewController: StreamCellActionDelegate {
             case .member, .host:
                 stopPKBattleForBroadcaster(withPkId: pkId)
                 break
-            case .moderator:
-                break
             }
             
         }
@@ -853,7 +898,11 @@ extension StreamViewController: StreamCellActionDelegate {
     
 }
 
-extension StreamViewController {
+extension StreamViewController: StreamRequestsActionDelegate {
+    
+    func didLeaveStream() {
+        didTapStreamClose()
+    }
     
     func sendRequest(){
         
@@ -874,7 +923,7 @@ extension StreamViewController {
         viewModel.user = viewerData
         viewModel.imagesArr = images
         viewModel.publisherStatus = self.viewModel.publisher
-        //viewModel.delegate = self
+        viewModel.delegate = self
         
         viewModel.success_callback = { [weak self] publisherStatus in
             guard let self else { return }

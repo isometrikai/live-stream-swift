@@ -7,17 +7,18 @@
 //
 
 import UIKit
+import IsometrikStream
 
 
 extension StreamViewController {
     
-    func didTapOnClosingAction(withOption option: StreamPopupAction, index: Int) {
+    func didTapOnClosingAction(withOption option: StreamPopupAction) {
         
         let isometrik = viewModel.isometrik
         let streamsData = viewModel.streamsData
         
         guard streamsData.count > 0,
-              let streamData = streamsData[safe: index]
+              let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
         let userType = viewModel.streamUserType
@@ -59,6 +60,7 @@ extension StreamViewController {
                 }
                 break
             case .host:
+                viewModel.ignoreMqttEventForStopStream = true
                 stopLiveStream(streamId: streamId, userId: userId)
                 self.endTimer()
                 break
@@ -136,7 +138,6 @@ extension StreamViewController {
         // fetching stream messages
         viewModel.fetchStreamMessages() { error in
             if error == nil {
-                print("MESSAGE COUNT \(self.viewModel.streamMessageViewModel?.messages.count)")
                 streamMessageView.viewModel = self.viewModel.streamMessageViewModel
                 streamMessageView.messageTableView.reloadData()
                 self.setHeightForMessages()
@@ -148,6 +149,33 @@ extension StreamViewController {
         
         // fetch copublish status
         self.fetchStatusOfCoPublishRequest { _ in }
+        
+        // check whether viewer is in moderator's group of a stream
+        viewModel.isUserModerator { success, error in
+            if error == nil {
+                cell.viewModel = self.viewModel
+                cell.streamContainer.streamMessageView.messageTableView.reloadData()
+            } else {
+                LogManager.shared.logGeneral("\(error.unwrap)", type: .debug)
+            }
+        }
+        
+        // fetch PK status if PK Challange
+        guard let streamData = viewModel.streamsData[safe: viewModel.selectedStreamIndex.row] else { return }
+        let isPK = streamData.isPkChallenge.unwrap
+        if isPK {
+            viewModel.fetchPKStreamStats { error in
+                if error == nil {
+                    guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView) else { return }
+                    
+                    visibleCell.updatePKBattleTimer()
+                    visibleCell.streamContainer.videoContainer.battleOn = true
+                    
+                    // set winner progress battle UI
+                    self.setWinnerBattleProgress(stats: self.viewModel.pkStreamStats)
+                }
+            }
+        }
         
     }
     
@@ -236,7 +264,7 @@ extension StreamViewController {
         let controller = StreamPopupViewController()
         controller.titleLabel.text = "Are you sure want to Stop Streaming Together?"
         controller.cancelButton.setTitle("No", for: .normal)
-        controller.yesButton.setTitle("Yes", for: .normal)
+        controller.actionButton.setTitle("Yes", for: .normal)
         
         controller.actionCallback = { [weak self] action in
             guard let self else { return }
@@ -264,7 +292,7 @@ extension StreamViewController {
         let controller = StreamPopupViewController()
         controller.titleLabel.text = "Are you sure want to Stop PK?"
         controller.cancelButton.setTitle("No", for: .normal)
-        controller.yesButton.setTitle("Yes", for: .normal)
+        controller.actionButton.setTitle("Yes", for: .normal)
         
         controller.actionCallback = { [weak self] action in
             guard let self else { return }

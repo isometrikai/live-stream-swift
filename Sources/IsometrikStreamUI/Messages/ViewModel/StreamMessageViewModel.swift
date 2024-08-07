@@ -25,35 +25,35 @@ enum ISMStreamMessageType: Int {
 
 class StreamMessageViewModel: NSObject {
     
-    var messagePageToken: String = ""
-    var streamInfo: ISMStream?
-    var isometrik: IsometrikSDK?
+    var streamInfo: ISMStream
+    var isometrik: IsometrikSDK
+    
     var messages: [ISMComment] = []
     var giftMessages: [ISMComment] = []
-    var wasLastMessagePage: Bool = false
     var streamUserType: StreamUserType = .viewer
+    var streamUserAccess: StreamUserAccess = .user
     var skip = 0
     var limit = 10
     
+    var isMessageAPILoading = false
+    var isLastMessagePage = false
+    
+    init(streamInfo: ISMStream, isometrik: IsometrikSDK) {
+        self.streamInfo = streamInfo
+        self.isometrik = isometrik
+    }
+    
     func fetchMessages(completionHandler: @escaping(_ error: IsometrikError?) -> Void){
         
-        guard let streamInfo = streamInfo else {
-            completionHandler(IsometrikError(errorMessage: "No Stream Data"))
-            return
-        }
+        let streamId = streamInfo.streamId.unwrap
         
-        guard let isometrik = isometrik else {
-            completionHandler(IsometrikError(errorMessage: "Isometrik found nil"))
-            return
-        }
-        
-        //let userId = isometrik.getUserSession().getUserId()
-        
-        if !wasLastMessagePage {
+        if !isMessageAPILoading && !isLastMessagePage {
             
-            isometrik.getIsometrik().fetchMessages(streamId: streamInfo.streamId.unwrap, skip: skip, limit: limit) { messagesData in
+            isMessageAPILoading = true
+            
+            isometrik.getIsometrik().fetchMessages(streamId: streamId, skip: skip, limit: limit) { messagesData in
                 
-                debugPrint("MESSAGE LOG :: MessageToken: \(messagesData.pageToken ?? "")\n MessagesCount \(messagesData.message?.count ?? 0)")
+                self.isMessageAPILoading = false
                 
                 // get messages and reverse it
                 let reversedMessages = messagesData.messageInfo.reversed()
@@ -69,39 +69,31 @@ class StreamMessageViewModel: NSObject {
                 
                 if self.messages.count.isMultiple(of: self.limit) {
                     self.skip += self.limit
-                    self.wasLastMessagePage = false
                 } else {
-                    self.wasLastMessagePage = true
+                    self.isLastMessagePage = true
                 }
+                
                 
                 completionHandler(nil)
                 
             } failure: { error in
+                self.isMessageAPILoading = false
                 let isometrikError = IsometrikError(errorMessage: "not able to fetch messages!")
                 completionHandler(isometrikError)
             }
-            
         }
         
     }
     
     func sendMessage(messageType: Int64 = 0, message: String, completionHandler: @escaping(_ message: ISMComment?, _ error: IsometrikError?) -> Void){
         
-        guard let streamInfo = streamInfo else {
-            completionHandler(nil, IsometrikError(errorMessage: "No Stream Data"))
-            return
-        }
-        
-        guard let isometrik = isometrik else {
-            completionHandler(nil, IsometrikError(errorMessage: "Isometrik found nil"))
-            return
-        }
-        
         let currentUserSession = isometrik.getUserSession()
+        let userImage = currentUserSession.getUserImage()
+        let userName = currentUserSession.getUserIdentifier()
+        let userId = currentUserSession.getUserId()
+        let name = currentUserSession.getUserName()
         
-        let userId = ""
-        let userName = ""
-        let metaData = MessageMetaDataBody(userName: userName, userId: userId, userProfile: currentUserSession.getUserImage(), fullName: "")
+        let metaData = MessageMetaDataBody(userName: userName, userId: userId, userProfile: currentUserSession.getUserImage(), fullName: name)
         
         isometrik.getIsometrik().sendMessage(streamId: streamInfo.streamId.unwrap, senderImage: currentUserSession.getUserImage(), senderIdentifier: currentUserSession.getUserIdentifier(), senderId: currentUserSession.getUserId(), senderName: currentUserSession.getUserName(), messageType: messageType, message: message, metaData: metaData) { message in
             DispatchQueue.main.async {
@@ -124,9 +116,9 @@ class StreamMessageViewModel: NSObject {
     }
     
     func resetToDefault(){
-        messagePageToken = ""
-        wasLastMessagePage = false
         messages = []
+        giftMessages = []
+        skip = 0
     }
     
 }

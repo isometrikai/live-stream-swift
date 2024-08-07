@@ -153,8 +153,6 @@ extension StreamViewController {
         
         viewModel.removeViewer(withId: viewerId)
         
-        print("mqttViewerRemoved .... viewer removed with name \(viewerData.viewerName ?? "")")
-        
         visibleCell.viewModel = viewModel
         
         let senderName = viewerData.viewerName.unwrap
@@ -192,7 +190,7 @@ extension StreamViewController {
             }
             
             visibleCell.streamEndView.isHidden = false
-            visibleCell.streamEndView.streamEndMessageLabel.text = "The host has removed you from the stream, you can watch other live videos".localized + "."
+            visibleCell.streamEndView.streamEndMessageLabel.text = "The host has removed you from the stream, you can watch other live videos" + "."
             visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
         }
         
@@ -201,9 +199,9 @@ extension StreamViewController {
         visibleCell.viewModel = viewModel
         
         let senderName = viewerData.viewerName.unwrap
-        let removedBy = streamData.userDetails?.userName ?? ""
+        let removedBy = viewerData.initiatorName.unwrap
         let timeStamp = viewerData.timestamp ?? 0
-        let message = "\(senderName) " + " " + "has been kicked out of the audience by".localized + " \(removedBy)"
+        let message = "\(senderName) " + " " + "has been kicked out of the audience by" + " \(removedBy)"
         
         let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.kickout.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
         
@@ -302,27 +300,52 @@ extension StreamViewController {
     @objc func mqttStreamStopped(notification: NSNotification){
         
         let streamsData = viewModel.streamsData
+        let ignoreMqttEventsForStopStream = !(viewModel.ignoreMqttEventForStopStream.unwrap)
         
-        guard let visibleCell = fullyVisibleCells(streamCollectionView),
+        guard ignoreMqttEventsForStopStream,
               let visibleIndex = fullyVisibleIndex(streamCollectionView),
               let _streamData = notification.userInfo?["data"] as? ISMStream,
-              let streamData = streamsData[safe: visibleIndex.row]
+              let streamData = streamsData[safe: visibleIndex.row],
+              streamData.streamId.unwrap == _streamData.streamId
         else { return }
         
         let streamUserType = viewModel.streamUserType
-        
-        if streamUserType == .host {
-            return
-        }
-        
+        let isometrik = viewModel.isometrik
+        let currentUserId = isometrik.getUserSession().getUserId()
         let streamId = streamData.streamId.unwrap
-        streamCollectionView.isScrollEnabled = false
         
-        // show the popup saying stream off
-        if streamId == _streamData.streamId {
-            visibleCell.streamEndView.isHidden = false
-            visibleCell.streamEndView.streamEndMessageLabel.text = "The host is not online now. You can watch other live videos".localized + "."
-            visibleCell.streamEndView.continueButton.addTarget(self, action: #selector(scrollToNextAvailableStream), for: .touchUpInside)
+        switch streamUserType {
+        case .viewer:
+            hostNotOnline()
+            break
+        case .member:
+            let wasPKMember = isometrik.getUserSession().getMemberForPKStatus()
+            if wasPKMember {
+                self.updateBroadCastingStatusAfterPKEnds(intentToStop: false)
+            } else {
+                hostNotOnline()
+            }
+            break
+        case .host:
+            
+//            if ignoreMqttEventsForStopStream, currentUserId == _streamData.createdBy {
+//                
+//                let controller = StreamPopupViewController()
+//                controller.titleLabel.text = "It looks like you have an active session on another device. You can't stream to multiple devices simultaneously."
+//                controller.cancelButton.isHidden = true
+//                controller.actionButton.setTitle("Cancel", for: .normal)
+//                
+//                controller.actionCallback = {[weak self] _ in
+//                    controller.dismiss(animated: true)
+//                    self?.stopLiveStream(streamId: streamId, userId: currentUserId)
+//                }
+//                
+//                controller.modalPresentationStyle = .overCurrentContext
+//                self.present(controller, animated: true)
+//                
+//            }
+            
+            break
         }
         
     }
@@ -507,11 +530,12 @@ extension StreamViewController {
             if userData.moderatorId == currentUserId {
                 
                 // Changing the stream user type
-                viewModel.streamUserType = .moderator
-                viewModel.streamMessageViewModel?.streamUserType = .moderator
+                viewModel.streamUserAccess = .moderator
+                viewModel.streamMessageViewModel?.streamUserAccess = .moderator
+                isometrik.getUserSession().setUserAccess(userAccess: .moderator)
                 
                 let title = "Added to moderator's group of broadcast".localized
-                let subtitle = "\(userData.moderatorName ?? "") " + "has been added to the moderator's group of broadcast by".localized  + " \(userData.initiatorName ?? "")" + ".\n" + "Being a moderator one can kick out members and viewers, reply-to and delete messages".localized
+                let subtitle = "\(userData.moderatorName ?? "") " + "has been added to the moderator's group of broadcast by"  + " \(userData.initiatorName ?? "")" + ".\n" + "Being a moderator one can kick out members and viewers, reply-to and delete messages".localized
                 
                 self.handleModalActions(title, subtitle)
                 
@@ -527,7 +551,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "has been added to the moderator's group of broadcast by".localized + " \(userData.initiatorName ?? "")"
+            let message = "\(senderName) " + "has been added to the moderator's group of broadcast by" + " \(userData.initiatorName ?? "")"
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.addAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
@@ -554,12 +578,14 @@ extension StreamViewController {
             
             if userData.moderatorId == currentUserId {
                 
-                // Changing the stream user type
-                viewModel.streamUserType = .viewer
-                viewModel.streamMessageViewModel?.streamUserType = .viewer
+                // Changing the stream user access
+                viewModel.streamUserAccess = .user
+                viewModel.streamMessageViewModel?.streamUserAccess = .user
+                isometrik.getUserSession().setUserAccess(userAccess: .user)
+                
                 
                 let title = "Removed from moderator's group of broadcast".localized
-                let subtitle = "\(userData.moderatorName ?? "") " + "has been removed from moderator's group of broadcast by".localized + " \(userData.initiatorName ?? "").\n " + "without being a moderator one can no longer kick out members and viewers, reply-to and delete messages".localized
+                let subtitle = "\(userData.moderatorName ?? "") " + "has been removed from moderator's group of broadcast by" + " \(userData.initiatorName ?? "").\n " + "without being a moderator one can no longer kick out members and viewers, reply-to and delete messages"
                 
                 self.handleModalActions(title, subtitle)
                 
@@ -575,7 +601,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by".localized + "\(userData.initiatorName ?? "")."
+            let message = "\(senderName) " + "has been removed from the moderator's group of broadcast by" + " " + "\(userData.initiatorName ?? "")."
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.removedAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
@@ -604,8 +630,10 @@ extension StreamViewController {
             if userData.moderatorId == currentUserId {
                 
                 // Changing the stream user type
-                viewModel.streamUserType = .viewer
-                viewModel.streamMessageViewModel?.streamUserType = .viewer
+
+                viewModel.streamUserAccess = .user
+                viewModel.streamMessageViewModel?.streamUserAccess = .user
+                isometrik.getUserSession().setUserAccess(userAccess: .user)
                 
                 // updating moderator flag
                 viewModel.streamsData[viewModel.selectedStreamIndex.row].isModerator = false
@@ -619,7 +647,7 @@ extension StreamViewController {
             
             let senderName = userData.moderatorName ?? ""
             let timeStamp = Int64(userData.timestamp ?? 0)
-            let message = "\(senderName) " + "left from the moderator's group of broadcast by".localized + " \(streamerName)"
+            let message = "\(senderName) " + "left from the moderator's group of broadcast."
             
             let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.leftAsModerator.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
             
@@ -689,8 +717,14 @@ extension StreamViewController {
     
     @objc func applicationWillEnterForeground(){
         
+        let isometrik = viewModel.isometrik
+        
         guard let player = viewModel.videoPreviewPlayer else { return }
         player.play()
+        
+        if let liveKitManager =  isometrik.getIsometrik().rtcWrapper.getLiveKitManager(), !liveKitManager.isCameraMute {
+            liveKitManager.updateLiveKitCameraStatus = true
+        }
         
     }
     

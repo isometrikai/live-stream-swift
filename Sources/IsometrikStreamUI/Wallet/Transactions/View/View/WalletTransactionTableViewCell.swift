@@ -43,11 +43,10 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         return label
     }()
     
-    lazy var coinAmount: UIButton = {
+    lazy var amountLabel: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
-        button.setImage(appearance.images.coin, for: .normal)
         button.setTitleColor(.black, for: .normal)
         return button
     }()
@@ -73,7 +72,7 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         infoStackView.addArrangedSubview(transactionId)
         infoStackView.addArrangedSubview(timeLabel)
         
-        addSubview(coinAmount)
+        addSubview(amountLabel)
     }
     
     func setUpConstraints(){
@@ -86,12 +85,12 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
             infoStackView.leadingAnchor.constraint(equalTo: transactionTypeImage.trailingAnchor, constant: 8),
             infoStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            coinAmount.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            coinAmount.centerYAnchor.constraint(equalTo: centerYAnchor)
+            amountLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            amountLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     
-    func configureCell(data: WalletTransactionData?){
+    func configureCell(data: WalletTransactionData?, currencyType: WalletCurrencyType){
         guard let data else { return }
         
         let transactionType = WalletTransactionType(rawValue: data.txnType.unwrap)
@@ -113,8 +112,16 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let obscureTransactionId = obscureString(data.transactionId.unwrap)
         transactionId.text = "TransactionId: \(obscureTransactionId)"
         
-        let abbreviatedAmount = Int64(data.amount.unwrap).ism_roundedWithAbbreviations
-        coinAmount.setTitle("  \(abbreviatedAmount)", for: .normal)
+        switch currencyType {
+        case .coin:
+            amountLabel.setImage(appearance.images.coin, for: .normal)
+            let coinBalance = Int64(data.amount.unwrap)
+            amountLabel.setTitle(" \(coinBalance)", for: .normal)
+        case .money:
+            amountLabel.imageView?.image = nil
+            let abbreviatedAmount = Double(data.amount.unwrap).formattedWithSuffix(fractionDigits: 1)
+            amountLabel.setTitle("\(data.currency.unwrap) \(abbreviatedAmount)", for: .normal)
+        }
         
         let timeStampInSec = TimeInterval(Double(data.txnTimeStamp.unwrap) / 1000)
         let date = Date(timeIntervalSince1970: timeStampInSec)

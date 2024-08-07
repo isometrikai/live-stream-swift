@@ -13,7 +13,10 @@ class StreamContainerView: UIView {
     // MARK: - PROPERTIES
     
     var footerBottomConstraint: NSLayoutConstraint?
+    
     var streamMessageViewConstraint: NSLayoutConstraint?
+    var streamMessageTrailingConstraints: NSLayoutConstraint?
+    
     var bottomGradientBottomAnchor: NSLayoutConstraint?
     var streamingInfoMessageViewHeightConstraints: NSLayoutConstraint?
     var streamingEventUpdateMessageViewHeightConstraints: NSLayoutConstraint?
@@ -220,6 +223,9 @@ class StreamContainerView: UIView {
         
         streamMessageViewConstraint = streamMessageView.heightAnchor.constraint(equalToConstant: 250)
         streamMessageViewConstraint?.isActive = true
+        
+        streamMessageTrailingConstraints = streamMessageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -80)
+        streamMessageTrailingConstraints?.isActive = true
         
         streamingInfoMessageViewHeightConstraints = streamInfoMessageView.heightAnchor.constraint(equalToConstant: 0)
         streamingInfoMessageViewHeightConstraints?.isActive = true

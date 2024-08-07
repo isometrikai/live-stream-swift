@@ -23,9 +23,9 @@ struct GiftsForGroupData {
 class StreamGiftViewModel {
     
     var isometrik: IsometrikSDK
-    
     var streamInfo: ISMStream
     var recieverGiftData: ISMCustomGiftRecieverData
+    private var dataPersistenceService: DataPersistenceService?
     
     var giftModelData: ISMStreamGiftModelData?
     var giftGroup: [ISMStreamGiftModel] = []
@@ -45,13 +45,24 @@ class StreamGiftViewModel {
     var sendGift: ((_ giftData: StreamMessageGiftModel) -> Void)?
     var buyCoins: (() -> Void)?
     
-    var contentBottomConstraint: NSLayoutConstraint?
     var audioPlayer: AVAudioPlayer?
     
     init(isometrik: IsometrikSDK, streamInfo: ISMStream, recieverGiftData: ISMCustomGiftRecieverData) {
         self.isometrik = isometrik
         self.streamInfo = streamInfo
         self.recieverGiftData = recieverGiftData
+        createDataPersistenceServiceContainer()
+    }
+    
+    // MARK: - DataPersistence service
+    
+    func createDataPersistenceServiceContainer() {
+        
+//        let dataPersistenceService = DataPersistenceService.getInstance()
+//        dataPersistenceService.createContainer(persistentModel: PersistenceGiftModel.self)
+//        dataPersistenceService.createContainer(persistentModel: PersistenceGiftCategoryModel.self)
+//        self.dataPersistenceService = dataPersistenceService
+        
     }
     
     // MARK: - Service funtions
@@ -139,9 +150,9 @@ class StreamGiftViewModel {
     }
     
     func getWalletBalance(completion: @escaping(_ success: Bool, _ error: String?)->Void){
-        isometrik.getIsometrik().getWalletBalance(currencyType: WalletCurrencyType.coin.rawValue){ response in
+        isometrik.getIsometrik().getWalletBalance(currencyType: WalletCurrencyType.coin.getValue){ response in
             self.walletBalance = response.data?.balance ?? 0
-            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance, currencyType: WalletCurrencyType.coin.rawValue)
+            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance, currencyType: WalletCurrencyType.coin.getValue)
             DispatchQueue.main.async {
                 completion(true, nil)
             }
@@ -236,7 +247,7 @@ class StreamGiftViewModel {
             isPk: (isometrik.getUserSession().getPKStatus() == .on),
             receiverName: recieverGiftData.recieverName,
             messageStreamId: streamInfo.streamId ?? "NA",
-            deviceId: ""
+            deviceId: UIDevice.current.identifierForVendor?.uuidString ?? ""
         )
         
         transferGifts(paramBody) { result, error in

@@ -27,9 +27,10 @@ public class RTCLiveKitManager: NSObject {
             )
         )
     )
+    
     var settings = Settings()
     var captureOption: CameraCaptureOptions?
-    var updateLiveKitCameraStatus = false
+    public var updateLiveKitCameraStatus = false
     
     public var videoSessions: [VideoSession] = [] {
         didSet {
@@ -37,7 +38,7 @@ public class RTCLiveKitManager: NSObject {
         }
     }
     
-    var isCameraMute: Bool = false {
+    public var isCameraMute: Bool = false {
         didSet {
             DispatchQueue.main.async {
                 LogManager.shared.logLiveKit("is camera enabled : \(!self.isCameraMute)", type: .debug)
@@ -78,7 +79,6 @@ public class RTCLiveKitManager: NSObject {
     // MARK: - FUNCTIONS
     
     func connectToRoom(withUid uid: UInt, hdBroadcast: Bool, isRestream: Bool, isRecorded: Bool) {
-        
         Task {
             
             await room.disconnect()
@@ -143,7 +143,6 @@ public class RTCLiveKitManager: NSObject {
             }
             
         }
-        
     }
     
     func disconnectFromRoom(){
@@ -300,33 +299,8 @@ extension RTCLiveKitManager: RoomDelegate {
                 
             }
             
-            
         }
         
     }
-    
-//    func room(_ room: Room, participant: Participant, didUpdate publication: TrackPublication, muted: Bool) {
-//        
-//        let participantUid = participant.identity.ism_userIdUInt() ?? 0
-//        
-//        let session = getSession(of: participantUid)
-////        print("Camera Mute :: for user session named: \(session?.userData?.name ?? "Unk") is set to be \(!participant.isCameraEnabled())")
-////
-////        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "streamAudioVideo"), object: nil, userInfo: ["eventName": "streamVideo", "value": !participant.isCameraEnabled(), "uid": participantUid])
-////
-////        print("Microphone Mute :: for user session named: \(session?.userData?.name ?? "Unk") is set to be \(!participant.isMicrophoneEnabled())")
-////
-////        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "streamAudioVideo"), object: nil, userInfo: ["eventName": "streamAudio", "value": !participant.isMicrophoneEnabled(), "uid": participantUid])
-//        
-////        if let videoTrack = publication.track as? VideoTrack {
-////            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "streamAudioVideo"), object: nil, userInfo: ["eventName": "streamVideo", "value": muted, "uid": participantUid])
-////        }
-////
-////        if let audioTrack = publication.track as? AudioTrack {
-////            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "streamAudioVideo"), object: nil, userInfo: ["eventName": "streamAudio", "value": muted, "uid": participantUid])
-////        }
-//        
-//    }
-
     
 }

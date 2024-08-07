@@ -176,6 +176,7 @@ public struct ISMStream: Codable {
     public var _id: String?
     public var recordViewCount: Int?
     public var metaData: StreamMetaData?
+    public var userMetaData: ISMUserMetaData?
 
     /// Codable keys to confirm Codable protocol
     enum CodingKeys: String, CodingKey {
@@ -271,6 +272,7 @@ public struct ISMStream: Codable {
         case isRsvp
         case recordViewCount
         case metaData
+        case userMetaData
         
         //:
 
@@ -355,7 +357,8 @@ public struct ISMStream: Codable {
                 otherProducts: [ISMOthersProductToBeTagged]? = nil,
                 _id: String = "",
                 isRsvp: Bool = false,
-                recordViewCount: Int = 0
+                recordViewCount: Int = 0,
+                userMetaData: ISMUserMetaData? = nil
                 
     ) {
         self.initiatorId = initiatorId
@@ -427,6 +430,7 @@ public struct ISMStream: Codable {
         self._id = _id
         self.isRsvp = isRsvp
         self.recordViewCount = recordViewCount
+        self.userMetaData = userMetaData
     }
     
     /// Public initlizer decoder.
@@ -560,6 +564,7 @@ public struct ISMStream: Codable {
         isRsvp = try? values.decodeIfPresent(Bool.self, forKey: .isRsvp)
         recordViewCount = try? values.decodeIfPresent(Int.self, forKey: .recordViewCount)
         metaData = try? values.decodeIfPresent(StreamMetaData.self, forKey: .metaData)
+        userMetaData = try? values.decodeIfPresent(ISMUserMetaData.self, forKey: .userMetaData)
         //:
     }
     
@@ -606,6 +611,7 @@ public struct ISMStream: Codable {
         try? container.encode(isRsvp, forKey: .isRsvp)
         try? container.encode(recordViewCount, forKey: .recordViewCount)
         try? container.encode(streamPreviewUrl, forKey: .streamPreviewUrl)
+        try? container.encode(userMetaData, forKey: .userMetaData)
     }
 
 }
@@ -643,7 +649,6 @@ public struct ISMPinProductDetails: Codable, Hashable {
 public struct StreamMetaData: Codable {
     public let conversationId: String?
 }
-
 
 public struct StreamInfo : Codable{
     public let duration : Int?
@@ -727,6 +732,11 @@ public struct ISMRecordedStreamData: Codable {
     
 }
 
+public struct ISMUserMetaData: Codable {
+    public let firstName: String?
+    public let profilePic: String?
+    public let lastName: String?
+}
 
 public struct RelaxedString: Codable, Hashable {
     

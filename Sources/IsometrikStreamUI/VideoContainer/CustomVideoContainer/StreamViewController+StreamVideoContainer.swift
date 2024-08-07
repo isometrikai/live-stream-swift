@@ -56,6 +56,7 @@ extension StreamViewController: RtcWrapperProtocol {
                 // session not exist
                 isometrik.getIsometrik().rtcWrapper.getLiveKitManager()?.videoSession(of:memberuid, isLocal ? .local : .remote).userData = $0
             }
+            
         }
         updateVideoSessionLayout()
         
@@ -74,13 +75,21 @@ extension StreamViewController: RtcWrapperProtocol {
         videoContainer.refreshLayout(streamInfo: streamData)
         
         /// refreshing UI elements when videos session updates
-        
         guard let visibleCell = self.fullyVisibleCells(self.streamCollectionView) else { return }
         ///refresh PK Views
         visibleCell.streamContainer.videoContainer.streamInfo = streamData
         visibleCell.streamContainer.videoContainer.refreshPKView()
         
         //visibleCell.mainDataContainerView.animatedGiftView.videoDidEnd()
+        
+        // remove the thumbnail if more that one member or sessions
+        if videoContainer.videoSessions.count > 1 {
+            visibleCell.streamThumbnailImage.image = UIImage()
+        } else {
+            if let streamImageUrl = URL(string: streamData.streamImage.unwrap) {
+                visibleCell.streamThumbnailImage.kf.setImage(with: streamImageUrl)
+            }
+        }
         
     }
     
@@ -120,8 +129,6 @@ extension StreamViewController: RtcWrapperProtocol {
                 self.fetchStreamData(cell: cell)
             }
             break
-        case .moderator:
-            break
         }
         
     }
@@ -160,11 +167,16 @@ extension StreamViewController: VideoContainerActionDelegate {
         if let sheet = moreSettingController.sheetPresentationController {
             
             // Fixed height detent of 200 points
-            let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
-                return 180 + ism_windowConstant.getBottomPadding
+            if #available(iOS 16.0, *) {
+                let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
+                    return 180 + ism_windowConstant.getBottomPadding
+                }
+                
+                sheet.detents = [fixedHeightDetent]
+            } else {
+                // Fallback on earlier versions
+                sheet.detents = [.medium()]
             }
-            
-            sheet.detents = [fixedHeightDetent]
         }
         
         present(moreSettingController, animated: true, completion: nil)

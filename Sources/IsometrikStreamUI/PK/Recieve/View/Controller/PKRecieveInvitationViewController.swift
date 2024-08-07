@@ -98,7 +98,7 @@ class PKRecieveInvitationViewController: UIViewController, ISMAppearanceProvider
         button.setTitle("Accept", for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.backgroundColor = appearance.colors.appColor
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.ismTapFeedBack()
         button.layer.cornerRadius = 25
         button.addTarget(self, action: #selector(acceptButtonTapped), for: .touchUpInside)

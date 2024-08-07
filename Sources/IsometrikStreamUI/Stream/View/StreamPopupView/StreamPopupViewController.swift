@@ -66,7 +66,7 @@ class StreamPopupViewController: UIViewController, ISMAppearanceProvider {
         return button
     }()
     
-    lazy var yesButton: UIButton = {
+    lazy var actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(.black, for: .normal)
@@ -95,7 +95,7 @@ class StreamPopupViewController: UIViewController, ISMAppearanceProvider {
         popupCardView.addSubview(titleLabel)
         popupCardView.addSubview(buttonStackView)
         buttonStackView.addArrangedSubview(cancelButton)
-        buttonStackView.addArrangedSubview(yesButton)
+        buttonStackView.addArrangedSubview(actionButton)
     }
     
     func setupConstraints(){

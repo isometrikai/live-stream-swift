@@ -141,17 +141,9 @@ extension IsometrikStream {
     
     /// Live streams
     /// - Parameter completionHandler: completionHandler: completionHandler for response data.
-    public func fetchStreams(limit: Int = 10 , skip: Int = 0, streamType: String = "1", streamStatus: StreamStatus = .considerAll, streamId: String? = nil, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+    public func fetchStreams(streamParam: StreamQuery, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
         
-        let streamQueryParam = StreamQuery(
-            limit: limit,
-            skip: skip,
-            fetchLive: true
-//            streamId: streamId,
-//            streamStatus: streamStatus.rawValue
-        )
-        
-        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.fetchStreams(streamQuery: streamQueryParam) , requestBody:nil)
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.fetchStreams(streamQuery: streamParam) , requestBody:nil)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamsData, ISMLiveAPIError> ) in
             switch result {

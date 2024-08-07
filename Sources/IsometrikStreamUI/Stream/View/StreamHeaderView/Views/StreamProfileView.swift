@@ -53,7 +53,6 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.text = ""
         label.numberOfLines = 0
         label.font = appearance.font.getFont(forTypo: .h8)
         return label
@@ -63,7 +62,6 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.text = ""
         label.numberOfLines = 0
         label.font = appearance.font.getFont(forTypo: .h8)
         return label
@@ -79,7 +77,8 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.follow.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = appearance.colors.appRed
+        button.imageView?.tintColor = appearance.colors.appColor
+        button.isHidden = true
         return button
     }()
     
@@ -115,10 +114,10 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         profileCard.addSubview(profileImageCardView)
         profileImageCardView.addSubview(profileImage)
         
-        profileCard.addSubview(infoStackView)
         profileCard.addSubview(profileDetailsButton)
         profileCard.addSubview(followButton)
         
+        profileCard.addSubview(infoStackView)
         infoStackView.addArrangedSubview(profileName)
         infoStackView.addArrangedSubview(userIdentifierLabel)
         

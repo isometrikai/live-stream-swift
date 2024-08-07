@@ -276,9 +276,13 @@ class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
             
             // remove that user from the list and update
             if isSearchingUser {
-                self.viewModel.searchedUserList.remove(at: indexPath.row)
+                if self.viewModel.searchedUserList.count > indexPath.row {
+                    self.viewModel.searchedUserList.remove(at: indexPath.row)
+                }
             } else {
-                self.viewModel.userList.remove(at: indexPath.row)
+                if self.viewModel.userList.count > indexPath.row {
+                    self.viewModel.userList.remove(at: indexPath.row)
+                }
             }
             
             self.userListTableView.reloadData()

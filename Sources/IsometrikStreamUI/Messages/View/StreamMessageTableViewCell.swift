@@ -56,6 +56,14 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         return button
     }()
     
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.style = .medium
+        indicator.color = appearance.colors.appSecondary
+        return indicator
+    }()
+    
     ///:
     
     lazy var messageLabel: UILabel = {
@@ -100,6 +108,13 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        backgroundMessageView.backgroundColor = .clear
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+        userProfileImage.backgroundColor = .clear
+    }
+    
     // MARK: - FUNCTIONS
     
     func setupViews(){
@@ -109,6 +124,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         profileCoverView.addSubview(userDefaultProfileImageView)
         profileCoverView.addSubview(userProfileImage)
         addSubview(profileButton)
+        profileCoverView.addSubview(activityIndicator)
         
         //addSubview(userNameLabel)
         addSubview(messageLabel)
@@ -122,6 +138,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         userProfileImage.ism_pin(to: profileCoverView)
         userDefaultProfileImageView.ism_pin(to: profileCoverView)
         deleteButton.ism_pin(to: deleteView)
+        activityIndicator.ism_pin(to: profileCoverView)
         
         NSLayoutConstraint.activate([
             backgroundMessageView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -165,9 +182,9 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         messageTrailingConstraint?.isActive = true
     }
     
-    func configureData(message: ISMComment?, userType: StreamUserType?) {
+    func configureData(message: ISMComment?, userAccess: StreamUserAccess?) {
         
-        guard let message, let userType else { return }
+        guard let message, let userAccess else { return }
         
         let userName = message.senderName ?? "Unknown".localized
         let userImage = message.senderImage.unwrap
@@ -204,19 +221,19 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
         
         // DELETE ACTIONS
         
-        viewTrailingConstraint?.constant = (userType == .host || userType == .moderator) ? 40 : 10
-        messageTrailingConstraint?.constant = (userType == .host || userType == .moderator) ? -40: -10
+        viewTrailingConstraint?.constant = (userAccess == .moderator) ? 40 : 10
+        messageTrailingConstraint?.constant = (userAccess == .moderator) ? -40: -10
         
         if messageType == .productBought {
             deleteView.isHidden = true
         } else {
-            deleteView.isHidden = (userType == .host || userType == .moderator) ? false : true
+            deleteView.isHidden = (userAccess == .moderator) ? false : true
         }
         
         //:
         
         if messageType == .productBought {
-            backgroundMessageView.backgroundColor = UIColor.colorWithHex(color: "#5FCF4C").withAlphaComponent(0.5)
+            backgroundMessageView.backgroundColor = appearance.colors.appColor.withAlphaComponent(0.5)
         } else {
             backgroundMessageView.backgroundColor = .black.withAlphaComponent(0.2)
         }
@@ -239,7 +256,7 @@ class StreamMessageTableViewCell: UITableViewCell, ISMAppearanceProvider {
             NSAttributedString(
                 string: message,
                 attributes: [
-                    NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h7)!,
+                    NSAttributedString.Key.font: appearance.font.getFont(forTypo: .h8)!,
                     NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.8)
                 ]
             )

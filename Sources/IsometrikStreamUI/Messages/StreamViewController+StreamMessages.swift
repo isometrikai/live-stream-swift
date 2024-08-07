@@ -169,19 +169,15 @@ extension StreamViewController {
         }
         
         // check before scroll to bottom, whether enabled or not
-        /**
-         
-         if scrollToBottomForMessage {
-             if !visibleCell.messages.isEmpty {
-                 let indexPath = IndexPath(row: visibleCell.messages.count - 1, section: 0)
-                 // if valid indexPath then only scroll otherwise not
-                 if messageTableView.isValid(indexPath: indexPath) {
-                     messageTableView.scrollToRow(at: indexPath , at: .bottom, animated: true)
-                 }
-             }
-         }
-         
-         */
+        if viewModel.scrollToBottomForMessage {
+            if messageCount != 0 {
+                let indexPath = IndexPath(row: messageCount - 1, section: 0)
+                // if valid indexPath then only scroll otherwise not
+                if messageTableView.isValid(indexPath: indexPath) {
+                    messageTableView.scrollToRow(at: indexPath , at: .bottom, animated: true)
+                }
+            }
+        }
         
         messageTableView.layoutIfNeeded()
         
@@ -196,16 +192,34 @@ extension StreamViewController {
         let maxHeightReached = messageTableView.contentSize.height > maximumMessageTableViewHeight
         messageTableViewHeightConstraint?.constant = maxHeightReached ? maximumMessageTableViewHeight : messageTableView.contentSize.height + 5
         
-        if messageCount > 0 {
-            let indexPath = IndexPath(row: messageCount - 1, section: 0)
-            // if valid indexPath then only scroll otherwise not
-            if messageTableView.isValid(indexPath: indexPath) {
-                DispatchQueue.main.async {
-                    messageTableView.scrollToRow(at: indexPath , at: .bottom, animated: true)
-                }
-            }
-        }
+//        if messageCount > 0 {
+//            let indexPath = IndexPath(row: messageCount - 1, section: 0)
+//            // if valid indexPath then only scroll otherwise not
+//            if messageTableView.isValid(indexPath: indexPath) {
+//                DispatchQueue.main.async {
+//                    messageTableView.scrollToRow(at: indexPath , at: .bottom, animated: true)
+//                }
+//            }
+//        }
         
+    }
+    
+    func reloadDataWithoutChangingScrollPosition(){
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
+        else { return }
+        
+        let messageTableView = visibleCell.streamContainer.streamMessageView.messageTableView
+        let distanceFromOffset = messageTableView.contentSize.height - messageTableView.contentOffset.y
+        
+        messageTableView.reloadData() // reload tableView
+        
+        // Calculate new content offset after reload tableView
+        let offset = messageTableView.contentSize.height - distanceFromOffset
+        
+        messageTableView.layoutIfNeeded()
+        
+        // set new content offset for the tableview without animation
+        messageTableView.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
     }
     
     func addStreamInfoMessage(message: ISMComment) {
@@ -233,6 +247,22 @@ extension StreamViewController {
         viewModel.streamAnimationPopupTimer?.invalidate()
         visibleCell.streamContainer.streamAnimationPopup.stopAnimation()
         
+    }
+    
+    func addAutoScrollTimer(){
+        viewModel.scrollToBottomForMessage = false
+        viewModel.autoScrollMessageTimer?.invalidate()
+        viewModel.autoScrollMessageAfter = 3
+        viewModel.autoScrollMessageTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.autoScrollStart), userInfo: nil, repeats: true)
+    }
+    
+    @objc func autoScrollStart(){
+        if viewModel.autoScrollMessageAfter == 0 {
+            viewModel.autoScrollMessageTimer?.invalidate()
+            viewModel.scrollToBottomForMessage = true
+        } else {
+            viewModel.autoScrollMessageAfter -= 1
+        }
     }
     
 }

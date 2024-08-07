@@ -47,15 +47,12 @@ class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
         return collectionView
     }()
     
-    lazy var defaultLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "No Gifts Found"
-        label.textColor = .white
-        label.font = appearance.font.getFont(forTypo: .h8)
-        label.textAlignment = .center
-        label.isHidden = true
-        return label
+    lazy var defaultView: CustomPlaceholderView = {
+        let view = CustomPlaceholderView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.configure(image: appearance.images.gift, text: "No Gifts Found", font: appearance.font.getFont(forTypo: .h8), color: .white)
+        view.isHidden = true
+        return view
     }()
     
     // MARK: MAIN -
@@ -74,14 +71,14 @@ class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
     
     func setUpViews(){
         addSubview(collectionView)
-        addSubview(defaultLabel)
+        addSubview(defaultView)
     }
     
     func setUpConstraints(){
         collectionView.ism_pin(to: self)
         NSLayoutConstraint.activate([
-            defaultLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            defaultLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            defaultView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            defaultView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
 

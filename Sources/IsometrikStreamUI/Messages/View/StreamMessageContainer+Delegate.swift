@@ -20,6 +20,7 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
         guard let viewModel else { return UITableViewCell() }
         
         let message = viewModel.messages[indexPath.row]
+        let userAccess = viewModel.streamUserAccess
         let messageType = ISMStreamMessageType(rawValue: Int(message.messageType ?? 0))
         
         switch messageType {
@@ -41,7 +42,7 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
             cell.contentView.isUserInteractionEnabled = false
             
             let message = viewModel.messages[indexPath.row]
-            cell.configureData(message: message, userType: viewModel.streamUserType)
+            cell.configureData(message: message, userAccess: userAccess)
             cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
             cell.profileButton.addTarget(self, action: #selector(profileButtonTapped(_:)), for: .touchUpInside)
             return cell
@@ -66,6 +67,15 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
             return 0
         }
         
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let viewModel else { return }
+        if viewModel.messages.count > 20 {
+            if indexPath.row == 0 {
+                delegate?.loadMoreMessages()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {

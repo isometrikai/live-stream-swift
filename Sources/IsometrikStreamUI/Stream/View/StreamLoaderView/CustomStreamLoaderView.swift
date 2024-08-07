@@ -13,12 +13,6 @@ class CustomStreamLoaderView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var streamData: ISMStream? {
-        didSet {
-            manageData()
-        }
-    }
-    
     let circularLayer = CAShapeLayer()
     var timer = Timer()
     
@@ -206,30 +200,33 @@ class CustomStreamLoaderView: UIView, ISMAppearanceProvider {
         circularLayer.add(animation, forKey: "width")
     }
     
-    func manageData(){
+    func manageData(streamData: ISMStream){
         
-        guard let data = streamData else { return }
+        let firstName = streamData.userDetails?.firstName ?? ""
+        let lastName = streamData.userDetails?.lastName ?? ""
+        let userName = streamData.userDetails?.userName ?? ""
+        let memberImage = streamData.userDetails?.userProfile ?? ""
         
-        let firstName = data.userDetails?.firstName ?? "U"
-        let lastName = data.userDetails?.lastName ?? "n"
+        if memberImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
+            if let profileURL = URL(string: memberImage) {
+                profileImageView.kf.setImage(with: profileURL)
+            }
+        } else {
+            profileImageView.image = UIImage()
+        }
         
-        if let streamImageURlString = data.streamImage {
+        if !firstName.isEmpty && !lastName.isEmpty {
+            defaultProfileView.initialsText.text = "\(firstName.prefix(1))\(lastName.prefix(1))".uppercased()
+        } else {
+            defaultProfileView.initialsText.text = "\(userName.prefix(2))".uppercased()
+        }
+        
+        
+        if let streamImageURlString = streamData.streamImage {
             if let url = URL(string: streamImageURlString) {
                 thumbnailImageView.kf.setImage(with: url)
             }
         }
-        
-        if let profileUrlString = data.userDetails?.profilePic {
-            if profileUrlString != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-                if let profileURL = URL(string: profileUrlString) {
-                    profileImageView.kf.setImage(with: profileURL)
-                }
-            } else {
-                profileImageView.image = UIImage()
-            }
-        }
-        
-        defaultProfileView.initialsText.text = "\(firstName.prefix(1))\(lastName.prefix(1))".uppercased()
         
     }
 

@@ -14,9 +14,6 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     
     var viewModel: StreamMemberViewModel
     
-    var updateMemebrsCallBack : (([ISMMember])->())?
-    var delegate: StreamMemberListActionDelegate?
-    
     let headerView: StreamMemberHeaderView = {
         let view = StreamMemberHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -39,6 +36,7 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Member Found"
+        view.defaultLabel.textColor = .white
         return view
     }()
     
@@ -68,28 +66,24 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     // MARK: - FUNTIONS
     
     func setupViews(){
-        view.backgroundColor = .black.withAlphaComponent(0.8)
+        view.backgroundColor = appearance.colors.appDarkGray
         view.addSubview(headerView)
         view.addSubview(tableView)
         view.addSubview(defaultView)
     }
     
     func setupConstraints(){
+        defaultView.ism_pin(to: view)
         NSLayoutConstraint.activate([
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 40),
+            headerView.heightAnchor.constraint(equalToConstant: 55),
             
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            
-            defaultView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            defaultView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            defaultView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 15),
-            defaultView.heightAnchor.constraint(equalToConstant: 150)
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor)
         ])
     }
     
@@ -99,13 +93,13 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
             case .success:
                 DispatchQueue.main.async {
                     let members = self.viewModel.memberList
-                    self.updateMemebrsCallBack?(members)
+                    self.viewModel.updateMemebrsCallBack?(members)
                     if members.count > 0 {
                         self.defaultView.isHidden = true
                     } else {
                         self.defaultView.isHidden = false
                     }
-                    self.headerView.memberCountLabel.text = "\(members.count)"
+                    self.headerView.memberCountView.featureLabel.text = "\(members.count)"
                     self.tableView.reloadData()
                 }
                
@@ -148,7 +142,7 @@ class StreamMemberHeaderView: UIView, ISMAppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.text = "Members".ism_localized
+        label.text = "Members"
         label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
@@ -162,22 +156,13 @@ class StreamMemberHeaderView: UIView, ISMAppearanceProvider {
         return stackView
     }()
     
-    lazy var memberCountLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "0"
-        label.textColor = .white
-        label.font = appearance.font.getFont(forTypo: .h8)
-        return label
-    }()
-    
-    let viewerImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "ism_Icon awesome-user")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = .white
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+    lazy var memberCountView: CustomFeatureView = {
+        let featureView = CustomFeatureView()
+        featureView.translatesAutoresizingMaskIntoConstraints = false
+        featureView.iconImageView.image = appearance.images.user.withRenderingMode(.alwaysTemplate)
+        featureView.iconImageView.tintColor = .white
+        featureView.featureLabel.textColor = .white
+        return featureView
     }()
     
     let dividerView: UIView = {
@@ -204,8 +189,7 @@ class StreamMemberHeaderView: UIView, ISMAppearanceProvider {
     func setupViews(){
         addSubview(headerLabel)
         addSubview(stackView)
-        stackView.addArrangedSubview(viewerImage)
-        stackView.addArrangedSubview(memberCountLabel)
+        stackView.addArrangedSubview(memberCountView)
         addSubview(dividerView)
     }
     
@@ -217,13 +201,12 @@ class StreamMemberHeaderView: UIView, ISMAppearanceProvider {
             headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             headerLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             
-            viewerImage.widthAnchor.constraint(equalToConstant: 15),
-            viewerImage.heightAnchor.constraint(equalToConstant: 15),
-            
             dividerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            dividerView.heightAnchor.constraint(equalToConstant: 1)
+            dividerView.heightAnchor.constraint(equalToConstant: 1),
+            
+            memberCountView.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
     
@@ -234,12 +217,12 @@ extension StreamMembersViewController: StreamMemberListActionDelegate {
     
     func didkickoutMemberTapped(member: ISMMember) {
         self.dismiss(animated: true)
-        delegate?.didkickoutMemberTapped(member: member)
+        viewModel.delegate?.didkickoutMemberTapped(member: member)
     }
     
     func didMemberTapped(withId memberId: String) {
         self.dismiss(animated: true)
-        delegate?.didMemberTapped(withId: memberId)
+        viewModel.delegate?.didMemberTapped(withId: memberId)
     }
     
 }

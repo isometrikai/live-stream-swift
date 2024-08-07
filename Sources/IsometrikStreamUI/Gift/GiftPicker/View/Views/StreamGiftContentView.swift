@@ -34,6 +34,7 @@ class StreamGiftContentView: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black.withAlphaComponent(0.1)
+        view.isHidden = true
         return view
     }()
     
@@ -42,6 +43,7 @@ class StreamGiftContentView: UIView {
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.style = .medium
         indicator.color = .white
+        indicator.isHidden = true
         return indicator
     }()
     

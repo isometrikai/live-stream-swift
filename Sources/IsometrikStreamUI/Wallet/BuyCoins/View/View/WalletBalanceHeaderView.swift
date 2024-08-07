@@ -31,7 +31,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureTitleLabel.text = "Total Coins"
         view.featureSubtitleImageView.image = appearance.images.coin
-        view.featureSubtitle.text = "20"
+        view.featureActionButton.tag = WalletCurrencyType.coin.rawValue
         view.backgroundColor = .white
         return view
     }()
@@ -41,8 +41,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureTitleLabel.text = "Total Money"
         view.featureSubtitleImageView.image = appearance.images.walletMoney
-        view.featureSubtitle.text = "$145.0"
-        view.featureActionButton.isHidden = true
+        view.featureActionButton.tag = WalletCurrencyType.money.rawValue
         view.backgroundColor = .white
         return view
     }()
@@ -99,14 +98,14 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         // if balanceData is nil
         guard let balanceData else {
             
-            let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: currencyType.rawValue)
+            let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: currencyType.getValue)
             
             switch currencyType {
             case .coin:
-                coinFeatureView.featureSubtitle.text = Int64(balance).ism_roundedWithAbbreviations
+                coinFeatureView.featureSubtitle.text = "\(Int64(balance))"
                 break
             case .money:
-                moneyFeatureView.featureSubtitle.text = "$" + "\(balance)"
+                moneyFeatureView.featureSubtitle.text = "$" + Double(balance).formattedWithSuffix(fractionDigits: 1)
                 break
             }
             
@@ -119,10 +118,10 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         
         switch currencyType {
         case .coin:
-            coinFeatureView.featureSubtitle.text = Int64(balance).ism_roundedWithAbbreviations
+            coinFeatureView.featureSubtitle.text = "\(Int64(balance))"
             break
         case .money:
-            moneyFeatureView.featureSubtitle.text = "\(currencySymbol)" + "\(balance)"
+            moneyFeatureView.featureSubtitle.text = "\(currencySymbol)" + Double(balance).formattedWithSuffix(fractionDigits: 1)
             break
         }
         
@@ -178,7 +177,7 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
     lazy var featureActionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Transaction", for: .normal)
+        button.setTitle("Transactions", for: .normal)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         button.backgroundColor = appearance.colors.appColor
         button.setTitleColor(appearance.colors.appSecondary, for: .normal)

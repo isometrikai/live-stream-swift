@@ -30,11 +30,16 @@ extension StreamViewController {
             
             controller.sheetPresentationController?.prefersGrabberVisible = false
             controller.sheetPresentationController?.preferredCornerRadius = 0
-            controller.sheetPresentationController?.detents = [
-                .custom(resolver: { context in
-                    return 250 + ism_windowConstant.getBottomPadding
-                })
-            ]
+            if #available(iOS 16.0, *) {
+                controller.sheetPresentationController?.detents = [
+                    .custom(resolver: { context in
+                        return 250 + ism_windowConstant.getBottomPadding
+                    })
+                ]
+            } else {
+                // Fallback on earlier versions
+                controller.sheetPresentationController?.detents = [.medium()]
+            }
             
             self.present(controller, animated: true)
             
@@ -274,16 +279,11 @@ extension StreamViewController {
             self.viewModel.streamsData[viewModel.selectedStreamIndex.row].secondUserDetails = streamInfo?.secondUserDetails
             self.viewModel.streamsData[viewModel.selectedStreamIndex.row].pkId = pkId
             
-            print("START PK EVENT, VIEWER: \(message)")
-            print("CREATION TIME ==>> \(creationTime)")
-            
             // calculate secs
             let startTime = Int(creationTime * 1000)
             let currentTime = Int(Date().timeIntervalSince1970 * 1000)
             let timeInMiliSec = (timeInMin * 60 * 1000)
             let remainingSec = Int((timeInMiliSec - (currentTime - startTime)) / 1000)
-            
-            print("TimeInSecs :: \(timeInMiliSec)")
             
             viewModel.pkBattleTimeInSec = remainingSec
             visibleCell.viewModel = viewModel
@@ -372,7 +372,7 @@ extension StreamViewController {
         let streamMembers = viewModel.streamMembers
         
         if streamMembers.count > 1 {
-            isometrik.getUserSession().setCurrentStreamData(streamData: streamData)
+            isometrik.getUserSession().setStreamData(streamData: streamData)
         } else {
             
             // setting pkId if present
@@ -442,26 +442,13 @@ extension StreamViewController {
                 }
                 
                 break
-            case .moderator:
-                break
             }
             
         } failure: { error in
-            switch error{
-            case .noResultsFound(_):
-                // handle noresults found here
-                break
-            case .invalidResponse:
-                DispatchQueue.main.async {
-                    self.view.showToast( message: "PK Stop Error: Invalid Response")
-                }
-            case .httpError(let errorCode, let errorMessage):
-                DispatchQueue.main.async{
-                    self.view.showToast( message: "PK Stop Error: \(errorCode) \(errorMessage?.error ?? "")")
-                }
-            default :
-                break
-            }
+            isometrik.getIsometrik().leaveChannel()
+            let errorMessage = CustomErrorHandler.getErrorMessage(error)
+            self.view.showToast(message: "\(errorMessage)")
+            self.dismissViewController()
         }
 
         
@@ -574,7 +561,7 @@ extension StreamViewController {
                 
                 switch userType {
                 case .member :
-                    // Note : change back to ghost(which is basically the member's original stream) stream if you are a member.
+                    // Note : change back to ghost stream if you are a member (which is basically the member's original stream).
                     self.updateBroadCastingStatusAfterPKEnds(intentToStop: false)
                 case .host :
                     break
@@ -589,7 +576,6 @@ extension StreamViewController {
                     viewModel.unsubscribeToStreamEvents(streamId: streamId)
                     
                     self.leaveStreamByViewer(userId: userInfo.userId ?? "", streamId:streamId)
-                    
                     
                     viewModel.streamsData[viewModel.selectedStreamIndex.row].pkInviteId = ""
                     
@@ -750,7 +736,8 @@ extension StreamViewController {
         viewModel.streamUserType = .viewer
         
         // remove current stream from array
-        if self.viewModel.streamsData.count ?? 0 >= visibleIndex.row + 1 {
+        let streamCount = self.viewModel.streamsData.count
+        if streamCount >= visibleIndex.row + 1 {
             self.viewModel.streamsData.remove(at: visibleIndex.row)
         }
         
@@ -775,24 +762,9 @@ extension StreamViewController {
     func stopPKBattle(pkId: String, action: PKStopAction){
         
         let isometrik = viewModel.isometrik
-        isometrik.getIsometrik().stopPKChallenge(pkId: pkId, action: action.rawValue) { result in
-                print(result)
-        }failure:  { error in
-            switch error{
-            case .noResultsFound(_):
-                // handle noresults found here
-                break
-            case .invalidResponse:
-                DispatchQueue.main.async {
-                    self.view.showToast( message: "PK Stop Battle Error: Invalid Response")
-                }
-            case .httpError(let errorCode, let errorMessage):
-                DispatchQueue.main.async{
-                    self.view.showToast( message: "PK Stop Battle Error: \(errorCode) \(errorMessage?.error ?? "")")
-                }
-            default :
-                break
-            }
+        isometrik.getIsometrik().stopPKChallenge(pkId: pkId, action: action.rawValue) { result in }failure:  { error in
+            let errorMessage = CustomErrorHandler.getErrorMessage(error)
+            self.view.showToast(message: "\(errorMessage)")
         }
         
     }
@@ -872,7 +844,6 @@ extension StreamViewController {
         
         DispatchQueue.main.async { [self] in
             
-            
             let controller = PKHostChangeViewController()
             
             controller.hostChange_Callback = { [weak self] in
@@ -884,8 +855,6 @@ extension StreamViewController {
                 let group = DispatchGroup()
                 group.enter()
                 
-                var hostData: ISMMember?
-                
                 // toggle member host tag
                 for i in 0..<streamMembers.count {
                     let member = streamMembers[i]
@@ -893,7 +862,6 @@ extension StreamViewController {
                         self.viewModel.streamMembers[i].isAdmin = nil
                     } else {
                         self.viewModel.streamMembers[i].isAdmin = true
-                        hostData = member
                     }
                     if i == (streamMembers.count - 1) {
                         group.leave()
@@ -902,37 +870,50 @@ extension StreamViewController {
                 
                 group.notify(queue: .main) {
                     
-                    // it updates the profile view of host for viewer
-                    //visibleCell.updateProfileView(members: self.members)
+                    // change streamInfo initiator info
+//                    self.viewModel.streamsData[self.viewModel.selectedStreamIndex.row].initiatorId = hostData.first?.userID
                     
-                    if let hostData = hostData {
-                        // change streamInfo initiator info
-                        self.viewModel.streamsData[self.viewModel.selectedStreamIndex.row].initiatorId = hostData.userID
+                    // change user Details too
+//                    let userDetail = StreamUserDetails(firstName: hostData.name, isFollow: nil, isStar: nil, lastName: hostData.name, userName: hostData.name, userProfile: hostData.imagePath, walletUserId: hostData.memberId)
+//                    
+//                    self.ongoingStreams[indexPath.row].userDetails = userDetail
+                    
+                    // toggle the winnerdata if any
+                    
+                    if self.viewModel.pkGiftData != nil {
                         
-                        // change user Details too
-//                        let userDetail = StreamUserDetails(firstName: hostData.name, isFollow: nil, isStar: nil, lastName: hostData.name, userName: hostData.name, userProfile: hostData.imagePath, walletUserId: hostData.memberId)
-//                        
-//                        self.ongoingStreams[indexPath.row].userDetails = userDetail
+                        let streamer1Id = self.viewModel.pkGiftData?.streamer1?.userId ?? ""
+                        let streamer1 = self.viewModel.pkGiftData?.streamer1
+                        let streamer2 = self.viewModel.pkGiftData?.streamer2
                         
-                        // toggle the winnerdata if any
+                        let firstStreamMemberId = self.viewModel.streamMembers.first?.userID ?? ""
+                        let firstStreamMemberIsAdmin = self.viewModel.streamMembers.first?.isAdmin ?? false
                         
-                        if self.viewModel.pkGiftData != nil {
-                            
-                            let streamer1Id = self.viewModel.pkGiftData?.streamer1?.userId ?? ""
-                            let streamer1 = self.viewModel.pkGiftData?.streamer1
-                            let streamer2 = self.viewModel.pkGiftData?.streamer2
-                            if streamer1Id == hostData.userID {
-                                self.viewModel.pkGiftData?.streamer1 = streamer1
-                                self.viewModel.pkGiftData?.streamer2 = streamer2
-                            } else {
-                                self.viewModel.pkGiftData?.streamer2 = streamer1
-                                self.viewModel.pkGiftData?.streamer1 = streamer2
-                            }
-                            
-                            visibleCell.streamContainer.videoContainer.giftData = self.viewModel.pkGiftData
+                        if streamer1Id == firstStreamMemberId && firstStreamMemberIsAdmin {
+                            self.viewModel.pkGiftData?.streamer1 = streamer1
+                            self.viewModel.pkGiftData?.streamer2 = streamer2
+                        } else {
+                            self.viewModel.pkGiftData?.streamer2 = streamer1
+                            self.viewModel.pkGiftData?.streamer1 = streamer2
                         }
                         
+                        visibleCell.streamContainer.videoContainer.giftData = self.viewModel.pkGiftData
+                        
+                        let streamer1Coin = self.viewModel.pkGiftData?.streamer1?.coins ?? 0
+                        let streamer1Name = self.viewModel.pkGiftData?.streamer1?.userName ?? ""
+                        
+                        let streamer2Coin = self.viewModel.pkGiftData?.streamer2?.coins ?? 0
+                        let streamer2Name = self.viewModel.pkGiftData?.streamer2?.userName ?? ""
+                        
+                        LogManager.shared.logCustom(category: "gift", message: "Streamer1(\(streamer1Name)) Coin: \(streamer1Coin)")
+                        
+                        LogManager.shared.logCustom(category: "gift", message: "Streamer2(\(streamer2Name)) Coin: \(streamer2Coin)")
+                        
                     }
+                      
+                    
+                    // reload the header views
+                    visibleCell.viewModel = self.viewModel
                     
                     // change video session data
                     self.updateVideoSessions()
@@ -945,7 +926,7 @@ extension StreamViewController {
                 if #available(iOS 16.0, *) {
                     
                     let customDetent = UISheetPresentationController.Detent.custom { context in
-                        return 200 + ism_windowConstant.getBottomPadding
+                        return 120 + ism_windowConstant.getBottomPadding
                     }
                     sheet.detents = [customDetent]
                     sheet.selectedDetentIdentifier = customDetent.identifier
@@ -1116,8 +1097,7 @@ extension StreamViewController {
     func setWinnerBattleProgress(stats: ISM_PK_StreamStats?){
         DispatchQueue.main.async { [weak self] in
             
-            guard let self,
-                  let stats,
+            guard let self, let stats,
                   let visibleCell = fullyVisibleCells(streamCollectionView)
             else { return }
             
@@ -1136,7 +1116,7 @@ extension StreamViewController {
                 if !(stats.firstUserCoins == 0) || !(stats.secondUserCoins == 0) {
                     
                     let streamer1Id = self.viewModel.pkGiftData?.streamer1?.userId ?? ""
-                    let firstUserId = stats.firstUserDetails?.streamUserId ?? ""
+                    let firstUserId = stats.firstUserDetails?.userId ?? ""
                     
                     if streamer1Id == firstUserId {
                         self.viewModel.pkGiftData?.streamer1?.coins = stats.firstUserCoins
