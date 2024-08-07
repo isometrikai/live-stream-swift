@@ -86,7 +86,7 @@ IsometrikSDK.getInstance().createConfiguration(
 
 ## On Termination or Logout
 
-While loggingOut the app remember to call this ``onTerminate`` method to release shared instances memory
+While loggingOut the app remember to call this ``onTerminate`` method to release shared instance from memory
 
 ```swift
 IsometrikSDK.getInstance().onTerminate()
