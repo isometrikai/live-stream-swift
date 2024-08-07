@@ -171,12 +171,13 @@ extension StreamViewController: VideoContainerActionDelegate {
                 let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
                     return 180 + ism_windowConstant.getBottomPadding
                 }
-                
                 sheet.detents = [fixedHeightDetent]
             } else {
                 // Fallback on earlier versions
                 sheet.detents = [.medium()]
             }
+            
+            
         }
         
         present(moreSettingController, animated: true, completion: nil)
