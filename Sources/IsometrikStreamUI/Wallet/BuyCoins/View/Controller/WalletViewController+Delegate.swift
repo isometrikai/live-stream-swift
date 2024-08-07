@@ -2,7 +2,7 @@
 import UIKit
 import IsometrikStream
 
-extension BuyCoinsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension WalletViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.coinPlans.count
@@ -40,7 +40,7 @@ extension BuyCoinsViewController: UICollectionViewDelegate, UICollectionViewData
     
 }
 
-extension BuyCoinsViewController {
+extension WalletViewController {
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

@@ -8,11 +8,11 @@
 import UIKit
 import IsometrikStream
 
-public final class BuyCoinsViewController: UIViewController, ISMAppearanceProvider {
+public final class WalletViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var viewModel: BuyCoinsViewModel
+    var viewModel: WalletViewModel
     
     lazy var headerView: CustomHeaderView = {
         let view = CustomHeaderView()
@@ -62,7 +62,7 @@ public final class BuyCoinsViewController: UIViewController, ISMAppearanceProvid
     
     // MARK: MAIN -
     
-    public init(viewModel: BuyCoinsViewModel) {
+    public init(viewModel: WalletViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

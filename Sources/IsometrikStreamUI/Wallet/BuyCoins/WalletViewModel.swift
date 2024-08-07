@@ -3,7 +3,7 @@ import Foundation
 import IsometrikStream
 import StoreKit
 
-final public class BuyCoinsViewModel {
+final public class WalletViewModel {
     
     var coinPlansData: CoinPlansResponseModel?
     var walletBalance: WalletBalance?
@@ -101,6 +101,10 @@ final public class BuyCoinsViewModel {
     func setCoinPlansPerProduct(products: [SKProduct]?) {
         
         guard let products else { return }
+        
+        // empty the array
+        coinPlans.removeAll()
+        skProducts.removeAll()
         
         // Sort products by price from lowest to highest
         var seenIdentifiers = Set<String>()

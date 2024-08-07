@@ -27,6 +27,7 @@ public class RTCLiveKitManager: NSObject {
             )
         )
     )
+    
     var settings = Settings()
     var captureOption: CameraCaptureOptions?
     public var updateLiveKitCameraStatus = false

@@ -91,8 +91,8 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     }
     
     @objc func getMoreTapped(){
-        let viewModel = BuyCoinsViewModel(isometrik: self.viewModel.isometrik)
-        let controller = BuyCoinsViewController(viewModel: viewModel)
+        let viewModel = WalletViewModel(isometrik: self.viewModel.isometrik)
+        let controller = WalletViewController(viewModel: viewModel)
         
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .pageSheet
