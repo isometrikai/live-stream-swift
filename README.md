@@ -1,3 +1,16 @@
+
+<p align="center">
+  <a href="https://cocoapods.org/pods/StreamChatUI"><img src="https://img.shields.io/badge/CocoaPods-compatible-green" /></a>
+  <a href="https://www.swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-green" /></a>
+   <a href="https://getstream.io/chat/docs/sdk/ios/"><img src="https://img.shields.io/badge/iOS-15%2B-lightblue" /></a>
+  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.5%2B-orange.svg" /></a>
+</p>
+
+<p align="center">
+  <img id="stream-label" alt="IsometrikStream" src="https://img.shields.io/badge/IsometrikStream-509KB-blue"/>
+  <img id="stream-ui-label" alt="IsometrikStreamUI" src="https://img.shields.io/badge/IsometrikStreamUI-9.7MB-blue"/>
+</p>
+
 # Isometrik LiveStream SDK
 
 This is the official Livestream SDK for integrating advanced streaming capabilities into your application. It includes a comprehensive set of features for live video broadcasting, stream chat interactions, and real-time viewer analytics, along with reusable UI components for seamless integration and more.
