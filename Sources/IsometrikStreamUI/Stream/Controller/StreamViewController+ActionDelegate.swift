@@ -138,6 +138,8 @@ extension StreamViewController: StreamCellActionDelegate {
    
     func didTapProductDetails() {
         
+        LogManager.shared.logGeneral("Profile view tapped", type: .info)
+        
 //        guard let productViewModel = viewModel.streamProductViewModel,
 //              let pinnedProductData = productViewModel.pinnedProductData
 //        else { return }
@@ -186,16 +188,35 @@ extension StreamViewController: StreamCellActionDelegate {
         
     }
     
-    func didTapSellerProfileView() {
+    func didTapStreamerProfileView() {
         
         var streamsData = viewModel.streamsData
-        
-        guard let _ = fullyVisibleCells(streamCollectionView),
-              let _ = streamsData[safe: viewModel.selectedStreamIndex.row],
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               streamsData.count > 0
         else { return }
         
-        let isometrik = viewModel.isometrik
+        let controller = StreamerDefaultProfileViewController()
+        
+        let memberData = viewModel.streamMembers.first
+        controller.configureData(userData: memberData)
+        
+        if #available(iOS 15.0, *) {
+            if #available(iOS 16.0, *) {
+                controller.sheetPresentationController?.prefersGrabberVisible = false
+                controller.sheetPresentationController?.detents = [
+                    .custom(resolver: { context in
+                        return 250
+                    })
+                ]
+            }
+        } else {
+            controller.sheetPresentationController?.detents = [.medium()]
+        }
+        
+        controller.sheetPresentationController?.preferredCornerRadius = 0
+        
+        self.present(controller, animated: true)
+        
         
 //        let index = viewModel.selectedStreamIndex.row
 //        let controller = StreamSellerProfileVC()

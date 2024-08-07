@@ -22,7 +22,7 @@ extension VerticalStreamCollectionViewCell: StreamCellActionDelegate {
         streamHeaderView.streamStatusView.moderatorButton.addTarget(self, action: #selector(moderatorButtonTapped), for: .touchUpInside)
         streamHeaderView.cartButton.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
         streamHeaderView.profileView.followButton.addTarget(self, action: #selector(followButtonTapped), for: .touchUpInside)
-        streamHeaderView.profileView.profileDetailsButton.addTarget(self, action: #selector(sellerProfileTapped), for: .touchUpInside)
+        streamHeaderView.profileView.profileDetailsButton.addTarget(self, action: #selector(streamerProfileTapped), for: .touchUpInside)
         streamHeaderView.streamStatusView.memberFeatureView.actionButton.addTarget(self, action: #selector(streamMembersTapped), for: .touchUpInside)
         
         // stream container footer targets

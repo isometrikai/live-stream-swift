@@ -94,7 +94,6 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
                 followButton.isHidden = false
             }
             
-            
             userName = hostMember?.userName
             firstName = hostMember?.metaData?.firstName
             lastName = hostMember?.metaData?.lastName

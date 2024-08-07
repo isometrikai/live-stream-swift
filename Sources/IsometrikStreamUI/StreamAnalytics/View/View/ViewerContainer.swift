@@ -111,14 +111,21 @@ extension ViewerContainer: UITableViewDelegate, UITableViewDataSource {
         
         let viewerData = viewers[indexPath.row]
         let userId = viewerData.appUserID.unwrap
-        
-        let name = (viewerData.userMetaData?.firstName ?? "-") + " " + (viewerData.userMetaData?.lastName ?? "-")
-        let image = viewerData.profilePic.unwrap
+        let firstName = viewerData.userMetaData?.firstName ?? ""
+        let lastName = viewerData.userMetaData?.lastName ?? ""
         let userName = viewerData.userName.unwrap
         
+        var name = ""
+        
+        if !firstName.isEmpty && !lastName.isEmpty {
+            name = (firstName + " " + lastName)
+        } else {
+            name = userName
+        }
+        
+        let image = viewerData.profilePic.unwrap
         let followStatus = viewerData.followStatus.unwrap
         let privacy = viewerData.privacy.unwrap
-        
         
         cell.titleLabel.textColor = .black
         
