@@ -160,6 +160,25 @@ extension IsometrikStream {
         
     }
     
+    public func fetchScheduledStreams(streamParam: StreamQuery, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.getScheduledStream(streamQuery: streamParam) , requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamsData, ISMLiveAPIError> ) in
+            switch result {
+            case .success(let streamResponse, _) :
+                DispatchQueue.main.async {
+                    completionHandler(streamResponse)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+            }
+        }
+        
+    }
+    
     
     /// Live streams
     /// - Parameter completionHandler: completionHandler: completionHandler for response data.

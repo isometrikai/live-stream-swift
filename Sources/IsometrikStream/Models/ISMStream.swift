@@ -169,7 +169,7 @@ public struct ISMStream: Codable {
     public var pinProductDetails: ISMPinProductDetails?
     public var recordedUrl: [String]?
     public let isStreamActive: Bool?
-    public var status: String = "STARTED"
+    public var status: String?
     public let storeId: String?
     public let products: [ISMProductToBeTagged]?
     public let otherProducts: [ISMOthersProductToBeTagged]?
@@ -546,7 +546,7 @@ public struct ISMStream: Codable {
         isStreamActive = try? values.decodeIfPresent(Bool.self, forKey: .isStreamActive)
         isRecorded = try? values.decodeIfPresent(Bool.self, forKey: .isRecorded)
         hdBroadcast = try? values.decodeIfPresent(Bool.self, forKey: .hdBroadcast)
-        //status = try? values.decodeIfPresent(String.self, forKey: .status)
+        status = try? values.decodeIfPresent(String.self, forKey: .status)
         isPublicStream = try? values.decodeIfPresent(Bool.self, forKey: .isPublicStream)
         isGroupStream = try? values.decodeIfPresent(Bool.self, forKey: .isGroupStream)
         lowLatencyMode = try? values.decodeIfPresent(Bool.self, forKey: .lowLatencyMode)

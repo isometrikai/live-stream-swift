@@ -36,7 +36,16 @@ extension VerticalStreamCollectionViewCell {
         switch streamUserType {
         case .viewer:
             
-            footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+            if streamStatus == .scheduled {
+                
+                self.streamContainer.streamFooterView.toggleBottomActionUI(for: .button)
+                footerActionButton.setTitle("RSVP - \(scheduleDateString)".localized, for: .normal)
+                footerActionButton.setImage(UIImage(), for: .normal)
+                
+            } else {
+                footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+            }
+            
             
 //            if isProductEnabled {
 //                footerView.toggleBottomActionUI(for: .button)
@@ -82,15 +91,29 @@ extension VerticalStreamCollectionViewCell {
             break
         case .host:
             
-            if isProductEnabled {
-                footerView.toggleBottomActionUI(for: .button)
+            if streamStatus == .scheduled {
                 
-                footerActionButton.setTitle("Pin Product", for: .normal)
+                self.streamContainer.streamFooterView.toggleBottomActionUI(for: .button)
+                
+                // Enable the goLive 5 minutes before starting time
+                let difference = Date().minuteDifferenceBetween(scheduleDate)
+                if difference < 5 {
+                    footerActionButton.setTitle("Go Live".localized, for: .normal)
+                } else {
+                    footerActionButton.setTitle("\(scheduleDateString)".localized, for: .normal)
+                }
                 footerActionButton.setImage(UIImage(), for: .normal)
+                
             } else {
-                footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+                if isProductEnabled {
+                    footerView.toggleBottomActionUI(for: .button)
+                    
+                    footerActionButton.setTitle("Pin Product", for: .normal)
+                    footerActionButton.setImage(UIImage(), for: .normal)
+                } else {
+                    footerView.toggleBottomActionUI(for: .text, isTextFieldActive: false)
+                }
             }
-            
             
 //            if streamStatus == .scheduled {
 //                

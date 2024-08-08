@@ -195,9 +195,19 @@ extension StreamViewController: StreamCellActionDelegate {
               streamsData.count > 0
         else { return }
         
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status.unwrap)
         let controller = StreamerDefaultProfileViewController()
+        var memberData: ISMMember?
         
-        let memberData = viewModel.streamMembers.first
+        if streamStatus == .scheduled {
+            let userId = streamData.userDetails?.id ?? ""
+            let userName = streamData.userDetails?.userName ?? ""
+            memberData = ISMMember(userID: userId, userName: userName)
+            
+        } else {
+            memberData = viewModel.streamMembers.first
+        }
+        
         controller.configureData(userData: memberData)
         
         if #available(iOS 15.0, *) {
@@ -278,7 +288,7 @@ extension StreamViewController: StreamCellActionDelegate {
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status)
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status.unwrap)
         
         let isGuestUser = isometrik.getUserSession().getUserType() == .guest
         let streamId = streamData.streamId.unwrap
@@ -322,7 +332,9 @@ extension StreamViewController: StreamCellActionDelegate {
             }
             
             self.present(popupController, animated: true)
-        } else {
+        } else if streamStatus == .scheduled {
+            self.dismissViewController()
+        } else  {
 //            let controller = StreamSellerProfileVC()
 //            controller.userId = streamData.userDetails?.id ?? ""
 //            controller.isSelf = (viewModel.streamUserType == .host)

@@ -91,10 +91,15 @@ class StreamerDefaultProfileViewController: UIViewController, ISMAppearanceProvi
         
         let firstName = userData.metaData?.firstName ?? ""
         let lastName = userData.metaData?.lastName ?? ""
-        let userName = userData.metaData?.userName ?? ""
+        let userName = userData.metaData?.userName ?? userData.userName.unwrap
         
-        titleLabel.text = "\(firstName) \(lastName)"
-        subtitleLabel.text = "\(userName)"
+        if !firstName.isEmpty && lastName.isEmpty {
+            titleLabel.text = "\(firstName) \(lastName)"
+            subtitleLabel.text = "\(userName)"
+        } else {
+            titleLabel.text = "\(userName)"
+            subtitleLabel.text = ""
+        }
         
         if let imageUrl = URL(string: userData.userProfileImageURL.unwrap) {
             profilePicture.kf.setImage(with: imageUrl)

@@ -209,7 +209,7 @@ extension StreamViewController: StreamSettingDelegate {
         else { return }
         
         let settingController = StreamSettingViewController()
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status)
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status.unwrap)
         let userType = viewModel.streamUserType
         
         let reportAction = StreamSettingData(settingLabel: "Report", settingImage: appearance.images.report, streamSettingType: .report)

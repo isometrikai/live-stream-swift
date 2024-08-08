@@ -77,7 +77,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         
         if viewModel.isScheduleStream {
             if viewModel.scheduleFor == nil {
-                self.ism_showAlert("Error", message: "Choose Date and Time for scheduling".localized + "!")
+                self.ism_showAlert("Error", message: "Date and Time cannot be empty for scheduling a stream")
                 return
             }
         }
@@ -290,7 +290,6 @@ extension GoLiveViewController {
             }
         }
         
-        
         if isProductEnabled {
             contentStackView.addArrangedSubview(addProductView)
         }
@@ -301,17 +300,19 @@ extension GoLiveViewController {
             if viewModel.isScheduleStream {
                 
                 // change action button state
-                goLiveButton.setTitle("Schedule Stream".localized, for: .normal)
+                goLiveButton.setTitle("Schedule Stream", for: .normal)
                 
+                dateTimeSelectorView.isHidden = false
                 contentStackView.addArrangedSubview(dateTimeSelectorView)
                 
             } else {
+                dateTimeSelectorView.isHidden = true
                 contentStackView.removeArrangedSubview(dateTimeSelectorView)
                 
                 viewModel.scheduleFor = nil
                 contentContainerView.dateTimeSelectorView.formTextView.customTextLabel.text = "Choose Date and Time".localized
                 
-                goLiveButton.setTitle("Go Live".localized, for: .normal)
+                goLiveButton.setTitle("Go Live", for: .normal)
             }
             
         }
@@ -365,6 +366,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
             let controller = ScheduleStreamPopupViewController()
             controller.modalPresentationStyle = .pageSheet
             controller.sheetPresentationController?.detents = [.medium()]
+            controller.sheetPresentationController?.preferredCornerRadius = 0
             
             controller.selectedDate = viewModel.scheduleFor
             
@@ -615,10 +617,12 @@ extension GoLiveViewController {
             isPaid: viewModel.isPaid, 
             isPublicStream: true,
             isRecorded: viewModel.recordBroadcast,
+            isScheduledStream: viewModel.isScheduleStream,
             amount: viewModel.paidAmount,
             userName: userName,
             rtmpIngest: viewModel.isRTMPStream,
             persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey,
+            scheduleStartTime: viewModel.isScheduleStream ? Int64(viewModel.scheduleFor != nil ? viewModel.scheduleFor?.timeIntervalSince1970 ?? 0 : Date().timeIntervalSince1970 ) : nil,
             isGroupStream: viewModel.multiLive,
             products: [],
             currency: "USD"
