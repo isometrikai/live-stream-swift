@@ -771,3 +771,16 @@ public struct RelaxedString: Codable, Hashable {
 public struct ISMPaidStreamResponseModel: Codable {
     let message: String?
 }
+
+public struct SharedStreamData {
+    public let streamTitle: String
+    public let streamImage: String
+    public let streamId: String
+    
+    public init(streamTitle: String, streamImage: String, streamId: String) {
+        self.streamTitle = streamTitle
+        self.streamImage = streamImage
+        self.streamId = streamId
+    }
+}
+

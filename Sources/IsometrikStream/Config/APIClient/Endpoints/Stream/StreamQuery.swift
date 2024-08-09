@@ -38,7 +38,7 @@ public struct StreamQuery: Codable {
     let isRestream: Bool?
     let isHDbroadcast: Bool?
     let isPaid: Bool?
-    
+    let isScheduledStream: Bool?
     //:
     
     public init(
@@ -58,7 +58,8 @@ public struct StreamQuery: Codable {
         isPrivate: Bool? = nil,
         isRestream: Bool? = nil,
         isHDbroadcast: Bool? = nil,
-        isPaid: Bool? = nil
+        isPaid: Bool? = nil,
+        isScheduledStream: Bool? = nil
         
     ){
         self.limit = limit
@@ -79,6 +80,7 @@ public struct StreamQuery: Codable {
         self.isRestream = isRestream
         self.isHDbroadcast = isHDbroadcast
         self.isPaid = isPaid
+        self.isScheduledStream = isScheduledStream
     }
     
     enum CodingKeys: String, CodingKey {
@@ -99,6 +101,7 @@ public struct StreamQuery: Codable {
         case isRestream = "restream"
         case isHDbroadcast = "hdbroadcast"
         case isPaid
+        case isScheduledStream
     }
     
     // Implementing the `+` operator to merge two StreamQuery instances
@@ -119,7 +122,8 @@ public struct StreamQuery: Codable {
             isPrivate: rhs.isPrivate ?? lhs.isPrivate,
             isRestream: rhs.isRestream ?? lhs.isRestream,
             isHDbroadcast: rhs.isHDbroadcast ?? lhs.isHDbroadcast,
-            isPaid: rhs.isPaid ?? lhs.isPaid
+            isPaid: rhs.isPaid ?? lhs.isPaid,
+            isScheduledStream: rhs.isScheduledStream ?? lhs.isScheduledStream
         )
     }
     

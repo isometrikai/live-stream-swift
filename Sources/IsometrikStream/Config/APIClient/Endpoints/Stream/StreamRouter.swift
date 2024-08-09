@@ -162,10 +162,6 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
                     param += ["audioOnly":"\(audioOnly)"]
                 }
                 
-                if let audioOnly = streamQuery.audioOnly {
-                    param += ["audioOnly":"\(audioOnly)"]
-                }
-                
                 if let isRestream = streamQuery.isRestream {
                     param += ["restream":"\(isRestream)"]
                 }
@@ -176,6 +172,10 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
                 
                 if let isPaid = streamQuery.isPaid {
                     param += ["isPaid":"\(isPaid)"]
+                }
+                
+                if let isScheduledStream = streamQuery.isScheduledStream {
+                    param += ["isScheduledStream":"\(isScheduledStream)"]
                 }
                 
                 //:

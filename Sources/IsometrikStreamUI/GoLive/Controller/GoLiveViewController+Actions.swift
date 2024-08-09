@@ -885,6 +885,11 @@ extension GoLiveViewController {
 }
 
 extension GoLiveViewController: ISMStreamActionDelegate {
+    
+    public func didShareStreamTapped(streamData: SharedStreamData, root: UINavigationController) {
+        viewModel.externalActionDelegate?.didShareStreamTapped(streamData: streamData, root: root)
+    }
+    
     public func didStreamStoreOptionTapped(forUserType: StreamUserType, root: UINavigationController) {
         viewModel.externalActionDelegate?.didStreamStoreOptionTapped(forUserType: forUserType ,root: root)
     }

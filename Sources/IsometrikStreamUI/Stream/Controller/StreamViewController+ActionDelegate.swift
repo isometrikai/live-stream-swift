@@ -621,14 +621,15 @@ extension StreamViewController: StreamCellActionDelegate {
         
         switch options {
         case .share:
-            debugPrint("Log:: Share tapped")
             
-            // External helper
-            let streamImage = streamData.streamImage ?? ""
-            let streamTitle = streamData.streamTitle ?? ""
+            let streamData = SharedStreamData(
+                streamTitle: streamData.streamDescription.unwrap,
+                streamImage: streamData.streamImage.unwrap,
+                streamId: streamData.streamId.unwrap
+            )
             
-            //Helper.shareStreamLink(coverImageUrl: streamImage, streamId: stream_Id, streamTitle: streamTitle)
-            //:
+            guard let navigationController = self.navigationController else { return }
+            viewModel.externalActionDelegate?.didShareStreamTapped(streamData: streamData, root: navigationController)
             
             break
         case .bidder:
@@ -658,8 +659,6 @@ extension StreamViewController: StreamCellActionDelegate {
             debugPrint("Log:: Wallet tapped")
             break
         case .analytics: 
-            
-            
             
             if userType == .member {
                 // analytics for cohost, while in PK
