@@ -18,7 +18,7 @@ This is the official Livestream SDK for integrating advanced streaming capabilit
 
 - **Restreaming**: Broadcast your live stream simultaneously to multiple platforms, expanding your reach and audience engagement across various channels.
 
-- **RTMP Streaming**: Support Real-Time Messaging Protocol (RTMP) for high-quality and low-latency live video streaming, compatible with a wide range of video platforms.
+- **Stream Ingestion**: Support streaming through external video or audio inputs sources like OBS etc.
 
 - **Single Live**: Enable a single live stream session, ideal for focused, high-quality broadcasts with a singular stream.
 
