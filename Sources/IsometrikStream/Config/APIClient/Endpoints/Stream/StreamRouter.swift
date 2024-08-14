@@ -45,14 +45,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL{
-        switch self {
-        case .startStream, .fetchStreams, .stopStream, .getStreamAnalytics, .buyPaidStream, .getScheduledStream:
-            return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
-        case .getRecordedStream, .getPresignedUrl:
-            return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
-        default:
-            return URL(string:"https://\(ISMConfiguration.shared.secondaryOrigin)")!
-        }
+        return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {
@@ -72,31 +65,31 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         let path: String
         switch self {
         case .startStream, .stopStream :
-            path = "/live/v2/stream"
+            path = "/live/v1/stream"
         case .fetchStreams:
-            path = "/live/v2/streams"
+            path = "/live/v1/streams"
         case  .deleteStream :
-            path = "/v1/stream"
+            path = "/live/v1/stream"
         case .searchStreams :
-            path = "/v1/streams"
+            path = "/live/v1/streams"
         case .checkStreamExistence:
-            path = "/v1/stream/check"
+            path = "/live/v1/stream/check"
         case .getSingleStream:
-            path = "/v1/streams/detail"
+            path = "/live/v1/streams/detail"
         case .getRecordedStream:
             path = "/streaming/v2/stream/recordings"
         case .getPresignedUrl:
             path = "/streaming/v2/stream/presignedurl"
         case .getStreamAnalytics:
-            path = "/live/v2/stream/analytics"
+            path = "/live/v1/stream/analytics"
         case .buyPaidStream:
-            path = "/live/v2/buy/stream"
+            path = "/live/v1/buy/stream"
         case .updateScheduledStream:
-            path = "/v1/updatestream"
+            path = "/live/v1/updatestream"
         case .startScheduledStream:
-            path = "/v1/stream/schedule/golive"
+            path = "/live/v1/stream/schedule/golive"
         case .getScheduledStream:
-            path = "/live/v2/streams/scheduled"
+            path = "/live/v1/streams/scheduled"
         }
         return path
     }

@@ -49,7 +49,7 @@ enum PKRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL{
-        return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
+        return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {
@@ -64,21 +64,21 @@ enum PKRouter: ISMLiveURLConvertible, CustomStringConvertible {
     var path: String {
         switch self {
         case .inviteUser, .inviteUserList :
-            return "/live/v2/invite/users"
+            return "/live/v1/invite/users"
         case .updateInvitationStatus:
-            return "/live/v2/invites"
+            return "/live/v1/invites"
         case .startPkChallenge:
-            return "/live/v2/pk/start"
+            return "/live/v1/pk/start"
         case .getPkStreamStats:
-            return "/live/v2/pk/stream/stats"
+            return "/live/v1/pk/stream/stats"
         case .sendCoinInPk:
-            return "/live/v2/pk/sendcoins"
+            return "/live/v1/pk/sendcoins"
         case  .getPKWinners:
-            return "/live/v2/pk/winner"
+            return "/live/v1/pk/winner"
         case .stopPK:
-            return "/live/v2/pk/stop"
+            return "/live/v1/pk/stop"
         case .endPK:
-            return "/live/v2/pk/end"
+            return "/live/v1/pk/end"
         }
     }
     

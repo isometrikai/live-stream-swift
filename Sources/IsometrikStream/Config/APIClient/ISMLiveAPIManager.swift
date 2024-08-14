@@ -137,8 +137,7 @@ public struct ISMLiveAPIManager {
 //                    }
 //                }
             case 401 :
-                break
-//                Utility.logOut()
+                completion(.failure(.httpError(401, ISMLiveErrorMessage(errorCode: 0, message: "Unauthorize"))))
             default:
                 // Handle the error messages and statuscode
                 do {
