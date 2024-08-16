@@ -58,6 +58,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         
         let streamTextView = profileView.streamTextView.text
         let profileImageView = profileView.profileCoverImageView
+        let userData = isometrik.getUserSession().getUserModel()
         
         if streamTextView == "My stream description..." {
             self.ism_showAlert("Error", message: "Stream Title Required!")
@@ -91,6 +92,10 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
             let description = streamTextView.unwrap
             let userData = isometrik.getUserSession().getUserModel()
             
+            if viewModel.isEditing && !viewModel.newImagePicked {
+                self.updateScheduleStream(userData: userData, description: description, imagePath: viewModel.streamData?.streamImage ?? "", videoPath: "")
+                return
+            }
             
             viewModel.getPresignedUrl(streamTitle: description) { success, error in
                 if success {
@@ -101,8 +106,13 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
                             print("Upload progress: \(progress * 100)%")
                             break
                         case .success:
-                            let userData = isometrik.getUserSession().getUserModel()
-                            self.startNewStream(userData: userData, description: description, imagePath: self.viewModel.mediaUrlString ?? "", videoPath: "")
+                            
+                            if self.viewModel.isEditing {
+                                self.updateScheduleStream(userData: userData, description: description, imagePath: self.viewModel.streamData?.streamImage ?? "", videoPath: "")
+                            } else {
+                                self.startNewStream(userData: userData, description: description, imagePath: self.viewModel.mediaUrlString ?? "", videoPath: "")
+                            }
+                            
                             break
                         case .failure(let error):
                             if let error = error {
@@ -582,24 +592,6 @@ extension GoLiveViewController {
             viewModel.isPaid = false
         }
         
-//        let streamBody = StartStreamBody(
-//            streamImage: imagePath,
-//            streamDescription: description,
-//            selfHosted: viewModel.selfHosted,
-//            restream: viewModel.restreamBroadcast,
-//            productsLinked: viewModel.productsLinked,
-//            products: viewModel.products,
-//            multiLive: viewModel.multiLive,
-//            members: viewModel.members,
-//            lowLatencyMode: viewModel.lowLatencyMode,
-//            isPublic: viewModel.isPublic,
-//            hdBroadcast: viewModel.isHdBroadcast,
-//            enableRecording: viewModel.recordBroadcast,
-//            audioOnly: viewModel.audioOnly,
-//            rtmpIngest: viewModel.isRTMPStream,
-//            persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey
-//        )
-        
         let streamBody = StreamBody(
             streamImage: imagePath,
             streamDescription: description,
@@ -740,49 +732,17 @@ extension GoLiveViewController {
         
     }
     
-    func updateScheduleStream(userData: ISMStreamUser, description: String, imagePath: String, videoPath: String, isPublic: Bool, multiLive: Bool, members:[String]? = [] , productLinked: Bool , products: [String] = []){
+    func updateScheduleStream(userData: ISMStreamUser, description: String, imagePath: String, videoPath: String){
         
-        guard let isometrikUserId = userData.userId,
-              let streamData = viewModel.streamData
+        guard let streamData = viewModel.streamData
         else { return }
         
         let isometrik = viewModel.isometrik
-        let userName = isometrik.getUserSession().getUserName()
         
-        
-        // create stream body
         let streamBody = StreamBody(
-            streamImage: imagePath,
-            streamPreviewUrl: videoPath,
-            streamDescription: description,
-            members: members ?? [],
-            createdBy: isometrikUserId,
-            isPublic: true,
-            audioOnly: false,
-            multiLive: multiLive,
-            lowLatencyMode: false,
-            restream: viewModel.restreamBroadcast,
-            enableRecording: viewModel.recordBroadcast,
-            hdBroadcast: viewModel.isHdBroadcast,
-            isSelfHosted: true,
-            productsLinked: productLinked,
-            isPaid: streamData.isPaid ?? false,
-            isPublicStream: true,
-            isRecorded: viewModel.recordBroadcast,
-            isScheduledStream: viewModel.isScheduleStream,
-            amount: Int(streamData.amount ?? 0),
-            streamTitle: userName, userName: userName,
-            rtmpIngest: viewModel.isRTMPStream,
-            persistRtmpIngestEndpoint: viewModel.isPersistentRTMPKey,
-            isHighLighted: false,
-            scheduleStartTime: Int64(streamData.scheduleStartTime ?? 0),
-            isometrikUserId: isometrikUserId,
-            //taggedProductIds: viewModel.selectedProducts.isEmpty ? streamData.taggedProductIds : viewModel.getProductIds(),
-            storeId: viewModel.getStoreId(),
-            storeCategoryId: "",
-            //products: viewModel.selectedProducts.isEmpty ? streamData.products : viewModel.getPayloadForMyProducts(),
-            //viewModel.getPayloadForOtherProducts(),
-            eventId: streamData._id ?? ""
+            streamImage: "\(imagePath)", 
+            streamDescription: "\(description)",
+            eventId: streamData.eventId ?? ""
         )
         
         do {
@@ -819,7 +779,7 @@ extension GoLiveViewController {
                 guard let self else { return }
                 self.viewModel.captureSession?.stopRunning()
                 DispatchQueue.main.async {
-                    self.viewModel.update_callback?(streamData._id ?? "")
+                    self.viewModel.update_callback?(streamData.eventId ?? "")
                     self.dismiss(animated: true)
                 }
             }

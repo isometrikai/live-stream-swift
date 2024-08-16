@@ -82,6 +82,27 @@ extension IsometrikStream {
         }
     }
     
+    public func deleteScheduleStream(streamBody: StreamBody, completionHandler: @escaping (ISMStream)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.startScheduledStream , requestBody:streamBody)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStream, ISMLiveAPIError> ) in
+            
+            switch result{
+                
+            case .success(let streamResponse, _) :
+                DispatchQueue.main.async {
+                    completionHandler(streamResponse)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+
+            }
+        }
+    }
+    
     /// Stop live stream
     /// - Parameters:
     ///   - streamId: Current runing stream Id, Type should be **String**.

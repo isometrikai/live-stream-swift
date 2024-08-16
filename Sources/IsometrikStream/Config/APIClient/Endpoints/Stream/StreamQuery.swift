@@ -28,6 +28,7 @@ public struct StreamQuery: Codable {
     let streamId: String?
     let sortOrder: String?
     let streamStatus: Int?
+    let eventId: String?
     
     // for filters
     let isLive: Bool?
@@ -50,6 +51,7 @@ public struct StreamQuery: Codable {
         streamId: String? = nil,
         sortOrder: String? = SortOrder.ascending.rawValue,
         streamStatus: Int? = StreamStatus.considerAll.rawValue,
+        eventId: String? = nil,
         
         isLive: Bool? = nil,
         isPK: Bool? = nil,
@@ -71,6 +73,7 @@ public struct StreamQuery: Codable {
         
         self.sortOrder = sortOrder
         self.streamStatus = streamStatus
+        self.eventId = eventId
         
         self.isLive = isLive
         self.isPK = isPK
@@ -92,6 +95,7 @@ public struct StreamQuery: Codable {
         case streamId
         case sortOrder
         case streamStatus
+        case eventId
         
         case isLive = "fetchLive"
         case isPK = "pk"
@@ -115,6 +119,7 @@ public struct StreamQuery: Codable {
             streamId: rhs.streamId ?? lhs.streamId,
             sortOrder: rhs.sortOrder ?? lhs.sortOrder,
             streamStatus: rhs.streamStatus ?? lhs.streamStatus,
+            eventId: rhs.eventId ?? lhs.eventId,
             isLive: rhs.isLive ?? lhs.isLive,
             isPK: rhs.isPK ?? lhs.isPK,
             isRecorded: rhs.isRecorded ?? lhs.isRecorded,

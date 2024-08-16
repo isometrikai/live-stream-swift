@@ -76,6 +76,7 @@ final public class GoLiveViewModel {
     var videoPreviewUrl: URL?
     var presignedUrlString: String?
     var mediaUrlString: String?
+    var newImagePicked: Bool = false
     
     var selectedCoins: Int = 0
     

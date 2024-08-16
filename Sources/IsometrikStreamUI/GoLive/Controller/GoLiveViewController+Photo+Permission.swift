@@ -67,6 +67,7 @@ extension GoLiveViewController: UINavigationControllerDelegate, UIImagePickerCon
             
             let profileImage = contentView.goLiveContentContainerView.profileView.profileCoverImageView
             profileImage.image = pickedImage
+            viewModel.newImagePicked = true
             contentView.goLiveContentContainerView.profileView.clearImageButton.isHidden = false
             //self.present(cropVC, animated: true, completion: nil)
         }

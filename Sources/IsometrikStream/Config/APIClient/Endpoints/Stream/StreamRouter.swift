@@ -24,6 +24,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     case startScheduledStream
     case updateScheduledStream
     case getScheduledStream(streamQuery: StreamQuery?)
+    case deleteScheduleStream
     
     var description: String {
         switch self {
@@ -41,6 +42,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .getStreamAnalytics: return "Get stream analytics"
         case .buyPaidStream: return "Buy paid stream"
         case .getScheduledStream: return "Get Scheduled streams."
+        case .deleteScheduleStream: return "Delete scheduled stream."
         }
     }
     
@@ -54,7 +56,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             return .post
         case .updateScheduledStream, .stopStream:
             return .patch
-        case .deleteStream :
+        case .deleteStream, .deleteScheduleStream :
             return .delete
         default:
             return .get
@@ -84,12 +86,11 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             path = "/live/v1/stream/analytics"
         case .buyPaidStream:
             path = "/live/v1/buy/stream"
-        case .updateScheduledStream:
-            path = "/live/v1/updatestream"
         case .startScheduledStream:
             path = "/live/v1/stream/schedule/golive"
-        case .getScheduledStream:
+        case .getScheduledStream, .deleteScheduleStream, .updateScheduledStream:
             path = "/live/v1/streams/scheduled"
+        
         }
         return path
     }
@@ -203,6 +204,10 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             
             if let sortOrder = streamQuery.sortOrder {
                 param += ["sortOrder":"\(sortOrder)"]
+            }
+            
+            if let eventId = streamQuery.eventId {
+                param += ["eventId":"\(eventId)"]
             }
             
         default:

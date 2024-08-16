@@ -177,6 +177,7 @@ public struct ISMStream: Codable {
     public var recordViewCount: Int?
     public var metaData: StreamMetaData?
     public var userMetaData: ISMUserMetaData?
+    public var eventId: String?
 
     /// Codable keys to confirm Codable protocol
     enum CodingKeys: String, CodingKey {
@@ -273,6 +274,7 @@ public struct ISMStream: Codable {
         case recordViewCount
         case metaData
         case userMetaData
+        case eventId
         
         //:
 
@@ -356,6 +358,7 @@ public struct ISMStream: Codable {
                 products: [ISMProductToBeTagged]? = nil,
                 otherProducts: [ISMOthersProductToBeTagged]? = nil,
                 _id: String = "",
+                eventId: String = "",
                 isRsvp: Bool = false,
                 recordViewCount: Int = 0,
                 userMetaData: ISMUserMetaData? = nil
@@ -561,6 +564,8 @@ public struct ISMStream: Codable {
             _id = try? values.decodeIfPresent(String.self, forKey: .id)
         }
         
+        eventId =  try? values.decodeIfPresent(String.self, forKey: .eventId)
+        
         isRsvp = try? values.decodeIfPresent(Bool.self, forKey: .isRsvp)
         recordViewCount = try? values.decodeIfPresent(Int.self, forKey: .recordViewCount)
         metaData = try? values.decodeIfPresent(StreamMetaData.self, forKey: .metaData)
@@ -612,6 +617,7 @@ public struct ISMStream: Codable {
         try? container.encode(recordViewCount, forKey: .recordViewCount)
         try? container.encode(streamPreviewUrl, forKey: .streamPreviewUrl)
         try? container.encode(userMetaData, forKey: .userMetaData)
+        try? container.encode(eventId, forKey: .eventId)
     }
 
 }

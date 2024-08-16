@@ -622,10 +622,18 @@ extension StreamViewController: StreamCellActionDelegate {
         switch options {
         case .share:
             
+            var streamId = ""
+            
+            if streamData.isScheduledStream ?? false && streamData.status == LiveStreamStatus.scheduled.rawValue {
+                streamId = streamData.eventId ?? ""
+            } else {
+                streamId = streamData.streamId.unwrap
+            }
+            
             let streamData = SharedStreamData(
                 streamTitle: streamData.streamDescription.unwrap,
                 streamImage: streamData.streamImage.unwrap,
-                streamId: streamData.streamId.unwrap
+                streamId: streamId
             )
             
             guard let navigationController = self.navigationController else { return }
