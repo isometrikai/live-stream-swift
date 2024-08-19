@@ -92,8 +92,8 @@ While loggingOut the app remember to call this ``onTerminate`` method to release
 IsometrikSDK.getInstance().onTerminate()
 ```
 
-### Setup App Universal link
-Isometrik SDK uses apple native universal links for generating an active sharable link from stream. [Steps to setup App Universal link for SDK](./README_DOC/universal_link.md)
+### Quick links
+[Steps to setup App Universal link for SDK](./README_DOC/universal_link.md) Isometrik SDK uses apple native universal links for generating an active sharable link from stream.
 
 
 
