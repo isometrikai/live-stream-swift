@@ -76,4 +76,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 ```
 
-And you're all set, or are you? there seems a missing puzzle, yes you're right, we have missed the step to generate link to share from stream SDK itself, we got you cover we've explain that [here](./README_DOC/external_delegate.md)
+And you're all set, or are you? there seems a missing puzzle, yes you're right, we have missed the step to generate link to share from stream SDK itself, we got you cover we've explain that [here](./external_delegate.md)
