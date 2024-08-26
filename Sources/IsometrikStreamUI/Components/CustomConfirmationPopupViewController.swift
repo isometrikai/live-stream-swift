@@ -41,7 +41,6 @@ class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProv
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.playAnimation(for: self.appearance.json.successAnimation)
         }
-        
     }
     
     // MARK: - FUNCTIONS
@@ -67,7 +66,7 @@ class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProv
     
     func playAnimation(for fileName: String) {
         var animationView: LottieAnimationView?
-        animationView = .init(name: fileName)
+        animationView = .init(filePath: appearance.json.successAnimation)
         animationView?.frame = defaultCoverView.bounds
         animationView?.contentMode = .scaleAspectFit
         animationView?.loopMode = .loop

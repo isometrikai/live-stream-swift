@@ -161,6 +161,7 @@ public struct ISM_Image {
     public var premiumBadge: UIImage = loadImageSafely(with: "ism_premium")
     public var premiumBadgeBG: UIImage = loadImageSafely(with: "ism_premium_bg")
     public var noLiveStream: UIImage = loadImageSafely(with: "ic_nolivestream")
+    public var editStream: UIImage = loadImageSafely(with: "ic_edit_pencil")
     
     // Message events
     public var deletedMsg: UIImage = loadImageSafely(with: "ism_del_msg")

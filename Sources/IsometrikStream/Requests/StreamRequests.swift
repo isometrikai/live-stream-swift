@@ -83,7 +83,7 @@ extension IsometrikStream {
     }
     
     public func deleteScheduleStream(streamBody: StreamBody, completionHandler: @escaping (ISMStream)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
-        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.startScheduledStream , requestBody:streamBody)
+        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.deleteScheduleStream , requestBody:streamBody)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStream, ISMLiveAPIError> ) in
             

@@ -108,7 +108,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
                         case .success:
                             
                             if self.viewModel.isEditing {
-                                self.updateScheduleStream(userData: userData, description: description, imagePath: self.viewModel.streamData?.streamImage ?? "", videoPath: "")
+                                self.updateScheduleStream(userData: userData, description: description, imagePath: self.viewModel.mediaUrlString ?? "", videoPath: "")
                             } else {
                                 self.startNewStream(userData: userData, description: description, imagePath: self.viewModel.mediaUrlString ?? "", videoPath: "")
                             }
@@ -636,7 +636,7 @@ extension GoLiveViewController {
             if self.viewModel.isScheduleStream {
                 
                 let controller = CustomConfirmationPopupViewController()
-                controller.infoLabel.text = "Stream Successfully scheduled".localized + "!"
+                controller.infoLabel.text = "Stream Successfully scheduled" + "!"
                 controller.isModalInPresentation = true
                 
                 if #available(iOS 16.0, *) {
