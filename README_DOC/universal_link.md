@@ -44,3 +44,34 @@ Replace `yourdomain.com` with your actual domain.
 ```
 3. upload JSON File at this path ``yourdomain.com/apple-app-site-association``
 4. You domain should be ``SSL secured``, ``https://yourdomain.com``
+
+And you're all set with the basic setup, Now
+
+### 3. Configure Your App to Handle Universal Links
+
+```swift
+import UIKit
+import IsometrikStream // Import this for accessing IsometirkSDK
+import IsometrikStreamUI // Import this for accessing ISMExternalActions
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+   func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+           
+      guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+           let url = userActivity.webpageURL,
+           let components = URLComponents(url: url,
+                                          resolvingAgainstBaseURL: true) else {
+         return
+      }
+      
+      // Extract stream id from path components
+      
+      let isometrikInstance = IsometrikSDK.getInstance() // get current isometrik instance
+      let externalActions = ISMExternalActions(isometrik: isometrikInstance) // create object of external actions for accessing the methods
+      externalActions.openStream(streamId: streamId, scene: scene as? UIWindowScene) // this method use to open the stream on SDK level it needs two parameters , 1. streamId 2. scene 
+        
+    }
+
+}
+```
