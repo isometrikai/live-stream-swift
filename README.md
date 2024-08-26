@@ -93,9 +93,8 @@ IsometrikSDK.getInstance().onTerminate()
 ```
 
 ### Quick links
-[Steps to setup App Universal link for SDK](./README_DOC/universal_link.md) Isometrik SDK uses apple native universal links for generating an active sharable link from stream.
-
-
+- [Steps to setup App Universal link for SDK](./README_DOC/universal_link.md) : Isometrik SDK uses apple native universal links for generating an active sharable link from stream.
+- [how to handle and configure SDK delegates](./README_DOC/external_delegate.md) : Isometrik SDK provides you external delegate to handle various actions that are there for the stream.
 
 
 
