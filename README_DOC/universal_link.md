@@ -36,7 +36,7 @@ Replace `yourdomain.com` with your actual domain.
     "details": [
       {
         "appID": "TEAMID.com.yourcompany.yourapp",
-        "paths": [ "*" ]
+        "paths": [ "/stream/*" ]
       }
     ]
   }
