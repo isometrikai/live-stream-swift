@@ -9,7 +9,7 @@
 import UIKit
 import IsometrikStream
 
-class StreamReportViewController: UIViewController, ISMAppearanceProvider {
+final public class StreamReportViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
@@ -40,7 +40,7 @@ class StreamReportViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: MAIN -
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setUpViews()
         setUpConstraints()
@@ -85,19 +85,19 @@ class StreamReportViewController: UIViewController, ISMAppearanceProvider {
 
 extension StreamReportViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return userViewModel.reportReasons.count
         return 0
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamReportTableViewCell", for: indexPath) as! StreamReportTableViewCell
 //        cell.reasonLabel.text = userViewModel.reportReasons[indexPath.row]
         cell.selectionStyle = .none
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        guard userViewModel.reportReasons.count > 0 else { return }
 //        let reason = userViewModel.reportReasons[indexPath.row]
 //        userViewModel.reportAUser(reason: reason) { success, error in
@@ -112,7 +112,7 @@ extension StreamReportViewController: UITableViewDelegate, UITableViewDataSource
 //        }
     }
     
-    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? StreamReportTableViewCell {
             UIView.animate(withDuration: 0.2, delay: 0) {
                 cell.cardView.transform = .init(scaleX: 0.95, y: 0.95)
@@ -120,7 +120,7 @@ extension StreamReportViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? StreamReportTableViewCell {
             UIView.animate(withDuration: 0.2, delay: 0) {
                 cell.cardView.transform = .identity
@@ -128,7 +128,7 @@ extension StreamReportViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     

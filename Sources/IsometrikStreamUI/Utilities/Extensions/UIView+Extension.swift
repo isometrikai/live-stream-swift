@@ -24,7 +24,7 @@ extension UIView {
         trailingAnchor.constraint(equalTo: superView.trailingAnchor).isActive = true
     }
     
-    func setGradient(withColors colors: [CGColor] , startPoint: CGPoint , endPoint: CGPoint) {
+    public func setGradient(withColors colors: [CGColor] , startPoint: CGPoint , endPoint: CGPoint) {
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = colors
         gradient.startPoint = startPoint
@@ -33,7 +33,7 @@ extension UIView {
         self.layer.insertSublayer(gradient, at: 0)
     }
     
-    func dropShadow(color: UIColor, opacity: Float = 0.5, offSet: CGSize, radius: CGFloat = 1, scale: Bool = true) {
+    public func dropShadow(color: UIColor, opacity: Float = 0.5, offSet: CGSize, radius: CGFloat = 1, scale: Bool = true) {
         layer.masksToBounds = false
         layer.shadowColor = color.cgColor
         layer.shadowOpacity = opacity
@@ -45,7 +45,7 @@ extension UIView {
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     
-    func ism_setGradient(withColors colors: [CGColor] , startPoint: CGPoint , endPoint: CGPoint) {
+    public func ism_setGradient(withColors colors: [CGColor] , startPoint: CGPoint , endPoint: CGPoint) {
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.colors = colors
         gradient.startPoint = startPoint
@@ -54,7 +54,7 @@ extension UIView {
         self.layer.insertSublayer(gradient, at: 0)
     }
     
-    func ism_applyCoinsAnimation(indexAt: Int, fromView: UIView, coins: String, image: UIImage) {
+    public func ism_applyCoinsAnimation(indexAt: Int, fromView: UIView, coins: String, image: UIImage) {
         let bubbleImageView: UIImageView
         let size: CGSize = image.size
         
@@ -142,7 +142,7 @@ extension UIView {
 
 extension UIStackView {
     
-    func ism_removeFully(view: UIView) {
+    public func ism_removeFully(view: UIView) {
         removeArrangedSubview(view)
         view.removeFromSuperview()
     }
@@ -168,7 +168,7 @@ public extension RandomAccessCollection {
 }
 
 extension UIColor {
-    class func colorWithHex(color:String) -> UIColor {
+    public class func colorWithHex(color:String) -> UIColor {
         var cString:String = color.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         if (cString.hasPrefix("#")) {
             cString.remove(at: cString.startIndex)

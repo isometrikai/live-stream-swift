@@ -9,19 +9,19 @@
 import UIKit
 import Lottie
 
-class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProvider {
+final public class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var close_callback: (()->Void)?
+    public var close_callback: (()->Void)?
 
-    let defaultCoverView: UIView = {
+    public let defaultCoverView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    lazy var infoLabel: UILabel = {
+    lazy public var infoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
@@ -33,7 +33,7 @@ class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProv
     
     // MARK: - MAIN
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
@@ -64,7 +64,7 @@ class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProv
         ])
     }
     
-    func playAnimation(for fileName: String) {
+    public func playAnimation(for fileName: String) {
         var animationView: LottieAnimationView?
         animationView = .init(filePath: appearance.json.successAnimation)
         animationView?.frame = defaultCoverView.bounds
@@ -80,7 +80,7 @@ class CustomConfirmationPopupViewController: UIViewController, ISMAppearanceProv
         
     }
     
-    func dismissController(){
+    public func dismissController(){
         close_callback?()
         self.dismiss(animated: true)
     }
