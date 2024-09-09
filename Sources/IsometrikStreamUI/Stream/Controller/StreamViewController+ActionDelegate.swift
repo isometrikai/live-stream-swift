@@ -622,6 +622,7 @@ extension StreamViewController: StreamCellActionDelegate {
         switch options {
         case .share:
             
+<<<<<<< HEAD
             var streamId = ""
             
             if streamData.isScheduledStream ?? false && streamData.status == LiveStreamStatus.scheduled.rawValue {
@@ -636,6 +637,14 @@ extension StreamViewController: StreamCellActionDelegate {
                 streamId: streamId
             )
             
+=======
+            let streamData = SharedStreamData(
+                streamTitle: streamData.streamDescription.unwrap,
+                streamImage: streamData.streamImage.unwrap,
+                streamId: streamData.streamId.unwrap
+            )
+            
+>>>>>>> eb23d1c (conflict resolved)
             guard let navigationController = self.navigationController else { return }
             viewModel.externalActionDelegate?.didShareStreamTapped(streamData: streamData, root: navigationController)
             
