@@ -20,18 +20,10 @@ public enum StreamSettingType {
 }
 
 public struct StreamSettingData {
-    let settingLabel: String
-    let settingImage: UIImage
-    var labelColor: UIColor = .white
-    var streamSettingType: StreamSettingType?
-    
-    public init(settingLabel: String, settingImage: UIImage, labelColor: UIColor, streamSettingType: StreamSettingType? = nil) {
-        self.settingLabel = settingLabel
-        self.settingImage = settingImage
-        self.labelColor = labelColor
-        self.streamSettingType = streamSettingType
-    }
-    
+    public let settingLabel: String
+    public let settingImage: UIImage
+    public var labelColor: UIColor = .white
+    public var streamSettingType: StreamSettingType?
 }
 
 public protocol StreamSettingDelegate {
