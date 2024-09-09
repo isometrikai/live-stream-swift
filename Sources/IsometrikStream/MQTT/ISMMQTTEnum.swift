@@ -44,7 +44,7 @@ public enum ISMMQTTNotificationType: String {
 }
 
 /// MQTT Data.
-enum MQTTData {
+public enum MQTTData {
     case mqttMessageSent
     case mqttMessageReplySent
     case mqttMessageRemoved
@@ -110,7 +110,7 @@ enum MQTTData {
     }
 }
 
-enum MqttResult<T> {
+public enum MqttResult<T> {
     case success(T)
     case failure(IsometrikError)
 }
