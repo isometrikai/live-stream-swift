@@ -7,7 +7,7 @@ public class ISMConfiguration {
     // Primary and secondary origins
     public let primaryOrigin: String
     public let secondaryOrigin: String
-    
+  
     // License and account details
     public var licenseKey: String
     public var accountId: String

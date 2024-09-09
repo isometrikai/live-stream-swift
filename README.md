@@ -1,13 +1,13 @@
 
 <p align="center">
-  <a href="https://www.swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-green" /></a>
-   <a href="https://getstream.io/chat/docs/sdk/ios/"><img src="https://img.shields.io/badge/iOS-15%2B-lightblue" /></a>
-  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.5%2B-orange.svg" /></a>
+  <a href="https://www.swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-compatible-darkgreen?style=flat-square"/></a>
+   <a href="https://getstream.io/chat/docs/sdk/ios/"><img src="https://img.shields.io/badge/iOS-15%2B-lightblue?style=flat-square" /></a>
+  <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.5%2B-orange.svg?style=flat-square" /></a>
 </p>
 
 <p align="center">
-  <img id="stream-label" alt="IsometrikStream" src="https://img.shields.io/badge/IsometrikStream-509KB-blue"/>
-  <img id="stream-ui-label" alt="IsometrikStreamUI" src="https://img.shields.io/badge/IsometrikStreamUI-9.7MB-blue"/>
+  <img id="stream-label" alt="IsometrikStream" src="https://img.shields.io/badge/IsometrikStream-509KB-blue?style=flat-square"/>
+  <img id="stream-ui-label" alt="IsometrikStreamUI" src="https://img.shields.io/badge/IsometrikStreamUI-9.7MB-blue?style=flat-square"/>
 </p>
 
 # Isometrik LiveStream SDK
@@ -17,8 +17,8 @@ This is the official Livestream SDK for integrating advanced streaming capabilit
 ## Features we have to offer
 
 - **Restreaming**: Broadcast your live stream simultaneously to multiple platforms, expanding your reach and audience engagement across various channels.
-
-- **RTMP Streaming**: Support Real-Time Messaging Protocol (RTMP) for high-quality and low-latency live video streaming, compatible with a wide range of video platforms.
+- 
+- **Stream Ingestion/RTMP**: Support streaming through external video or audio inputs sources like OBS etc.
 
 - **Single Live**: Enable a single live stream session, ideal for focused, high-quality broadcasts with a singular stream.
 
@@ -86,14 +86,15 @@ IsometrikSDK.getInstance().createConfiguration(
 
 ## On Termination or Logout
 
-While loggingOut the app remember to call this ``onTerminate`` method to release shared instances memory
+While loggingOut the app remember to call this ``onTerminate`` method to release shared instance from memory
 
 ```swift
 IsometrikSDK.getInstance().onTerminate()
 ```
 
-
-
+### Quick links
+- [Steps to setup App Universal link for SDK](./README_DOC/universal_link.md) : Isometrik SDK uses apple native universal links for generating an active sharable link from stream.
+- [how to handle and configure SDK delegates](./README_DOC/external_delegate.md) : Isometrik SDK provides you external delegate to handle various actions that are there for the stream.
 
 
 
