@@ -196,7 +196,7 @@ extension RecordedStreamPlayerViewController: RecordedStreamPlayerCellActionDele
 
 extension RecordedStreamPlayerViewController: StreamSettingDelegate {
     
-    func didTapSettingOptionFor(actionType: StreamSettingType) {
+    public func didTapSettingOptionFor(actionType: StreamSettingType) {
         switch actionType {
         case .report:
             

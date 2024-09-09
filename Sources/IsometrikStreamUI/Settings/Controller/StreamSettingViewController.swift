@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum StreamSettingType {
+public enum StreamSettingType {
     case report
     case speaker
     case audio
@@ -19,31 +19,31 @@ enum StreamSettingType {
     case kickout
 }
 
-struct StreamSettingData {
+public struct StreamSettingData {
     let settingLabel: String
     let settingImage: UIImage
     var labelColor: UIColor = .white
     var streamSettingType: StreamSettingType?
 }
 
-protocol StreamSettingDelegate {
+public protocol StreamSettingDelegate {
     func didTapSettingOptionFor(actionType: StreamSettingType)
 }
 
-class StreamSettingViewController: UIViewController, ISMAppearanceProvider {
+public class StreamSettingViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
 
-    var streamViewModel: StreamViewModel?
-    var delegate: StreamSettingDelegate?
+    public var streamViewModel: StreamViewModel?
+    public var delegate: StreamSettingDelegate?
     
-    var settingData: [StreamSettingData]? {
+    public var settingData: [StreamSettingData]? {
         didSet {
             self.settingTableView.reloadData()
         }
     }
     
-    lazy var settingTableView: UITableView = {
+    lazy public var settingTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(StreamSettingOptionTableViewCell.self, forCellReuseIdentifier: "StreamSettingOptionTableViewCell")
@@ -56,7 +56,7 @@ class StreamSettingViewController: UIViewController, ISMAppearanceProvider {
         return tableView
     }()
     
-    lazy var closeButton: UIButton = {
+    lazy public var closeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.close.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -67,7 +67,7 @@ class StreamSettingViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - MAIN
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
@@ -106,25 +106,25 @@ class StreamSettingViewController: UIViewController, ISMAppearanceProvider {
 
 extension StreamSettingViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let settingData else { return Int() }
         return settingData.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let settingData else { return UITableViewCell() }
         let cell = tableView.dequeueReusableCell(withIdentifier: "StreamSettingOptionTableViewCell", for: indexPath) as! StreamSettingOptionTableViewCell
         cell.data = settingData[indexPath.row]
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let settingData else { return }
         delegate?.didTapSettingOptionFor(actionType: settingData[indexPath.row].streamSettingType ?? .none)
         self.dismiss(animated: true)
     }
     
-    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? StreamSettingOptionTableViewCell {
             UIView.animate(withDuration: 0.2) {
                 cell.contentView.backgroundColor = .white.withAlphaComponent(0.2)
@@ -132,7 +132,7 @@ extension StreamSettingViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? StreamSettingOptionTableViewCell {
             UIView.animate(withDuration: 0.2) {
                 cell.contentView.backgroundColor = .clear
@@ -140,7 +140,7 @@ extension StreamSettingViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
     }
     

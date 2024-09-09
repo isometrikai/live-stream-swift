@@ -11,7 +11,7 @@ import IsometrikStream
 
 extension StreamViewController: StreamSettingDelegate {
     
-    func didTapSettingOptionFor(actionType: StreamSettingType) {
+    public func didTapSettingOptionFor(actionType: StreamSettingType) {
         
         let isometrik = viewModel.isometrik
         let streamsData = viewModel.streamsData
