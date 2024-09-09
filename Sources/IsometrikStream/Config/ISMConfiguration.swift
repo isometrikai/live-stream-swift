@@ -28,7 +28,7 @@ public class ISMConfiguration {
     public var authToken: String
     
     // Private initializer to ensure the singleton pattern
-    public init(
+    private init(
         primaryOrigin: String = "https://apis.isometrik.io",
         secondaryOrigin: String = "",
         liveKitUrl: String = "wss://streaming.isometrik.io",
