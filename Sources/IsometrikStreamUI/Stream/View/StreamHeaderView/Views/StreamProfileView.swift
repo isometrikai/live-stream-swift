@@ -7,11 +7,11 @@
 
 import UIKit
 
-class StreamProfileView: UIView, ISMAppearanceProvider {
+final public class StreamProfileView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let profileCard: UIView = {
+    public let profileCard: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black.withAlphaComponent(0.6)
@@ -19,14 +19,14 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         return view
     }()
     
-    let profileImageCardView: UIView = {
+    public let profileImageCardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.masksToBounds = true
         return view
     }()
     
-    let profileImage: UIImageView = {
+    public let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
@@ -34,13 +34,13 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         return imageView
     }()
     
-    let defaultProfileView: CustomDefaultProfileView = {
+    public let defaultProfileView: CustomDefaultProfileView = {
         let defaultView = CustomDefaultProfileView()
         defaultView.layer.cornerRadius = 20
         return defaultView
     }()
     
-    let infoStackView: UIStackView = {
+    public let infoStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -49,7 +49,7 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         return stackView
     }()
     
-    lazy var profileName: UILabel = {
+    public lazy var profileName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -58,7 +58,7 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         return label
     }()
     
-    lazy var userIdentifierLabel: UILabel = {
+    public lazy var userIdentifierLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
@@ -67,13 +67,13 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         return label
     }()
     
-    let profileDetailsButton: UIButton = {
+    public let profileDetailsButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    lazy var followButton: UIButton = {
+    lazy public var followButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(appearance.images.follow.withRenderingMode(.alwaysTemplate), for: .normal)

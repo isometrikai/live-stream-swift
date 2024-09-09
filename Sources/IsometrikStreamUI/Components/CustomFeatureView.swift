@@ -1,17 +1,17 @@
 
 import UIKit
 
-class CustomFeatureView: UIView, ISMAppearanceProvider {
+public final class CustomFeatureView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
         
-    let iconImageView: UIImageView = {
+    public let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    lazy var featureLabel: UILabel = {
+    lazy public var featureLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "--"
@@ -20,7 +20,7 @@ class CustomFeatureView: UIView, ISMAppearanceProvider {
         return label
     }()
     
-    let actionButton: UIButton = {
+    public let actionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
