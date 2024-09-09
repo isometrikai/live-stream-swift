@@ -8,17 +8,17 @@
 
 import UIKit
 
-class StreamDefaultEmptyView: UIView, ISMAppearanceProvider {
+public class StreamDefaultEmptyView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let defaultImageView: UIImageView = {
+    public let defaultImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    lazy var defaultLabel: UILabel = {
+    lazy public var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "No Data Found"
