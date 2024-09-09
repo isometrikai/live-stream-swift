@@ -24,6 +24,13 @@ public struct StreamSettingData {
     public let settingImage: UIImage
     public var labelColor: UIColor = .white
     public var streamSettingType: StreamSettingType?
+    
+    public init(settingLabel: String, settingImage: UIImage, labelColor: UIColor = .white, streamSettingType: StreamSettingType? = nil) {
+        self.settingLabel = settingLabel
+        self.settingImage = settingImage
+        self.labelColor = labelColor
+        self.streamSettingType = streamSettingType
+    }
 }
 
 public protocol StreamSettingDelegate {
