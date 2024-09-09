@@ -119,18 +119,20 @@ extension StreamViewController: StreamSettingDelegate {
                 // delete stream
                 let popupController = StreamPopupViewController()
                 popupController.titleLabel.text = "Are you sure that you want to delete your live?"
+                popupController.cancelButton.setTitle("Cancel", for: .normal)
+                popupController.actionButton.setTitle("Yes", for: .normal)
                 popupController.modalPresentationStyle = .overCurrentContext
                 popupController.modalTransitionStyle = .crossDissolve
                 
                 popupController.actionCallback = { [weak self] streamAction in
                     switch streamAction {
                     case .ok:
-                        isometrik.getIsometrik().deleteStream(streamId: streamData._id ?? "") { result in
+                        let streamBody = StreamBody(eventId: "\(streamData.eventId ?? "")")
+                        isometrik.getIsometrik().deleteScheduleStream(streamBody: streamBody) { result in
                             self?.dismissViewController()
                         } failure: { error in
                             print(error.localizedDescription)
                         }
-
                         break
                     default:
                         break
@@ -167,8 +169,8 @@ extension StreamViewController: StreamSettingDelegate {
                         // get stream data
                         visibleCell.streamLoader.isHidden = false
                         
-                        let streamParam = StreamQuery(streamId: streamId)
-                        isometrik.getIsometrik().fetchStreams(streamParam: streamParam) { data in
+                        let streamParam = StreamQuery(eventId: streamId)
+                        isometrik.getIsometrik().fetchScheduledStreams(streamParam: streamParam) { data in
                             let streams = data.streams
                             if let streams, streams.count > 0, let stream = streams.first {
                                 self.viewModel.streamsData[selectedStreamIndex] = stream
@@ -209,7 +211,7 @@ extension StreamViewController: StreamSettingDelegate {
         else { return }
         
         let settingController = StreamSettingViewController()
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status)
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status.unwrap)
         let userType = viewModel.streamUserType
         
         let reportAction = StreamSettingData(settingLabel: "Report", settingImage: appearance.images.report, streamSettingType: .report)
@@ -259,8 +261,8 @@ extension StreamViewController: StreamSettingDelegate {
             break
         case .scheduled:
             
-            let deleteStream = StreamSettingData(settingLabel: "Delete Live", settingImage: UIImage(), streamSettingType: .delete)
-            let editStream = StreamSettingData(settingLabel: "Edit Live", settingImage: UIImage(), streamSettingType: .edit)
+            let deleteStream = StreamSettingData(settingLabel: "Delete Live", settingImage: self.appearance.images.removeCircle.withRenderingMode(.alwaysTemplate), streamSettingType: .delete)
+            let editStream = StreamSettingData(settingLabel: "Edit Live", settingImage: self.appearance.images.editStream.withRenderingMode(.alwaysTemplate), streamSettingType: .edit)
             
             switch userType {
             case .viewer:

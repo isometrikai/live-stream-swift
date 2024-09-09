@@ -48,6 +48,17 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
         return tableView
     }()
     
+    lazy var defaultView: StreamDefaultEmptyView = {
+        let view = StreamDefaultEmptyView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.defaultLabel.textColor = .black
+        view.defaultLabel.text = "No Transactions Found"
+        view.defaultImageView.image = appearance.images.debitTransaction
+        view.defaultImageView.alpha = 0.5
+        view.isHidden = true
+        return view
+    }()
+    
     // MARK: MAIN -
     
     init(viewModel: WalletTransactionViewModel) {
@@ -83,6 +94,8 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
         view.addSubview(optionsHeaderView)
         view.addSubview(transactionTableView)
         
+        view.addSubview(defaultView)
+        
         transactionTableView.delegate = self
         transactionTableView.dataSource = self
         
@@ -116,7 +129,12 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
             transactionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             transactionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             transactionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            transactionTableView.topAnchor.constraint(equalTo: optionsHeaderView.bottomAnchor)
+            transactionTableView.topAnchor.constraint(equalTo: optionsHeaderView.bottomAnchor),
+            
+            defaultView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            defaultView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            defaultView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            defaultView.topAnchor.constraint(equalTo: optionsHeaderView.bottomAnchor)
         ])
     }
 
@@ -124,19 +142,28 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
         
         if showLoader {
             CustomLoader.shared.startLoading()
+            self.defaultView.isHidden = true
         }
         
         if isRefreshing {
             viewModel.skip = 0
             viewModel.transactions.removeAll()
             self.transactionTableView.reloadData()
+            self.defaultView.isHidden = true
         }
         
         viewModel.getTransactions { success, error in
             CustomLoader.shared.stopLoading()
             self.viewModel.refreshControl.endRefreshing()
             if success {
+                if self.viewModel.transactions.count > 0 {
+                    self.defaultView.isHidden = true
+                } else {
+                    self.defaultView.isHidden = false
+                }
                 self.transactionTableView.reloadData()
+            } else {
+                self.defaultView.isHidden = false
             }
         }
     }

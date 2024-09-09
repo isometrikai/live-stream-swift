@@ -78,6 +78,7 @@ class ScheduleStreamPopupViewController: UIViewController, ISMAppearanceProvider
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.datePickerMode = .dateAndTime
         picker.preferredDatePickerStyle = .wheels
+        picker.setValue(UIColor.black, forKeyPath: "textColor")
         picker.addTarget(self, action: #selector(dateChanged), for: .valueChanged)
         return picker
     }()

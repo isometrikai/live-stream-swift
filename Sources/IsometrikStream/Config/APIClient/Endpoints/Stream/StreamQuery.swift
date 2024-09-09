@@ -28,6 +28,7 @@ public struct StreamQuery: Codable {
     let streamId: String?
     let sortOrder: String?
     let streamStatus: Int?
+    let eventId: String?
     
     // for filters
     let isLive: Bool?
@@ -38,7 +39,7 @@ public struct StreamQuery: Codable {
     let isRestream: Bool?
     let isHDbroadcast: Bool?
     let isPaid: Bool?
-    
+    let isScheduledStream: Bool?
     //:
     
     public init(
@@ -50,6 +51,7 @@ public struct StreamQuery: Codable {
         streamId: String? = nil,
         sortOrder: String? = SortOrder.ascending.rawValue,
         streamStatus: Int? = StreamStatus.considerAll.rawValue,
+        eventId: String? = nil,
         
         isLive: Bool? = nil,
         isPK: Bool? = nil,
@@ -58,7 +60,8 @@ public struct StreamQuery: Codable {
         isPrivate: Bool? = nil,
         isRestream: Bool? = nil,
         isHDbroadcast: Bool? = nil,
-        isPaid: Bool? = nil
+        isPaid: Bool? = nil,
+        isScheduledStream: Bool? = nil
         
     ){
         self.limit = limit
@@ -70,6 +73,7 @@ public struct StreamQuery: Codable {
         
         self.sortOrder = sortOrder
         self.streamStatus = streamStatus
+        self.eventId = eventId
         
         self.isLive = isLive
         self.isPK = isPK
@@ -79,6 +83,7 @@ public struct StreamQuery: Codable {
         self.isRestream = isRestream
         self.isHDbroadcast = isHDbroadcast
         self.isPaid = isPaid
+        self.isScheduledStream = isScheduledStream
     }
     
     enum CodingKeys: String, CodingKey {
@@ -90,6 +95,7 @@ public struct StreamQuery: Codable {
         case streamId
         case sortOrder
         case streamStatus
+        case eventId
         
         case isLive = "fetchLive"
         case isPK = "pk"
@@ -99,6 +105,7 @@ public struct StreamQuery: Codable {
         case isRestream = "restream"
         case isHDbroadcast = "hdbroadcast"
         case isPaid
+        case isScheduledStream
     }
     
     // Implementing the `+` operator to merge two StreamQuery instances
@@ -112,6 +119,7 @@ public struct StreamQuery: Codable {
             streamId: rhs.streamId ?? lhs.streamId,
             sortOrder: rhs.sortOrder ?? lhs.sortOrder,
             streamStatus: rhs.streamStatus ?? lhs.streamStatus,
+            eventId: rhs.eventId ?? lhs.eventId,
             isLive: rhs.isLive ?? lhs.isLive,
             isPK: rhs.isPK ?? lhs.isPK,
             isRecorded: rhs.isRecorded ?? lhs.isRecorded,
@@ -119,7 +127,8 @@ public struct StreamQuery: Codable {
             isPrivate: rhs.isPrivate ?? lhs.isPrivate,
             isRestream: rhs.isRestream ?? lhs.isRestream,
             isHDbroadcast: rhs.isHDbroadcast ?? lhs.isHDbroadcast,
-            isPaid: rhs.isPaid ?? lhs.isPaid
+            isPaid: rhs.isPaid ?? lhs.isPaid,
+            isScheduledStream: rhs.isScheduledStream ?? lhs.isScheduledStream
         )
     }
     

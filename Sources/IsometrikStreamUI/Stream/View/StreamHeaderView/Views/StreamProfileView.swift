@@ -114,13 +114,12 @@ class StreamProfileView: UIView, ISMAppearanceProvider {
         profileCard.addSubview(profileImageCardView)
         profileImageCardView.addSubview(profileImage)
         
-        profileCard.addSubview(profileDetailsButton)
-        profileCard.addSubview(followButton)
-        
         profileCard.addSubview(infoStackView)
         infoStackView.addArrangedSubview(profileName)
         infoStackView.addArrangedSubview(userIdentifierLabel)
         
+        profileCard.addSubview(profileDetailsButton)
+        profileCard.addSubview(followButton)
         
     }
     

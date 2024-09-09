@@ -138,6 +138,8 @@ extension StreamViewController: StreamCellActionDelegate {
    
     func didTapProductDetails() {
         
+        LogManager.shared.logGeneral("Profile view tapped", type: .info)
+        
 //        guard let productViewModel = viewModel.streamProductViewModel,
 //              let pinnedProductData = productViewModel.pinnedProductData
 //        else { return }
@@ -186,16 +188,45 @@ extension StreamViewController: StreamCellActionDelegate {
         
     }
     
-    func didTapSellerProfileView() {
+    func didTapStreamerProfileView() {
         
         var streamsData = viewModel.streamsData
-        
-        guard let _ = fullyVisibleCells(streamCollectionView),
-              let _ = streamsData[safe: viewModel.selectedStreamIndex.row],
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
               streamsData.count > 0
         else { return }
         
-        let isometrik = viewModel.isometrik
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status.unwrap)
+        let controller = StreamerDefaultProfileViewController()
+        var memberData: ISMMember?
+        
+        if streamStatus == .scheduled {
+            let userId = streamData.userDetails?.id ?? ""
+            let userName = streamData.userDetails?.userName ?? ""
+            memberData = ISMMember(userID: userId, userName: userName)
+            
+        } else {
+            memberData = viewModel.streamMembers.first
+        }
+        
+        controller.configureData(userData: memberData)
+        
+        if #available(iOS 15.0, *) {
+            if #available(iOS 16.0, *) {
+                controller.sheetPresentationController?.prefersGrabberVisible = false
+                controller.sheetPresentationController?.detents = [
+                    .custom(resolver: { context in
+                        return 250
+                    })
+                ]
+            }
+        } else {
+            controller.sheetPresentationController?.detents = [.medium()]
+        }
+        
+        controller.sheetPresentationController?.preferredCornerRadius = 0
+        
+        self.present(controller, animated: true)
+        
         
 //        let index = viewModel.selectedStreamIndex.row
 //        let controller = StreamSellerProfileVC()
@@ -257,7 +288,7 @@ extension StreamViewController: StreamCellActionDelegate {
               let streamData = streamsData[safe: viewModel.selectedStreamIndex.row]
         else { return }
         
-        let streamStatus = LiveStreamStatus(rawValue: streamData.status)
+        let streamStatus = LiveStreamStatus(rawValue: streamData.status.unwrap)
         
         let isGuestUser = isometrik.getUserSession().getUserType() == .guest
         let streamId = streamData.streamId.unwrap
@@ -301,7 +332,9 @@ extension StreamViewController: StreamCellActionDelegate {
             }
             
             self.present(popupController, animated: true)
-        } else {
+        } else if streamStatus == .scheduled {
+            self.dismissViewController()
+        } else  {
 //            let controller = StreamSellerProfileVC()
 //            controller.userId = streamData.userDetails?.id ?? ""
 //            controller.isSelf = (viewModel.streamUserType == .host)
@@ -588,14 +621,23 @@ extension StreamViewController: StreamCellActionDelegate {
         
         switch options {
         case .share:
-            debugPrint("Log:: Share tapped")
             
-            // External helper
-            let streamImage = streamData.streamImage ?? ""
-            let streamTitle = streamData.streamTitle ?? ""
+            var streamId = ""
             
-            //Helper.shareStreamLink(coverImageUrl: streamImage, streamId: stream_Id, streamTitle: streamTitle)
-            //:
+            if streamData.isScheduledStream ?? false && streamData.status == LiveStreamStatus.scheduled.rawValue {
+                streamId = streamData.eventId ?? ""
+            } else {
+                streamId = streamData.streamId.unwrap
+            }
+            
+            let streamData = SharedStreamData(
+                streamTitle: streamData.streamDescription.unwrap,
+                streamImage: streamData.streamImage.unwrap,
+                streamId: streamId
+            )
+            
+            guard let navigationController = self.navigationController else { return }
+            viewModel.externalActionDelegate?.didShareStreamTapped(streamData: streamData, root: navigationController)
             
             break
         case .bidder:
@@ -625,8 +667,6 @@ extension StreamViewController: StreamCellActionDelegate {
             debugPrint("Log:: Wallet tapped")
             break
         case .analytics: 
-            
-            
             
             if userType == .member {
                 // analytics for cohost, while in PK

@@ -53,7 +53,6 @@ class WalletTransactionViewModel {
             }
             
             
-            
             if self.transactions.count.isMultiple(of: self.limit) {
                 self.skip += self.limit
             }

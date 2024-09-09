@@ -184,7 +184,8 @@ extension StreamViewController {
         
         //:
         
-        if viewModel.streamMembers.count > 1 {
+        // set stream thumbnail image to nil if more than one members or stream is rtmp
+        if (viewModel.streamMembers.count > 1 || streamData.rtmpIngest.unwrap) && !streamData.isScheduledStream.unwrap {
             cell.streamThumbnailImage.image = UIImage()
         } else {
             if let url = URL(string: streamImage) {
@@ -205,7 +206,7 @@ extension StreamViewController {
             
             // if schedule stream is of current user changing the viewType to host
             
-            let streamUserId = streamData.userDetails?.isomatricChatUserId ?? ""
+            let streamUserId = streamData.userDetails?.id ?? ""
             let currentUserId = isometrik.getUserSession().getUserId()
             
             if streamUserId == currentUserId {

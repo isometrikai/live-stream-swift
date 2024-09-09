@@ -50,7 +50,7 @@ public class VideoSession: NSObject {
         
         liveKitVideoView = VideoView()
         liveKitVideoView?.mirrorMode = .auto
-        liveKitVideoView?.isDebugMode = true
+        //liveKitVideoView?.isDebugMode = true
         
     }
 }

@@ -23,7 +23,7 @@ extension VerticalStreamCollectionViewCell {
         
         let isometrik = viewModel.isometrik
         let streamUserType = viewModel.streamUserType
-        let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status)
+        let liveStreamStatus = LiveStreamStatus(rawValue:streamData.status.unwrap)
         let streamMembers = viewModel.streamMembers
         
         let isPKEnabled = isometrik.getStreamOptionsConfiguration().isPKStreamEnabled
@@ -63,25 +63,26 @@ extension VerticalStreamCollectionViewCell {
             switch streamUserType {
             case .viewer:
                 
-                if isRTMPIngest {
-                    viewModel.streamOptions = [.gift, .share, .request]
-                } else {
-                    viewModel.streamOptions = [.gift, .share, .loved]
-                    if !isPKStream {
-                        if streamMembers.count > 0 {
-                            if currentUserInMemberList {
-                                viewModel.streamOptions += [.startPublishing]
-                            } else {
-                                if isGroupStreaming {
-                                    viewModel.streamOptions += [.request]
-                                }
-                            }
+                if !isPKStream {
+                    if streamMembers.count > 0 {
+                        if currentUserInMemberList {
+                            viewModel.streamOptions += [.startPublishing]
                         } else {
                             if isGroupStreaming {
                                 viewModel.streamOptions += [.request]
                             }
                         }
+                    } else {
+                        if isGroupStreaming {
+                            viewModel.streamOptions += [.request]
+                        }
                     }
+                }
+                
+                if isRTMPIngest {
+                    viewModel.streamOptions += [.gift, .share]
+                } else {
+                    viewModel.streamOptions += [.gift, .share, .loved]
                 }
                 
                 
@@ -151,10 +152,17 @@ extension VerticalStreamCollectionViewCell {
 
             switch streamUserType {
             case .viewer:
-                viewModel.streamOptions = [.share, .store, .settings]
+                viewModel.streamOptions = [.share, .settings]
+                if isProductEnabled {
+                    viewModel.streamOptions += [.store]
+                }
+                
                 break
             case .host:
-                viewModel.streamOptions = [.share, .store, .more]
+                viewModel.streamOptions = [.share, .more]
+                if isProductEnabled {
+                    viewModel.streamOptions += [.store]
+                }
                 break
             default:
                 print("nothing")

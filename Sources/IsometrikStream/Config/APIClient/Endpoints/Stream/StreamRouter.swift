@@ -10,7 +10,6 @@ import UIKit
 enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
     case startStream
-    case startScheduledStream
     case stopStream
     case deleteStream(streamId: String)
     case fetchStreams(streamQuery: StreamQuery?)
@@ -18,10 +17,14 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     case checkStreamExistence(streamId: String)
     case getSingleStream(streamId: String)
     case getRecordedStream
-    case updateScheduledStream
     case getPresignedUrl(streamTitle: String, mediaExtension: String)
     case getStreamAnalytics(streamId: String)
     case buyPaidStream
+    
+    case startScheduledStream
+    case updateScheduledStream
+    case getScheduledStream(streamQuery: StreamQuery?)
+    case deleteScheduleStream
     
     var description: String {
         switch self {
@@ -38,18 +41,13 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .getPresignedUrl: return "For uploading stream image cover"
         case .getStreamAnalytics: return "Get stream analytics"
         case .buyPaidStream: return "Buy paid stream"
+        case .getScheduledStream: return "Get Scheduled streams."
+        case .deleteScheduleStream: return "Delete scheduled stream."
         }
     }
     
     var baseURL: URL{
-        switch self {
-        case .startStream, .fetchStreams, .stopStream, .getStreamAnalytics, .buyPaidStream:
-            return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
-        case .getRecordedStream, .getPresignedUrl:
-            return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
-        default:
-            return URL(string:"https://\(ISMConfiguration.shared.secondaryOrigin)")!
-        }
+        return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {
@@ -58,7 +56,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             return .post
         case .updateScheduledStream, .stopStream:
             return .patch
-        case .deleteStream :
+        case .deleteStream, .deleteScheduleStream :
             return .delete
         default:
             return .get
@@ -69,29 +67,30 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         let path: String
         switch self {
         case .startStream, .stopStream :
-            path = "/live/v2/stream"
+            path = "/live/v1/stream"
         case .fetchStreams:
-            path = "/live/v2/streams"
-        case .startScheduledStream:
-            path = "/v1/stream/schedule/golive"
+            path = "/live/v1/streams"
         case  .deleteStream :
-            path = "/v1/stream"
+            path = "/live/v1/stream"
         case .searchStreams :
-            path = "/v1/streams"
+            path = "/live/v1/streams"
         case .checkStreamExistence:
-            path = "/v1/stream/check"
+            path = "/live/v1/stream/check"
         case .getSingleStream:
-            path = "/v1/streams/detail"
+            path = "/live/v1/streams/detail"
         case .getRecordedStream:
             path = "/streaming/v2/stream/recordings"
-        case .updateScheduledStream:
-            path = "/v1/updatestream"
         case .getPresignedUrl:
             path = "/streaming/v2/stream/presignedurl"
         case .getStreamAnalytics:
-            path = "/live/v2/stream/analytics"
+            path = "/live/v1/stream/analytics"
         case .buyPaidStream:
-            path = "/live/v2/buy/stream"
+            path = "/live/v1/buy/stream"
+        case .startScheduledStream:
+            path = "/live/v1/stream/schedule/golive"
+        case .getScheduledStream, .deleteScheduleStream, .updateScheduledStream:
+            path = "/live/v1/streams/scheduled"
+        
         }
         return path
     }
@@ -157,10 +156,6 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
                     param += ["audioOnly":"\(audioOnly)"]
                 }
                 
-                if let audioOnly = streamQuery.audioOnly {
-                    param += ["audioOnly":"\(audioOnly)"]
-                }
-                
                 if let isRestream = streamQuery.isRestream {
                     param += ["restream":"\(isRestream)"]
                 }
@@ -171,6 +166,10 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
                 
                 if let isPaid = streamQuery.isPaid {
                     param += ["isPaid":"\(isPaid)"]
+                }
+                
+                if let isScheduledStream = streamQuery.isScheduledStream {
+                    param += ["isScheduledStream":"\(isScheduledStream)"]
                 }
                 
                 //:
@@ -191,6 +190,26 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
             param = [
                 "streamId": "\(streamId)"
             ]
+        case let .getScheduledStream(streamQuery):
+            
+            guard let streamQuery else { return [:] }
+            
+            if let limit = streamQuery.limit {
+                param += ["limit":"\(limit)"]
+            }
+            
+            if let skip = streamQuery.skip {
+                param += ["skip":"\(skip)"]
+            }
+            
+            if let sortOrder = streamQuery.sortOrder {
+                param += ["sortOrder":"\(sortOrder)"]
+            }
+            
+            if let eventId = streamQuery.eventId {
+                param += ["eventId":"\(eventId)"]
+            }
+            
         default:
             break
             

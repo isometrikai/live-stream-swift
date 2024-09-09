@@ -16,6 +16,8 @@ class CustomRTMPMemberView: UIView, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.image = appearance.images.joinStream.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = appearance.colors.appSecondary
         return imageView
     }()
     

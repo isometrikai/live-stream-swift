@@ -70,4 +70,5 @@ public struct ISMMetaData: Codable, Hashable {
         case userID = "userId"
         case profilePic
     }
+    
 }

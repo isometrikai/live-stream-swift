@@ -56,13 +56,30 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         
         // updating schedule stream changes
         if streamStatus == .scheduled {
-            streamStatusView.isHidden = true
-            headerView.cartButton(canBeShown: true)
+            
+            let scheduleStartDate = Date(timeIntervalSince1970: Double(streamData.scheduleStartTime.unwrap))
+            let scheduleStartDateString = scheduleStartDate.ism_getCustomMessageTime(dateFormat: "d MMM, hh:mm a").uppercased()
+            
+            streamStatusView.liveButton.setTitle("\(scheduleStartDateString)", for: .normal)
+            streamStatusView.liveButton.setTitleColor(appearance.colors.appSecondary, for: .normal)
+            streamStatusView.liveButton.backgroundColor = appearance.colors.appColor
+            
+            streamStatusView.memberFeatureView.isHidden = true
+            
+            headerView.cartButton(canBeShown: false)
             viewerCountView.iconImageView.image = appearance.images.rsvpdUser.withRenderingMode(.alwaysTemplate)
+            
+            headerView.viewerCountView.actionButton.isEnabled = false
+            
         } else {
-            streamStatusView.isHidden = false
+            
+            streamStatusView.liveButton.setTitleColor(.white, for: .normal)
+            streamStatusView.memberFeatureView.isHidden = false
             headerView.cartButton(canBeShown: false)
             viewerCountView.iconImageView.image = appearance.images.eye.withRenderingMode(.alwaysTemplate)
+            
+            headerView.viewerCountView.actionButton.isEnabled = true
+            
         }
         
         // updating paid stream changes
@@ -81,61 +98,79 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
             moderatorButton.isHidden = true
         }
         
-        // updating stream profile changes
-        switch streamUserType {
-        case .viewer:
+        if streamStatus == .started {
+            // updating stream profile changes
+            switch streamUserType {
+            case .viewer:
 
-            let filteredMember = viewModel.streamMembers.filter { member in
-                member.isAdmin == true
+                let filteredMember = viewModel.streamMembers.filter { member in
+                    member.isAdmin == true
+                }
+                hostMember = filteredMember.first
+                
+                if currentUserId != hostMember?.userID ?? "" {
+                    followButton.isHidden = false
+                }
+                
+                userName = hostMember?.userName
+                firstName = hostMember?.metaData?.firstName
+                lastName = hostMember?.metaData?.lastName
+                profileImage = hostMember?.userProfileImageURL
+
+                self.setHeaderCartBadgeUpdates()
+                
+                break
+            case .member:
+                if currentUserId != hostMember?.userID ?? "" {
+                    followButton.isHidden = false
+                }
+                
+                let filteredMember = viewModel.streamMembers.filter { member in
+                    member.isAdmin == true
+                }
+                hostMember = filteredMember.first
+                
+                userName = hostMember?.userName
+                firstName = hostMember?.metaData?.firstName
+                lastName = hostMember?.metaData?.lastName
+                profileImage = hostMember?.userProfileImageURL
+                
+                break
+            case .host:
+
+                let filteredMember = viewModel.streamMembers.filter { member in
+                    member.userID == currentUserId
+                }
+
+                hostMember = filteredMember.first
+                
+                followButton.isHidden = true
+                
+                userName = hostMember?.userName
+                firstName = hostMember?.metaData?.firstName
+                lastName = hostMember?.metaData?.lastName
+                profileImage = hostMember?.userProfileImageURL
+
+                break
             }
-            hostMember = filteredMember.first
-            
-            if currentUserId != hostMember?.userID ?? "" {
+        } else if streamStatus == .scheduled {
+            switch streamUserType {
+            case .viewer:
                 followButton.isHidden = false
+                userName = streamData.userDetails?.userName ?? ""
+                break
+            case .host:
+                followButton.isHidden = true
+                
+                userName = isometrik.getUserSession().getUserIdentifier()
+                firstName = isometrik.getUserSession().getUserName()
+                lastName = " "
+                profileImage = isometrik.getUserSession().getUserImage()
+                break
+            default: break
             }
-            
-            
-            userName = hostMember?.userName
-            firstName = hostMember?.metaData?.firstName
-            lastName = hostMember?.metaData?.lastName
-            profileImage = hostMember?.userProfileImageURL
-
-            self.setHeaderCartBadgeUpdates()
-            
-            break
-        case .member:
-            if currentUserId != hostMember?.userID ?? "" {
-                followButton.isHidden = false
-            }
-            
-            let filteredMember = viewModel.streamMembers.filter { member in
-                member.isAdmin == true
-            }
-            hostMember = filteredMember.first
-            
-            userName = hostMember?.userName
-            firstName = hostMember?.metaData?.firstName
-            lastName = hostMember?.metaData?.lastName
-            profileImage = hostMember?.userProfileImageURL
-            
-            break
-        case .host:
-
-            let filteredMember = viewModel.streamMembers.filter { member in
-                member.userID == currentUserId
-            }
-
-            hostMember = filteredMember.first
-            
-            followButton.isHidden = true
-            
-            userName = isometrik.getUserSession().getUserIdentifier()
-            firstName = isometrik.getUserSession().getUserName()
-            lastName = " "
-            profileImage = isometrik.getUserSession().getUserImage()
-
-            break
         }
+        
         
         self.setFollowButtonStatus()
         

@@ -200,7 +200,7 @@ final public class GoLiveViewController: UIViewController {
         
         // harcoded updates
         viewModel.isScheduleStream = true
-        let scheduleStartTime = TimeInterval(streamData.startTime.unwrap)
+        let scheduleStartTime = TimeInterval(streamData.scheduleStartTime.unwrap)
         viewModel.scheduleFor = Date(timeIntervalSince1970: scheduleStartTime)
         
         // MARK: Updating UI -
@@ -221,14 +221,16 @@ final public class GoLiveViewController: UIViewController {
         profileView.streamTextView.textColor = .white
         
         // Stream Option: Restream, Recorded, HDBroadcast
-        
         containerView.hdBroadCastToggle.isSelected = viewModel.isHdBroadcast
         containerView.recordBroadCastToggle.isSelected = viewModel.recordBroadcast
         self.didToggleOptionTapped(withStreamOption: .restreamBroadcast)
         
         // Hidden options
         let scheduleOption = contentView.goLiveContentContainerView.scheduleToggle
+        let dateTimeSelectorView = containerView.dateTimeSelectorView
         scheduleOption.isHidden = true
+        dateTimeSelectorView.isHidden = true
+        
         
         footerView.bottomActionView.isHidden = true
         footerView.goLiveButtonBottomConstraint?.constant = -15

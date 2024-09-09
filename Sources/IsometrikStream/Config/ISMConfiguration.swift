@@ -29,7 +29,7 @@ public class ISMConfiguration {
     
     // Private initializer to ensure the singleton pattern
     private init(
-        primaryOrigin: String = "apis.isometrik.io",
+        primaryOrigin: String = "https://apis.isometrik.io",
         secondaryOrigin: String = "",
         liveKitUrl: String = "wss://streaming.isometrik.io",
         MQTTHost: String = "connections.isometrik.io",

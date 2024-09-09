@@ -76,6 +76,7 @@ final public class GoLiveViewModel {
     var videoPreviewUrl: URL?
     var presignedUrlString: String?
     var mediaUrlString: String?
+    var newImagePicked: Bool = false
     
     var selectedCoins: Int = 0
     
@@ -278,13 +279,20 @@ final public class GoLiveViewModel {
     
     func uploadStreamCover(image: UIImage, _ completion: @escaping (UploadStatus) -> Void){
         
-        if let presignedUrlString, let presignedUrl = URL(string: presignedUrlString) {
-            uploadingManager.uploadImageToS3(presignedURL: presignedUrl, image: image) { result in
-                DispatchQueue.main.async {
-                    completion(result)
+        // Down sample the image before uploading
+        if let downsampledImageData = downsampleImage(image: image, maxSizeInMB: 0.8), let downSampledImage = UIImage(data: downsampledImageData) {
+            
+            if let presignedUrlString, let presignedUrl = URL(string: presignedUrlString) {
+                uploadingManager.uploadImageToS3(presignedURL: presignedUrl, image: downSampledImage) { result in
+                    DispatchQueue.main.async {
+                        completion(result)
+                    }
                 }
             }
+            
         }
+        
+        
         
     }
     
@@ -294,6 +302,19 @@ final public class GoLiveViewModel {
             return
         }
         let videoUrlExtension = url.absoluteString.getUrlExtension()
+    }
+    
+    func downsampleImage(image: UIImage, maxSizeInMB: Double) -> Data? {
+        let maxSizeInBytes = maxSizeInMB * 1024 * 1024
+        var compression: CGFloat = 1.0
+        var imageData = image.jpegData(compressionQuality: compression)
+        
+        while let data = imageData, Double(data.count) > maxSizeInBytes, compression > 0 {
+            compression -= 0.1
+            imageData = image.jpegData(compressionQuality: compression)
+        }
+        
+        return imageData
     }
     
     //:

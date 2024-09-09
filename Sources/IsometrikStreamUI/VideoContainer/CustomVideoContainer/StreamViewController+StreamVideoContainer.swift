@@ -82,8 +82,8 @@ extension StreamViewController: RtcWrapperProtocol {
         
         //visibleCell.mainDataContainerView.animatedGiftView.videoDidEnd()
         
-        // remove the thumbnail if more that one member or sessions
-        if videoContainer.videoSessions.count > 1 {
+        // set stream thumbnail image to nil if more than one members or stream is rtmp
+        if videoContainer.videoSessions.count > 1 || streamData.rtmpIngest.unwrap {
             visibleCell.streamThumbnailImage.image = UIImage()
         } else {
             if let streamImageUrl = URL(string: streamData.streamImage.unwrap) {
@@ -171,12 +171,13 @@ extension StreamViewController: VideoContainerActionDelegate {
                 let fixedHeightDetent = UISheetPresentationController.Detent.custom(identifier: .init("fixedHeight")) { _ in
                     return 180 + ism_windowConstant.getBottomPadding
                 }
-                
                 sheet.detents = [fixedHeightDetent]
             } else {
                 // Fallback on earlier versions
                 sheet.detents = [.medium()]
             }
+            
+            
         }
         
         present(moreSettingController, animated: true, completion: nil)

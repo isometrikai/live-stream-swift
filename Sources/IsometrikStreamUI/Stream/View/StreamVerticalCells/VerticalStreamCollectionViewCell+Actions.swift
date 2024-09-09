@@ -28,8 +28,8 @@ extension VerticalStreamCollectionViewCell {
         delegate?.didTapFollowButton()
     }
     
-    @objc func sellerProfileTapped(){
-        delegate?.didTapSellerProfileView()
+    @objc func streamerProfileTapped(){
+        delegate?.didTapStreamerProfileView()
     }
     
     @objc func productDetailsTapped(){

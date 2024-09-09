@@ -26,7 +26,6 @@ extension GoLiveViewController {
                 captureSession.startRunning()
             }
         }
-        
     }
     
 }

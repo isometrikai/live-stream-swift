@@ -21,14 +21,13 @@ class StreamDefaultEmptyView: UIView, ISMAppearanceProvider {
     lazy var defaultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "No Data Found".localized
+        label.text = "No Data Found"
         label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
-    
     
     // MARK: - MAIN
     

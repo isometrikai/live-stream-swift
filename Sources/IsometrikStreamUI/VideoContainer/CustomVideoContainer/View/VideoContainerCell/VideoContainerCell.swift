@@ -487,28 +487,15 @@ class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
         
         switch userType {
         case .viewer:
-            
-            rtmpDefaultView.defaultImageView.image = appearance.images.joinStream
             rtmpDefaultView.defaultLabel.text = "Join"
-            
             break
         case .host:
-            
-            rtmpDefaultView.defaultImageView.image = appearance.images.requestList.withRenderingMode(.alwaysTemplate)
-            rtmpDefaultView.defaultImageView.tintColor = appearance.colors.appSecondary
             rtmpDefaultView.defaultLabel.text = "Add"
-            
             break
         case .member:
-            
-            rtmpDefaultView.defaultImageView.image = appearance.images.joinStream
             rtmpDefaultView.defaultLabel.text = "Waiting.."
-            
             break
-        case .none:
-            break
-        case .guest:
-            break
+        default: break
         }
         self.rtmpDefaultView.backgroundColor = appearance.colors.appColor
         

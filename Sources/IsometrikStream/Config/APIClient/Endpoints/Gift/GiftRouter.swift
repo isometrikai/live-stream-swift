@@ -25,7 +25,8 @@ enum GiftRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL {
-        return URL(string: "https://service-\(ISMConfiguration.shared.primaryOrigin)")!
+        return URL(string: "https://service-apis.isometrik.io")!
+        //return URL(string: "\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {

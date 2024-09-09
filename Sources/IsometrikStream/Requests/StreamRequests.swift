@@ -82,6 +82,27 @@ extension IsometrikStream {
         }
     }
     
+    public func deleteScheduleStream(streamBody: StreamBody, completionHandler: @escaping (ISMStream)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.deleteScheduleStream , requestBody:streamBody)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStream, ISMLiveAPIError> ) in
+            
+            switch result{
+                
+            case .success(let streamResponse, _) :
+                DispatchQueue.main.async {
+                    completionHandler(streamResponse)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+                print(error.localizedDescription)
+
+            }
+        }
+    }
+    
     /// Stop live stream
     /// - Parameters:
     ///   - streamId: Current runing stream Id, Type should be **String**.
@@ -144,6 +165,25 @@ extension IsometrikStream {
     public func fetchStreams(streamParam: StreamQuery, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.fetchStreams(streamQuery: streamParam) , requestBody:nil)
+        
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamsData, ISMLiveAPIError> ) in
+            switch result {
+            case .success(let streamResponse, _) :
+                DispatchQueue.main.async {
+                    completionHandler(streamResponse)
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    failure(error)
+                }
+            }
+        }
+        
+    }
+    
+    public func fetchScheduledStreams(streamParam: StreamQuery, completionHandler: @escaping (ISMStreamsData)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
+        
+        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.getScheduledStream(streamQuery: streamParam) , requestBody:nil)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStreamsData, ISMLiveAPIError> ) in
             switch result {

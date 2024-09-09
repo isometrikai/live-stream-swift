@@ -22,7 +22,7 @@ enum SubscriptionRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL{
-        return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
+        return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {

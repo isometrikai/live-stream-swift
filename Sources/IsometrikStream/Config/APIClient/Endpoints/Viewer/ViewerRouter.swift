@@ -35,12 +35,7 @@ enum ViewerRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL{
-        switch self {
-        case .fetchViewersForAnalytics:
-            return URL(string:"https://service-\(ISMConfiguration.shared.primaryOrigin)")!
-        default:
-            return URL(string:"https://\(ISMConfiguration.shared.primaryOrigin)")!
-        }
+        return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {
@@ -68,7 +63,7 @@ enum ViewerRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .fetchViewers:
             path = "/streaming/v2/viewers"
         case .fetchViewersForAnalytics:
-            path = "/live/v2/stream/viewer"
+            path = "/live/v1/stream/viewer"
         }
         return path
     }

@@ -9,16 +9,16 @@
 import Foundation
 
 // MARK: - Welcome
-struct ISMTokenModel: Codable {
-    let message: String
-    let data: ISMTokenData
+public struct ISMTokenModel: Codable {
+    public let message: String
+    public let data: ISMTokenData
 }
 
 // MARK: - DataClass
-struct ISMTokenData: Codable {
-    let userToken, userID, msg: String
+public struct ISMTokenData: Codable {
+    public let userToken, userID, msg: String
 
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case userToken
         case userID = "userId"
         case msg

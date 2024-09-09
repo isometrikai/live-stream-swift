@@ -10,7 +10,7 @@ import UIKit
 
 extension UIView {
     
-    func showToast(message:String, duration : CGFloat = 3.0){
+    public func showToast(message:String, duration : CGFloat = 3.0){
         DispatchQueue.main.async {
             ToastManager.shared.showToast(message: message, in: self)
         }
