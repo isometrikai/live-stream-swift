@@ -31,7 +31,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureTitleLabel.text = "Total Coins"
         view.featureSubtitleImageView.image = appearance.images.coin
-        view.featureActionButton.tag = WalletCurrencyType.coin.rawValue
+        view.featureActionButton.tag = ISMWalletCurrencyType.coin.rawValue
         view.backgroundColor = .white
         return view
     }()
@@ -41,7 +41,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.featureTitleLabel.text = "Total Money"
         view.featureSubtitleImageView.image = appearance.images.walletMoney
-        view.featureActionButton.tag = WalletCurrencyType.money.rawValue
+        view.featureActionButton.tag = ISMWalletCurrencyType.money.rawValue
         view.backgroundColor = .white
         return view
     }()
@@ -93,7 +93,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         ])
     }
     
-    func configureView(balanceData: WalletBalance?, currencyType: WalletCurrencyType){
+    func configureView(balanceData: ISMWalletBalance?, currencyType: ISMWalletCurrencyType){
         
         // if balanceData is nil
         guard let balanceData else {

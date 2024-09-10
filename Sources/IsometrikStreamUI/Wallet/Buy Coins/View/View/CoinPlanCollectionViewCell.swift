@@ -87,7 +87,7 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
         ])
     }
     
-    func configureCell(data: CoinPlan?, skProduct: SKProduct?){
+    func configureCell(data: ISMCoinPlan?, skProduct: SKProduct?){
         
         guard let data, let skProduct else { return }
         

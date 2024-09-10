@@ -8,11 +8,11 @@
 import UIKit
 import IsometrikStream
 
-public final class WalletViewController: UIViewController, ISMAppearanceProvider {
+public final class ISMWalletViewController: UIViewController, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    var viewModel: WalletViewModel
+    var viewModel: ISMWalletViewModel
     
     lazy var headerView: CustomHeaderView = {
         let view = CustomHeaderView()
@@ -62,7 +62,7 @@ public final class WalletViewController: UIViewController, ISMAppearanceProvider
     
     // MARK: MAIN -
     
-    public init(viewModel: WalletViewModel) {
+    public init(viewModel: ISMWalletViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -129,7 +129,7 @@ public final class WalletViewController: UIViewController, ISMAppearanceProvider
         }
     }
     
-    func setupWalletBalance(currencyType: WalletCurrencyType){
+    func setupWalletBalance(currencyType: ISMWalletCurrencyType){
         
         walletBalanceHeaderView.configureView(balanceData: nil, currencyType: currencyType)
         
@@ -150,7 +150,7 @@ public final class WalletViewController: UIViewController, ISMAppearanceProvider
     }
     
     @objc func transactionButtonTapped(_ sender: UIButton){
-        let currencyType = WalletCurrencyType(rawValue: sender.tag) ?? .coin
+        let currencyType = ISMWalletCurrencyType(rawValue: sender.tag) ?? .coin
         let viewModel = WalletTransactionViewModel(isometrik: viewModel.isometrik, walletCurrencyType: currencyType)
         let controller = WalletTransactionViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(controller, animated: true)

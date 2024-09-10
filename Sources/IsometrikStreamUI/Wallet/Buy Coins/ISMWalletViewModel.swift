@@ -3,11 +3,11 @@ import Foundation
 import IsometrikStream
 import StoreKit
 
-final public class WalletViewModel {
+final public class ISMWalletViewModel {
     
-    var coinPlansData: CoinPlansResponseModel?
-    var walletBalance: WalletBalance?
-    var coinPlans: [CoinPlan] = []
+    var coinPlansData: ISMCoinPlansResponseModel?
+    var walletBalance: ISMWalletBalance?
+    var coinPlans: [ISMCoinPlan] = []
     var skProducts: [SKProduct] = []
     
     public var isometrik: IsometrikSDK
@@ -16,7 +16,7 @@ final public class WalletViewModel {
         self.isometrik = isometrik
     }
     
-    public func getWalletBalance(currencyType: WalletCurrencyType, completion: @escaping(_ success: Bool, _ error: String?)->Void){
+    public func getWalletBalance(currencyType: ISMWalletCurrencyType, completion: @escaping(_ success: Bool, _ error: String?)->Void){
         isometrik.getIsometrik().getWalletBalance(currencyType: currencyType.getValue) { response in
             self.walletBalance = response.data
             let balance = response.data?.balance ?? 0

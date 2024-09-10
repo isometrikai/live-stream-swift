@@ -1,13 +1,13 @@
 
 import Foundation
 
-public struct CoinPlansResponseModel: Codable {
+public struct ISMCoinPlansResponseModel: Codable {
     public let status: String?
     public let messsage: String?
-    public let data: [CoinPlan]?
+    public let data: [ISMCoinPlan]?
 }
 
-public struct CoinPlan: Codable {
+public struct ISMCoinPlan: Codable {
     public let id: String?
     public let currencyPlanImage: String?
     public let baseCurrencyValue: Double?

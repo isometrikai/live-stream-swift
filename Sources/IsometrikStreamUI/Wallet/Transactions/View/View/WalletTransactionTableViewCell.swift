@@ -90,10 +90,10 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         ])
     }
     
-    func configureCell(data: WalletTransactionData?, currencyType: WalletCurrencyType){
+    func configureCell(data: ISMWalletTransactionData?, currencyType: ISMWalletCurrencyType){
         guard let data else { return }
         
-        let transactionType = WalletTransactionType(rawValue: data.txnType.unwrap)
+        let transactionType = ISMWalletTransactionType(rawValue: data.txnType.unwrap)
         
         switch transactionType {
         case .debit:

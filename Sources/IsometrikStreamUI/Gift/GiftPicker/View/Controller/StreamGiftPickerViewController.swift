@@ -65,7 +65,7 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
         let headerView = contentView.headerView
         
         // get wallet balance from userdefaults first
-        let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: WalletCurrencyType.coin.getValue)
+        let balance = UserDefaultsProvider.shared.getWalletBalance(currencyType: ISMWalletCurrencyType.coin.getValue)
         
         if balance == 0 {
             headerView.getMoreButton.setTitle("Buy coins", for: .normal)
@@ -91,8 +91,8 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     }
     
     @objc func getMoreTapped(){
-        let viewModel = WalletViewModel(isometrik: self.viewModel.isometrik)
-        let controller = WalletViewController(viewModel: viewModel)
+        let viewModel = ISMWalletViewModel(isometrik: self.viewModel.isometrik)
+        let controller = ISMWalletViewController(viewModel: viewModel)
         
         let navigationController = UINavigationController(rootViewController: controller)
         navigationController.modalPresentationStyle = .pageSheet

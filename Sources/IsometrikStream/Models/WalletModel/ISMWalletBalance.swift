@@ -7,13 +7,13 @@
 
 import Foundation
 
-public struct WalletBalanceResponseModel: Codable {
+public struct ISMWalletBalanceResponseModel: Codable {
     public let status: String?
     public let message: String?
-    public let data: WalletBalance?
+    public let data: ISMWalletBalance?
 }
 
-public struct WalletBalance: Codable {
+public struct ISMWalletBalance: Codable {
     
     public let id: String?
     public let currency: String?

@@ -12,23 +12,23 @@ class WalletTransactionViewModel {
     
     let isometrik: IsometrikSDK
     var totalTransactions: Int64 = 0
-    var transactions: [WalletTransactionData] = []
+    var transactions: [ISMWalletTransactionData] = []
     var selectedTransactionType: TransactionType = .all
-    var walletCurrencyType: WalletCurrencyType
+    var walletCurrencyType: ISMWalletCurrencyType
     
     let refreshControl = UIRefreshControl()
     
     var skip = 0
     var limit = 20
     
-    init(isometrik: IsometrikSDK, walletCurrencyType: WalletCurrencyType) {
+    init(isometrik: IsometrikSDK, walletCurrencyType: ISMWalletCurrencyType) {
         self.isometrik = isometrik
         self.walletCurrencyType = walletCurrencyType
     }
     
     func getTransactions(_ completion: @escaping(Bool, String?) -> Void){
         
-        var transactionType: WalletTransactionType? = nil
+        var transactionType: ISMWalletTransactionType? = nil
         
         switch selectedTransactionType {
         case .credit:

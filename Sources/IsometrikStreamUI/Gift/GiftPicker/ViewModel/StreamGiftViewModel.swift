@@ -150,9 +150,9 @@ class StreamGiftViewModel {
     }
     
     func getWalletBalance(completion: @escaping(_ success: Bool, _ error: String?)->Void){
-        isometrik.getIsometrik().getWalletBalance(currencyType: WalletCurrencyType.coin.getValue){ response in
+        isometrik.getIsometrik().getWalletBalance(currencyType: ISMWalletCurrencyType.coin.getValue){ response in
             self.walletBalance = response.data?.balance ?? 0
-            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance, currencyType: WalletCurrencyType.coin.getValue)
+            UserDefaultsProvider.shared.setWalletBalance(data: self.walletBalance, currencyType: ISMWalletCurrencyType.coin.getValue)
             DispatchQueue.main.async {
                 completion(true, nil)
             }

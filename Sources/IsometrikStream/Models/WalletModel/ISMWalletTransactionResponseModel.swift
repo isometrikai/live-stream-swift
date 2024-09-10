@@ -1,7 +1,7 @@
 
 import Foundation
 
-public enum WalletCurrencyType: Int {
+public enum ISMWalletCurrencyType: Int {
     case coin = 0
     case money
     
@@ -15,21 +15,21 @@ public enum WalletCurrencyType: Int {
     }
 }
 
-public enum WalletTransactionType: String {
+public enum ISMWalletTransactionType: String {
     case debit = "DEBIT"
     case credit = "CREDIT"
 }
 
-public struct WalletTransactionResponseModel: Codable {
+public struct ISMWalletTransactionResponseModel: Codable {
     
     public let status: String?
     public let message: String?
-    public let data: [WalletTransactionData]?
+    public let data: [ISMWalletTransactionData]?
     public let totalCount: Int64?
     
 }
 
-public struct WalletTransactionData: Codable {
+public struct ISMWalletTransactionData: Codable {
     
     public let amount: Float64?
     public let openingBalance: Float64?

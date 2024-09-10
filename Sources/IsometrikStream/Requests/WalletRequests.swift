@@ -13,11 +13,10 @@ import Foundation
 
 extension IsometrikStream {
     
-    public func getCurrencyPlans(completionHandler: @escaping (CoinPlansResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
+    public func getCurrencyPlans(completionHandler: @escaping (ISMCoinPlansResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getCurrencyPlans, requestBody: nil)
-        
-        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<CoinPlansResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMCoinPlansResponseModel, ISMLiveAPIError> ) in
             
             switch result {
 
@@ -34,10 +33,10 @@ extension IsometrikStream {
         
     }
     
-    public func getWalletBalance(currencyType: String, completionHandler: @escaping (WalletBalanceResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
+    public func getWalletBalance(currencyType: String, completionHandler: @escaping (ISMWalletBalanceResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletBalance(currency: currencyType), requestBody: nil)
-        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<WalletBalanceResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMWalletBalanceResponseModel, ISMLiveAPIError> ) in
             
             switch result {
 
@@ -75,14 +74,14 @@ extension IsometrikStream {
         
     }
     
-    public func getWalletTransactions(transactionType: WalletTransactionType?, currencyType: WalletCurrencyType, skip: Int = 0, limit: Int = 10, completionHandler: @escaping (WalletTransactionResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
+    public func getWalletTransactions(transactionType: ISMWalletTransactionType?, currencyType: ISMWalletCurrencyType, skip: Int = 0, limit: Int = 10, completionHandler: @escaping (ISMWalletTransactionResponseModel)->(), failure : @escaping (ISMLiveAPIError) -> ()){
         
         let transactionSpecific = !(transactionType == nil)
         let txnType = transactionType?.rawValue ?? nil
         
         let request =  ISMLiveAPIRequest<Any>(endPoint: WalletRouter.getWalletTransaction(currency: currencyType.getValue, transactionType: txnType, transactionSpecific: transactionSpecific, skip: skip, limit: limit), requestBody: nil)
         
-        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<WalletTransactionResponseModel, ISMLiveAPIError> ) in
+        ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMWalletTransactionResponseModel, ISMLiveAPIError> ) in
             switch result {
             case .success(let planResponse, _) :
                 DispatchQueue.main.async {
