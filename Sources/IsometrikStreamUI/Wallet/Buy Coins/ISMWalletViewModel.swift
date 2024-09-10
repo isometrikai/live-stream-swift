@@ -43,7 +43,7 @@ final public class ISMWalletViewModel {
                 $0.appStoreProductIdentifier ?? ""
             }
             
-            IAPManager.shared.getPlansFromApple(productIds: productIdsString ?? [String]()) { result, success, errorString in
+            ISMIAPManager.shared.getPlansFromApple(productIds: productIdsString ?? [String]()) { result, success, errorString in
                 CustomLoader.shared.stopLoading()
                 if success {
                     DispatchQueue.main.async {
@@ -82,7 +82,7 @@ final public class ISMWalletViewModel {
             deviceType: "APP_STORE",
             packageName: "",
             productId: data["productId"] as? String,
-            purchaseToken: IAPManager.shared.generateReceipt()
+            purchaseToken: ISMIAPManager.shared.generateReceipt()
         )
         
         isometrik.getIsometrik().purchaseToken(body: walletBody) { response in

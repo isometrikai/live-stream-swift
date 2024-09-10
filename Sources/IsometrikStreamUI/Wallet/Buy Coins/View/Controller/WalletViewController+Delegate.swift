@@ -46,7 +46,7 @@ extension ISMWalletViewController {
         
         let skProduct = viewModel.skProducts[indexPath.row]
         
-        IAPManager.shared.buy(product: skProduct, withHandler: { (result) in
+        ISMIAPManager.shared.buy(product: skProduct, withHandler: { (result) in
             switch result {
             case .success:
                 DispatchQueue.main.async {

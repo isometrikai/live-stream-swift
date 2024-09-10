@@ -2,11 +2,11 @@ import Foundation
 import StoreKit
 import IsometrikStream
 
-final public class IAPManager: NSObject {
+final public class ISMIAPManager: NSObject {
     
     // MARK: - Custom Types
     
-    public enum IAPManagerError: Error {
+    public enum ISMIAPManagerError: Error {
         case noProductIDsFound
         case noProductsFound
         case paymentWasCancelled
@@ -19,8 +19,8 @@ final public class IAPManager: NSObject {
     
     // MARK: - Properties
     
-    public static let shared = IAPManager()
-    var onReceiveProductsHandler: ((Result<[SKProduct], IAPManagerError>) -> Void)?
+    public static let shared = ISMIAPManager()
+    var onReceiveProductsHandler: ((Result<[SKProduct], ISMIAPManagerError>) -> Void)?
     var onBuyProductHandler: ((Result<Bool, Error>) -> Void)?
     var totalRestoredPurchases = 0
         
@@ -54,7 +54,7 @@ final public class IAPManager: NSObject {
     
     // MARK: - Get IAP Products
     
-    public func getProducts(productIdsFrombacken:[String], withHandler productsReceiveHandler: @escaping (_ result: Result<[SKProduct], IAPManagerError>) -> Void) {
+    public func getProducts(productIdsFrombacken:[String], withHandler productsReceiveHandler: @escaping (_ result: Result<[SKProduct], ISMIAPManagerError>) -> Void) {
         // Keep the handler (closure) that will be called when requesting for
         // products on the App Store is finished.
         onReceiveProductsHandler = productsReceiveHandler
@@ -90,7 +90,7 @@ final public class IAPManager: NSObject {
 
 
 // MARK: - SKPaymentTransactionObserver
-extension IAPManager: SKPaymentTransactionObserver {
+extension ISMIAPManager: SKPaymentTransactionObserver {
     
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         transactions.forEach { (transaction) in
@@ -115,7 +115,7 @@ extension IAPManager: SKPaymentTransactionObserver {
                     if error.code != .paymentCancelled {
                         onBuyProductHandler?(.failure(error))
                     } else {
-                        onBuyProductHandler?(.failure(IAPManagerError.paymentWasCancelled))
+                        onBuyProductHandler?(.failure(ISMIAPManagerError.paymentWasCancelled))
                     }
                 }
                 SKPaymentQueue.default().finishTransaction(transaction)
@@ -144,7 +144,7 @@ extension IAPManager: SKPaymentTransactionObserver {
             if error.code != .paymentCancelled {
                 onBuyProductHandler?(.failure(error))
             } else {
-                onBuyProductHandler?(.failure(IAPManagerError.paymentWasCancelled))
+                onBuyProductHandler?(.failure(ISMIAPManagerError.paymentWasCancelled))
             }
         }
     }
@@ -154,7 +154,7 @@ extension IAPManager: SKPaymentTransactionObserver {
 
 
 // MARK: - SKProductsRequestDelegate
-extension IAPManager: SKProductsRequestDelegate {
+extension ISMIAPManager: SKProductsRequestDelegate {
     public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         // Get the available products contained in the response.
         let products = response.products
@@ -184,8 +184,8 @@ extension IAPManager: SKProductsRequestDelegate {
 
 
 
-// MARK: - IAPManagerError Localized Error Descriptions
-extension IAPManager.IAPManagerError: LocalizedError {
+// MARK: - ISMIAPManagerError Localized Error Descriptions
+extension ISMIAPManager.ISMIAPManagerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .noProductIDsFound: return "No In-App Purchase product identifiers were found."
@@ -197,7 +197,7 @@ extension IAPManager.IAPManagerError: LocalizedError {
 }
 
 // MARK: - usage
-extension IAPManager{
+extension ISMIAPManager{
     
     public func getPlansFromApple(productIds: [String],handler: @escaping ((_ result: [SKProduct],_ success:Bool, _ errorString: String?) -> Void)){
         getProducts(productIdsFrombacken: productIds) { (result) in
