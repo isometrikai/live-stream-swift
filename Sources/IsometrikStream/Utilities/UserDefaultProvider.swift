@@ -76,7 +76,7 @@ public class UserDefaultsProvider: NSObject {
     }
     
     public func getIsometrikDefaultProfile() -> String {
-        return "https://cdn.getfudo.com/adminAssets/0/0/Logo.png"
+        return "https://www.gravatar.com/avatar/?d=identicon"
     }
     
     // MARK: - Wallet details

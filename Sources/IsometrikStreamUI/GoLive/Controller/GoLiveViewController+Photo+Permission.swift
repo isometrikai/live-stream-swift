@@ -11,21 +11,43 @@ import IsometrikStream
 
 extension GoLiveViewController {
     
-    func requestPhotoLibraryPermission(completion: @escaping (Bool) -> Void) {
+    func requestPhotoLibraryPermission(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         switch PHPhotoLibrary.authorizationStatus(for: .readWrite) {
         case .authorized, .limited:
             completion(true)
         case .notDetermined:
             PHPhotoLibrary.requestAuthorization { status in
                 DispatchQueue.main.async {
-                    completion(status == .authorized || status == .limited)
+                    if status == .authorized || status == .limited {
+                        completion(true)
+                    } else {
+                        self.showPhotoLibraryPermissionDeniedAlert(on: viewController)
+                        completion(false)
+                    }
                 }
             }
         case .denied, .restricted:
+            self.showPhotoLibraryPermissionDeniedAlert(on: viewController)
             completion(false)
         @unknown default:
             completion(false)
         }
+    }
+    
+    func showPhotoLibraryPermissionDeniedAlert(on viewController: UIViewController) {
+        let alert = UIAlertController(
+            title: "Photo Library Access Denied",
+            message: "You have denied access to the photo library. Please go to Settings to enable it.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings)
+            }
+        })
+        
+        viewController.present(alert, animated: true, completion: nil)
     }
     
 }
@@ -34,7 +56,7 @@ extension GoLiveViewController: UINavigationControllerDelegate, UIImagePickerCon
 
     /// Image picker view controller
     func configureImagePickerViewController() {
-        requestPhotoLibraryPermission { [weak self] granted in
+        requestPhotoLibraryPermission(from: self) { [weak self] granted in
             guard granted else {
                 print("Photo library permission not granted")
                 return

@@ -4,26 +4,49 @@ import AVFoundation
 
 extension GoLiveViewController {
     
-    func requestCameraPermission(completion: @escaping (Bool) -> Void) {
+    func requestCameraPermission(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             completion(true)
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 DispatchQueue.main.async {
-                    completion(granted)
+                    if granted {
+                        completion(true)
+                    } else {
+                        self.showPermissionDeniedAlert(on: viewController)
+                        completion(false)
+                    }
                 }
             }
         case .denied, .restricted:
+            self.showPermissionDeniedAlert(on: viewController)
             completion(false)
         @unknown default:
             completion(false)
         }
     }
     
+    func showPermissionDeniedAlert(on viewController: UIViewController) {
+        let alert = UIAlertController(
+            title: "Camera Access Denied",
+            message: "You have denied camera access. Please go to Settings to enable it.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings)
+            }
+        })
+        
+        viewController.present(alert, animated: true, completion: nil)
+    }
+
+    
     func createSession(){
         
-        requestCameraPermission { [weak self] granted in
+        requestCameraPermission(from: self) { [weak self] granted in
             
             guard granted else {
                 self?.view.showToast(message: "Camera permission not granted")

@@ -61,6 +61,7 @@ class PaidStreamCardViewController: UIViewController, ISMAppearanceProvider {
         textField.textColor = .white
         textField.font = appearance.font.getFont(forTypo: .h6)
         textField.keyboardType = .phonePad
+        textField.delegate = self
         return textField
     }()
     
@@ -182,4 +183,22 @@ class PaidStreamCardViewController: UIViewController, ISMAppearanceProvider {
         }
     }
 
+}
+
+extension PaidStreamCardViewController: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        // Combine the current text with the new input
+        let currentText = textField.text ?? ""
+        let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        // Check if the new text is numeric and contains no more than 6 digits
+        let isNumeric = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: newText))
+        
+        // Return true only if it is numeric and less than or equal to 6 digits
+        return isNumeric && newText.count <= 6
+        
+    }
+    
 }
