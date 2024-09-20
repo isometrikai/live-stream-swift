@@ -115,11 +115,14 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func loadData(for query: String = ""){
+        
+        CustomLoader.shared.startLoading()
         self.viewModel.streamUserList.removeAll()
         self.userTableView.reloadData()
         
         viewModel.getData(query: query) {
             DispatchQueue.main.async {
+                CustomLoader.shared.stopLoading()
                 if self.viewModel.streamUserList.isEmpty {
                     self.defaultView.isHidden = false
                 } else {
