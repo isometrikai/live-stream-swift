@@ -44,7 +44,7 @@ public class FloatingHeartView: UIView, ISMAppearanceProvider {
 
     public func animateInView(view: UIView, imageToUse: UIImage) {
         heartImageView?.image = imageToUse
-        heartImageView?.tintColor = appearance.colors.appColor
+        heartImageView?.tintColor = appearance.colors.appRed
         guard let rotationDirection = RotationDirection(rawValue: CGFloat(1 - Int(2 * randomNumber(cap: 2)))) else { return }
         prepareForAnimation()
         performBloomAnimation()

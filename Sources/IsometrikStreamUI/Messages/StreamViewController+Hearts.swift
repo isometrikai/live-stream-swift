@@ -52,8 +52,7 @@ extension StreamViewController: ISMAppearanceProvider {
                 let fountainY = videoContainer.bounds.height - ((FloatingHeartView.heartSize / 2) + 8)
                 
                 heart.center = CGPoint(x: fountainX, y: fountainY)
-                let imageToSend =  UIImage(named: imageToUse)?.withRenderingMode(.alwaysTemplate)
-                heart.animateInView(view: self.view, imageToUse: (imageToSend ?? self.appearance.images.heart))
+                heart.animateInView(view: self.view, imageToUse: self.appearance.images.heart.withRenderingMode(.alwaysTemplate))
                 
             }
         }
