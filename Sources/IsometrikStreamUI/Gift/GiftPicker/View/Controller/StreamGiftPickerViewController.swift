@@ -38,11 +38,15 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
         super.viewDidLoad()
         setUpViews()
         setUpConstraints()
-        loadDataInitially()
+        //loadDataInitially()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         loadWalletBalance()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        loadDataInitially()
     }
     
     required init?(coder: NSCoder) {
