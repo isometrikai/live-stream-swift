@@ -7,6 +7,10 @@
 
 import Foundation
 
+extension Notification.Name {
+    public static let didPublishTrackNotification = Notification.Name("didPublishTrackNotification")
+}
+
 /// MQTT data Type
 public enum ISMMQTTNotificationType: String {
     case mqttMessageSent = "MQTTmessageSent"

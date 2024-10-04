@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import LiveKit
 
 /**
     Extension to manage the `Observer Actions` used in the `StreamLiveViewController` class
@@ -726,6 +727,37 @@ extension StreamViewController {
             liveKitManager.updateLiveKitCameraStatus = true
         }
         
+    }
+    
+    // MARK: - LIVEKIT Observer
+    
+    @objc func handleTrackPublication(_ notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let trackKind = userInfo["trackKind"] as? Track.Kind,
+           let participant = userInfo["participant"] as? Participant,
+           let isMuted = userInfo["isMuted"] as? Bool,
+           let visibleCell = fullyVisibleCells(streamCollectionView)
+        {
+            
+            let currentVideoSession = visibleCell.streamContainer.videoContainer.videoSessions[0]
+            
+            switch trackKind {
+            case .audio:
+                print("Audio track published by \(participant.identity)")
+                currentVideoSession.isAudioMute = isMuted
+            case .video:
+                print("Video track published by \(participant.identity)")
+                currentVideoSession.isVideoMute = isMuted
+            default:
+                print("Unknown track kind")
+            }
+            
+            DispatchQueue.main.async {
+                let broadCasterView = visibleCell.streamContainer.videoContainer
+                broadCasterView.videoSessions[0] = currentVideoSession
+            }
+            
+        }
     }
     
 }

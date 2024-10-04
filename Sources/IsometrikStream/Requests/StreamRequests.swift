@@ -143,8 +143,9 @@ extension IsometrikStream {
     ///   - completionHandler: completionHandler for response data.
     public func deleteStream(streamId: String, completionHandler: @escaping (ISMStream)->(), failure : @escaping (ISMLiveAPIError) -> ()) {
         
+        let streamBody = StreamBody(streamId: streamId)
         
-        let request =  ISMLiveAPIRequest<Any>(endPoint: StreamRouter.deleteStream(streamId: streamId) , requestBody:nil)
+        let request =  ISMLiveAPIRequest(endPoint: StreamRouter.deleteStream, requestBody: streamBody)
         
         ISMLiveAPIManager.sendRequest(request: request) { (result :ISMLiveResult<ISMStream, ISMLiveAPIError> ) in
             switch result {

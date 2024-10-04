@@ -39,7 +39,6 @@ extension StreamViewController {
         
         isometrik.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttMemberLeft), name: ISMMQTTNotificationType.mqttMemberLeft.name, object: nil)
         
-        
         /**
          MQTT observers for `Viewer`
          */
@@ -113,6 +112,8 @@ extension StreamViewController {
     func addStreamObservers(){
         addAppLifeCycleObservers()
         addMqttObservers()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTrackPublication(_:)), name: .didPublishTrackNotification, object: nil)
     }
     
     // MARK: - REMOVE OBSERVES FUNCTIONS
@@ -194,6 +195,8 @@ extension StreamViewController {
     func removeAllObservers(){
         removeAppLifeCycleObservers()
         removeMQTTObservers()
+        
+        NotificationCenter.default.removeObserver(self, name: .didPublishTrackNotification, object: nil)
     }
     
 }

@@ -11,7 +11,7 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
     
     case startStream
     case stopStream
-    case deleteStream(streamId: String)
+    case deleteStream
     case fetchStreams(streamQuery: StreamQuery?)
     case searchStreams(streamQuery: StreamQuery?)
     case checkStreamExistence(streamId: String)
@@ -104,9 +104,6 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
         var param: [String: String] = [:]
         
         switch self {
-        case let .deleteStream(streamId):
-            param = ["streamId":"\(streamId)"]
-            break
         case let .fetchStreams(streamQuery):
             if let streamQuery = streamQuery {
                 

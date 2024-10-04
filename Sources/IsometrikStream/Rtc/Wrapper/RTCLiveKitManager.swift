@@ -305,16 +305,11 @@ extension RTCLiveKitManager: RoomDelegate {
     
     public func room(_ room: Room, participant: Participant, trackPublication: TrackPublication, didUpdateIsMuted isMuted: Bool) {
         
-        let kind = trackPublication.kind
-        switch kind {
-        case .audio:
-            print("Audio isMuted: \(isMuted)")
-        case .video:
-            print("video isMuted: \(isMuted)")
-        default:
-            print("Unknown track kind.")
-        }
         
+        let userInfo: [String: Any] = ["trackKind": trackPublication.kind, "participant": participant , "isMuted" : isMuted]
+                
+        NotificationCenter.default.post(name: .didPublishTrackNotification, object: nil, userInfo: userInfo)
+
     }
     
 }
