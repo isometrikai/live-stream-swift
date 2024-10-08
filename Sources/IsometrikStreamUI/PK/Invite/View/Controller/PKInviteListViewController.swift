@@ -65,6 +65,10 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        removeObservers()
+    }
+    
     // MARK: - MAIN
     
     override func viewDidLoad() {
@@ -72,6 +76,11 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
         setupViews()
         setupConstraints()
         loadData()
+        addObservers()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        removeObservers()
     }
     
     // MARK: - FUNTIONS
@@ -111,7 +120,11 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
 //            bottomRefuseAllInvitationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 //            bottomRefuseAllInvitationView.heightAnchor.constraint(equalToConstant: 50),
 //            bottomRefuseAllInvitationView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            
         ])
+        
+        viewModel.bottomConstraint = NSLayoutConstraint(item: defaultView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0)
+        view.addConstraint(viewModel.bottomConstraint!)
     }
     
     func loadData(for query: String = ""){
@@ -133,6 +146,16 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
         }
     }
     
+    func addObservers(){
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification) , name: UIResponder.keyboardWillShowNotification , object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardNotification) , name: UIResponder.keyboardWillHideNotification , object: nil)
+    }
+    
+    func removeObservers(){
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     // MARK: - ACTIONS
     
     @objc func closeButtonTapped(){
@@ -140,7 +163,9 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField){
-        loadData(for: textField.text ?? "")
+        viewModel.debouncer.debounce {
+            self.loadData(for: textField.text ?? "")
+        }
     }
 
 }
@@ -180,6 +205,26 @@ extension PKInviteListViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+}
+
+extension PKInviteListViewController {
+    
+    @objc func handleKeyboardNotification(notification: NSNotification){
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            let isKeyboardShowing = notification.name == UIResponder.keyboardWillShowNotification
+            
+            viewModel.bottomConstraint?.constant = isKeyboardShowing ? -keyboardHeight : -ism_windowConstant.getBottomPadding
+            
+            UIView.animate(withDuration:0.2, delay: 0 , options: .curveEaseOut , animations: {
+                self.view.layoutIfNeeded()
+            } , completion: {(completed) in
+            })
+        }
     }
     
 }

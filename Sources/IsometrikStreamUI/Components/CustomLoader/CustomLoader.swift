@@ -86,7 +86,7 @@ final public class CustomLoader {
             if let topMostViewController = self.topMostViewController {
                 topMostViewController.view.setNeedsLayout()
                 topMostViewController.view.layoutIfNeeded()
-                self.loaderView?.frame = UIScreen.main.bounds
+                self.loaderView?.frame = topMostViewController.view.bounds
                 topMostViewController.view.addSubview(self.loaderView!)
             }
         }

@@ -16,6 +16,7 @@ class CustomStreamOptionView: UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .black.withAlphaComponent(0.5)
+        view.layer.cornerRadius = 22.5
         return view
     }()
     
@@ -48,11 +49,6 @@ class CustomStreamOptionView: UIView {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.backgroundView.layer.cornerRadius = self.frame.width / 2
-        }
-        
     }
     
     required init?(coder: NSCoder) {

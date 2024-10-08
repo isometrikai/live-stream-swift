@@ -39,12 +39,12 @@ extension CustomVideoContainer: UICollectionViewDelegate, UICollectionViewDelega
         
         if let videoSession = videoSessions[safe: indexPath.item] {
             cell.videoSession = videoSession
-            cell.videoView.isHidden = false
-            cell.sessionProfileView.isHidden = false
+//            cell.videoView.isHidden = false
+//            cell.sessionProfileView.isHidden = false
         } else {
             cell.moreOptionView.isHidden = true
-            cell.sessionProfileView.isHidden = true
-            cell.videoView.isHidden = true
+//            cell.sessionProfileView.isHidden = true
+//            cell.videoView.isHidden = true
             cell.setupRTMPDefaultView()
         }
         

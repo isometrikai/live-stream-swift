@@ -19,18 +19,22 @@ class PKInviteUserViewModel: NSObject {
     var linking_CallBack: ((ISM_PK_InviteStream?) ->())?
     var bottomConstraint: NSLayoutConstraint?
     
+    let debouncer = Debouncer(delay: 0.5)
+    
     init(isometrik: IsometrikSDK, streamInfo: ISMStream) {
         self.isometrik = isometrik
         self.streamInfo = streamInfo
     }
     
     func getData(query: String, completionHandler: @escaping () -> ()){
+        
         isometrik.getIsometrik().getPKInviteUserList(query: query) { result in
             self.streamUserList = result.streams ?? []
             completionHandler()
         }failure: { error in
             completionHandler()
         }
+        
     }
     
     func sendInvite(index: Int, completionHandler: @escaping (_ success: Bool,_ errorMessage : String? ) -> ()) {

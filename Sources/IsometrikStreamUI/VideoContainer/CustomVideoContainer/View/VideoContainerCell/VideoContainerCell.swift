@@ -359,6 +359,24 @@ class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
         
         battleProfileView.defaultProfilePicture.initialsText.text = "\(initialText)".uppercased()
         
+        // make videoView hiden if its track is nil
+//        if videoSession.liveKitVideoView?.isRendering == false  {
+//            
+//            videoView.isHidden = true
+//            sessionProfileView.isHidden = false
+//            
+//        } else {
+//            
+//            if videoSession.isVideoMute {
+//                sessionProfileView.isHidden = false
+//                videoView.isHidden = true
+//            } else {
+//                sessionProfileView.isHidden = true
+//                videoView.isHidden = false
+//            }
+//            
+//        }
+        
         if videoSession.isVideoMute {
             sessionProfileView.isHidden = false
             videoView.isHidden = true
@@ -385,6 +403,12 @@ class VideoContainerCell: UICollectionViewCell, ISMAppearanceProvider {
         self.videoView.subviews.forEach({ $0.removeFromSuperview() })
         
         guard let view = videoSession.liveKitVideoView else { return }
+        
+        print("VIDEO SESSION >>> \(view)")
+        print("VIDEO SESSION >>> (rendering) \(view.isRendering)")
+        print("VIDEO SESSION >>> (frame) \(view.frame)")
+        print("VIDEO SESSION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        
         self.videoView.addSubview(view)
         view.ism_pin(to: self.videoView)
         

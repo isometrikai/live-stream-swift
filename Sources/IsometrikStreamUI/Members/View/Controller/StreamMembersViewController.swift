@@ -37,6 +37,7 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
         view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Member Found"
         view.defaultLabel.textColor = .white
+        view.isHidden = true
         return view
     }()
     

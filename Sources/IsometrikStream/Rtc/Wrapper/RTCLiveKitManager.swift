@@ -258,6 +258,7 @@ extension RTCLiveKitManager: RoomDelegate {
                 // create video session for local participant if not created
                 let session = self.videoSession(of: participantId)
                 session.liveKitVideoView?.track = videoTrack
+                session.isVideoMute = videoTrack.isMuted
                 
                 // Update the track
                 self.delegate?.didUpdateVideoTrack(track: videoTrack, uid: participantId)
@@ -280,6 +281,7 @@ extension RTCLiveKitManager: RoomDelegate {
                 // create video session for remote participant if not created
                 let session = self.videoSession(of: participantId, .remote)
                 session.liveKitVideoView?.track = videoTrack
+                session.isVideoMute = videoTrack.isMuted
                 
                 // Update the track
                 self.delegate?.didUpdateVideoTrack(track: videoTrack, uid: participantId)
