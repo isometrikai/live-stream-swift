@@ -25,8 +25,15 @@ enum GiftRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL {
-        return URL(string: "https://service-apis.isometrik.io")!
-        //return URL(string: "\(ISMConfiguration.shared.primaryOrigin)")!
+        
+        switch self {
+        case .sendGiftToStreamer:
+            return URL(string: "\(ISMConfiguration.shared.primaryOrigin)")!
+        default:
+            return URL(string: "https://service-apis.isometrik.io")!
+        }
+        
+        //return URL(string: "https://service-apis.isometrik.io")!
     }
     
     var method: ISMLiveHTTPMethod {
@@ -46,7 +53,7 @@ enum GiftRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .getGiftForACategory:
             path = "/v1/app/virtualGifts"
         case .sendGiftToStreamer:
-            path = "/live/v4/giftTransfer"
+            path = "/live/v1/giftTransfer"
         }
         return path
     }
