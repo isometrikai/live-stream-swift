@@ -47,9 +47,9 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
         case .purchaseToken:
             path = "/v1/appWallet/tokenPurchase"
         case .getWalletBalance:
-            path = "/wallet/v1/wallet/user"
+            path = "/v1/wallet/user"
         case .getWalletTransaction:
-            path = "/wallet/v1/transaction/user"
+            path = "/v1/transaction/user"
         }
         return path
     }
