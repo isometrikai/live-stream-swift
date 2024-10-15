@@ -22,13 +22,14 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
     }
     
     var baseURL: URL{
-        switch self {
-        case .getCurrencyPlans, .purchaseToken:
-            return URL(string: "https://apinew.isometrik.ai")!
-        case .getWalletBalance, .getWalletTransaction:
-            return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
-        }
-        //return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
+//        switch self {
+//        case .getCurrencyPlans, .purchaseToken:
+//            return URL(string: "https://apinew.isometrik.ai")!
+//        case .getWalletBalance, .getWalletTransaction:
+//            
+//            return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
+//        }
+        return URL(string: "https://apinew.isometrik.ai")!
     }
     
     var method: ISMLiveHTTPMethod {
