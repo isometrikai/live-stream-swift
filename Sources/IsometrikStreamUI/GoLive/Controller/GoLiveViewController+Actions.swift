@@ -124,7 +124,10 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
                         
                     }
                 } else {
-                    print(error)
+                    DispatchQueue.main.async {
+                        CustomLoader.shared.stopLoading()
+                        self.view.showToast( message: "unable to fetch presigned url")
+                    }
                 }
             }
             
@@ -576,6 +579,7 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
 
 extension GoLiveViewController {
     
+    
     func startNewStream(userData: ISMStreamUser, description: String, imagePath: String, videoPath: String) {
         
         guard let isometrikUserId = userData.userId
@@ -703,6 +707,9 @@ extension GoLiveViewController {
             }
             
         } failure: { error in
+            
+            /// Stop loading.
+            CustomLoader.shared.stopLoading()
             
             switch error{
             case .noResultsFound(_):

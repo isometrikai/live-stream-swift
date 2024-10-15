@@ -24,10 +24,11 @@ enum WalletRouter: ISMLiveURLConvertible, CustomStringConvertible {
     var baseURL: URL{
         switch self {
         case .getCurrencyPlans, .purchaseToken:
-            return URL(string: "https://service-apis.isometrik.io")!
+            return URL(string: "https://apinew.isometrik.ai")!
         case .getWalletBalance, .getWalletTransaction:
             return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
         }
+        //return URL(string:"\(ISMConfiguration.shared.primaryOrigin)")!
     }
     
     var method: ISMLiveHTTPMethod {
