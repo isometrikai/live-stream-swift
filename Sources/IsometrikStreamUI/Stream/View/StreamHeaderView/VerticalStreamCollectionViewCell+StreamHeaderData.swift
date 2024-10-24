@@ -109,7 +109,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
                 hostMember = filteredMember.first
                 
                 if currentUserId != hostMember?.userID ?? "" {
-                    followButton.isHidden = false
+                    //followButton.isHidden = false
                 }
                 
                 userName = hostMember?.userName
@@ -122,7 +122,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
                 break
             case .member:
                 if currentUserId != hostMember?.userID ?? "" {
-                    followButton.isHidden = false
+                    //followButton.isHidden = false
                 }
                 
                 let filteredMember = viewModel.streamMembers.filter { member in
@@ -144,7 +144,7 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
 
                 hostMember = filteredMember.first
                 
-                followButton.isHidden = true
+                //followButton.isHidden = true
                 
                 userName = hostMember?.userName
                 firstName = hostMember?.metaData?.firstName
@@ -156,11 +156,11 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         } else if streamStatus == .scheduled {
             switch streamUserType {
             case .viewer:
-                followButton.isHidden = false
+                //followButton.isHidden = false
                 userName = streamData.userDetails?.userName ?? ""
                 break
             case .host:
-                followButton.isHidden = true
+                //followButton.isHidden = true
                 
                 userName = isometrik.getUserSession().getUserIdentifier()
                 firstName = isometrik.getUserSession().getUserName()
@@ -206,6 +206,13 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         
         // set stream members count view
         streamStatusView.memberFeatureView.featureLabel.text = "\(viewModel.streamMembers.count)"
+        
+        DispatchQueue.main.async {
+            viewerCountView.featureLabel.text = viewModel.streamViewers.count.description
+        }
+        
+        
+        LogManager.shared.logCustom(category: "viewCountTest", message: "ViewerCount: \(viewModel.streamViewers.count)")
         
     }
     

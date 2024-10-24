@@ -76,8 +76,6 @@ public final class ISMWalletViewController: UIViewController, ISMAppearanceProvi
         setUpViews()
         setUpConstraints()
         getPlans()
-        setupWalletBalance(currencyType: .coin)
-        setupWalletBalance(currencyType: .money)
     }
     
     public override func viewWillAppear(_ animated: Bool) {

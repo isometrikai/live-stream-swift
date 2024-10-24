@@ -12,13 +12,14 @@ public class CustomHeaderView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    public let headerTitle: UILabel = {
+    public lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = ""
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 2
+        label.font = appearance.font.getFont(forTypo: .h4)
         return label
     }()
     

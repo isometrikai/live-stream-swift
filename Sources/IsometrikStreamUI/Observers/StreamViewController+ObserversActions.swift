@@ -153,7 +153,6 @@ extension StreamViewController {
         }
         
         viewModel.removeViewer(withId: viewerId)
-        
         visibleCell.viewModel = viewModel
         
         let senderName = viewerData.viewerName.unwrap
