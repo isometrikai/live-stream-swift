@@ -37,10 +37,10 @@ extension MyController: ISMExternalDelegate {
     // This function is triggered when the "Close Stream" action is tapped.
     // - Note: This action is only triggered for viewers in the stream.
     // - Parameters:
-    //   - streamData: An `ISMStream` object containing details of the stream to be closed.
+    //   - memberData: Data associated with the host member of a stream.
     //   - callback: A callback function to handle the success status of the close action.
     //   - root: The `UINavigationController` to present the follow confirmation UI.
-    func didCloseStreamTapped(streamData: ISMStream, callback: @escaping (Bool) -> (), root: UINavigationController) {
+    func didCloseStreamTapped(memberData: ISMMember?, callback: @escaping (Bool) -> (), root: UINavigationController) {
         
         // Initialize a controller for handling the follow confirmation action
         let controller = DemoFollowViewController()
@@ -52,6 +52,11 @@ extension MyController: ISMExternalDelegate {
                     callback(success)
                 }
             }
+        }
+        
+        // User the host member id as per your requirement as added below
+        if let memberData, let memberMetaData = memberData.metaData, let memberId = memberMetaData.userID {
+            print("host member id: \(memberId)")
         }
         
         // Configure the sheet presentation with a custom height for modern iOS versions

@@ -53,7 +53,7 @@ extension StreamViewController: ISMAppearanceProvider {
                 
                 heart.center = CGPoint(x: fountainX, y: fountainY)
                 heart.animateInView(view: self.view, imageToUse: self.appearance.images.heart.withRenderingMode(.alwaysTemplate))
-                
+
             }
         }
         

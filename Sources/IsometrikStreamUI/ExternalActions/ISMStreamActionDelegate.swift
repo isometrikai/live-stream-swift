@@ -18,10 +18,10 @@ public protocol ISMStreamActionDelegate {
     
     /// Called when the stream close action is triggered.
     /// - Parameters:
-    ///   - streamData: Data associated with the stream that is being closed.
+    ///   - memberData: Data associated with the host member of a stream.
     ///   - callback: A closure that returns `true` if the stream closed successfully, allowing for actions based on the result.
     ///   - root: The navigation controller used for any required navigation.
-    func didCloseStreamTapped(streamData: ISMStream, callback: @escaping (Bool) -> (), root: UINavigationController)
+    func didCloseStreamTapped(memberData: ISMMember?, callback: @escaping (Bool) -> (), root: UINavigationController)
 
 }
 

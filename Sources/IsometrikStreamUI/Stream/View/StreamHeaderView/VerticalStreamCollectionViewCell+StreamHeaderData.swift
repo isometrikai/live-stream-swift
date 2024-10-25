@@ -46,7 +46,6 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         streamTitleLabel.isHidden = isPKStream
 
         streamTitleLabel.text = streamData.streamDescription.unwrap
-        headerView.animateViewersCount(withText: viewModel.streamViewerCount)
         
         var hostMember: ISMMember?
         var userName: String?
@@ -208,11 +207,10 @@ extension VerticalStreamCollectionViewCell: ISMAppearanceProvider {
         streamStatusView.memberFeatureView.featureLabel.text = "\(viewModel.streamMembers.count)"
         
         DispatchQueue.main.async {
-            viewerCountView.featureLabel.text = viewModel.streamViewers.count.description
+//            headerView.animateViewersCount(withText: viewModel.streamViewerCount)
+            headerView.animateViewersCount(withText: viewModel.streamViewers.count)
+            
         }
-        
-        
-        LogManager.shared.logCustom(category: "viewCountTest", message: "ViewerCount: \(viewModel.streamViewers.count)")
         
     }
     

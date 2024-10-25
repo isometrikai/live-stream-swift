@@ -23,15 +23,25 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let stackView = UIStackView()
         stackView.distribution = .fill
         stackView.axis = .vertical
+        stackView.spacing = 2
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    lazy var transactionId: UILabel = {
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .gray
+        label.font = appearance.font.getFont(forTypo: .h8)
+        return label
+    }()
+    
+    lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = appearance.font.getFont(forTypo: .h6)
+        label.numberOfLines = 2
         return label
     }()
     
@@ -69,7 +79,8 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         backgroundColor = .clear
         addSubview(transactionTypeImage)
         addSubview(infoStackView)
-        infoStackView.addArrangedSubview(transactionId)
+        infoStackView.addArrangedSubview(titleLabel)
+        infoStackView.addArrangedSubview(subtitleLabel)
         infoStackView.addArrangedSubview(timeLabel)
         
         addSubview(amountLabel)
@@ -84,6 +95,7 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
             
             infoStackView.leadingAnchor.constraint(equalTo: transactionTypeImage.trailingAnchor, constant: 8),
             infoStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            infoStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -80),
             
             amountLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             amountLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
@@ -110,7 +122,11 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         }
         
         let obscureTransactionId = obscureString(data.transactionId.unwrap)
-        transactionId.text = "TransactionId: \(obscureTransactionId)"
+        titleLabel.text = "TransactionId: \(obscureTransactionId)"
+        
+        if let note = data.notes {
+            subtitleLabel.text = "\(note)"
+        }
         
         switch currencyType {
         case .coin:

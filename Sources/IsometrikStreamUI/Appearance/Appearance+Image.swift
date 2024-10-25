@@ -169,6 +169,8 @@ public struct ISM_Image {
     public var userKickedOut: UIImage = loadImageSafely(with: "ism_user_kickedOut")
     public var kickout: UIImage = loadImageSafely(with: "ism_kickout")
     public var userJoined: UIImage = loadImageSafely(with: "ism_user_joined")
+    public var acceptRequest: UIImage = loadImageSafely(with: "ism_accept_req")
+    public var rejectRequest: UIImage = loadImageSafely(with: "ism_reject_req")
     
     // Wallet images
     public var debitTransaction: UIImage = loadImageSafely(with: "ic_debit")

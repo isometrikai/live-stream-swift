@@ -322,8 +322,11 @@ extension StreamViewController: StreamCellActionDelegate {
             case .viewer:
                 
                 guard let navigationController = self.navigationController else { return }
+                
+                let getHostMemberData = viewModel.streamMembers.filter { $0.isAdmin == true }
+                
                 viewModel.externalActionDelegate?.didCloseStreamTapped(
-                    streamData: streamData,
+                    memberData: getHostMemberData.first,
                     callback: { success in
                         if success {
                             self.leaveStreamByViewer(userId: userId, streamId: streamId)
