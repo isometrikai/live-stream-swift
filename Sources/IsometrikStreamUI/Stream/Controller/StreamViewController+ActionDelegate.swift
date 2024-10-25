@@ -320,7 +320,17 @@ extension StreamViewController: StreamCellActionDelegate {
                 yesButton.setTitle("End broadcasting", for: .normal)
                 break
             case .viewer:
-                self.leaveStreamByViewer(userId: userId, streamId: streamId)
+                
+                guard let navigationController = self.navigationController else { return }
+                viewModel.externalActionDelegate?.didCloseStreamTapped(
+                    streamData: streamData,
+                    callback: { success in
+                        if success {
+                            self.leaveStreamByViewer(userId: userId, streamId: streamId)
+                        }
+                    },
+                    root: navigationController
+                )
                 return
             }
             

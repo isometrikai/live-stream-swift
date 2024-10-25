@@ -860,4 +860,6 @@ extension GoLiveViewController: ISMStreamActionDelegate {
     public func didStreamStoreOptionTapped(forUserType: StreamUserType, root: UINavigationController) {
         viewModel.externalActionDelegate?.didStreamStoreOptionTapped(forUserType: forUserType ,root: root)
     }
+    
+    public func didCloseStreamTapped(streamData: ISMStream, callback: @escaping (Bool) -> (), root: UINavigationController) {}
 }
