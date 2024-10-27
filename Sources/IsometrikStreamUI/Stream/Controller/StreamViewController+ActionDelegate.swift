@@ -12,6 +12,51 @@ enum StreamActionEnum {
 
 extension StreamViewController: StreamCellActionDelegate {
     
+    func didCopublisherRequestResponseTapped(response: CopublishRequestResponseType, messageInfo: ISMComment?, index: Int) {
+        
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        guard let streamData = streamsData[safe: viewModel.selectedStreamIndex.row],
+              let streamId = streamData.streamId,
+              let visibleCell = fullyVisibleCells(streamCollectionView)
+        else { return }
+        
+        
+        let requestByUserId = messageInfo?.senderId ?? ""
+        let messageType = messageInfo?.messageType ?? 0
+        
+        switch response {
+            case .accepted:
+                
+                isometrik.getIsometrik().acceptCopublishRequest(streamId: streamId, requestByUserId: requestByUserId) { (result) in
+                    //
+                }failure: { error in
+                    self.handleError(error: error)
+                }
+            
+                break
+            case .rejected:
+            
+                isometrik.getIsometrik().denyCopublishRequest(streamId: streamId, requestByUserId: requestByUserId) { result in
+                    //
+                }failure: { error in
+                    self.handleError(error: error)
+                }
+            
+                break
+        }
+        
+        // removing the request message from list
+        viewModel.streamMessageViewModel?.messages.removeAll(where: { message in
+            message.senderId == messageInfo?.senderId && message.messageType ?? 0 == ISMStreamMessageType.request.rawValue
+        })
+        
+        let messagetableView = visibleCell.streamContainer.streamMessageView.messageTableView
+        messagetableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        
+        self.setHeightForMessages()
+    }
+    
     func didProfileTapped(messageInfo: ISMComment?) {
         
 //        guard let isometrik = viewModel.isometrik,
@@ -946,6 +991,27 @@ extension StreamViewController: StreamCellActionDelegate {
                 break
             }
             
+        }
+    }
+    
+    func handleError(error: ISMLiveAPIError){
+        switch error{
+        case .noResultsFound(_):
+            // handle noresults found here
+            break
+        case .invalidResponse:
+            DispatchQueue.main.async {
+                self.view.showToast( message: "Error : Invalid Response")
+            }
+        case.networkError(let error):
+            self.view.showToast( message: "Network Error \(error.localizedDescription)")
+            
+        case .httpError(let errorCode, let errorMessage):
+            DispatchQueue.main.async{
+                self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")
+            }
+        default :
+            break
         }
     }
     

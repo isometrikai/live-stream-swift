@@ -9,6 +9,11 @@
 import Foundation
 import IsometrikStream
 
+enum CopublishRequestResponseType {
+    case accepted
+    case rejected
+}
+
 protocol StreamCellActionDelegate {
     
     func didTapStreamClose()
@@ -34,6 +39,7 @@ protocol StreamCellActionDelegate {
     func didDeleteButtonTapped(messageInfo: ISMComment?)
     func didStartScheduledStream()
     func didProfileTapped(messageInfo: ISMComment?)
+    func didCopublisherRequestResponseTapped(response: CopublishRequestResponseType, messageInfo: ISMComment?, index: Int)
     
     func StopPKBattleAsTimerFinishes()
     

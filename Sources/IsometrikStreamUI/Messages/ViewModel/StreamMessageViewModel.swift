@@ -17,6 +17,7 @@ enum ISMStreamMessageType: Int {
     case pinnedProduct = 10000
     case likeMessage = 3
     case productBought = 4
+    case request = 5
     
     case changeStream = 21
     case pkStart = 23

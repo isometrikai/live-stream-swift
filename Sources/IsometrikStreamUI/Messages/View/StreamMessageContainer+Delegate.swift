@@ -46,6 +46,19 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
             cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
             cell.profileButton.addTarget(self, action: #selector(profileButtonTapped(_:)), for: .touchUpInside)
             return cell
+            
+        case .request:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "StreamRequestMessageTableViewCell", for: indexPath) as! StreamRequestMessageTableViewCell
+            cell.selectionStyle = .none
+            let message = viewModel.messages[indexPath.row]
+            cell.configureCell(message: message)
+            cell.acceptButton.tag = indexPath.row
+            cell.rejectButton.tag = indexPath.row
+            cell.acceptButton.addTarget(self, action: #selector(acceptButtonTapped(_:)), for: .touchUpInside)
+            cell.rejectButton.addTarget(self, action: #selector(rejectButtonTapped(_:)), for: .touchUpInside)
+            cell.contentView.isUserInteractionEnabled = false
+            return cell
+            
         default:
             break
         }
@@ -61,7 +74,7 @@ extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UI
         let messageType = ISMStreamMessageType(rawValue: Int(message.messageType ?? 0))
         
         switch messageType {
-        case .productBought, .deletedMessage, .text :
+        case .productBought, .deletedMessage, .text , .request :
             return messageTableView.estimatedRowHeight
         default:
             return 0

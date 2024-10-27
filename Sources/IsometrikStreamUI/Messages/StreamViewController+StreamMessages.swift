@@ -56,7 +56,7 @@ extension StreamViewController {
         self.setHeightForMessages()
         
         switch messageType {
-        case .text, .productBought:
+        case .text, .productBought, .request:
             
             // check for duplicate messages only if not a delete message
             if message.messageId != "" && message.messageId != nil {
@@ -151,6 +151,31 @@ extension StreamViewController {
         default:
             break
         }
+    }
+    
+    func removeRequestMessage(forsenderId senderId: String) {
+        
+        guard let visibleCell = fullyVisibleCells(streamCollectionView)
+        else { return }
+        
+        let streamMessageView = visibleCell.streamContainer.streamMessageView
+        let streamMessageViewModel = viewModel.streamMessageViewModel
+        let streamMessageTableView = streamMessageView.messageTableView
+        
+        guard let streamMessageViewModel else {
+            return
+        }
+        
+        // setting message height initially too
+        self.setHeightForMessages()
+        
+        if let index = streamMessageViewModel.messages.firstIndex(where: { message in
+            message.senderId == senderId && message.messageType == Int64(ISMStreamMessageType.request.rawValue)
+        }) {
+            streamMessageViewModel.messages.remove(at: index)
+            streamMessageTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+        }
+        
     }
     
     func setHeightForMessages(withReload: Bool = false) {

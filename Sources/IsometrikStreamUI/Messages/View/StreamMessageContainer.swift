@@ -23,6 +23,7 @@ class StreamMessageContainer: UIView, ISMAppearanceProvider {
         tableView.showsVerticalScrollIndicator = false
         tableView.register(StreamMessageTableViewCell.self, forCellReuseIdentifier: "StreamMessageTableViewCell")
         tableView.register(StreamDeleteMessageTableViewCell.self, forCellReuseIdentifier: "StreamDeleteMessageTableViewCell")
+        tableView.register(StreamRequestMessageTableViewCell.self, forCellReuseIdentifier: "StreamRequestMessageTableViewCell")
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         return tableView
@@ -122,14 +123,30 @@ class StreamMessageContainer: UIView, ISMAppearanceProvider {
         
     }
     
-    @objc func profileButtonTapped(_ button: UIButton) {
+    @objc func profileButtonTapped(_ sender: UIButton) {
         
         guard let viewModel else { return }
         let messages = viewModel.messages
         if messages.count > 0 {
-            delegate?.didProfileTapped(messageInfo: messages[button.tag])
+            delegate?.didProfileTapped(messageInfo: messages[sender.tag])
         }
         
     }
 
+    @objc func acceptButtonTapped(_ sender: UIButton) {
+        guard let viewModel else { return }
+        let messages = viewModel.messages
+        if messages.count > 0 {
+            delegate?.didCopublisherRequestResponseTapped(response: .accepted, messageInfo: messages[sender.tag], index: sender.tag)
+        }
+    }
+    
+    @objc func rejectButtonTapped(_ sender: UIButton) {
+        guard let viewModel else { return }
+        let messages = viewModel.messages
+        if messages.count > 0 {
+            delegate?.didCopublisherRequestResponseTapped(response: .rejected, messageInfo: messages[sender.tag], index: sender.tag)
+        }
+    }
+    
 }

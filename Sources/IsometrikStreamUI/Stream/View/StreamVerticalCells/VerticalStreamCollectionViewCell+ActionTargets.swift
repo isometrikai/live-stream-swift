@@ -11,6 +11,11 @@ import IsometrikStream
 
 extension VerticalStreamCollectionViewCell: StreamCellActionDelegate {
     
+    func didCopublisherRequestResponseTapped(response: CopublishRequestResponseType, messageInfo: ISMComment?, index: Int) {
+        delegate?.didCopublisherRequestResponseTapped(response: response, messageInfo: messageInfo, index: index)
+    }
+    
+    
     func addActionTargets(){
         
         // stream container header targets

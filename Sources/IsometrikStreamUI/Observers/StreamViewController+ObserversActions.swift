@@ -398,17 +398,59 @@ extension StreamViewController {
 //            }
 //        }
         
-        let senderName = userRequest.userName ?? ""
-        let timeStamp = Int64(userRequest.requestTime ?? 0)
+        let senderName = userRequest.userName.unwrap
+        let timeStamp = Int64(userRequest.requestTime.unwrap)
         let message = "\(senderName) requested to be a copublisher in a stream."
+        let userProfilePic = userRequest.userProfilePic.unwrap
+        let streamId = userRequest.streamId.unwrap
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        let userId = userRequest.userId.unwrap
         
         let messageInfo = ISMComment(messageId: "", messageType: -2, message: message, senderIdentifier: "", senderImage: StreamUserEvents.joined.rawValue, senderName: "\(senderName)", senderId: "", sentAt: timeStamp)
         
         addStreamInfoMessage(message: messageInfo)
         
+        
+        // list down the message in the list if user is host
+        if isometrik.getUserSession().getUserType() == .host {
+            
+            let requestMessage = ISMComment(messageId: "", messageType: 5, message: "", senderIdentifier: "", senderImage: userProfilePic, senderName: "\(senderName)", senderId: userId, sentAt: timeStamp)
+            
+            guard streamsData.count > 0,
+                  let streamInfo = streamsData[safe: viewModel.selectedStreamIndex.row]
+            else { return }
+            
+            if streamId == streamInfo.streamId.unwrap {
+                DispatchQueue.main.async {
+                    self.handleMessages(message: requestMessage)
+                }
+            }
+            
+        }
+        
     }
     
     @objc func mqttRequestToBeCoPublisherRemoved(notification: NSNotification){
+        
+        guard let userRequest = notification.userInfo?["data"] as? ISMRequest else {
+            return
+        }
+        
+        let isometrik = viewModel.isometrik
+        let streamsData = viewModel.streamsData
+        let senderId = userRequest.userId.unwrap
+        let streamId = userRequest.streamId.unwrap
+        
+        guard streamsData.count > 0,
+              let streamInfo = streamsData[safe: viewModel.selectedStreamIndex.row]
+        else { return }
+        
+        if streamId == streamInfo.streamId.unwrap {
+            DispatchQueue.main.async {
+                self.removeRequestMessage(forsenderId: senderId)
+            }
+        }
         
     }
     

@@ -60,7 +60,7 @@ class StreamRequestListTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Accept", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.backgroundColor = appearance.colors.appColor
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.layer.cornerRadius = 15
@@ -183,11 +183,11 @@ class StreamRequestListTableViewCell: UITableViewCell, ISMAppearanceProvider {
         
         if let accepted = data.accepted , let pending = data.pending {
             if accepted {
-                statusLabelInfo.text = "accepted".uppercased().ism_localized
+                statusLabelInfo.text = "accepted".uppercased()
                 statusLabelInfo.textColor = .green
                 actionStackView.isHidden = true
             } else if(!accepted && !pending) {
-                statusLabelInfo.text = "declined".uppercased().ism_localized
+                statusLabelInfo.text = "declined".uppercased()
                 statusLabelInfo.textColor = .red
                 actionStackView.isHidden = true
             } else {
