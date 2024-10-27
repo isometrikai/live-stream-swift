@@ -7,46 +7,28 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 
 class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    var userType: StreamUserType = .viewer
     var skip = 0
     var totalViewerCount = 0
     
-    var streamData: ISMStream? {
-        didSet {
-            guard let streamData = streamData else {
-                return
-            }
-            self.viewers.removeAll()
-            self.skip = 0
-            self.totalViewerCount = 0
-            self.fetchStreamViewers(streamInfo: streamData) {}
-        }
-    }
-    
+    var userType: StreamUserType
+    var streamData: ISMStream
+    var isometrik: IsometrikSDK
     var delegate: StreamViewerActionDelegate?
-    
-    var isometrik: IsometrikSDK? {
-        didSet {
-            addObservers()
-        }
-    }
-    
     var updateViewerCount_callback: ((Int)->Void)?
     
     var viewers: [ISMViewer] = [] {
         didSet {
             DispatchQueue.main.async { [self] in
                 if viewers.count == 0 {
-                    self.tableView.isHidden = true
                     headerView.countLabel.text = "\(0)"
                 } else {
-                    self.tableView.isHidden = false
                     headerView.countLabel.text = "\(totalViewerCount)"
                     self.tableView.reloadData()
                 }
@@ -70,6 +52,7 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.refreshControl = refreshControl
+        tableView.isSkeletonable = true
         return tableView
     }()
     
@@ -80,14 +63,6 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
         view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Viewers Found".localized
         return view
-    }()
-    
-    let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.style = .medium
-        indicator.tintColor = .white
-        return indicator
     }()
     
     lazy var refreshControl: UIRefreshControl = {
@@ -101,11 +76,28 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
     
     // MARK: - MAIN
     
+    init(isometrik: IsometrikSDK, streamData: ISMStream, userType: StreamUserType) {
+        self.isometrik = isometrik
+        self.streamData = streamData
+        self.userType = userType
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
         addObservers()
+        
+        tableView.rowHeight = 70
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        loadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -120,7 +112,6 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
         view.addSubview(headerView)
         view.addSubview(defaultView)
         view.addSubview(tableView)
-        view.addSubview(activityIndicator)
     }
     
     func setupConstraints(){
@@ -134,15 +125,11 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor)
         ])
     }
     
     func addObservers(){
-        guard let isometrik = isometrik else { return }
         
         isometrik.getMqttSession().addObserverForMQTT(self, selector: #selector(self.mqttViewerRemovedByInitiator), name: ISMMQTTNotificationType.mqttViewerRemovedByInitiator.name, object: nil)
         
@@ -155,8 +142,6 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func removeObservers(){
-        
-        guard let isometrik = isometrik else { return }
         
         isometrik.getMqttSession().removeObserverForMQTT(self, name: ISMMQTTNotificationType.mqttViewerRemovedByInitiator.name, object: nil)
         
@@ -177,62 +162,51 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
         return viewers.count > 0
     }
     
+    func loadData(isRefreshed: Bool = false){
+        
+        self.skip = 0
+        self.viewers.removeAll()
+        self.totalViewerCount = 0
+        
+        let baseColor = UIColor.colorWithHex(color: "#2C2C2C")
+        let secondaryColor = UIColor.colorWithHex(color: "#1E1E1E")
+        let accentColor = UIColor.colorWithHex(color: "#3A3A3A")
+
+        let gradient = SkeletonGradient(baseColor: baseColor, secondaryColor: secondaryColor)
+        
+        // show skeleton view
+        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
+        self.tableView.showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation, transition: .crossDissolve(0.25))
+        
+        fetchStreamViewers(streamInfo: streamData) {}
+    }
+    
     // MARK: - ACTIONS
     
-    @objc private func mqttViewerRemovedByInitiator(notification: NSNotification) {
-        
-//        guard let viewerData = notification.userInfo?["data"] as? ViewerRemoveEvent,
-//              viewerData.streamId.unwrap == streamData?.streamId.unwrap,
-//              viewerExists(withId: viewerData.viewerId.unwrap)
-//        else { return }
-//        
-//        self.viewers.removeAll { viewers in
-//            viewers.viewerId == viewerData.viewerId
-//        }
-        
-    }
+    @objc private func mqttViewerRemovedByInitiator(notification: NSNotification) {}
     
     @objc private func mqttStreamStopped(notification: NSNotification) {
         self.dismiss(animated: true)
     }
     
-    @objc private func mqttViewerJoined(notification: NSNotification) {
-        
-//        guard let viewerData = notification.userInfo?["data"] as? ViewerJoinEvent,
-//              viewerData.streamId.unwrap == streamData?.streamId.unwrap,
-//              !viewerExists(withId: viewerData.viewerId.unwrap)
-//        else { return }
-//        
-//        let viewer = ISMViewer(viewerId: viewerData.viewerId.unwrap, identifier: viewerData.viewerIdentifier.unwrap, name: viewerData.viewerName.unwrap, imagePath: viewerData.viewerProfilePic.unwrap, joinTime: viewerData.timestamp.unwrap)
-//        
-//        self.viewers.append(viewer)
-
-    }
+    @objc private func mqttViewerJoined(notification: NSNotification) {}
     
-    @objc private func mqttViewerRemoved(notification: NSNotification) {
-//        guard let viewerData = notification.userInfo?["data"] as? ViewerRemoveEvent,
-//              viewerData.streamId.unwrap == streamData?.streamId.unwrap,
-//              viewerExists(withId: viewerData.viewerId.unwrap)
-//        else { return }
-//
-//        self.viewers.removeAll { viewers in
-//            viewers.viewerId == viewerData.viewerId
-//        }
-    }
+    @objc private func mqttViewerRemoved(notification: NSNotification) {}
     
     @objc func refreshAction(){
-        self.skip = 0
-        self.viewers.removeAll()
-        self.totalViewerCount = 0
-        fetchStreamViewers(streamInfo: streamData) {}
+        loadData(isRefreshed: true)
     }
     
 }
 
-extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataSource {
+extension StreamViewerChildViewController: UITableViewDelegate, SkeletonTableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewers.count
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "StreamViewerTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -251,9 +225,7 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
             if indexPath.row == self.viewers.count - 1 {
                 if totalViewerCount > self.viewers.count {
                     // call for more
-                    if let streamData = streamData {
-                        fetchStreamViewers(streamInfo: streamData) {}
-                    }
+                    fetchStreamViewers(streamInfo: streamData) {}
                 }
             }
         }
@@ -293,7 +265,10 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
         guard let streamId = streamInfo?.streamId else { return }
 
         /// Start loading
-        isometrik?.getIsometrik().fetchViewers(streamId: streamId, skip: self.skip, limit: 10, completionHandler: { viewerData in
+        isometrik.getIsometrik().fetchViewers(streamId: streamId, skip: self.skip, limit: 10, completionHandler: { viewerData in
+            
+            self.refreshControl.endRefreshing()
+            self.tableView.hideSkeleton(transition: .crossDissolve(0.25))
             
             guard let viewers = viewerData.viewers else { return }
             
@@ -316,7 +291,9 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
             
         }, failure: { error in
             
-            print(error)
+            self.refreshControl.endRefreshing()
+            self.tableView.hideSkeleton(transition: .crossDissolve(0.25))
+
             self.viewers = []
             self.defaultView.isHidden = false
             self.updateViewerCount_callback?(0)
@@ -327,7 +304,7 @@ extension StreamViewerChildViewController: UITableViewDelegate, UITableViewDataS
     
     func removeViewerByInitiator(initiatorId: String, initiatorName: String, streamId: String, viewerId: String) {
         
-        isometrik?.getIsometrik().removeViewer(streamId: streamId, viewerId: viewerId, initiatorId: initiatorId, completionHandler: { _ in
+        isometrik.getIsometrik().removeViewer(streamId: streamId, viewerId: viewerId, initiatorId: initiatorId, completionHandler: { _ in
         }, failure: { error in
             print(error)
         })
@@ -342,19 +319,19 @@ extension StreamViewerChildViewController: StreamViewerActionDelegate {
     
     func didActionButtonTapped(with index: Int, with data: ISMViewer, actionType: ActionType) {
         
-        let userAccess = isometrik?.getUserSession().getUserAccess()
+        let userAccess = isometrik.getUserSession().getUserAccess()
         if userAccess != .moderator {
             return
         }
         
-        guard let streamId = streamData?.streamId,
+        guard let streamId = streamData.streamId,
               let viewerId = viewers[index].viewerId  else { return }
         
-        let firstName = isometrik?.getUserSession().getFirstName()
-        let lastName = isometrik?.getUserSession().getLastName()
+        let firstName = isometrik.getUserSession().getFirstName()
+        let lastName = isometrik.getUserSession().getLastName()
         let fullName = "\(firstName ?? "") \(lastName ?? "")"
         
-        self.removeViewerByInitiator(initiatorId: isometrik?.getUserSession().getUserId() ?? "", initiatorName: fullName,streamId: streamId, viewerId: viewerId)
+        self.removeViewerByInitiator(initiatorId: isometrik.getUserSession().getUserId() ?? "", initiatorName: fullName,streamId: streamId, viewerId: viewerId)
         
         self.tableView.beginUpdates()
         

@@ -453,17 +453,13 @@ extension StreamViewController: StreamCellActionDelegate {
         else { return }
         
         let userType = viewModel.streamUserType
-//        let streamStatus = LiveStreamStatus(rawValue: streamData.status ?? "SCHEDULED")
-//        
-//        if streamStatus == .scheduled {
-//            return
-//        }
         
-        let controller = StreamViewerChildViewController()
+        let controller = StreamViewerChildViewController(
+            isometrik: isometrik,
+            streamData: streamData,
+            userType: userType
+        )
         
-        controller.isometrik = isometrik
-        controller.streamData = streamData
-        controller.userType = userType
         controller.modalPresentationStyle = .pageSheet
         
         controller.updateViewerCount_callback = { [weak self] (viewersCount) in

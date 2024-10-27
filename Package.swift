@@ -24,7 +24,8 @@ let package = Package(
         .package(url: "https://github.com/airbnb/lottie-ios", from: "4.4.3"),
         .package(url: "https://github.com/emqx/CocoaMQTT", from: "2.1.6"),
         .package(url: "https://github.com/onevcat/Kingfisher", from: "7.12.0"),
-        .package(url: "https://github.com/kasketis/netfox", from: "1.0.0")
+        .package(url: "https://github.com/kasketis/netfox", from: "1.0.0"),
+        .package(url: "https://github.com/Juanpe/SkeletonView", from: "1.31.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -42,7 +43,8 @@ let package = Package(
                 "IsometrikStream",
                 .product(name: "Lottie", package: "lottie-ios"),
                 .product(name: "Kingfisher", package: "kingfisher"),
-                .product(name: "netfox", package: "netfox")
+                .product(name: "netfox", package: "netfox"),
+                .product(name: "SkeletonView", package: "SkeletonView")
             ],
             resources: [
                 .process("Resources")

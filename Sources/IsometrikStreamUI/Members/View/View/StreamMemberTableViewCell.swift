@@ -8,6 +8,7 @@
 import UIKit
 import IsometrikStream
 import Kingfisher
+import SkeletonView
 
 protocol StreamMemberListActionDelegate {
     func didkickoutMemberTapped(member: ISMMember)
@@ -44,6 +45,7 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTapped))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGesture)
+        imageView.isSkeletonable = true
         
         return imageView
     }()
@@ -59,6 +61,7 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fill
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -67,6 +70,8 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.skeletonTextNumberOfLines = 2
         return label
     }()
     
@@ -77,6 +82,8 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -87,6 +94,7 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         view.layer.cornerCurve = .continuous
         view.layer.cornerRadius = 5
         view.isHidden = true
+        view.isSkeletonable = true
         return view
     }()
     
@@ -101,6 +109,7 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
         button.backgroundColor = appearance.colors.appColor
         button.addTarget(self, action:  #selector(userTypeTapped), for: .touchUpInside)
         button.isHidden = true
+        button.isSkeletonable = true
         return button
     }()
     
@@ -120,15 +129,19 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        addSubview(userDefaultProfile)
-        addSubview(userProfile)
-        addSubview(userInfoStackView)
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
+        contentView.addSubview(userDefaultProfile)
+        contentView.addSubview(userProfile)
+        contentView.addSubview(userInfoStackView)
         
         userInfoStackView.addArrangedSubview(titleLabel)
         userInfoStackView.addArrangedSubview(subtitleLabel)
         
-        addSubview(userType)
-        addSubview(statusView)
+        contentView.addSubview(userType)
+        contentView.addSubview(statusView)
     }
     
     func setupConstraints(){

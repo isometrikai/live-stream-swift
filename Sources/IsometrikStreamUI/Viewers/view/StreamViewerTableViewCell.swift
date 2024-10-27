@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import IsometrikStream
+import SkeletonView
 
 protocol StreamViewerActionDelegate {
     func didActionButtonTapped(with index: Int, with data: ISMViewer, actionType: ActionType)
@@ -45,6 +46,7 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.isSkeletonable = true
         return imageView
     }()
     
@@ -53,6 +55,7 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.distribution = .fill
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -61,6 +64,10 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.linesCornerRadius = 3
+        label.lastLineFillPercent = 70
+        label.skeletonTextNumberOfLines = 2
         return label
     }()
     
@@ -70,6 +77,8 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -79,6 +88,8 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h8)
         label.numberOfLines = 0
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -92,6 +103,8 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
         button.layer.cornerRadius = 15
         button.backgroundColor = appearance.colors.appColor
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        button.isSkeletonable = true
+        button.isHiddenWhenSkeletonIsActive = true
         return button
     }()
     
@@ -111,16 +124,20 @@ class StreamViewerTableViewCell: UITableViewCell, ISMAppearanceProvider {
     // MARK: - FUNTIONS
     
     func setupViews(){
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
         self.backgroundColor = .clear
-        addSubview(defaultProfile)
-        addSubview(userProfile)
-        addSubview(userInfoStackView)
+        contentView.addSubview(defaultProfile)
+        contentView.addSubview(userProfile)
+        contentView.addSubview(userInfoStackView)
         
         userInfoStackView.addArrangedSubview(titleLabel)
         userInfoStackView.addArrangedSubview(subtitleLabel)
         userInfoStackView.addArrangedSubview(joiningLabel)
         
-        addSubview(actionButton)
+        contentView.addSubview(actionButton)
     }
     
     func setupConstraints(){

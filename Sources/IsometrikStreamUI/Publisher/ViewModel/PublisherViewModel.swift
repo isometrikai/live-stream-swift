@@ -55,7 +55,7 @@ class PublisherViewModel {
         } failure: { error in
             switch error{
             case .noResultsFound(_):
-                // handle noresults found here
+                completion(.failure(msg: "not result found"))
                 break
             case .invalidResponse:
                 completion(.failure(msg: "CoPublish Error : Invalid Response"))

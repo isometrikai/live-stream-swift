@@ -7,6 +7,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
 
@@ -28,6 +29,7 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
         tableView.register(StreamMemberTableViewCell.self, forCellReuseIdentifier: "StreamMemberTableViewCell")
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
+        tableView.isSkeletonable = true
         return tableView
     }()
     
@@ -48,6 +50,8 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        
+        tableView.rowHeight = 70
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,7 +61,6 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     init(viewModel: StreamMemberViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-
     }
     
     required init?(coder: NSCoder) {
@@ -89,7 +92,21 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func loadStreamMembers(){
+        
+        let baseColor = UIColor.colorWithHex(color: "#2C2C2C")
+        let secondaryColor = UIColor.colorWithHex(color: "#1E1E1E")
+        let accentColor = UIColor.colorWithHex(color: "#3A3A3A")
+
+        let gradient = SkeletonGradient(baseColor: baseColor, secondaryColor: secondaryColor)
+        
+        // show skeleton view
+        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
+        self.tableView.showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation, transition: .crossDissolve(0.25))
+        
         viewModel.getStreamMembers { result in
+            
+            self.tableView.hideSkeleton(transition: .crossDissolve(0.25))
+            
             switch result {
             case .success:
                 DispatchQueue.main.async {
@@ -113,10 +130,14 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     
 }
 
-extension StreamMembersViewController: UITableViewDelegate, UITableViewDataSource {
+extension StreamMembersViewController: UITableViewDelegate, SkeletonTableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.memberList.count
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "StreamMemberTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

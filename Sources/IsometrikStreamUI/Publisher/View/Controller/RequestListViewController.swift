@@ -7,6 +7,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class RequestListViewController: UIViewController, ISMAppearanceProvider {
 
@@ -35,13 +36,14 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
         tableview.dataSource = self
         tableview.backgroundColor = .clear
         tableview.register(StreamRequestListTableViewCell.self, forCellReuseIdentifier: "StreamRequestListTableViewCell")
+        tableview.isSkeletonable = true
         return tableview
     }()
     
     lazy var defaultView: StreamDefaultEmptyView = {
         let view = StreamDefaultEmptyView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.isHidden = false
+        view.isHidden = true
         view.defaultImageView.image = appearance.images.noViewers
         view.defaultLabel.text = "No Requests Found"
         return view
@@ -53,6 +55,8 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        
+        requestListTableView.rowHeight = 70
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,8 +128,22 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func loadRequests() {
+        
+        
+        let baseColor = UIColor.colorWithHex(color: "#2C2C2C")
+        let secondaryColor = UIColor.colorWithHex(color: "#1E1E1E")
+        let accentColor = UIColor.colorWithHex(color: "#3A3A3A")
+
+        let gradient = SkeletonGradient(baseColor: baseColor, secondaryColor: secondaryColor)
+        
+        // show skeleton view
+        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
+        requestListTableView.showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation, transition: .crossDissolve(0.25))
 
         viewModel.getRequestList { result in
+            
+            self.requestListTableView.hideSkeleton(transition: .crossDissolve(0.25))
+            
             switch result {
             case .success:
                 DispatchQueue.main.async{
@@ -134,7 +152,7 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
                 }
  
             case let .failure(msg):
-                
+                self.reloadUI()
                 self.view.showToast(message: msg)
             }
         }
@@ -212,10 +230,14 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
 
 }
 
-extension RequestListViewController: UITableViewDelegate, UITableViewDataSource {
+extension RequestListViewController: UITableViewDelegate, SkeletonTableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.requestList.count
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "StreamRequestListTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

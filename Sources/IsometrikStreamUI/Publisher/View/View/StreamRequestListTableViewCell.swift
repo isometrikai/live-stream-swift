@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import IsometrikStream
+import SkeletonView
 
 protocol StreamRequestListActionDelegate {
     func didAcceptActionTapped(_ index: Int)
@@ -37,6 +38,7 @@ class StreamRequestListTableViewCell: UITableViewCell, ISMAppearanceProvider {
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 25
+        imageView.isSkeletonable = true
         return imageView
     }()
     
@@ -53,6 +55,8 @@ class StreamRequestListTableViewCell: UITableViewCell, ISMAppearanceProvider {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.spacing = 5
+        stackView.isSkeletonable = true
+        stackView.isHiddenWhenSkeletonIsActive = true
         return stackView
     }()
     
@@ -86,6 +90,8 @@ class StreamRequestListTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
+        label.isSkeletonable = true
+        label.skeletonTextNumberOfLines = 2
         return label
     }()
     
@@ -112,14 +118,17 @@ class StreamRequestListTableViewCell: UITableViewCell, ISMAppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
         backgroundColor = .clear
-        addSubview(defaultImageView)
-        addSubview(userProfileImage)
-        addSubview(infoLabel)
-        addSubview(actionStackView)
+        contentView.addSubview(defaultImageView)
+        contentView.addSubview(userProfileImage)
+        contentView.addSubview(infoLabel)
+        contentView.addSubview(actionStackView)
         actionStackView.addArrangedSubview(acceptButton)
         actionStackView.addArrangedSubview(declineButton)
-        addSubview(statusLabelInfo)
+        contentView.addSubview(statusLabelInfo)
     }
     
     func setupContraints(){
