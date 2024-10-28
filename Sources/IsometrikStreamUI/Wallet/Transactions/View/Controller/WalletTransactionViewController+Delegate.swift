@@ -1,11 +1,16 @@
 
 import UIKit
+import SkeletonView
 
-extension WalletTransactionViewController: UITableViewDelegate, UITableViewDataSource {
+extension WalletTransactionViewController: UITableViewDelegate, SkeletonTableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.transactions.count
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "WalletTransactionTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class RestreamChannelsViewController: UIViewController, ISMAppearanceProvider {
 
@@ -55,6 +56,7 @@ class RestreamChannelsViewController: UIViewController, ISMAppearanceProvider {
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
+        tableView.isSkeletonable = true
         return tableView
     }()
     
@@ -65,6 +67,8 @@ class RestreamChannelsViewController: UIViewController, ISMAppearanceProvider {
         setupViews()
         setupConstraints()
         loadData()
+        
+        restreamChannelTableView.rowHeight = 50
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,11 +117,11 @@ class RestreamChannelsViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func loadData(){
-        DispatchQueue.main.async {
-            CustomLoader.shared.startLoading()
-        }
+       
+        self.restreamChannelTableView.showSkeleton(usingColor: .clouds, transition: .crossDissolve(0.5))
+        
         viewModel.getRestreamChannels { success, error in
-            CustomLoader.shared.stopLoading()
+            self.restreamChannelTableView.hideSkeleton(transition: .crossDissolve(0.5))
             if error == nil {
                 self.restreamChannelTableView.reloadData()
             } else {

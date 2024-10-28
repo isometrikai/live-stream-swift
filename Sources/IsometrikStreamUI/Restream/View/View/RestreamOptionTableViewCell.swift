@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class RestreamOptionTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
@@ -23,6 +24,7 @@ class RestreamOptionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let view = GoLiveCustomToggleView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.activeColor = .black
+        view.isSkeletonable = true
         return view
     }()
 
@@ -31,6 +33,7 @@ class RestreamOptionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         image.translatesAutoresizingMaskIntoConstraints = false
         image.image = appearance.images.arrowRight.withRenderingMode(.alwaysTemplate)
         image.tintColor = .black.withAlphaComponent(0.3)
+        image.isSkeletonable = true
         return image
     }()
     
@@ -50,8 +53,11 @@ class RestreamOptionTableViewCell: UITableViewCell, ISMAppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        addSubview(optionHeader)
-        addSubview(trailingImage)
+        backgroundColor = .clear
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        contentView.addSubview(optionHeader)
+        contentView.addSubview(trailingImage)
     }
     
     func setupConstraints(){

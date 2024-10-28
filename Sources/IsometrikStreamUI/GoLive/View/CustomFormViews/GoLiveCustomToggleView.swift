@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SkeletonView
 
 class GoLiveCustomToggleView: UIView, ISMAppearanceProvider {
 
@@ -39,6 +40,8 @@ class GoLiveCustomToggleView: UIView, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 20
         return imageView
     }()
     
@@ -48,6 +51,8 @@ class GoLiveCustomToggleView: UIView, ISMAppearanceProvider {
         label.text = "Use Persistent RTMP Stream Key".localized
         label.font = appearance.font.getFont(forTypo: .h6)
         label.textColor = .white
+        label.isSkeletonable = true
+        label.linesCornerRadius = 3
         return label
     }()
     
@@ -72,6 +77,7 @@ class GoLiveCustomToggleView: UIView, ISMAppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
+        isSkeletonable = true
         addSubview(toggleImageView)
         addSubview(toggleTitleLabel)
         addSubview(actionButton)

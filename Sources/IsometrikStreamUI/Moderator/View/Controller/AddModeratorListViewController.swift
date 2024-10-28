@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
 
@@ -37,6 +38,7 @@ class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
         tableview.register(DynamicUserInfoTableViewCell.self, forCellReuseIdentifier: "DynamicUserInfoTableViewCell")
         tableview.backgroundColor = .clear
         tableview.separatorColor = .lightGray.withAlphaComponent(0.2)
+        tableview.isSkeletonable = true
         return tableview
     }()
     
@@ -82,6 +84,8 @@ class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        
+        userListTableView.rowHeight = 70
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,11 +143,9 @@ class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func fetchUsers(withSearchString: String? = nil) {
-        DispatchQueue.main.async {
-            CustomLoader.shared.startLoading()
-        }
+        userListTableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
         viewModel.getUserList(searchString: withSearchString) { response in
-            CustomLoader.shared.stopLoading()
+            self.userListTableView.hideSkeleton(transition: .crossDissolve(0.25))
             self.searchBarView.stopAnimating()
             switch response {
                 case .success:
@@ -298,7 +300,7 @@ class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
 
 }
 
-extension AddModeratorListViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+extension AddModeratorListViewController: UITableViewDelegate, SkeletonTableViewDataSource, UIScrollViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if viewModel.isSearchingUser {
@@ -306,6 +308,10 @@ extension AddModeratorListViewController: UITableViewDelegate, UITableViewDataSo
         } else {
             return viewModel.userList.count
         }
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "DynamicUserInfoTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

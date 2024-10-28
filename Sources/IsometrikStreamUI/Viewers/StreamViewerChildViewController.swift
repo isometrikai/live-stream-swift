@@ -168,16 +168,7 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
         self.viewers.removeAll()
         self.totalViewerCount = 0
         
-        let baseColor = UIColor.colorWithHex(color: "#2C2C2C")
-        let secondaryColor = UIColor.colorWithHex(color: "#1E1E1E")
-        let accentColor = UIColor.colorWithHex(color: "#3A3A3A")
-
-        let gradient = SkeletonGradient(baseColor: baseColor, secondaryColor: secondaryColor)
-        
-        // show skeleton view
-        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
-        self.tableView.showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation, transition: .crossDissolve(0.25))
-        
+        self.tableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
         fetchStreamViewers(streamInfo: streamData) {}
     }
     

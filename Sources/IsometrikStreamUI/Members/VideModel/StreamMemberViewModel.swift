@@ -39,7 +39,7 @@ class StreamMemberViewModel {
         }failure: { error in
             switch error{
             case .noResultsFound(_):
-                // handle noresults found here
+                completion(.failure(msg: "no result found"))
                 break
             case .invalidResponse:
                 DispatchQueue.main.async {

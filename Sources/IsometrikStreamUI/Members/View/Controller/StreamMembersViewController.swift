@@ -92,16 +92,7 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func loadStreamMembers(){
-        
-        let baseColor = UIColor.colorWithHex(color: "#2C2C2C")
-        let secondaryColor = UIColor.colorWithHex(color: "#1E1E1E")
-        let accentColor = UIColor.colorWithHex(color: "#3A3A3A")
-
-        let gradient = SkeletonGradient(baseColor: baseColor, secondaryColor: secondaryColor)
-        
-        // show skeleton view
-        let animation = SkeletonAnimationBuilder().makeSlidingAnimation(withDirection: .topLeftBottomRight)
-        self.tableView.showAnimatedGradientSkeleton(usingGradient: gradient, animation: animation, transition: .crossDissolve(0.25))
+        self.tableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
         
         viewModel.getStreamMembers { result in
             
@@ -123,6 +114,7 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
                
                 
             case let .failure(msg):
+                self.defaultView.isHidden = false
                 self.view.showToast(message: msg)
             }
         }

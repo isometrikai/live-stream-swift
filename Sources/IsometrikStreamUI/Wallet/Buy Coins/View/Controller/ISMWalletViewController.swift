@@ -7,6 +7,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 public final class ISMWalletViewController: UIViewController, ISMAppearanceProvider {
 
@@ -30,11 +31,12 @@ public final class ISMWalletViewController: UIViewController, ISMAppearanceProvi
         return view
     }()
     
-    lazy var walletBalanceHeaderView: WalletBalanceHeaderView = {
-        let view = WalletBalanceHeaderView()
+    lazy var walletBalanceHeaderView: ISMWalletBalanceHeaderView = {
+        let view = ISMWalletBalanceHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.coinFeatureView.featureActionButton.addTarget(self, action: #selector(transactionButtonTapped(_:)), for: .touchUpInside)
         view.moneyFeatureView.featureActionButton.addTarget(self, action: #selector(transactionButtonTapped(_:)), for: .touchUpInside)
+        view.isSkeletonable = true
         return view
     }()
     
@@ -56,6 +58,7 @@ public final class ISMWalletViewController: UIViewController, ISMAppearanceProvi
         collectionView.contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         collectionView.backgroundColor = .clear
         collectionView.delaysContentTouches = false
+        collectionView.isSkeletonable = true
         
         return collectionView
     }()
@@ -115,7 +118,14 @@ public final class ISMWalletViewController: UIViewController, ISMAppearanceProvi
     }
     
     func getPlans(){
+        
+        self.walletBalanceHeaderView.showAnimatedSkeleton(usingColor: .clouds, transition: .crossDissolve(0.5))
+        self.coinPlanCollectionView.showAnimatedSkeleton(usingColor: .clouds, transition: .crossDissolve(0.5))
+        
         viewModel.getCoinPlans { success, error in
+            
+            self.walletBalanceHeaderView.hideSkeleton(transition: .crossDissolve(0.5))
+            
             if success {
                 self.coinPlanCollectionView.reloadData()
                 self.setupWalletBalance(currencyType: .coin)
@@ -128,17 +138,14 @@ public final class ISMWalletViewController: UIViewController, ISMAppearanceProvi
     }
     
     func setupWalletBalance(currencyType: ISMWalletCurrencyType){
-        
         walletBalanceHeaderView.configureView(balanceData: nil, currencyType: currencyType)
         
-        CustomLoader.shared.startLoading()
         viewModel.getWalletBalance(currencyType: currencyType) { success, error in
-            CustomLoader.shared.stopLoading()
+            self.coinPlanCollectionView.hideSkeleton(transition: .crossDissolve(0.5))
             if success {
                 self.walletBalanceHeaderView.configureView(balanceData: self.viewModel.walletBalance, currencyType: currencyType)
             }
         }
-        
     }
     
     // MARK: - ACTIONS

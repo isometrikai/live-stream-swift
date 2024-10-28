@@ -7,6 +7,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
@@ -16,6 +17,8 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 20
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 20
         return imageView
     }()
     
@@ -25,6 +28,7 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         stackView.axis = .vertical
         stackView.spacing = 2
         stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -33,6 +37,10 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .gray
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.skeletonTextNumberOfLines = 2
+        label.lastLineFillPercent = 60
+        label.linesCornerRadius = 3
         return label
     }()
     
@@ -42,6 +50,8 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.textColor = .black
         label.font = appearance.font.getFont(forTypo: .h6)
         label.numberOfLines = 2
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -50,6 +60,8 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -58,6 +70,8 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h5)
         button.setTitleColor(.black, for: .normal)
+        button.isSkeletonable = true
+        button.skeletonCornerRadius = 5
         return button
     }()
     
@@ -73,17 +87,25 @@ class WalletTransactionTableViewCell: UITableViewCell, ISMAppearanceProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        transactionTypeImage.layer.borderWidth = 0
+    }
+    
     // MARK: FUNCTIONS -
     
     func setUpViews(){
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
         backgroundColor = .clear
-        addSubview(transactionTypeImage)
-        addSubview(infoStackView)
+        contentView.addSubview(transactionTypeImage)
+        contentView.addSubview(infoStackView)
         infoStackView.addArrangedSubview(titleLabel)
         infoStackView.addArrangedSubview(subtitleLabel)
         infoStackView.addArrangedSubview(timeLabel)
         
-        addSubview(amountLabel)
+        contentView.addSubview(amountLabel)
     }
     
     func setUpConstraints(){

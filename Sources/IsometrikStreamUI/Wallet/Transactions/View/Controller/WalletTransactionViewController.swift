@@ -7,6 +7,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
 
@@ -98,6 +99,8 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
         
         transactionTableView.delegate = self
         transactionTableView.dataSource = self
+        transactionTableView.isSkeletonable = true
+        transactionTableView.rowHeight = 90
         
         transactionTableView.register(WalletTransactionTableViewCell.self, forCellReuseIdentifier: "WalletTransactionTableViewCell")
         
@@ -141,7 +144,7 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
     func loadData(isRefreshing: Bool = false, showLoader: Bool = false){
         
         if showLoader {
-            CustomLoader.shared.startLoading()
+            self.transactionTableView.showAnimatedSkeleton(usingColor: .clouds, transition: .crossDissolve(0.2))
             self.defaultView.isHidden = true
         }
         
@@ -153,7 +156,7 @@ class WalletTransactionViewController: UIViewController, ISMAppearanceProvider {
         }
         
         viewModel.getTransactions { success, error in
-            CustomLoader.shared.stopLoading()
+            self.transactionTableView.hideSkeleton(transition: .crossDissolve(0.2))
             self.viewModel.refreshControl.endRefreshing()
             if success {
                 if self.viewModel.transactions.count > 0 {

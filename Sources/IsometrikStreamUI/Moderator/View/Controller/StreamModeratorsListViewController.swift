@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 protocol StreamModeratorsListActionDelegate {
     func openListForSelectingModerators()
@@ -33,6 +34,7 @@ class StreamModeratorsListViewController: UIViewController, ISMAppearanceProvide
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.refreshControl = refreshControl
+        tableView.isSkeletonable = true
         return tableView
     }()
     
@@ -81,6 +83,8 @@ class StreamModeratorsListViewController: UIViewController, ISMAppearanceProvide
         super.viewDidLoad()
         setupViews()
         setupConstraints()
+        
+        tableView.rowHeight = 70
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,12 +93,10 @@ class StreamModeratorsListViewController: UIViewController, ISMAppearanceProvide
         viewModel.skip = 0
         viewModel.moderatorList.removeAll()
         
-        DispatchQueue.main.async {
-            CustomLoader.shared.startLoading()
-        }
+        self.tableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.5))
         viewModel.getModerators { [weak self] in
             guard let self else { return }
-            CustomLoader.shared.stopLoading()
+            self.tableView.hideSkeleton()
             self.tableView.reloadData()
             self.headerView.headerTitle.text = "Moderators".localized + " (\(self.viewModel.moderatorList.count))"
         }
@@ -170,10 +172,14 @@ class StreamModeratorsListViewController: UIViewController, ISMAppearanceProvide
 
 }
 
-extension StreamModeratorsListViewController: UITableViewDelegate, UITableViewDataSource {
+extension StreamModeratorsListViewController: UITableViewDelegate, SkeletonTableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.moderatorList.count
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "DynamicUserInfoTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

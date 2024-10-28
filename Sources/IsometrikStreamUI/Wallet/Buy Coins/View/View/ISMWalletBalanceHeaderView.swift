@@ -7,8 +7,9 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
-class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
+class ISMWalletBalanceHeaderView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
@@ -23,6 +24,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         stackView.layer.cornerRadius = 10
         stackView.layer.masksToBounds = true
         stackView.backgroundColor = appearance.colors.appLightGray
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -33,6 +35,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.featureSubtitleImageView.image = appearance.images.coin
         view.featureActionButton.tag = ISMWalletCurrencyType.coin.rawValue
         view.backgroundColor = .white
+        view.isSkeletonable = true
         return view
     }()
     
@@ -43,6 +46,7 @@ class WalletBalanceHeaderView: UIView, ISMAppearanceProvider {
         view.featureSubtitleImageView.image = appearance.images.walletMoney
         view.featureActionButton.tag = ISMWalletCurrencyType.money.rawValue
         view.backgroundColor = .white
+        view.isSkeletonable = true
         return view
     }()
     
@@ -140,6 +144,7 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
         stackView.axis = .vertical
         stackView.spacing = 5
         stackView.distribution = .fill
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -148,6 +153,8 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = appearance.colors.appGray
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.linesCornerRadius = 5
         return label
     }()
     
@@ -156,6 +163,7 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
         stackView.distribution = .fill
         stackView.axis = .horizontal
         stackView.spacing = 8
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -163,6 +171,8 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 12.5
         return imageView
     }()
     
@@ -171,6 +181,9 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
         label.font = appearance.font.getFont(forTypo: .h3)
+        label.isSkeletonable = true
+        label.linesCornerRadius = 5
+        label.lastLineFillPercent = 60
         return label
     }()
     
@@ -183,6 +196,8 @@ class BalanceFeatureView: UIView, ISMAppearanceProvider {
         button.setTitleColor(appearance.colors.appSecondary, for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h6)
         button.layer.cornerRadius = 17.5
+        button.isSkeletonable = true
+        button.isHiddenWhenSkeletonIsActive = true
         return button
     }()
     

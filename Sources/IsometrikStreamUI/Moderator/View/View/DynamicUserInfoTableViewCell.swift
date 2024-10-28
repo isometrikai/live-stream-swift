@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import IsometrikStream
+import SkeletonView
 
 class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
@@ -31,6 +32,8 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.2).cgColor
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 25
         return imageView
     }()
     
@@ -48,6 +51,7 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 0
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -56,6 +60,10 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h5)
+        label.isSkeletonable = true
+        label.skeletonTextNumberOfLines = 2
+        label.lastLineFillPercent = 70
+        label.linesCornerRadius = 3
         return label
     }()
     
@@ -64,6 +72,8 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lightGray
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -78,6 +88,8 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        button.isSkeletonable = true
+        button.skeletonCornerRadius = 17.5
         return button
     }()
     
@@ -97,15 +109,19 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        backgroundColor = .clear
-        addSubview(defaultUserProfilePicture)
-        addSubview(userProfilePicture)
         
-        addSubview(infoStackView)
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
+        backgroundColor = .clear
+        contentView.addSubview(defaultUserProfilePicture)
+        contentView.addSubview(userProfilePicture)
+        
+        contentView.addSubview(infoStackView)
         infoStackView.addArrangedSubview(titleLabel)
         infoStackView.addArrangedSubview(subtitleLabel)
         
-        addSubview(actionButton)
+        contentView.addSubview(actionButton)
     }
     
     func setupConstraints(){

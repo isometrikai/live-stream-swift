@@ -32,9 +32,6 @@ final public class ISMWalletViewModel {
     }
     
     func getCoinPlans(completion: @escaping(_ success: Bool, _ error: String?) -> Void){
-        DispatchQueue.main.async {
-            CustomLoader.shared.startLoading()
-        }
         isometrik.getIsometrik().getCurrencyPlans { response in
             
             self.coinPlansData = response

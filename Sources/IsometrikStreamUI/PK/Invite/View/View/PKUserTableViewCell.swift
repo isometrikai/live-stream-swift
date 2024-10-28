@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import IsometrikStream
+import SkeletonView
 
 class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
@@ -39,6 +40,8 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
         imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 25
         imageView.clipsToBounds = true
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 25
         return imageView
     }()
     
@@ -50,6 +53,7 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.spacing = 4
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -58,12 +62,17 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = appearance.font.getFont(forTypo: .h6)
+        label.isSkeletonable = true
+        label.skeletonTextNumberOfLines = 2
+        label.lastLineFillPercent = 70
         return label
     }()
     
     let subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -76,12 +85,14 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
         button.setTitle("Invite", for: .normal)
         button.titleLabel?.font = appearance.font.getFont(forTypo: .h8)
         button.setTitleColor(appearance.colors.appColor, for: .normal)
-        button.layer.borderWidth = 1
         button.layer.borderColor = appearance.colors.appColor.cgColor
         button.layer.cornerCurve = .continuous
         button.layer.cornerRadius = 15
         button.ismTapFeedBack()
         button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
+        
+        button.isSkeletonable = true
+        button.skeletonCornerRadius = 15
         
         return button
     }()
@@ -99,17 +110,27 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        actionButton.layer.borderWidth = 0
+    }
+    
     // MARK: - FUNCTIONS
     
     func setupViews(){
-        addSubview(userDefaultImage)
-        addSubview(userProfileImage)
         
-        addSubview(stackView)
+        backgroundColor = .clear
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
+        contentView.addSubview(userDefaultImage)
+        contentView.addSubview(userProfileImage)
+        
+        contentView.addSubview(stackView)
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(subtitleLabel)
         
-        addSubview(actionButton)
+        contentView.addSubview(actionButton)
     }
     
     func setupContraints(){
@@ -127,9 +148,10 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
             actionButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             actionButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             actionButton.heightAnchor.constraint(equalToConstant: 30),
-            actionButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            actionButton.widthAnchor.constraint(equalToConstant: 80),
             
             stackView.leadingAnchor.constraint(equalTo: userProfileImage.trailingAnchor, constant: 10),
+            stackView.trailingAnchor.constraint(equalTo: actionButton.leadingAnchor, constant: -10),
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             titleLabel.heightAnchor.constraint(equalToConstant: 17),
@@ -139,6 +161,8 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
     
     func manageData(){
         guard let data = data else { return }
+        
+        actionButton.layer.borderWidth = 1
         
         if data.profilePic.unwrap != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
             if let profileURL = URL(string: "\(data.profilePic.unwrap)") {

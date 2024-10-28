@@ -8,6 +8,7 @@
 import UIKit
 import IsometrikStream
 import StoreKit
+import SkeletonView
 
 class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
     
@@ -18,6 +19,7 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 8
         view.backgroundColor = appearance.colors.appLightGray
+        view.isSkeletonable = true
         return view
     }()
     
@@ -27,6 +29,8 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
         label.textAlignment = .center
         label.textColor = appearance.colors.appSecondary
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -34,6 +38,8 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 8
         return imageView
     }()
     
@@ -43,6 +49,8 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
         label.textAlignment = .center
         label.textColor = appearance.colors.appSecondary
         label.font = appearance.font.getFont(forTypo: .h8)
+        label.isSkeletonable = true
+        label.isHiddenWhenSkeletonIsActive = true
         return label
     }()
     
@@ -61,8 +69,12 @@ class CoinPlanCollectionViewCell: UICollectionViewCell, ISMAppearanceProvider {
     // MARK: FUNCTIONS -
     
     func setUpViews(){
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
         backgroundColor = .clear
-        addSubview(coverView)
+        contentView.addSubview(coverView)
         coverView.addSubview(coinLabel)
         coverView.addSubview(coinImage)
         coverView.addSubview(amountLabel)

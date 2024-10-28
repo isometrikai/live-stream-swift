@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SkeletonView
 
 class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
     
@@ -37,6 +38,7 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
         tableView.register(PKUserTableViewCell.self, forCellReuseIdentifier: "PKUserTableViewCell")
         tableView.separatorColor = .white.withAlphaComponent(0.3)
         tableView.backgroundColor = .clear
+        tableView.isSkeletonable = true
         return tableView
     }()
     
@@ -77,6 +79,8 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
         setupConstraints()
         loadData()
         addObservers()
+        
+        userTableView.rowHeight = 70
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -129,13 +133,13 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
     
     func loadData(for query: String = ""){
         
-        CustomLoader.shared.startLoading()
+        userTableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
         self.viewModel.streamUserList.removeAll()
         self.userTableView.reloadData()
         
         viewModel.getData(query: query) {
             DispatchQueue.main.async {
-                CustomLoader.shared.stopLoading()
+                self.userTableView.hideSkeleton(transition: .crossDissolve(0.25))
                 if self.viewModel.streamUserList.isEmpty {
                     self.defaultView.isHidden = false
                 } else {
@@ -171,10 +175,14 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
 }
 
 
-extension PKInviteListViewController: UITableViewDelegate, UITableViewDataSource {
+extension PKInviteListViewController: UITableViewDelegate, SkeletonTableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.streamUserList.count
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UITableView, cellIdentifierForRowAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "PKUserTableViewCell"
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
