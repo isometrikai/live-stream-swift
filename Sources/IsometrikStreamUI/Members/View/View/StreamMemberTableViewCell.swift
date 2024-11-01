@@ -53,6 +53,7 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
     let userDefaultProfile: CustomDefaultProfileView = {
         let imageView = CustomDefaultProfileView()
         imageView.layer.cornerRadius = 25
+        imageView.isSkeletonable = true
         return imageView
     }()
     

@@ -9,6 +9,7 @@
 import UIKit
 import Kingfisher
 import IsometrikStream
+import SkeletonView
 
 class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
     
@@ -30,6 +31,7 @@ class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
     let cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isSkeletonable = true
         return view
     }()
     
@@ -37,6 +39,8 @@ class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 2
         return imageView
     }()
     
@@ -47,6 +51,8 @@ class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
         label.text = "Group name"
         label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
+        label.isSkeletonable = true
+        label.skeletonTextLineHeight = .fixed(3)
         return label
     }()
     
@@ -73,10 +79,14 @@ class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
     // MARK: FUNCTIONS -
     
     func setUpViews(){
-        addSubview(cardView)
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
+        contentView.addSubview(cardView)
         cardView.addSubview(giftGroupImage)
         cardView.addSubview(groupTitle)
-        addSubview(dividerView)
+        contentView.addSubview(dividerView)
     }
     
     func setUpConstraints(){

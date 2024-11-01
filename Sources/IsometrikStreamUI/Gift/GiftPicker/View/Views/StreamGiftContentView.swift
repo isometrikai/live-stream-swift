@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SkeletonView
 
 class StreamGiftContentView: UIView {
     
@@ -21,30 +22,15 @@ class StreamGiftContentView: UIView {
     let giftGroupHeaderView: StreamGiftContentGroupHeaderView = {
         let view = StreamGiftContentGroupHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isSkeletonable = true
         return view
     }()
     
     let giftContentItemView: StreamGiftContentItemsView = {
         let view = StreamGiftContentItemsView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isSkeletonable = true
         return view
-    }()
-    
-    let loaderView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .black.withAlphaComponent(0.1)
-        view.isHidden = true
-        return view
-    }()
-    
-    let indicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView()
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.style = .medium
-        indicator.color = .white
-        indicator.isHidden = true
-        return indicator
     }()
     
     // MARK: MAIN -
@@ -65,14 +51,9 @@ class StreamGiftContentView: UIView {
         addSubview(headerView)
         addSubview(giftGroupHeaderView)
         addSubview(giftContentItemView)
-        
-        addSubview(loaderView)
-        addSubview(indicator)
     }
     
     func setUpConstraints(){
-        loaderView.ism_pin(to: self)
-        indicator.ism_pin(to: self)
         NSLayoutConstraint.activate([
             
             headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -92,18 +73,6 @@ class StreamGiftContentView: UIView {
             
         ])
         
-    }
-    
-    func startAnimating(){
-        loaderView.isHidden = false
-        indicator.isHidden = false
-        indicator.startAnimating()
-    }
-    
-    func stopAnimating(){
-        loaderView.isHidden = true
-        indicator.isHidden = true
-        indicator.stopAnimating()
     }
     
 }

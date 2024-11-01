@@ -92,7 +92,7 @@ class StreamMembersViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func loadStreamMembers(){
-        self.tableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
+        self.tableView.showAnimatedSkeleton(usingColor: .white.withAlphaComponent(0.1), transition: .crossDissolve(0.25))
         
         viewModel.getStreamMembers { result in
             

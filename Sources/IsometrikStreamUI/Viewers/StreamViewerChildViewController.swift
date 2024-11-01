@@ -168,7 +168,7 @@ class StreamViewerChildViewController: UIViewController, ISMAppearanceProvider {
         self.viewers.removeAll()
         self.totalViewerCount = 0
         
-        self.tableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
+        self.tableView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.25))
         fetchStreamViewers(streamInfo: streamData) {}
     }
     

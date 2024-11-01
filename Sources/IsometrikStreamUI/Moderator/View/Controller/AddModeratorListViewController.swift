@@ -143,7 +143,7 @@ class AddModeratorListViewController: UIViewController, ISMAppearanceProvider {
     }
     
     func fetchUsers(withSearchString: String? = nil) {
-        userListTableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
+        userListTableView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.25))
         viewModel.getUserList(searchString: withSearchString) { response in
             self.userListTableView.hideSkeleton(transition: .crossDissolve(0.25))
             self.searchBarView.stopAnimating()

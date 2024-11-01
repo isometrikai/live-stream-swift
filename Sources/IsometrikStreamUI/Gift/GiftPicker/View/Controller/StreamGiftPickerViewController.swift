@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
 
@@ -23,6 +24,7 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
         
         view.giftGroupHeaderView.delegate = self
         view.giftContentItemView.delegate = self
+        view.isSkeletonable = true
         
         return view
     }()
@@ -38,7 +40,7 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
         super.viewDidLoad()
         setUpViews()
         setUpConstraints()
-        //loadDataInitially()
+        loadDataInitially()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,7 +48,7 @@ class StreamGiftPickerViewController: UIViewController, ISMAppearanceProvider {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        loadDataInitially()
+        //loadDataInitially()
     }
     
     required init?(coder: NSCoder) {

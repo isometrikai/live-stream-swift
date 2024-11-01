@@ -2,6 +2,7 @@
 import Foundation
 import AVFoundation
 import IsometrikStream
+import UIKit
 
 extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftItemActionProtocol {
     
@@ -51,12 +52,17 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
     
     func loadDataInitially(){
         
+        let groupCollection = contentView.giftGroupHeaderView.collectionView
+        let groupContentCollection = contentView.giftContentItemView.collectionView
+        
         let group = DispatchGroup()
         group.enter()
         
-        contentView.startAnimating()
+        groupCollection.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.25))
         
         viewModel.getGiftGroups { success, error in
+            
+            groupCollection.hideSkeleton(transition: .crossDissolve(0.25))
             
             if success {
                 if self.viewModel.giftGroup.count > 0 {
@@ -66,12 +72,7 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
                     self.contentView.giftGroupHeaderView.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: .centeredHorizontally)
                     
                     group.leave()
-                } else {
-                    self.contentView.stopAnimating()
                 }
-            } else {
-                self.contentView.stopAnimating()
-                // show error
             }
             
         }
@@ -81,7 +82,6 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
             guard let giftsForGroupData = self.viewModel.selectedGiftGroupData,
                   let giftGroupId = giftsForGroupData.id
             else {
-                self.contentView.stopAnimating()
                 return
             }
             
@@ -93,6 +93,7 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
     func loadGiftItemsForGroup(groupId id: String) {
         
         let giftData = self.viewModel.getGiftItemsForGroup(groupId: id)
+        let groupContentCollection = contentView.giftContentItemView.collectionView
         
         self.contentView.giftContentItemView.totalCount = giftData.1
         self.contentView.giftContentItemView.data = giftData.0
@@ -100,11 +101,12 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
         
         if giftData.0.isEmpty {
             
-            self.contentView.startAnimating()
+            groupContentCollection.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.25))
             
             // get from server
             self.viewModel.getGiftForGroups(giftGroupId: id) { success, error in
-                self.contentView.stopAnimating()
+                
+                groupContentCollection.hideSkeleton(transition: .crossDissolve(0.25))
                 if success {
                     let data = self.viewModel.getGiftItemsForGroup(groupId: id)
                     if data.0.isEmpty {
@@ -120,7 +122,7 @@ extension StreamGiftPickerViewController: GiftGroupActionProtocol, StreamGiftIte
         } else {
             
             // show saved items
-            self.contentView.stopAnimating()
+            groupContentCollection.hideSkeleton(transition: .crossDissolve(0.25))
             self.contentView.giftContentItemView.totalCount = giftData.1
             self.contentView.giftContentItemView.data = giftData.0
             

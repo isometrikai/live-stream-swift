@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 protocol StreamGiftItemActionProtocol {
     func callForNextPage(groupId: String)
@@ -43,7 +44,7 @@ class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
         collectionView.delaysContentTouches = false
         
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        
+        collectionView.isSkeletonable = true
         return collectionView
     }()
     
@@ -85,7 +86,15 @@ class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
 }
 
 
-extension StreamGiftContentItemsView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension StreamGiftContentItemsView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SkeletonCollectionViewDataSource {
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "StreamGiftGroupItemCell"
+    }
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 12
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count

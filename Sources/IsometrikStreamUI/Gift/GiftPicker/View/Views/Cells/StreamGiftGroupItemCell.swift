@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
     
@@ -22,6 +23,7 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
     let cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.isSkeletonable = true
         return view
     }()
     
@@ -29,6 +31,8 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
+        imageView.isSkeletonable = true
+        imageView.skeletonCornerRadius = 2
         return imageView
     }()
     
@@ -36,9 +40,11 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.text = "12 Coins"
+        label.text = ""
         label.font = appearance.font.getFont(forTypo: .h8)
         label.textAlignment = .center
+        label.isSkeletonable = true
+        label.skeletonTextLineHeight = .fixed(3)
         return label
     }()
     
@@ -57,7 +63,11 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
     // MARK: FUNCTIONS -
     
     func setUpViews(){
-        addSubview(cardView)
+        
+        isSkeletonable = true
+        contentView.isSkeletonable = true
+        
+        contentView.addSubview(cardView)
         cardView.addSubview(giftItemImage)
         cardView.addSubview(groupItemTitle)
     }

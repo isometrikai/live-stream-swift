@@ -129,7 +129,7 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
     
     func loadRequests() {
         
-        requestListTableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
+        requestListTableView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.25))
 
         viewModel.getRequestList { result in
             

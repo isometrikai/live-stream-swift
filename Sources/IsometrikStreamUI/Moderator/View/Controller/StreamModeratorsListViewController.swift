@@ -93,7 +93,7 @@ class StreamModeratorsListViewController: UIViewController, ISMAppearanceProvide
         viewModel.skip = 0
         viewModel.moderatorList.removeAll()
         
-        self.tableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.5))
+        self.tableView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.5))
         viewModel.getModerators { [weak self] in
             guard let self else { return }
             self.tableView.hideSkeleton()

@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 protocol GiftGroupActionProtocol {
     func giftGroupTapped(groupId: String, giftGroupTitle: String)
@@ -41,7 +42,7 @@ class StreamGiftContentGroupHeaderView: UIView {
         collectionView.backgroundColor = .clear
         collectionView.delaysContentTouches = false
         collectionView.allowsMultipleSelection = false
-        
+        collectionView.isSkeletonable = true
         return collectionView
     }()
     
@@ -84,7 +85,11 @@ class StreamGiftContentGroupHeaderView: UIView {
     
 }
 
-extension StreamGiftContentGroupHeaderView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension StreamGiftContentGroupHeaderView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, SkeletonCollectionViewDataSource {
+    
+    func collectionSkeletonView(_ skeletonView: UICollectionView, cellIdentifierForItemAt indexPath: IndexPath) -> ReusableCellIdentifier {
+        return "StreamGiftGroupCell"
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count

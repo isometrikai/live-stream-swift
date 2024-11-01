@@ -133,7 +133,7 @@ class PKInviteListViewController: UIViewController, ISMAppearanceProvider {
     
     func loadData(for query: String = ""){
         
-        userTableView.showAnimatedSkeleton(usingColor: .wetAsphalt, transition: .crossDissolve(0.25))
+        userTableView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#343434"), transition: .crossDissolve(0.25))
         self.viewModel.streamUserList.removeAll()
         self.userTableView.reloadData()
         
