@@ -33,6 +33,7 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
         imageView.contentMode = .scaleAspectFit
         imageView.isSkeletonable = true
         imageView.skeletonCornerRadius = 2
+        imageView.backgroundColor = .white.withAlphaComponent(0.1)
         return imageView
     }()
     

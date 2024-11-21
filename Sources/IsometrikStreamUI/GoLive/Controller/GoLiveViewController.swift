@@ -231,7 +231,6 @@ final public class GoLiveViewController: UIViewController {
         scheduleOption.isHidden = true
         dateTimeSelectorView.isHidden = true
         
-        
         footerView.bottomActionView.isHidden = true
         footerView.goLiveButtonBottomConstraint?.constant = -15
         

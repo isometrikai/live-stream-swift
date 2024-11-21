@@ -57,6 +57,12 @@ class GoLiveAddProductsView: UIView, ISMAppearanceProvider {
         return button
     }()
     
+    let customListView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var productCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +76,7 @@ class GoLiveAddProductsView: UIView, ISMAppearanceProvider {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         collectionView.backgroundColor = .clear
+        collectionView.isHidden = true
         return collectionView
     }()
     
@@ -92,7 +99,8 @@ class GoLiveAddProductsView: UIView, ISMAppearanceProvider {
         addSubview(headerView)
         headerView.addSubview(headerTitle)
         headerView.addSubview(addButton)
-        addSubview(productCollectionView)
+        addSubview(customListView)
+        //addSubview(productCollectionView)
     }
     
     func setupConstraints(){
@@ -108,10 +116,10 @@ class GoLiveAddProductsView: UIView, ISMAppearanceProvider {
             addButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
             addButton.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
             
-            productCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            productCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            productCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            productCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor)
+            customListView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            customListView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            customListView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            customListView.topAnchor.constraint(equalTo: headerView.bottomAnchor)
         ])
     }
 }

@@ -29,6 +29,11 @@ enum GoLivePremiumActionType {
     case free
 }
 
+public protocol GoliveAddProductListViewProvider {
+    func customAddProductListView() -> UIView
+    func updateAddProductListView(with data: Any)
+}
+
 typealias response = ((Bool) -> Void)
 
 final public class GoLiveViewModel {
@@ -40,6 +45,7 @@ final public class GoLiveViewModel {
     
     var isometrik: IsometrikSDK
     var externalActionDelegate: ISMGoLiveActionDelegate?
+    var addProductListViewProvider: GoliveAddProductListViewProvider?
     
     var currenStreamType: GoLiveStreamType = .guestLive
     let uploadingManager = UploadingManager()
@@ -83,15 +89,18 @@ final public class GoLiveViewModel {
     var captureSession: AVCaptureSession?
     var videoPreviewLayer: AVCaptureVideoPreviewLayer!
     var stillImageOutput: AVCapturePhotoOutput!
+    var productIds: [String] = []
+    
     
 //    var selectedProducts: [StreamProductModel] = []
 //    var allProducts: [StreamProductModel] = []
     
     var update_callback: ((_ streamId: String)->())?
     
-    public init(isometrik: IsometrikSDK, delegate: ISMGoLiveActionDelegate? = nil) {
+    public init(isometrik: IsometrikSDK, delegate: ISMGoLiveActionDelegate? = nil, addProductListViewProvider: GoliveAddProductListViewProvider? = nil) {
         self.isometrik = isometrik
         self.externalActionDelegate = delegate
+        self.addProductListViewProvider = addProductListViewProvider
 //        self.productViewModel = ProductViewModel(isometrik: isometrik)
     }
     

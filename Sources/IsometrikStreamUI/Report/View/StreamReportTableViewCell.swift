@@ -8,11 +8,11 @@
 
 import UIKit
 
-class StreamReportTableViewCell: UITableViewCell, ISMAppearanceProvider {
+public class StreamReportTableViewCell: UITableViewCell, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let cardView: UIView = {
+    public let cardView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .lightGray.withAlphaComponent(0.2)
@@ -20,7 +20,7 @@ class StreamReportTableViewCell: UITableViewCell, ISMAppearanceProvider {
         return view
     }()
     
-    lazy var reasonLabel: UILabel = {
+    public lazy var reasonLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
@@ -31,7 +31,7 @@ class StreamReportTableViewCell: UITableViewCell, ISMAppearanceProvider {
     
     // MARK: MAIN -
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
         setupConstraints()

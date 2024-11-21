@@ -215,7 +215,6 @@ extension GoLiveViewController {
         let contentStackView = contentContainerView.contentStackView
         
         let restreamOption = contentContainerView.restreamOption
-        let addProductView = contentContainerView.addProductView
         let scheduleToggle = contentContainerView.scheduleToggle
         let dateTimeSelectorView = contentContainerView.dateTimeSelectorView
         let infoLabelView = contentContainerView.infoLabelView
@@ -304,7 +303,7 @@ extension GoLiveViewController {
         }
         
         if isProductEnabled {
-            contentStackView.addArrangedSubview(addProductView)
+            setupAddProductListView()
         }
         
         if isScheduleEnabled {
@@ -449,7 +448,9 @@ extension GoLiveViewController: LiveOptionsActionDelegate {
         let isometrik = viewModel.isometrik
         if isometrik.getStreamOptionsConfiguration().isProductInStreamEnabled {
             viewModel.externalActionDelegate?.didAddProductTapped(selectedProductsIds: [], productIds: { productIds in
+                
                 // do something with productIds
+                
             }, root: navigationController)
         }
         
@@ -862,4 +863,45 @@ extension GoLiveViewController: ISMStreamActionDelegate {
     }
     
     public func didCloseStreamTapped(memberData: ISMMember?, callback: @escaping (Bool) -> (), root: UINavigationController) {}
+    
+}
+
+// External view provider setup
+
+extension GoLiveViewController {
+    
+    private func setupAddProductListView() {
+        
+        let contentContainerView = contentView.goLiveContentContainerView
+        let contentStackView = contentContainerView.contentStackView
+        let addProductView = contentContainerView.addProductView
+        let customListView = addProductView.customListView
+        
+        if let customView = viewModel.addProductListViewProvider?.customAddProductListView() {
+            
+            //self.customAddProductView = customView
+            customView.translatesAutoresizingMaskIntoConstraints = false
+            customListView.addSubview(customView)
+            customView.pin(to: customListView)
+            
+            if viewModel.productIds.isEmpty {
+                contentContainerView.addProductViewHeightConstraint?.constant = 170
+            } else {
+                // setting view's height based on the content view's height
+                contentContainerView.addProductViewHeightConstraint?.constant = customView.frame.height
+            }
+            
+            // setting view's height based on the content view's height
+            contentContainerView.addProductViewHeightConstraint?.constant = customView.frame.height
+            
+            contentStackView.addArrangedSubview(addProductView)
+        }
+        
+    }
+    
+    public func updateAddProductListView(with data: Any) {
+        viewModel.addProductListViewProvider?.updateAddProductListView(with: data)
+    }
+
+    
 }

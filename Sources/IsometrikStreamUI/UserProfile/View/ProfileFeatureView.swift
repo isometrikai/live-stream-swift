@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ProfileFeatureView: UIView, ISMAppearanceProvider {
+public class ProfileFeatureView: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let infoStackView: UIStackView = {
+    public let infoStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .fill
@@ -21,7 +21,7 @@ class ProfileFeatureView: UIView, ISMAppearanceProvider {
         return stackView
     }()
     
-    lazy var followersView: CustomFeatureView = {
+    public lazy var followersView: CustomFeatureView = {
         let view = CustomFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.iconImageView.image = appearance.images.user
@@ -32,7 +32,7 @@ class ProfileFeatureView: UIView, ISMAppearanceProvider {
         return view
     }()
     
-    lazy var coinView: CustomFeatureView = {
+    public lazy var coinView: CustomFeatureView = {
         let view = CustomFeatureView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.iconImageView.image = UIImage(named: "starYello")?.withRenderingMode(.alwaysTemplate)
@@ -46,7 +46,7 @@ class ProfileFeatureView: UIView, ISMAppearanceProvider {
     
     // MARK: - MAIN
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()

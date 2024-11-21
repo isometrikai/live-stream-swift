@@ -8,11 +8,11 @@
 
 import UIKit
 
-class StreamProfileBottomActionView: UIView, ISMAppearanceProvider {
+public class StreamProfileBottomActionView: UIView, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    let buttonStackView: UIStackView = {
+    public let buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 15
@@ -21,7 +21,7 @@ class StreamProfileBottomActionView: UIView, ISMAppearanceProvider {
         return stackView
     }()
     
-    let mentionButton: UIButton = {
+    public let mentionButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 25
@@ -33,7 +33,7 @@ class StreamProfileBottomActionView: UIView, ISMAppearanceProvider {
         return button
     }()
     
-    lazy var followButton: UIButton = {
+    public lazy var followButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -51,7 +51,7 @@ class StreamProfileBottomActionView: UIView, ISMAppearanceProvider {
     
     // MARK: - MAIN
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()

@@ -15,7 +15,7 @@ final public class StreamReportViewController: UIViewController, ISMAppearancePr
     
     let userViewModel = ISMUserViewModel()
     
-    lazy var headerView: CustomHeaderView = {
+    public lazy var headerView: CustomHeaderView = {
         let view = CustomHeaderView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.headerTitle.text = "Report".localized
@@ -25,7 +25,7 @@ final public class StreamReportViewController: UIViewController, ISMAppearancePr
         return view
     }()
     
-    lazy var reasonsTableView: UITableView = {
+    public lazy var reasonsTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self

@@ -8,11 +8,11 @@
 
 import UIKit
 
-class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
+public class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
 
     // MARK: - PROPERTIES
     
-    let buttonStackView: UIStackView = {
+    public let buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 15
@@ -21,7 +21,7 @@ class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
         return stackView
     }()
     
-    lazy var followAndLeaveButton: UIButton = {
+    public lazy var followAndLeaveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -36,7 +36,7 @@ class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
         return button
     }()
     
-    lazy var leaveButton: UIButton = {
+    public lazy var leaveButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -55,7 +55,7 @@ class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
     
     // MARK: - MAIN
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setupConstraints()
@@ -83,12 +83,12 @@ class StreamProfileBottomActionViewForViewers: UIView, ISMAppearanceProvider {
         ])
     }
     
-    func removeViewFromStackView(view: UIView){
+    public func removeViewFromStackView(view: UIView){
         buttonStackView.removeArrangedSubview(view)
         view.isHidden = true
     }
     
-    func addViewToStackView(view: UIView) {
+    public func addViewToStackView(view: UIView) {
         view.isHidden = false
         buttonStackView.addArrangedSubview(view)
     }
