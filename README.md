@@ -84,14 +84,6 @@ IsometrikSDK.getInstance().createConfiguration(
 )
 ```
 
-## Add default isometrik profile
-
-Add default isometrik profile image url:
-
-```swift
-UserDefaultsProvider.shared.setIsometrikDefaultProfile(imageStringUrl: "YOUR DEFAULT PROFILE")
-```
-
 ## Enabling or Disabling the Logger
 
 You can enable or disable the logger as per your application's requirements.
@@ -115,6 +107,7 @@ IsometrikSDK.getInstance().onTerminate()
 ### Quick links
 - [Steps to setup App Universal link for SDK](./README_DOC/universal_link.md) : Isometrik SDK uses apple native universal links for generating an active sharable link from stream.
 - [how to handle and configure SDK delegates](./README_DOC/external_delegate.md) : Isometrik SDK provides you external delegate to handle various actions that are there for the stream.
+- [Add Isometrik Default profile](./README_DOC/Isometrik_default_profile.md): Handle default profile throught out the live stream profile images
 
 
 
