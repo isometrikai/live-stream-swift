@@ -190,7 +190,7 @@ extension PKInviteListViewController: UITableViewDelegate, SkeletonTableViewData
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         cell.selectionStyle = .none
         cell.data = viewModel.streamUserList[indexPath.row]
-        cell.contentView.isUserInteractionEnabled = false
+        cell.contentView.isUserInteractionEnabled = true
         cell.tag = indexPath.row
         cell.backgroundColor = .clear
         
