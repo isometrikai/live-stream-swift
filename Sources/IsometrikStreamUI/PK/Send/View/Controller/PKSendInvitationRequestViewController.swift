@@ -155,17 +155,17 @@ class PKSendInvitationRequestViewController: UIViewController, ISMAppearanceProv
         var userName = viewModel.userName
         
         
-        if profilePic == "\(UserDefaultsProvider.shared.getIsometrikDefaultProfile())" || profilePic.isEmpty {
-            profileView.isHidden = true
-            defaultProfileView.isHidden = false
-            let initials = "\(name.prefix(2))"
-            defaultProfileView.initialsText.text = "\(initials)".uppercased()
-        } else {
+        if profilePic != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !profilePic.isEmpty {
             profileView.isHidden = false
             defaultProfileView.isHidden = true
             if let url = URL(string: profilePic) {
                 self.profileView.kf.setImage(with: url)
             }
+        } else {
+            profileView.isHidden = true
+            defaultProfileView.isHidden = false
+            let initials = "\(name.prefix(2))"
+            defaultProfileView.initialsText.text = "\(initials)".uppercased()
         }
         
         titleLabel.text = "\(name)"

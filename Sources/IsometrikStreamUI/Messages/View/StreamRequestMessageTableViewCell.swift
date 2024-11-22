@@ -187,12 +187,8 @@ class StreamRequestMessageTableViewCell: UITableViewCell, ISMAppearanceProvider 
         
         // PROFILE
         
-        if userImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !userImage.isEmpty {
-            
-            if let url = URL(string: userImage) {
-                userProfileImage.kf.setImage(with: url)
-            }
-            
+        if userImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !userImage.isEmpty, let url = URL(string: userImage) {
+            userProfileImage.kf.setImage(with: url)
         } else {
             userProfileImage.image = UIImage()
         }

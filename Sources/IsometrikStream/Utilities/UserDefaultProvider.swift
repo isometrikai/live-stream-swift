@@ -22,6 +22,7 @@ public class UserDefaultsProvider: NSObject {
     
     public static var shared: UserDefaultsProvider = UserDefaultsProvider()
     private let defaults = UserDefaults.standard
+    private var defaultProfile: String = ""
     
     public func resetStreamUserDefaults(){
         setStreamData(model: nil)
@@ -75,8 +76,12 @@ public class UserDefaultsProvider: NSObject {
         UserDefaults.standard.synchronize()
     }
     
+    public func setIsometrikDefaultProfile(imageStringUrl: String){
+        self.defaultProfile = imageStringUrl
+    }
+    
     public func getIsometrikDefaultProfile() -> String {
-        return "https://www.gravatar.com/avatar/?d=identicon"
+        return defaultProfile
     }
     
     // MARK: - Wallet details

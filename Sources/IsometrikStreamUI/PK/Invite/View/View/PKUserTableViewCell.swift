@@ -164,12 +164,10 @@ class PKUserTableViewCell: UITableViewCell, ISMAppearanceProvider {
         
         actionButton.layer.borderWidth = 1
         
-        if data.profilePic.unwrap != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-            if let profileURL = URL(string: "\(data.profilePic.unwrap)") {
-                userProfileImage.kf.setImage(with: profileURL)
-            }
+        let profilePic = data.profilePic.unwrap
+        if profilePic != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !profilePic.isEmpty, let profileURL = URL(string: profilePic) {
+            userProfileImage.kf.setImage(with: profileURL)
         }
-           
         
         titleLabel.text = "@\(data.userName ?? "")"
         subtitleLabel.ism_setLabelWithLeftImage(withImage: appearance.images.eye, imageColor: appearance.colors.appLightGray, imageSize: 13, text: "\(data.viewerCount ?? 0)", font: appearance.font.getFont(forTypo: .h8)!, textColor: appearance.colors.appLightGray)

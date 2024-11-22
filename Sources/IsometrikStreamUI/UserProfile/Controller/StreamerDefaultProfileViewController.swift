@@ -101,7 +101,9 @@ class StreamerDefaultProfileViewController: UIViewController, ISMAppearanceProvi
             subtitleLabel.text = ""
         }
         
-        if let imageUrl = URL(string: userData.userProfileImageURL.unwrap) {
+        let profileImage = userData.userProfileImageURL.unwrap
+        
+        if !profileImage.isEmpty && profileImage != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), let imageUrl = URL(string: profileImage) {
             profilePicture.kf.setImage(with: imageUrl)
         } else {
             profilePicture.image = UIImage()

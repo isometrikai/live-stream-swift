@@ -84,6 +84,14 @@ IsometrikSDK.getInstance().createConfiguration(
 )
 ```
 
+## Add default isometrik profile
+
+Add default isometrik profile image url:
+
+```swift
+UserDefaultsProvider.shared.setIsometrikDefaultProfile(imageStringUrl: "YOUR DEFAULT PROFILE")
+```
+
 ## Enabling or Disabling the Logger
 
 You can enable or disable the logger as per your application's requirements.

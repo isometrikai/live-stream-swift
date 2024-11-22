@@ -131,15 +131,10 @@ class PKSessionGuestProfileView: UIView, ISMAppearanceProvider {
     func manageData(){
         guard let data = data else { return }
         
-        if data.metaData?.profilePic.unwrap != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-            
-            if let profileURL = URL(string: data.metaData?.profilePic ?? "") {
-                profileImageView.kf.setImage(with: profileURL)
-                pkProfileOverlay.profileImageView.kf.setImage(with: profileURL)
-            } else {
-                profileImageView.image = UIImage()
-                pkProfileOverlay.profileImageView.image = UIImage()
-            }
+        let profilePic = data.metaData?.profilePic ?? ""
+        if !profilePic.isEmpty, profilePic != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), let profileURL = URL(string: profilePic) {
+            profileImageView.kf.setImage(with: profileURL)
+            pkProfileOverlay.profileImageView.kf.setImage(with: profileURL)
         } else {
             profileImageView.image = UIImage()
             pkProfileOverlay.profileImageView.image = UIImage()

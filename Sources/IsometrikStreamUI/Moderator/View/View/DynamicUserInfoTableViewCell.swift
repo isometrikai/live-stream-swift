@@ -160,12 +160,8 @@ class DynamicUserInfoTableViewCell: UITableViewCell, ISMAppearanceProvider {
         let userName = userData.identifier.unwrap
         let name = userData.name.unwrap
         
-        if imagePath != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-            if let imageUrl = URL(string: imagePath) {
-                userProfilePicture.kf.setImage(with: imageUrl)
-            } else {
-                userProfilePicture.image = UIImage()
-            }
+        if imagePath != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !imagePath.isEmpty, let imageUrl = URL(string: imagePath) {
+            userProfilePicture.kf.setImage(with: imageUrl)
         } else {
             userProfilePicture.image = UIImage()
         }

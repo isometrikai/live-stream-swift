@@ -187,10 +187,8 @@ class PKRecieveInvitationViewController: UIViewController, ISMAppearanceProvider
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         if isURL {
-            if image != UserDefaultsProvider.shared.getIsometrikDefaultProfile() {
-                if let url = URL(string: image) {
-                    imageView.kf.setImage(with: url)
-                }
+            if image != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), let url = URL(string: image) {
+                imageView.kf.setImage(with: url)
             }
         }
         imageView.layer.borderColor = appearance.colors.appLightGray.withAlphaComponent(0.5).cgColor

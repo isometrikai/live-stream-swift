@@ -230,10 +230,8 @@ class StreamMemberTableViewCell: UITableViewCell, ISMAppearanceProvider {
             }
         }
         
-        if profilePic != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !(profilePic.isEmpty) {
-            if let imagePathUrl = URL(string: profilePic){
-                userProfile.kf.setImage(with: imagePathUrl)
-            }
+        if profilePic != UserDefaultsProvider.shared.getIsometrikDefaultProfile(), !(profilePic.isEmpty), let imagePathUrl = URL(string: profilePic) {
+            userProfile.kf.setImage(with: imagePathUrl)
         } else {
             userProfile.image = UIImage()
         }
