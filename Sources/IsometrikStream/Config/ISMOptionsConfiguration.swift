@@ -27,6 +27,8 @@ public class ISMOptionsConfiguration {
     /// This will activates the paid stream options
     private let enableScheduleStream: Bool
     
+    private let enableLogging: Bool
+    
     public init(
         enableProfileDelegate: Bool = false,
         enableGroupStream: Bool = false,
@@ -35,7 +37,8 @@ public class ISMOptionsConfiguration {
         enableRTMPStream: Bool = false,
         enablePaidStream: Bool = false,
         enableRestream: Bool = false,
-        enableScheduleStream: Bool = false
+        enableScheduleStream: Bool = false,
+        enableLogging: Bool = false
     ) {
         self.enableProfileDelegate = enableProfileDelegate
         self.enablePKStream = enablePKStream
@@ -45,6 +48,7 @@ public class ISMOptionsConfiguration {
         self.enablePaidStream = enablePaidStream
         self.enableRestream = enableRestream
         self.enableScheduleStream = enableScheduleStream
+        self.enableLogging = enableLogging
     }
     
     public var isProfileDelegateEnabled: Bool {
@@ -77,6 +81,10 @@ public class ISMOptionsConfiguration {
     
     public var isPaidStreamEnabled: Bool {
         return enablePaidStream
+    }
+    
+    public var isLoggingEnabled: Bool {
+        return enableLogging
     }
     
 }

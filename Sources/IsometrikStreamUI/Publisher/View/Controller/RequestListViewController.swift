@@ -144,7 +144,6 @@ class RequestListViewController: UIViewController, ISMAppearanceProvider {
  
             case let .failure(msg):
                 self.reloadUI()
-                self.view.showToast(message: msg)
             }
         }
         
@@ -271,7 +270,7 @@ extension RequestListViewController: StreamRequestListActionDelegate {
                 }
             case.networkError(let error):
                 self.view.showToast( message: "Network Error \(error.localizedDescription)")
-                
+
             case .httpError(let errorCode, let errorMessage):
                 DispatchQueue.main.async{
                     self.view.showToast( message: "\(errorCode) \(errorMessage?.error ?? "")")

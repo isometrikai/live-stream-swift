@@ -55,7 +55,6 @@ open class ISMMQTTSessionWrapper: NSObject {
         mqtt?.willMessage = nil
         mqtt?.keepAlive = 60
         mqtt?.delegate = self
-        mqtt?.autoReconnect = false
         
         _ = mqtt?.connect()
         

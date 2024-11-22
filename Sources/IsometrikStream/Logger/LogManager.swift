@@ -4,6 +4,9 @@ import os.log
 final public class LogManager {
     public static let shared = LogManager()
 
+    // Property to enable or disable logging
+    public var isLoggingEnabled: Bool = true
+
     private let subsystem: String
     private let generalCategory = "General"
     private let networkCategory = "Network"
@@ -26,28 +29,34 @@ final public class LogManager {
         return "\(prefix) [\(type.description)] [\(fileName):\(line)] > \(message)"
     }
 
+    // Helper function to check if logging is enabled
+    private func logIfEnabled(_ category: String, message: String, type: OSLogType, file: String, line: Int) {
+        guard isLoggingEnabled else { return }
+        os_log("%{public}@", log: logger(for: category), type: type, formattedMessage(message, type: type, file: file, line: line))
+    }
+
     public func logGeneral(_ message: String, type: OSLogType = .default, file: String = #file, line: Int = #line) {
-        os_log("%{public}@", log: logger(for: generalCategory), type: type, formattedMessage(message, type: type, file: file, line: line))
+        logIfEnabled(generalCategory, message: message, type: type, file: file, line: line)
     }
 
     public func logNetwork(_ message: String, type: OSLogType = .default, file: String = #file, line: Int = #line) {
-        os_log("%{public}@", log: logger(for: networkCategory), type: type, formattedMessage(message, type: type, file: file, line: line))
+        logIfEnabled(networkCategory, message: message, type: type, file: file, line: line)
     }
 
     public func logDatabase(_ message: String, type: OSLogType = .default, file: String = #file, line: Int = #line) {
-        os_log("%{public}@", log: logger(for: databaseCategory), type: type, formattedMessage(message, type: type, file: file, line: line))
+        logIfEnabled(databaseCategory, message: message, type: type, file: file, line: line)
     }
 
     public func logMQTT(_ message: String, type: OSLogType = .default, file: String = #file, line: Int = #line) {
-        os_log("%{public}@", log: logger(for: mqttCategory), type: type, formattedMessage(message, type: type, file: file, line: line))
+        logIfEnabled(mqttCategory, message: message, type: type, file: file, line: line)
     }
 
     public func logLiveKit(_ message: String, type: OSLogType = .default, file: String = #file, line: Int = #line) {
-        os_log("%{public}@", log: logger(for: liveKitCategory), type: type, formattedMessage(message, type: type, file: file, line: line))
+        logIfEnabled(liveKitCategory, message: message, type: type, file: file, line: line)
     }
 
     public func logCustom(category: String, message: String, type: OSLogType = .default, file: String = #file, line: Int = #line) {
-        os_log("%{public}@", log: logger(for: category), type: type, formattedMessage(message, type: type, file: file, line: line))
+        logIfEnabled(category, message: message, type: type, file: file, line: line)
     }
 
     // Define the prefixes for each log type
