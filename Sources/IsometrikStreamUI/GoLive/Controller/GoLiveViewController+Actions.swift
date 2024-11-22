@@ -67,7 +67,7 @@ extension GoLiveViewController: GoLiveFooterActionDelegate {
         
         // show user error if mqtt connection not connected
         if !(isometrik.getMqttSession().isConnected) {
-            self.view.showToast(message: "connection not established, Try Again!")
+            self.view.showToast(message: "connection is broken!")
             return
         }
         
