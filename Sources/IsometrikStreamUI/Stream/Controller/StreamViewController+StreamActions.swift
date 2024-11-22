@@ -156,7 +156,7 @@ extension StreamViewController {
                 cell.viewModel = self.viewModel
                 cell.streamContainer.streamMessageView.messageTableView.reloadData()
             } else {
-                LogManager.shared.logGeneral("\(error.unwrap)", type: .debug)
+                ISMLogManager.shared.logGeneral("\(error.unwrap)", type: .debug)
             }
         }
         

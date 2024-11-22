@@ -44,9 +44,9 @@ open class ISMMQTTSessionWrapper: NSObject {
         
         let port = UInt16(configuration.MQTTPort)
         
-        LogManager.shared.logMQTT("ClientId: \(clientID)", type: .debug)
-        LogManager.shared.logMQTT("Username: \(userName)", type: .debug)
-        LogManager.shared.logMQTT("Password: \(password)", type: .debug)
+        ISMLogManager.shared.logMQTT("ClientId: \(clientID)", type: .debug)
+        ISMLogManager.shared.logMQTT("Username: \(userName)", type: .debug)
+        ISMLogManager.shared.logMQTT("Password: \(password)", type: .debug)
         
         mqtt = CocoaMQTT(clientID: clientID, host: configuration.MQTTHost, port: port)
         mqtt?.logLevel = .off

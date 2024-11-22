@@ -1,8 +1,8 @@
 import Foundation
 import os.log
 
-final public class LogManager {
-    public static let shared = LogManager()
+final public class ISMLogManager {
+    public static let shared = ISMLogManager()
 
     // Property to enable or disable logging
     public var isLoggingEnabled: Bool = true
@@ -24,7 +24,7 @@ final public class LogManager {
     }
 
     private func formattedMessage(_ message: String, type: OSLogType, file: String, line: Int) -> String {
-        let prefix = LogManager.prefixes[type.rawValue] ?? ""
+        let prefix = ISMLogManager.prefixes[type.rawValue] ?? ""
         let fileName = (file as NSString).lastPathComponent
         return "\(prefix) [\(type.description)] [\(fileName):\(line)] > \(message)"
     }

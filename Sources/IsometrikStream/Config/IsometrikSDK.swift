@@ -43,7 +43,7 @@ public class IsometrikSDK {
         banubaClientToken : String = "",
         userToken: String = "",
         userType: UserType = .none,
-        streamOptionsConfiguration: ISMOptionsConfiguration =  ISMOptionsConfiguration(enableProfileDelegate: false, enableGroupStream: false, enablePKStream: false, enableProductInStream: false, enableRTMPStream: false, enablePaidStream: false, enableRestream: false, enableScheduleStream: false, enableLogging: true)
+        streamOptionsConfiguration: ISMOptionsConfiguration =  ISMOptionsConfiguration(enableProfileDelegate: false, enableGroupStream: false, enablePKStream: false, enableProductInStream: false, enableRTMPStream: false, enablePaidStream: false, enableRestream: false, enableScheduleStream: false)
     ) {
         
         if accountId.isEmpty {
@@ -88,8 +88,6 @@ public class IsometrikSDK {
         let mqttSession = ISMMQTTSessionWrapper(configuration: configuration)
         mqttSession.establishConnection(withUserId: userSession.getUserId())
         self.mqttSession = mqttSession
-        
-        LogManager.shared.isLoggingEnabled = streamOptionsConfiguration.isLoggingEnabled
         
     }
     
@@ -147,7 +145,7 @@ public class IsometrikSDK {
         UserDefaultsProvider.shared.removeUserDefaults()
         
         // reseting singletons
-        LogManager.shared.isLoggingEnabled = true
+        ISMLogManager.shared.isLoggingEnabled = true
         
         userSession = nil
         mqttSession = nil

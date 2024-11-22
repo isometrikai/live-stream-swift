@@ -183,7 +183,7 @@ extension StreamViewController: StreamCellActionDelegate {
    
     func didTapProductDetails() {
         
-        LogManager.shared.logGeneral("Profile view tapped", type: .info)
+        ISMLogManager.shared.logGeneral("Profile view tapped", type: .info)
         
 //        guard let productViewModel = viewModel.streamProductViewModel,
 //              let pinnedProductData = productViewModel.pinnedProductData

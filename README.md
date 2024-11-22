@@ -84,6 +84,18 @@ IsometrikSDK.getInstance().createConfiguration(
 )
 ```
 
+## Enabling or Disabling the Logger
+
+You can enable or disable the logger as per your application's requirements.
+
+### Usage
+
+Disable the logger by setting `isLoggingEnabled` to `false`:
+
+```swift
+ISMLogManager.shared.isLoggingEnabled = false // Default value: true
+```
+
 ## On Termination or Logout
 
 While loggingOut the app remember to call this ``onTerminate`` method to release shared instance from memory

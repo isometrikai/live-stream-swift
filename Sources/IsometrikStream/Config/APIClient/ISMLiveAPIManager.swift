@@ -49,7 +49,7 @@ public struct ISMLiveAPIManager {
         
         let endpoint = "\(request.endPoint.baseURL)\(request.endPoint.path)"
         let endpointMethod = "\(request.endPoint.method)".uppercased()
-        LogManager.shared.logNetwork("Endpoint: \(endpointMethod) \(endpoint)", type: .debug)
+        ISMLogManager.shared.logNetwork("Endpoint: \(endpointMethod) \(endpoint)", type: .debug)
         
         var urlComponents = URLComponents(url: request.endPoint.baseURL.appendingPathComponent(request.endPoint.path), resolvingAgainstBaseURL: true)
         urlComponents?.queryItems = request.endPoint.queryParams?.map { URLQueryItem(name: $0.key, value: $0.value) }
@@ -89,7 +89,7 @@ public struct ISMLiveAPIManager {
                 return
             }
             
-            LogManager.shared.logNetwork("HttpStatusCode: \(httpResponse.statusCode)", type: .debug)
+            ISMLogManager.shared.logNetwork("HttpStatusCode: \(httpResponse.statusCode)", type: .debug)
             
             if let error = error {
                 completion(.failure(.decodingError(error)))
@@ -111,7 +111,7 @@ public struct ISMLiveAPIManager {
                     if let decodingError = error as? DecodingError {
                         self.handleDecodingError(error: decodingError)
                     } else {
-                        LogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
+                        ISMLogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
                     }
                     completion(.failure(.decodingError(error)))
                 }
@@ -143,12 +143,12 @@ public struct ISMLiveAPIManager {
                 do {
                     var errorObject = try JSONDecoder().decode(ISMLiveErrorMessage.self, from: data)
                     completion(.failure(.httpError(httpResponse.statusCode, errorObject)))
-                    LogManager.shared.logNetwork("Error: \(errorObject.readableErrorMessage.unwrap)", type: .debug)
+                    ISMLogManager.shared.logNetwork("Error: \(errorObject.readableErrorMessage.unwrap)", type: .debug)
                 } catch {
                     if let decodingError = error as? DecodingError {
                         self.handleDecodingError(error: decodingError)
                     } else {
-                        LogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
+                        ISMLogManager.shared.logNetwork("Error: \(error.localizedDescription)", type: .debug)
                     }
                     completion(.failure(.decodingError(error)))
                 }
@@ -171,16 +171,16 @@ public struct ISMLiveAPIManager {
     static func handleDecodingError(error: DecodingError){
         switch error {
         case .typeMismatch(let key, let context):
-            LogManager.shared.logNetwork("Type mismatch for key \(key), context: \(context.debugDescription)", type: .debug)
+            ISMLogManager.shared.logNetwork("Type mismatch for key \(key), context: \(context.debugDescription)", type: .debug)
         case .valueNotFound(let type, let context):
-            LogManager.shared.logNetwork("Value not found for type \(type), context: \(context.debugDescription)", type: .debug)
+            ISMLogManager.shared.logNetwork("Value not found for type \(type), context: \(context.debugDescription)", type: .debug)
         case .keyNotFound(let key, let context):
-            LogManager.shared.logNetwork("Key not found: \(key), context: \(context.debugDescription)", type: .debug)
+            ISMLogManager.shared.logNetwork("Key not found: \(key), context: \(context.debugDescription)", type: .debug)
         case .dataCorrupted(let context):
-            LogManager.shared.logNetwork("Data corrupted, context: \(context.debugDescription)", type: .debug)
+            ISMLogManager.shared.logNetwork("Data corrupted, context: \(context.debugDescription)", type: .debug)
         @unknown default:
             print("")
-            LogManager.shared.logNetwork("Unknown decoding error", type: .debug)
+            ISMLogManager.shared.logNetwork("Unknown decoding error", type: .debug)
         }
     }
     

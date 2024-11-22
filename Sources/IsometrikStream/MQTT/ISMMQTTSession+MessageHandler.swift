@@ -14,7 +14,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
     
     public func mqtt(_ mqtt: CocoaMQTT, didConnectAck ack: CocoaMQTTConnAck) {
 
-        LogManager.shared.logMQTT("Connection Acknowledgement: \(ack.description)")
+        ISMLogManager.shared.logMQTT("Connection Acknowledgement: \(ack.description)")
         
         if ack == .accept {
             subscribeUserEvents()
@@ -31,7 +31,7 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
     
     public func mqtt(_ mqtt: CocoaMQTT, didStateChangeTo state: CocoaMQTTConnState) {
         
-        LogManager.shared.logMQTT("State : \(state.description)", type: .info)
+        ISMLogManager.shared.logMQTT("State : \(state.description)", type: .info)
         
         switch state {
         case .disconnected:
@@ -66,8 +66,8 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
         }
 
         let eventMessage = message.string?.description ?? ""
-        LogManager.shared.logMQTT("Event with action: \(actionName)", type: .info)
-        LogManager.shared.logMQTT("Event message: \(eventMessage)", type: .info)
+        ISMLogManager.shared.logMQTT("Event with action: \(actionName)", type: .info)
+        ISMLogManager.shared.logMQTT("Event message: \(eventMessage)", type: .info)
         
         switch MQTTData.dataType(actionName) {
         case .mqttMessageSent:
@@ -470,12 +470,12 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
         let successMessage = "Successfully subscribed to topics: \(success)"
         let failedMessage = failed.isEmpty ? "No failed subscriptions." : "Failed to subscribe to topics: \(failed.joined(separator: ", "))"
         let logMessage = "\(successMessage)\n\(failedMessage)"
-        LogManager.shared.logMQTT(logMessage, type: .debug)
+        ISMLogManager.shared.logMQTT(logMessage, type: .debug)
     }
 
     public func mqtt(_ mqtt: CocoaMQTT, didUnsubscribeTopics topics: [String]) {
         let unsubscribedMessage = "Successfully unsubscribed to topics: \(topics.joined(separator: ", "))"
-        LogManager.shared.logMQTT(unsubscribedMessage, type: .debug)
+        ISMLogManager.shared.logMQTT(unsubscribedMessage, type: .debug)
     }
 
     public func mqttDidPing(_ mqtt: CocoaMQTT) {}
@@ -484,10 +484,10 @@ extension ISMMQTTSessionWrapper: CocoaMQTTDelegate {
 
     public func mqttDidDisconnect(_ mqtt: CocoaMQTT, withError err: Error?) {
         if err == nil {
-            LogManager.shared.logMQTT(#function + "Mqtt disconnected", type: .info)
+            ISMLogManager.shared.logMQTT(#function + "Mqtt disconnected", type: .info)
         } else {
             let errorDescription = err?.localizedDescription ?? ""
-            LogManager.shared.logMQTT(#function + "Error while disconnecting: \(errorDescription)", type: .error)
+            ISMLogManager.shared.logMQTT(#function + "Error while disconnecting: \(errorDescription)", type: .error)
         }
     }
     

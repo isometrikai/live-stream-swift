@@ -905,9 +905,9 @@ extension StreamViewController {
                         let streamer2Coin = self.viewModel.pkGiftData?.streamer2?.coins ?? 0
                         let streamer2Name = self.viewModel.pkGiftData?.streamer2?.userName ?? ""
                         
-                        LogManager.shared.logCustom(category: "gift", message: "Streamer1(\(streamer1Name)) Coin: \(streamer1Coin)")
+                        ISMLogManager.shared.logCustom(category: "gift", message: "Streamer1(\(streamer1Name)) Coin: \(streamer1Coin)")
                         
-                        LogManager.shared.logCustom(category: "gift", message: "Streamer2(\(streamer2Name)) Coin: \(streamer2Coin)")
+                        ISMLogManager.shared.logCustom(category: "gift", message: "Streamer2(\(streamer2Name)) Coin: \(streamer2Coin)")
                         
                     }
                       
