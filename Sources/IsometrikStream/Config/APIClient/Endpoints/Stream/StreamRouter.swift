@@ -169,6 +169,14 @@ enum StreamRouter: ISMLiveURLConvertible, CustomStringConvertible {
                     param += ["isScheduledStream":"\(isScheduledStream)"]
                 }
                 
+                if let startDateTime = streamQuery.startDateTime {
+                    param += ["startDateTime":"\(startDateTime)"]
+                }
+                
+                if let endDateTime = streamQuery.endDateTime {
+                    param += ["endDateTime":"\(endDateTime)"]
+                }
+                
                 //:
             }
             break

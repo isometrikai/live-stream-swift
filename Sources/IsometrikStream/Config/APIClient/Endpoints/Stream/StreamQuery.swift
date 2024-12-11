@@ -40,6 +40,8 @@ public struct StreamQuery: Codable {
     let isHDbroadcast: Bool?
     let isPaid: Bool?
     let isScheduledStream: Bool?
+    let startDateTime: String?
+    let endDateTime: String?
     //:
     
     public init(
@@ -61,8 +63,9 @@ public struct StreamQuery: Codable {
         isRestream: Bool? = nil,
         isHDbroadcast: Bool? = nil,
         isPaid: Bool? = nil,
-        isScheduledStream: Bool? = nil
-        
+        isScheduledStream: Bool? = nil,
+        startDateTime: String? = nil,
+        endDateTime: String? = nil
     ){
         self.limit = limit
         self.skip = skip
@@ -84,6 +87,9 @@ public struct StreamQuery: Codable {
         self.isHDbroadcast = isHDbroadcast
         self.isPaid = isPaid
         self.isScheduledStream = isScheduledStream
+        
+        self.startDateTime = startDateTime
+        self.endDateTime = endDateTime
     }
     
     enum CodingKeys: String, CodingKey {
@@ -106,6 +112,8 @@ public struct StreamQuery: Codable {
         case isHDbroadcast = "hdbroadcast"
         case isPaid
         case isScheduledStream
+        case startDateTime
+        case endDateTime
     }
     
     // Implementing the `+` operator to merge two StreamQuery instances
@@ -128,7 +136,9 @@ public struct StreamQuery: Codable {
             isRestream: rhs.isRestream ?? lhs.isRestream,
             isHDbroadcast: rhs.isHDbroadcast ?? lhs.isHDbroadcast,
             isPaid: rhs.isPaid ?? lhs.isPaid,
-            isScheduledStream: rhs.isScheduledStream ?? lhs.isScheduledStream
+            isScheduledStream: rhs.isScheduledStream ?? lhs.isScheduledStream,
+            startDateTime: rhs.startDateTime ?? lhs.startDateTime,
+            endDateTime: rhs.endDateTime ?? lhs.endDateTime
         )
     }
     

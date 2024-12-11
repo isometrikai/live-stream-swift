@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IsometrikStream
 
 extension StreamMessageContainer: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
