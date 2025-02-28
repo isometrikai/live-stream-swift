@@ -22,7 +22,7 @@ class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
         }
     }
     
-    var data: ISMStreamGiftModel? {
+    var data: CachedGiftCategoryModel? {
         didSet {
             manageData()
         }
@@ -111,9 +111,10 @@ class StreamGiftGroupCell: UICollectionViewCell, ISMAppearanceProvider {
     
     func manageData(){
         guard let data else { return }
-        groupTitle.text = data.giftTitle.unwrap
+        groupTitle.text = data.giftTitle
         
-        if let imgString = data.giftImage, imgString != "", let imageUrl = URL(string: imgString) {
+        let imgString = data.giftImage
+        if imgString != "", let imageUrl = URL(string: imgString) {
             giftGroupImage.kf.setImage(with: imageUrl)
         } else {
             giftGroupImage.image = appearance.images.giftPlaceholder

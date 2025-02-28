@@ -14,7 +14,7 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
     
     // MARK: - PROPERTIES
     
-    var data: ISMStreamGiftModel? {
+    var data: CachedGiftModel? {
         didSet {
             manageData()
         }
@@ -89,9 +89,10 @@ class StreamGiftGroupItemCell: UICollectionViewCell, ISMAppearanceProvider {
     
     func manageData(){
         guard let data else { return }
-        groupItemTitle.text = "\(data.virtualCurrency ?? 0) Coins"
+        groupItemTitle.text = "\(data.virtualCurrency) Coins"
         
-        if let imgString = data.giftImage, imgString != "", let imageUrl = URL(string: imgString) {
+        let imgString = data.giftImage
+        if imgString != "", let imageUrl = URL(string: imgString) {
             giftItemImage.kf.setImage(with: imageUrl)
         } else {
             giftItemImage.image = UIImage()

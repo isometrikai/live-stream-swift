@@ -8,6 +8,7 @@
 
 import UIKit
 import IsometrikStream
+import SkeletonView
 
 class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
     
@@ -79,6 +80,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         stackView.spacing = 10
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -107,6 +109,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         view.featureImage.image = appearance.images.viewerStat
         view.featureLabel.text = "Viewers"
         view.valueLabel.text = "--"
+        view.isSkeletonable = true
         return view
     }()
     
@@ -116,7 +119,6 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         view.featureImage.image = appearance.images.followersStat
         view.featureLabel.text = "Followers"
         view.valueLabel.text = "--"
-        view.isHidden = true
         return view
     }()
     
@@ -126,6 +128,7 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         stackView.spacing = 10
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -300,6 +303,10 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
     
     func loadData(){
         
+        topHorizontalStackView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#BBBBBB"), transition: .crossDissolve(0.25))
+        
+        bottomHorizontalStackView.showAnimatedSkeleton(usingColor: UIColor.colorWithHex(color: "#BBBBBB"), transition: .crossDissolve(0.25))
+        
         let isometrik = viewModel.isometrik
         let firstName = isometrik.getUserSession().getFirstName()
         let lastName = isometrik.getUserSession().getLastName()
@@ -328,9 +335,11 @@ class StreamAnalyticsController: UIViewController, ISMAppearanceProvider {
         defaultImageView.initialsText.font = appearance.font.getFont(forTypo: .h3)
         
         // get stream Analytics
-        CustomLoader.shared.startLoading()
         viewModel.fetchStreamAnalytics { success, error in
-            CustomLoader.shared.stopLoading()
+            
+            self.topHorizontalStackView.hideSkeleton(transition: .crossDissolve(0.25))
+            self.bottomHorizontalStackView.hideSkeleton(transition: .crossDissolve(0.25))
+            
             if success {
                 guard let analyticData = self.viewModel.analyticData else { return }
                 
@@ -405,6 +414,9 @@ class AnalyticsInfoView: UIView, ISMAppearanceProvider {
         label.textColor = .black
         label.font = appearance.font.getFont(forTypo: .h3)
         label.textAlignment = .center
+        label.isSkeletonable = true
+        label.skeletonTextLineHeight = .fixed(10)
+        label.skeletonCornerRadius = 5
         return label
     }()
     
@@ -415,6 +427,7 @@ class AnalyticsInfoView: UIView, ISMAppearanceProvider {
         stackView.distribution = .fill
         stackView.spacing = 0
         stackView.alignment = .center
+        stackView.isSkeletonable = true
         return stackView
     }()
     
@@ -433,6 +446,7 @@ class AnalyticsInfoView: UIView, ISMAppearanceProvider {
     // MARK: - FUNCTIONS
     
     func setupViews(){
+        isSkeletonable = true
         addSubview(stackView)
         stackView.addArrangedSubview(featureImage)
         stackView.addArrangedSubview(featureLabel)

@@ -18,7 +18,7 @@ class StreamGiftContentGroupHeaderView: UIView {
 
     // MARK: - PROPERTIES
     
-    var data: [ISMStreamGiftModel] = [] {
+    var data: [CachedGiftCategoryModel] = [] {
         didSet {
             self.collectionView.reloadData()
         }
@@ -103,10 +103,11 @@ extension StreamGiftContentGroupHeaderView: UICollectionViewDelegate, UICollecti
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard data.count > 0,
-              let groupData = data[safe: indexPath.row],
-              let groupId = groupData.id,
-              let groupTitle = groupData.giftTitle
+              let groupData = data[safe: indexPath.row]
         else { return }
+        
+        let groupId = groupData.id
+        let groupTitle = groupData.giftTitle
         
         delegate?.giftGroupTapped(groupId: groupId, giftGroupTitle: groupTitle)
     }

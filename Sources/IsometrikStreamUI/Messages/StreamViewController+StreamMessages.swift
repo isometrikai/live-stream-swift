@@ -77,9 +77,11 @@ extension StreamViewController {
             
             streamMessageTableView.beginUpdates()
             let index = IndexPath(row: messageCount - 1, section: 0)
-            streamMessageTableView.insertRows(at: [index], with: .fade)
-            streamMessageTableView.endUpdates()
             
+            // TODO: safe the index
+            streamMessageTableView.insertRows(at: [index], with: .fade)
+            
+            streamMessageTableView.endUpdates()
             self.setHeightForMessages()
             
             // refresh the pinned item details for updates like, stock count

@@ -11,8 +11,7 @@ import IsometrikStream
 import SkeletonView
 
 protocol StreamGiftItemActionProtocol {
-    func callForNextPage(groupId: String)
-    func didGiftItemSelected(giftData: ISMStreamGiftModel)
+    func didGiftItemSelected(giftData: CachedGiftModel)
 }
 
 class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
@@ -20,7 +19,7 @@ class StreamGiftContentItemsView: UIView, ISMAppearanceProvider {
     // MARK: - PROPERTIES
     
     var totalCount = 0
-    var data: [ISMStreamGiftModel] = [] {
+    var data: [CachedGiftModel] = [] {
         didSet {
             self.collectionView.reloadData()
         }
@@ -103,15 +102,6 @@ extension StreamGiftContentItemsView: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StreamGiftGroupItemCell", for: indexPath) as! StreamGiftGroupItemCell
         cell.data = data[indexPath.row]
-        
-        if indexPath.row == data.count - 1 {
-            if data.count < totalCount {
-                if let groupData = data[safe: indexPath.row], let groupId = groupData.giftGroupId {
-                    delegate?.callForNextPage(groupId: groupId)
-                }
-            }
-        }
-        
         return cell
     }
     
